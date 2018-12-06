@@ -1,9 +1,13 @@
-package com.example.laure.thymesaver;
+package com.example.laure.thymesaver.UI;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+
+import com.example.laure.thymesaver.R;
+import com.example.laure.thymesaver.Database.Recipe;
+import com.example.laure.thymesaver.Adapters.RecipeAdapter;
 
 import java.util.ArrayList;
 

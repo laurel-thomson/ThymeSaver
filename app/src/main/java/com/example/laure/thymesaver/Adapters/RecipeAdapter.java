@@ -1,4 +1,4 @@
-package com.example.laure.thymesaver;
+package com.example.laure.thymesaver.Adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -7,6 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.example.laure.thymesaver.Database.Recipe;
+import com.example.laure.thymesaver.R;
 
 import java.util.ArrayList;
 
