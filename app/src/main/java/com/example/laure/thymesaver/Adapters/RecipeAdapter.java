@@ -1,7 +1,9 @@
 package com.example.laure.thymesaver.Adapters;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,20 +14,27 @@ import com.example.laure.thymesaver.Database.Recipe;
 import com.example.laure.thymesaver.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHolder> {
-    private ArrayList<Recipe> mRecipes;
+    private List<Recipe> mRecipes;
+    private final LayoutInflater mInflater;
 
-    public RecipeAdapter(ArrayList<Recipe> recipes) {
-        mRecipes = recipes;
+    public RecipeAdapter(Context context) {
+        mInflater = LayoutInflater.from(context);
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
+        LinearLayout v = (LinearLayout) mInflater
                 .inflate(R.layout.recipe_list_item, parent, false);
         return new MyViewHolder(v);
+    }
+
+    public void setRecipes(List<Recipe> recipes) {
+        mRecipes = recipes;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -35,6 +44,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
 
     @Override
     public int getItemCount() {
+        if (mRecipes == null) return 0;
         return mRecipes.size();
     }
 
