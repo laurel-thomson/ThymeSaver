@@ -12,22 +12,25 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.laure.thymesaver.Adapters.IngredientAdapter;
-import com.example.laure.thymesaver.Adapters.RecipeAdapter;
 import com.example.laure.thymesaver.Database.Ingredient;
 import com.example.laure.thymesaver.R;
 
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.List;
 
 public class AddIngredients extends AppCompatActivity implements IngredientAdapter.IngredientAdapterListener {
     private IngredientAdapter mAdapter;
-    private SearchView searchView;
+    private SearchView mSearchView;
+    private Hashtable<Ingredient, Integer>  mRecipeIngredients = new Hashtable<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_edit_recipe);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         List<Ingredient> ingredients = new ArrayList<Ingredient>();
@@ -46,14 +49,14 @@ public class AddIngredients extends AppCompatActivity implements IngredientAdapt
 
         // Associate searchable configuration with the SearchView
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        searchView = (SearchView) menu.findItem(R.id.action_search)
+        mSearchView = (SearchView) menu.findItem(R.id.action_search)
                 .getActionView();
-        searchView.setSearchableInfo(searchManager
+        mSearchView.setSearchableInfo(searchManager
                 .getSearchableInfo(getComponentName()));
-        searchView.setMaxWidth(Integer.MAX_VALUE);
+        mSearchView.setMaxWidth(Integer.MAX_VALUE);
 
         // listening to search query text change
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // filter recycler view when query submitted
@@ -89,8 +92,8 @@ public class AddIngredients extends AppCompatActivity implements IngredientAdapt
     @Override
     public void onBackPressed() {
         // close search view on back button pressed
-        if (!searchView.isIconified()) {
-            searchView.setIconified(true);
+        if (!mSearchView.isIconified()) {
+            mSearchView.setIconified(true);
             return;
         }
         super.onBackPressed();
@@ -98,10 +101,19 @@ public class AddIngredients extends AppCompatActivity implements IngredientAdapt
 
     @Override
     public void onIngredientSelected(Ingredient ingredient) {
+
+        //either add the ingredient to the dictionary, or increment its quantity
+        if (mRecipeIngredients.containsKey(ingredient)) {
+            mRecipeIngredients.put(ingredient, mRecipeIngredients.get(ingredient) + 1);
+        }
+        else {
+            mRecipeIngredients.put(ingredient, 1);
+        }
+
         Toast.makeText(
                 getApplicationContext(),
-                "Selected: " + ingredient.getName(),
-                Toast.LENGTH_LONG)
+                ingredient.getName() + " recipe quantity = " +  mRecipeIngredients.get(ingredient),
+                Toast.LENGTH_SHORT)
                     .show();
     }
 }
