@@ -42,7 +42,7 @@ public class WeeklyMealsActivity extends AppCompatActivity {
     }
 
     public void addRecipeClick(View view) {
-        Intent intent = new Intent(this, AddEditRecipeActivity.class);
+        Intent intent = new Intent(this, AddIngredients.class);
         startActivity(intent);
     }
 }

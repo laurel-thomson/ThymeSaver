@@ -19,7 +19,7 @@ import com.example.laure.thymesaver.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddEditRecipeActivity extends AppCompatActivity implements IngredientAdapter.IngredientAdapterListener {
+public class AddIngredients extends AppCompatActivity implements IngredientAdapter.IngredientAdapterListener {
     private IngredientAdapter mAdapter;
     private SearchView searchView;
 

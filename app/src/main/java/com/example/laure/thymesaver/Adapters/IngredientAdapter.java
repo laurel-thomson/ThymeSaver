@@ -22,6 +22,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
     private List<Ingredient> mIngredients;
     private List<Ingredient> mFilteredIngredients;
     private IngredientAdapterListener mListener;
+    private Ingredient mUserCreatedIngredient;
 
     public IngredientAdapter(
             Context context,
@@ -70,6 +71,19 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
                             filteredList.add(row);
                         }
                     }
+
+                    //if we didn't match any ingredients, we want to add what the user is typing
+                    //as an ingredient
+                    if (filteredList.size() == 0) {
+                        if (mUserCreatedIngredient == null) {
+                            mUserCreatedIngredient = new Ingredient(charString);
+                        }
+                        else {
+                            mUserCreatedIngredient.setName(charString);
+                        }
+                        filteredList.add(mUserCreatedIngredient);
+                    }
+
                     mFilteredIngredients = filteredList;
                 }
 
