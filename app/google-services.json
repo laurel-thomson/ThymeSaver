@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "157439382276",
+    "firebase_url": "https://thymesaver-dc176.firebaseio.com",
+    "project_id": "thymesaver-dc176",
+    "storage_bucket": "thymesaver-dc176.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:157439382276:android:13c49a9b7cee1a35",
+        "android_client_info": {
+          "package_name": "com.example.laure.thymesaver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "157439382276-mcpu4d3uptvuki5c0or9gvv5rjamv8r3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.laure.thymesaver",
+            "certificate_hash": "8f1b417ccf828218edfda2e9ec425ac9fc7705e5"
+          }
+        },
+        {
+          "client_id": "157439382276-nv130jo7k3obib492rn1v0ct6iiap7kv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiTDntc9Sll2Epnmfan-SMmeX93V8GSXc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "157439382276-nv130jo7k3obib492rn1v0ct6iiap7kv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
