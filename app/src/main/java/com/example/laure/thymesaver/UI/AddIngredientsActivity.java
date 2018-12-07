@@ -2,6 +2,7 @@ package com.example.laure.thymesaver.UI;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,12 +17,11 @@ import com.example.laure.thymesaver.Database.Ingredient;
 import com.example.laure.thymesaver.R;
 
 import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 
-public class AddIngredients extends AppCompatActivity implements IngredientAdapter.IngredientAdapterListener {
+public class AddIngredientsActivity extends AppCompatActivity implements IngredientAdapter.IngredientAdapterListener {
+
     private IngredientAdapter mAdapter;
     private SearchView mSearchView;
     private Hashtable<Ingredient, Integer>  mRecipeIngredients = new Hashtable<>();
@@ -30,7 +30,7 @@ public class AddIngredients extends AppCompatActivity implements IngredientAdapt
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_edit_recipe);
+        setContentView(R.layout.activity_add_ingredients);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         List<Ingredient> ingredients = new ArrayList<Ingredient>();

@@ -5,7 +5,7 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-@Database(entities = {Recipe.class}, version=1)
+@Database(entities = {Recipe.class, Ingredient.class, RecipeIngredient.class}, version=2)
 public abstract class RecipeDatabase extends RoomDatabase {
     public abstract RecipeDao getRecipeDao();
 

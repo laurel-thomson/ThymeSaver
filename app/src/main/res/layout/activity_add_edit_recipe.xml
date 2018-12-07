@@ -1,17 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UI.AddIngredients">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/ingredient_recycler_view"
-        style="@style/RecyclerViewStyle"
+    <EditText
+        android:id="@+id/recipe_name_textview"
+        style="@style/TextViewStyle"
+        android:hint="Recipe Name"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <android.support.design.widget.FloatingActionButton
+        style="@style/FABStyle"
+        android:id="@+id/add_ingredient_button"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:scrollbars="vertical" />
+        android:onClick="addIngredientClick"
+        android:clickable="true"
+        app:srcCompat="@android:drawable/ic_input_add" />
+
 
 </android.support.constraint.ConstraintLayout>
+

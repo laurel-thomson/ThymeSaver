@@ -15,7 +15,6 @@ public class Recipe {
     @ColumnInfo(name = "name")
     private String mName;
 
-
     public Recipe(String name) {
         mName = name;
     }

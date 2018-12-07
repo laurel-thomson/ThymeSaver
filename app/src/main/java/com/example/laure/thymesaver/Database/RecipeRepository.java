@@ -21,13 +21,13 @@ public class RecipeRepository {
     }
 
     public void insertRecipe(Recipe recipe) {
-        new InsertAsyncTask(mRecipeDao).execute(recipe);
+        new InsertRecipeAsyncTask(mRecipeDao).execute(recipe);
     }
 
-    private class InsertAsyncTask extends AsyncTask<Recipe,Void,Void> {
+    private class InsertRecipeAsyncTask extends AsyncTask<Recipe,Void,Void> {
         private RecipeDao mRecipeDao;
 
-        InsertAsyncTask(RecipeDao dao) {
+        InsertRecipeAsyncTask(RecipeDao dao) {
             mRecipeDao = dao;
         }
 
@@ -35,6 +35,28 @@ public class RecipeRepository {
         protected Void doInBackground(final Recipe...params) {
             mRecipeDao.insertRecipe(params[0]);
             return  null;
+        }
+    }
+
+    public void insertOrUpdateRecipeIngredient(RecipeIngredient recipeIngredient) {
+         new InsertOrUpdateRecipeIngredientAsyncTask
+                 (mRecipeDao).execute(recipeIngredient);    }
+
+
+    private class InsertOrUpdateRecipeIngredientAsyncTask extends AsyncTask<RecipeIngredient,Void,Void> {
+        private RecipeDao mRecipeDao;
+
+        InsertOrUpdateRecipeIngredientAsyncTask(RecipeDao dao) {
+            mRecipeDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final RecipeIngredient...params) {
+            long index = mRecipeDao.insertRecipeIngredient(params[0]);
+            if (index == -1) { //insert was unsuccessful
+                mRecipeDao.updateRecipeIngredient(params[0]);
+            }
+            return null;
         }
     }
 }
