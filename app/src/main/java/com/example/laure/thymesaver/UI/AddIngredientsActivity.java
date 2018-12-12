@@ -13,7 +13,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.laure.thymesaver.Adapters.IngredientAdapter;
-import com.example.laure.thymesaver.Database.Ingredient;
+import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
 
 import java.util.ArrayList;
@@ -34,8 +34,6 @@ public class AddIngredientsActivity extends AppCompatActivity implements Ingredi
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         List<Ingredient> ingredients = new ArrayList<Ingredient>();
-        ingredients.add(new Ingredient("Mushrooms"));
-        ingredients.add(new Ingredient("Potatoes"));
 
         RecyclerView rv = findViewById(R.id.ingredient_recycler_view);
         rv.setLayoutManager(new LinearLayoutManager(this));

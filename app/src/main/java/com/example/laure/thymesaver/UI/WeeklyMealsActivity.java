@@ -11,7 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.example.laure.thymesaver.Adapters.RecipeAdapter;
-import com.example.laure.thymesaver.Database.Recipe;
+import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.ViewModels.RecipeViewModel;
 import java.util.List;

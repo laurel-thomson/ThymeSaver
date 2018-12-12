@@ -4,8 +4,8 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 
-import com.example.laure.thymesaver.Database.Recipe;
-import com.example.laure.thymesaver.Database.RecipeRepository;
+import com.example.laure.thymesaver.Models.Recipe;
+import com.example.laure.thymesaver.Firebase.Database.RecipeRepository;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ public class RecipeViewModel extends AndroidViewModel {
 
     public RecipeViewModel(Application application) {
         super(application);
-        mRepository = new RecipeRepository(application);
+        mRepository = new RecipeRepository();
         mAllRecipes = mRepository.getAllRecipes();
     }
 
@@ -23,7 +23,4 @@ public class RecipeViewModel extends AndroidViewModel {
         return mAllRecipes;
     }
 
-    public void insertRecipe(Recipe recipe) {
-        mRepository.insertRecipe(recipe);
-    }
 }

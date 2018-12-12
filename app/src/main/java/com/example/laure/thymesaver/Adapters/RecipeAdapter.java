@@ -3,17 +3,15 @@ package com.example.laure.thymesaver.Adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.laure.thymesaver.Database.Recipe;
+import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHolder> {

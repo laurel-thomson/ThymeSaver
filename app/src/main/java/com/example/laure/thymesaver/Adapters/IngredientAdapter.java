@@ -9,7 +9,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
-import com.example.laure.thymesaver.Database.Ingredient;
+import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
 
 import java.util.ArrayList;
@@ -76,7 +76,8 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
                     //as an ingredient
                     if (filteredList.size() == 0) {
                         if (mUserCreatedIngredient == null) {
-                            mUserCreatedIngredient = new Ingredient(charString);
+                            mUserCreatedIngredient = new Ingredient();
+                            mUserCreatedIngredient.setName(charString);
                         }
                         else {
                             mUserCreatedIngredient.setName(charString);
