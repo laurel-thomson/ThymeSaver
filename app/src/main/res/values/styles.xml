@@ -23,6 +23,14 @@
         <item name="android:dividerHeight">5dp</item>
     </style>
 
+    <style name="ButtonStyle">
+        <item name="android:background">@color/colorPrimaryLight</item>
+        <item name="android:textColor">@color/colorPrimaryText</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
     <style name="FABStyle">
         <item name="android:tint">@color/colorTextIcon</item>
     </style>

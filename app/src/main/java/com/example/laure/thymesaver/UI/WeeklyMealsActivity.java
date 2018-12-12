@@ -45,4 +45,5 @@ public class WeeklyMealsActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AddEditRecipeActivity.class);
         startActivity(intent);
     }
+
 }

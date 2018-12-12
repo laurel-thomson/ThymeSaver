@@ -16,12 +16,18 @@ import java.util.List;
 public class RecipeRepository {
     private FirebaseDatabase mDatabase;
     private DatabaseReference mRecipeReference;
-
+    private static RecipeRepository mSoleInstance;
     private List<Recipe> mRecipes = new ArrayList<>();
-
     private final LiveData<List<Recipe>> mRecipeLiveData;
 
-    public RecipeRepository() {
+    public static RecipeRepository getInstance() {
+        if (mSoleInstance == null) {
+            mSoleInstance = new RecipeRepository();
+        }
+        return mSoleInstance;
+    }
+
+    private RecipeRepository() {
         mDatabase = FirebaseDatabase.getInstance();
         mRecipeReference = mDatabase.getReference();
         mRecipeLiveData = Transformations.map(

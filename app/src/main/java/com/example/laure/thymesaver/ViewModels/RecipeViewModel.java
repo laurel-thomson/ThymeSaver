@@ -15,7 +15,7 @@ public class RecipeViewModel extends AndroidViewModel {
 
     public RecipeViewModel(Application application) {
         super(application);
-        mRepository = new RecipeRepository();
+        mRepository = RecipeRepository.getInstance();
         mAllRecipes = mRepository.getAllRecipes();
     }
 
@@ -26,5 +26,4 @@ public class RecipeViewModel extends AndroidViewModel {
     public void addRecipe(Recipe r) {
         mRepository.addRecipe(r);
     }
-
 }

@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <EditText
-        android:id="@+id/recipe_name_textview"
+        android:id="@+id/recipe_name_edittext"
         style="@style/TextViewStyle"
         android:hint="Recipe Name"
         app:layout_constraintTop_toTopOf="parent"
@@ -15,6 +15,18 @@
         android:layout_marginLeft="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <Button
+        style="@style/ButtonStyle"
+        android:id="@+id/create_recipe_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="createRecipeClick"
+        android:text="Create Recipe!"
+        app:layout_constraintTop_toBottomOf="@id/recipe_name_edittext"
+        android:layout_marginTop="150dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp" />
 
     <android.support.design.widget.FloatingActionButton
         style="@style/FABStyle"
