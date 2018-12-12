@@ -23,4 +23,8 @@ public class RecipeViewModel extends AndroidViewModel {
         return mAllRecipes;
     }
 
+    public void addRecipe(Recipe r) {
+        mRepository.addRecipe(r);
+    }
+
 }
