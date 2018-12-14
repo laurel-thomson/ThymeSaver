@@ -51,7 +51,7 @@ public class AddEditRecipeActivity extends AppCompatActivity{
                             .setText("Tab " + (i + 1))
                             .setTabListener(tabListener));
         }
-
+        mViewPager.setAdapter(new TabsAdapter(getSupportFragmentManager(),3));
     }
 
     public class TabsAdapter extends FragmentStatePagerAdapter {
@@ -73,9 +73,9 @@ public class AddEditRecipeActivity extends AppCompatActivity{
                 case 0:
                     return new AboutRecipeFragment();
                 case 1:
-                    return new AboutRecipeFragment();
+                    return new RecipeIngredientsFragment();
                 case 2:
-                    return new AboutRecipeFragment();
+                    return new RecipeStepsFragment();
                 default:
                     return null;
             }
