@@ -52,6 +52,16 @@ public class AddEditRecipeActivity extends AppCompatActivity{
                             .setTabListener(tabListener));
         }
         mViewPager.setAdapter(new TabsAdapter(getSupportFragmentManager(),3));
+
+        mViewPager.setOnPageChangeListener(
+                new ViewPager.SimpleOnPageChangeListener() {
+                    @Override
+                    public void onPageSelected(int position) {
+                        // When swiping between pages, select the
+                        // corresponding tab.
+                        actionBar.setSelectedNavigationItem(position);
+                    }
+                });
     }
 
     public class TabsAdapter extends FragmentStatePagerAdapter {
