@@ -1,4 +1,4 @@
-package com.example.laure.thymesaver.UI;
+package com.example.laure.thymesaver.UI.RecipeDetail;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

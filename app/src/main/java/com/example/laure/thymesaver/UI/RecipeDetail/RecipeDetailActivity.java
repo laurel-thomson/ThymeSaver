@@ -1,7 +1,6 @@
-package com.example.laure.thymesaver.UI;
+package com.example.laure.thymesaver.UI.RecipeDetail;
 
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -12,14 +11,14 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.example.laure.thymesaver.R;
 
-public class AddEditRecipeActivity extends AppCompatActivity{
+public class RecipeDetailActivity extends AppCompatActivity{
 
     private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_edit_recipe);
+        setContentView(R.layout.activity_recipe_detail);
         mViewPager = findViewById(R.id.pager);
         final ActionBar actionBar = getSupportActionBar();
 

@@ -13,10 +13,11 @@ import android.view.View;
 import com.example.laure.thymesaver.Adapters.RecipeAdapter;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.R;
+import com.example.laure.thymesaver.UI.RecipeDetail.RecipeDetailActivity;
 import com.example.laure.thymesaver.ViewModels.RecipeViewModel;
 import java.util.List;
 
-public class WeeklyMealsActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
     private RecipeViewModel mViewModel;
     private RecipeAdapter mAdapter;
     private RecyclerView mRecyclerView;
@@ -24,7 +25,7 @@ public class WeeklyMealsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_weekly_meals);
+        setContentView(R.layout.activity_main);
         mViewModel = ViewModelProviders.of(this).get(RecipeViewModel.class);
 
         mViewModel.getAllRecipes().observe(this, new Observer<List<Recipe>>() {
@@ -42,7 +43,7 @@ public class WeeklyMealsActivity extends AppCompatActivity {
     }
 
     public void addRecipeClick(View view) {
-        Intent intent = new Intent(this, AddEditRecipeActivity.class);
+        Intent intent = new Intent(this, RecipeDetailActivity.class);
         startActivity(intent);
     }
 
