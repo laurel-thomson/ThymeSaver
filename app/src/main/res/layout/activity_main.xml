@@ -6,6 +6,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <FrameLayout
+        android:id="@+id/frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        app:layout_constraintBottom_toTopOf="@id/navigation"/>
+
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
         android:layout_width="match_parent"
@@ -15,6 +22,5 @@
         app:itemTextColor="@color/bottom_nav_color_selector"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/bottom_navigation_items" />
-
 
 </android.support.constraint.ConstraintLayout>
