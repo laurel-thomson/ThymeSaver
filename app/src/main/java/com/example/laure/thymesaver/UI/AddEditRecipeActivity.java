@@ -44,13 +44,10 @@ public class AddEditRecipeActivity extends AppCompatActivity{
             }
         };
 
-        // Add 3 tabs, specifying the tab's text and TabListener
-        for (int i = 0; i < 3; i++) {
-            actionBar.addTab(
-                    actionBar.newTab()
-                            .setText("Tab " + (i + 1))
-                            .setTabListener(tabListener));
-        }
+        actionBar.addTab(actionBar.newTab().setText("Info").setTabListener(tabListener));
+        actionBar.addTab(actionBar.newTab().setText("Ingredients").setTabListener(tabListener));
+        actionBar.addTab(actionBar.newTab().setText("Steps").setTabListener(tabListener));
+
         mViewPager.setAdapter(new TabsAdapter(getSupportFragmentManager(),3));
 
         mViewPager.setOnPageChangeListener(
