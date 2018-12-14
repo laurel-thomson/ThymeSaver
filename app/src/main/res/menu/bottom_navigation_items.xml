@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/action_meal_planner"
+        android:title="Meal Planner"
+        android:icon="@drawable/ic_calendar"/>
+    <item android:id="@+id/action_cookbook"
+        android:title="Cookbook"
+        android:icon="@drawable/ic_book"/>
+    <item android:id="@+id/action_pantry"
+        android:title="Pantry"
+        android:icon="@drawable/ic_fork_knife"/>
+    <item android:id="@+id/action_shopping_list"
+        android:title="Shopping List"
+        android:icon="@drawable/ic_shopping_cart"/>
+</menu>
