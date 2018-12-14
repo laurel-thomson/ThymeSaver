@@ -1,46 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/recipe_name_edittext"
-        style="@style/TextViewStyle"
-        android:hint="Recipe Name"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="30dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <Button
-        style="@style/ButtonStyle"
-        android:id="@+id/create_recipe_button"
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="createRecipeClick"
-        android:text="Create Recipe!"
-        app:layout_constraintTop_toBottomOf="@id/recipe_name_edittext"
-        android:layout_marginTop="150dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp" />
+        android:layout_below="@+id/tool_bar"
+        android:elevation="6dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
-    <android.support.design.widget.FloatingActionButton
-        style="@style/FABStyle"
-        android:id="@+id/add_ingredient_button"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="addIngredientClick"
-        android:clickable="true"
-        app:srcCompat="@android:drawable/ic_input_add" />
-
-
-</android.support.constraint.ConstraintLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>
 
