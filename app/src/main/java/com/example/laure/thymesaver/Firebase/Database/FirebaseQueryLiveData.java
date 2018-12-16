@@ -17,9 +17,9 @@ public class FirebaseQueryLiveData<T> extends LiveData<DataSnapshot> {
     private final MyEventListener mListener = new MyEventListener();
 
     public FirebaseQueryLiveData(
-            DatabaseReference ref,
+            Query q,
             Class<T> classType) {
-        mQuery = ref;
+        mQuery = q;
         mClassType = classType;
     }
 
@@ -40,8 +40,8 @@ public class FirebaseQueryLiveData<T> extends LiveData<DataSnapshot> {
             if(dataSnapshot != null){
                 setValue(dataSnapshot);
                 for(DataSnapshot snap : dataSnapshot.getChildren()){
-                    T msg = snap.getValue(mClassType);
-                    mQueryValuesList.add(msg);
+                    T value = snap.getValue(mClassType);
+                    mQueryValuesList.add(value);
                 }
             }
         }
