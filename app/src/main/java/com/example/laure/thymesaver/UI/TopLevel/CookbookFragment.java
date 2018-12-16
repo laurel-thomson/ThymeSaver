@@ -2,11 +2,9 @@ package com.example.laure.thymesaver.UI.TopLevel;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,7 +16,6 @@ import android.view.ViewGroup;
 import com.example.laure.thymesaver.Adapters.RecipeAdapter;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.R;
-import com.example.laure.thymesaver.UI.RecipeDetail.RecipeDetailActivity;
 import com.example.laure.thymesaver.ViewModels.RecipeViewModel;
 
 import java.util.List;
@@ -54,13 +51,9 @@ public class CookbookFragment extends Fragment {
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
                 DividerItemDecoration.VERTICAL));
 
-        FloatingActionButton button = view.findViewById(R.id.launch_add_recipe_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), RecipeDetailActivity.class);
-                startActivity(intent);
-            }
-        });
+        Recipe r = new Recipe();
+        r.setName("pumpkin pie");
+        r.addIngredient("pumpkin", 1);
+        mViewModel.addRecipe(r);
     }
 }

@@ -31,12 +31,13 @@ public class RecipeRepository {
         mDatabase = FirebaseDatabase.getInstance();
         mRecipeReference = mDatabase.getReference();
         mRecipeLiveData = Transformations.map(
-                new FirebaseQueryLiveData(mRecipeReference)
-                , new Deserializer());
+                new FirebaseQueryLiveData(mRecipeReference),
+                new Deserializer());
     }
 
     public void addRecipe(Recipe r) {
-        mRecipeReference.child("recipes").push().setValue(r);
+        //mRecipeReference.child("recipes").push().setValue(r);
+        mRecipeReference.child("recipes").child(r.getName()).setValue(r);
     }
 
     private class Deserializer implements Function<DataSnapshot, List<Recipe>> {
@@ -46,6 +47,7 @@ public class RecipeRepository {
 
             for(DataSnapshot snap : dataSnapshot.getChildren()){
                 Recipe r = snap.getValue(Recipe.class);
+                r.setName(snap.getKey());
                 mRecipes.add(r);
             }
             return mRecipes;
