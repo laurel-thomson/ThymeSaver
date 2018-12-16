@@ -1,5 +1,6 @@
 package com.example.laure.thymesaver.UI.RecipeDetail;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,15 +11,24 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.laure.thymesaver.R;
+import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
+import com.example.laure.thymesaver.ViewModels.RecipeViewModel;
 
 public class RecipeDetailActivity extends AppCompatActivity{
 
+    public static String CURRENT_RECIPE_NAME = "Current Recipe Name";
     private ViewPager mViewPager;
+    private RecipeDetailViewModel mViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
+
+        mViewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
+        String recipeName = getIntent().getStringExtra(CURRENT_RECIPE_NAME);
+        mViewModel.setCurrentRecipe(recipeName);
+
         mViewPager = findViewById(R.id.pager);
         final ActionBar actionBar = getSupportActionBar();
 

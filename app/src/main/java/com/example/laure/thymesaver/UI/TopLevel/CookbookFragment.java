@@ -2,6 +2,7 @@ package com.example.laure.thymesaver.UI.TopLevel;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import com.example.laure.thymesaver.Adapters.RecipeAdapter;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.R;
+import com.example.laure.thymesaver.UI.RecipeDetail.RecipeDetailActivity;
 import com.example.laure.thymesaver.ViewModels.RecipeViewModel;
 
 import java.util.List;
@@ -49,5 +51,21 @@ public class CookbookFragment extends Fragment {
 
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
                 DividerItemDecoration.VERTICAL));
+
+        mAdapter.setOnItemClickListener(new RecipeAdapter.ClickListener() {
+            @Override
+            public void onItemClick(int position, View v) {
+                Intent intent = new Intent(getActivity(), RecipeDetailActivity.class);
+                intent.putExtra(
+                        RecipeDetailActivity.CURRENT_RECIPE_NAME,
+                        mRecipeViewModel.getRecipeName(position));
+                startActivity(intent);
+            }
+
+            @Override
+            public void onItemLongClick(int position, View v) {
+                //implement this later
+            }
+        });
     }
 }
