@@ -41,4 +41,24 @@ public class Ingredient {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+
+        if (!(o instanceof Ingredient)) {
+            return false;
+        }
+
+        Ingredient i = (Ingredient) o;
+
+        return name.equals(i.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * name.hashCode();
+    }
 }
