@@ -17,6 +17,7 @@ import java.util.List;
 public class Repository {
     private FirebaseDatabase mDatabase;
     private DatabaseReference mRecipeReference;
+    private DatabaseReference mIngredientReference;
     private static Repository mSoleInstance;
     private List<Recipe> mRecipes = new ArrayList<>();
     private List<Ingredient> mIngredients = new ArrayList<>();
@@ -32,21 +33,22 @@ public class Repository {
 
     private Repository() {
         mDatabase = FirebaseDatabase.getInstance();
-        mRecipeReference = mDatabase.getReference();
+        mRecipeReference = mDatabase.getReference("recipes");
+        mIngredientReference = mDatabase.getReference("ingredients");
         mRecipeLiveData = Transformations.map(
-                new FirebaseQueryLiveData(mRecipeReference),
+                new FirebaseQueryLiveData(mRecipeReference, Recipe.class),
                 new RecipeDeserializer());
         mIngredientLiveData = Transformations.map(
-                new FirebaseQueryLiveData(mRecipeReference),
+                new FirebaseQueryLiveData(mIngredientReference, Ingredient.class),
                 new IngredientDeserializer());
     }
 
     public void addRecipe(Recipe r) {
-        mRecipeReference.child("recipes").child(r.getName()).setValue(r);
+        mRecipeReference.child(r.getName()).setValue(r);
     }
 
     public void addIngredient(Ingredient i) {
-        mRecipeReference.child("ingredients").child(i.getName()).setValue(i);
+        mIngredientReference.child(i.getName()).setValue(i);
     }
 
     @NonNull

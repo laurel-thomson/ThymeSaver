@@ -24,6 +24,10 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
     private IngredientAdapterListener mListener;
     private Ingredient mUserCreatedIngredient;
 
+    public IngredientAdapter(Context context) {
+        mContext = context;
+    }
+
     public IngredientAdapter(
             Context context,
             List<Ingredient> ingredients,
@@ -34,9 +38,15 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
         mListener = listener;
     }
 
+    public void setIngredients(List<Ingredient> ingredients) {
+        mIngredients = ingredients;
+        mFilteredIngredients = ingredients;
+        notifyDataSetChanged();
+    }
+
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
+        View itemView = LayoutInflater.from(mContext)
                 .inflate(R.layout.ingredient_list_item, parent, false);
 
         return new MyViewHolder(itemView);
@@ -50,6 +60,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
 
     @Override
     public int getItemCount() {
+        if (mFilteredIngredients == null) return 0;
         return mFilteredIngredients.size();
     }
 

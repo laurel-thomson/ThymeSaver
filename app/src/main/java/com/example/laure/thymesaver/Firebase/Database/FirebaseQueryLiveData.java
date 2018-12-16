@@ -1,33 +1,31 @@
 package com.example.laure.thymesaver.Firebase.Database;
 
 import android.arch.lifecycle.LiveData;
-
-import com.example.laure.thymesaver.Models.Recipe;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FirebaseQueryLiveData extends LiveData<DataSnapshot> {
-    private List<Recipe> mQueryValuesList = new ArrayList<>();
+public class FirebaseQueryLiveData<T> extends LiveData<DataSnapshot> {
+    private List<T> mQueryValuesList = new ArrayList<>();
+    private final Class<T> mClassType;
     private final Query mQuery;
     private final MyEventListener mListener = new MyEventListener();
 
-    public FirebaseQueryLiveData(Query query) {
-        mQuery = query;
-    }
-
-    public FirebaseQueryLiveData(DatabaseReference ref) {
+    public FirebaseQueryLiveData(
+            DatabaseReference ref,
+            Class<T> classType) {
         mQuery = ref;
+        mClassType = classType;
     }
 
     @Override
     protected void onActive() {
-        mQuery.addChildEventListener(mListener);
+        mQuery.addValueEventListener(mListener);
     }
 
     @Override
@@ -35,35 +33,22 @@ public class FirebaseQueryLiveData extends LiveData<DataSnapshot> {
         mQuery.removeEventListener(mListener);
     }
 
-    private class MyEventListener implements ChildEventListener {
+    private class MyEventListener implements ValueEventListener {
 
         @Override
-        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+        public void onDataChange(DataSnapshot dataSnapshot) {
             if(dataSnapshot != null){
                 setValue(dataSnapshot);
                 for(DataSnapshot snap : dataSnapshot.getChildren()){
-                    Recipe msg = snap.getValue(Recipe.class);
+                    T msg = snap.getValue(mClassType);
                     mQueryValuesList.add(msg);
                 }
-            } else {
             }
         }
 
         @Override
-        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-        }
-
-        @Override
-        public void onChildRemoved(DataSnapshot dataSnapshot) {
-        }
-
-        @Override
-        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-        }
-
-        @Override
         public void onCancelled(DatabaseError databaseError) {
-        }
 
+        }
     }
 }
