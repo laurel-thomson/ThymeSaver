@@ -52,11 +52,5 @@ public class PantryFragment extends Fragment {
 
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
                 DividerItemDecoration.VERTICAL));
-
-        Ingredient i = new Ingredient();
-        i.setName("tomato");
-        i.setUnit("quantity");
-        i.setPantryQuantity(1);
-        mIngredientViewModel.addIngredient(i);
     }
 }

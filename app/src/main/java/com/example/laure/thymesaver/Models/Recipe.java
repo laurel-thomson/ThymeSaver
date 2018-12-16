@@ -10,6 +10,11 @@ public class Recipe {
     private HashMap<String, Integer> recipeIngredients = new HashMap<>();
 
     public Recipe() {
+        //required empty constructor for Firebase
+    }
+
+    public Recipe(String name) {
+        this.name = name;
     }
 
     @Exclude

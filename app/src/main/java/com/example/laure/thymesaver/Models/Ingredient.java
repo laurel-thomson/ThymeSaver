@@ -8,6 +8,13 @@ public class Ingredient {
     private int pantryQuantity;
 
     public Ingredient() {
+        //required empty constructor for Firebase
+    }
+
+    public Ingredient(String name, String unit, int pantryQuantity) {
+        this.name = name;
+        this.unit = unit;
+        this.pantryQuantity = pantryQuantity;
     }
 
     public String getUnit() {
