@@ -5,17 +5,17 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 
 import com.example.laure.thymesaver.Models.Recipe;
-import com.example.laure.thymesaver.Firebase.Database.RecipeRepository;
+import com.example.laure.thymesaver.Firebase.Database.Repository;
 
 import java.util.List;
 
 public class RecipeViewModel extends AndroidViewModel {
-    private RecipeRepository mRepository;
+    private Repository mRepository;
     private LiveData<List<Recipe>> mAllRecipes;
 
     public RecipeViewModel(Application application) {
         super(application);
-        mRepository = RecipeRepository.getInstance();
+        mRepository = Repository.getInstance();
         mAllRecipes = mRepository.getAllRecipes();
     }
 

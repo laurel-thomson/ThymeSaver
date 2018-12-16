@@ -14,14 +14,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.laure.thymesaver.Adapters.RecipeAdapter;
+import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.R;
+import com.example.laure.thymesaver.ViewModels.IngredientViewModel;
 import com.example.laure.thymesaver.ViewModels.RecipeViewModel;
 
 import java.util.List;
 
 public class CookbookFragment extends Fragment {
-    private RecipeViewModel mViewModel;
+    private RecipeViewModel mRecipeViewModel;
+    private IngredientViewModel mIngredientViewModel;
     private RecipeAdapter mAdapter;
     private RecyclerView mRecyclerView;
 
@@ -33,9 +36,9 @@ public class CookbookFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(RecipeViewModel.class);
-
-        mViewModel.getAllRecipes().observe(this, new Observer<List<Recipe>>() {
+        mRecipeViewModel = ViewModelProviders.of(this).get(RecipeViewModel.class);
+        mIngredientViewModel = ViewModelProviders.of(this).get(IngredientViewModel.class);
+        mRecipeViewModel.getAllRecipes().observe(this, new Observer<List<Recipe>>() {
             @Override
             public void onChanged(@Nullable List<Recipe> recipes) {
                 //update the cached copy of recipes in the adapter
@@ -51,9 +54,12 @@ public class CookbookFragment extends Fragment {
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
                 DividerItemDecoration.VERTICAL));
 
+        Ingredient i = new Ingredient();
+        i.setName("chips");
         Recipe r = new Recipe();
-        r.setName("pumpkin pie");
-        r.addIngredient("pumpkin", 1);
-        mViewModel.addRecipe(r);
+        r.setName("chips and salsa");
+        r.addIngredient("chips",1);
+        mRecipeViewModel.addRecipe(r);
+        mIngredientViewModel.addIngredient(i);
     }
 }

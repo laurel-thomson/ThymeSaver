@@ -1,11 +1,32 @@
 package com.example.laure.thymesaver.Models;
 
+import com.google.firebase.database.Exclude;
+
 public class Ingredient {
     private String name;
+    private String unit;
+    private int pantryQuantity;
 
     public Ingredient() {
     }
 
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public int getPantryQuantity() {
+        return pantryQuantity;
+    }
+
+    public void setPantryQuantity(int pantryQuantity) {
+        this.pantryQuantity = pantryQuantity;
+    }
+
+    @Exclude
     public String getName() {
         return name;
     }
