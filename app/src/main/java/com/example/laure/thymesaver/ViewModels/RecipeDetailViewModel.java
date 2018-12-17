@@ -7,7 +7,7 @@ import com.example.laure.thymesaver.Firebase.Database.Repository;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.Recipe;
 
-import java.util.HashMap;
+import java.util.List;
 
 public class RecipeDetailViewModel extends AndroidViewModel {
     private Repository mRepository;
@@ -25,10 +25,11 @@ public class RecipeDetailViewModel extends AndroidViewModel {
     }
 
     public Recipe getCurrentRecipe() {
+
         return mCurrentRecipe;
     }
 
-    public HashMap<Ingredient, Integer> getCurrentRecipeIngredients() {
+    public List<Ingredient> getCurrentRecipeIngredients() {
         return mRepository.getRecipeIngredients(mCurrentRecipe);
     }
 }

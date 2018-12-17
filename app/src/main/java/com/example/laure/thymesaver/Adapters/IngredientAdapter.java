@@ -24,10 +24,6 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
     private IngredientAdapterListener mListener;
     private Ingredient mUserCreatedIngredient;
 
-    public IngredientAdapter(Context context) {
-        mContext = context;
-    }
-
     public IngredientAdapter(
             Context context,
             List<Ingredient> ingredients,
@@ -35,6 +31,13 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
         mContext = context;
         mIngredients = ingredients;
         mFilteredIngredients = ingredients;
+        mListener = listener;
+    }
+
+    public IngredientAdapter(
+            Context context,
+            IngredientAdapterListener listener) {
+        mContext = context;
         mListener = listener;
     }
 

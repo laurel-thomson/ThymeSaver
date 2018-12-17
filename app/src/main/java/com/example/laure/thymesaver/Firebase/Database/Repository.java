@@ -3,16 +3,21 @@ package com.example.laure.thymesaver.Firebase.Database;
 import android.arch.core.util.Function;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Transformations;
+import android.content.res.Resources;
 import android.support.annotation.NonNull;
 
 import com.example.laure.thymesaver.Models.Ingredient;
+import com.example.laure.thymesaver.Models.MeasuredIngredient;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.nio.channels.NotYetConnectedException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Repository {
     private FirebaseDatabase mDatabase;
@@ -36,10 +41,10 @@ public class Repository {
         mRecipeReference = mDatabase.getReference("recipes");
         mIngredientReference = mDatabase.getReference("ingredients");
         mRecipeLiveData = Transformations.map(
-                new FirebaseQueryLiveData(mRecipeReference, Recipe.class),
-                new RecipeDeserializer());
+                new FirebaseQueryLiveData<Recipe>(mRecipeReference, Recipe.class),
+                new RecipeListDeserializer());
         mIngredientLiveData = Transformations.map(
-                new FirebaseQueryLiveData(mIngredientReference, Ingredient.class),
+                new FirebaseQueryLiveData<Ingredient>(mIngredientReference, Ingredient.class),
                 new IngredientDeserializer());
     }
 
@@ -61,7 +66,30 @@ public class Repository {
         return mIngredientLiveData;
     }
 
-    private class RecipeDeserializer implements Function<DataSnapshot, List<Recipe>> {
+    public Recipe getRecipe(String recipeName) {
+        for (Recipe r : mRecipes) {
+            if (r.getName().equals(recipeName))
+                return r;
+        }
+        throw new Resources.NotFoundException();
+    }
+
+    public List<Ingredient> getRecipeIngredients(Recipe recipe) {
+        List<Ingredient> measuredIngredients = new ArrayList<>();
+
+        for (Map.Entry<String, Integer> entry : recipe.getRecipeIngredients().entrySet()) {
+            String ingredientName = entry.getKey();
+            int quantity = entry.getValue();
+
+            for (Ingredient i : mIngredients) {
+                if (i.getName().equals(ingredientName));
+                measuredIngredients.add(new MeasuredIngredient(i, quantity));
+            }
+        }
+        return measuredIngredients;
+    }
+
+    private class RecipeListDeserializer implements Function<DataSnapshot, List<Recipe>> {
         @Override
         public List<Recipe> apply(DataSnapshot dataSnapshot) {
             mRecipes.clear();

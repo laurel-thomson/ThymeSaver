@@ -13,13 +13,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.laure.thymesaver.Adapters.IngredientAdapter;
+import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.AddIngredientsActivity;
 import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 
-public class RecipeIngredientsFragment extends Fragment {
+public class RecipeIngredientsFragment extends Fragment  implements IngredientAdapter.IngredientAdapterListener{
     private RecipeDetailViewModel mViewModel;
     private IngredientAdapter mAdapter;
     private RecyclerView mRecyclerView;
@@ -34,11 +36,12 @@ public class RecipeIngredientsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         mViewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
-        mAdapter.setIngredients(mViewModel.getCurrentRecipeIngredients());
 
         mRecyclerView = view.findViewById(R.id.recipe_ingredients_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new IngredientAdapter(getActivity());
+        mAdapter = new IngredientAdapter(getActivity(),
+                mViewModel.getCurrentRecipeIngredients(),
+                this);
         mRecyclerView.setAdapter(mAdapter);
 
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
@@ -52,5 +55,14 @@ public class RecipeIngredientsFragment extends Fragment {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public void onIngredientSelected(Ingredient ingredient) {
+        Toast.makeText(
+                getContext(),
+                ingredient.getName(),
+                Toast.LENGTH_SHORT)
+                .show();
     }
 }

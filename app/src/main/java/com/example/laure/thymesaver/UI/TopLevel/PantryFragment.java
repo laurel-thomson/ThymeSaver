@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.laure.thymesaver.Adapters.IngredientAdapter;
 import com.example.laure.thymesaver.Adapters.RecipeAdapter;
@@ -23,7 +24,7 @@ import com.example.laure.thymesaver.ViewModels.RecipeViewModel;
 
 import java.util.List;
 
-public class PantryFragment extends Fragment {
+public class PantryFragment extends Fragment implements IngredientAdapter.IngredientAdapterListener{
     private IngredientViewModel mIngredientViewModel;
     private IngredientAdapter mAdapter;
     private RecyclerView mRecyclerView;
@@ -37,6 +38,7 @@ public class PantryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mIngredientViewModel = ViewModelProviders.of(this).get(IngredientViewModel.class);
+        mAdapter = new IngredientAdapter(getActivity(),this);
         mIngredientViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
             @Override
             public void onChanged(@Nullable List<Ingredient> ingredients) {
@@ -47,10 +49,18 @@ public class PantryFragment extends Fragment {
 
         mRecyclerView = view.findViewById(R.id.pantry_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new IngredientAdapter(getActivity());
         mRecyclerView.setAdapter(mAdapter);
 
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
                 DividerItemDecoration.VERTICAL));
+    }
+
+    @Override
+    public void onIngredientSelected(Ingredient ingredient) {
+        Toast.makeText(
+                getContext(),
+                ingredient.getName(),
+                Toast.LENGTH_SHORT)
+                .show();
     }
 }

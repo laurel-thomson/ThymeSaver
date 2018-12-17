@@ -3,7 +3,6 @@ package com.example.laure.thymesaver.ViewModels;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
-
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.Firebase.Database.Repository;
 
@@ -23,7 +22,8 @@ public class RecipeViewModel extends AndroidViewModel {
         return mAllRecipes;
     }
 
-    public void addRecipe(Recipe r) {
-        mRepository.addRecipe(r);
+    public String getRecipeName(int position) {
+        List<Recipe> recipes = mAllRecipes.getValue();
+        return recipes.get(position).getName();
     }
 }
