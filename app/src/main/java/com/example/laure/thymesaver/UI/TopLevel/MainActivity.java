@@ -26,12 +26,22 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView mNavigationView;
     private ViewPager mViewPager;
     private ViewPagerAdapter mAdapter;
+    private FloatingActionButton mFAB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        mFAB = findViewById(R.id.main_add_button);
+        mFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), RecipeDetailActivity.class);
+                startActivity(intent);
+            }
+        });
 
         mNavigationView = findViewById(R.id.navigation);
         mViewPager = findViewById(R.id.main_viewpager);
@@ -61,8 +71,8 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
+
             @Override
             public void onPageSelected(int position) {
                 if (mPreviousMenuItem != null) {
@@ -72,12 +82,19 @@ public class MainActivity extends AppCompatActivity {
                 }
                 mNavigationView.getMenu().getItem(position).setChecked(true);
                 mPreviousMenuItem = mNavigationView.getMenu().getItem(position);
-
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
+                switch (state) {
+                    case ViewPager.SCROLL_STATE_IDLE:
+                        mFAB.show();
+                        break;
+                    case ViewPager.SCROLL_STATE_DRAGGING:
+                    case ViewPager.SCROLL_STATE_SETTLING:
+                        mFAB.hide();
+                        break;
+                }
             }
         });
         mAdapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -86,15 +103,6 @@ public class MainActivity extends AppCompatActivity {
         mAdapter.addFragment(new PantryFragment());
         mAdapter.addFragment(new ShoppingListFragment());
         mViewPager.setAdapter(mAdapter);
-
-        FloatingActionButton button = findViewById(R.id.main_add_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), RecipeDetailActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
 
