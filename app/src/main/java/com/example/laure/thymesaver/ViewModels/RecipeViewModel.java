@@ -21,9 +21,4 @@ public class RecipeViewModel extends AndroidViewModel {
     public LiveData<List<Recipe>> getAllRecipes() {
         return mAllRecipes;
     }
-
-    public String getRecipeName(int position) {
-        List<Recipe> recipes = mAllRecipes.getValue();
-        return recipes.get(position).getName();
-    }
 }

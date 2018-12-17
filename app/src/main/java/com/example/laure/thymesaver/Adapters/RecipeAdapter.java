@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.R;
 
@@ -17,10 +18,11 @@ import java.util.List;
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHolder> {
     private List<Recipe> mRecipes;
     private final LayoutInflater mInflater;
-    private static ClickListener mClickListener;
+    private RecipeAdapter.RecipeAdapterListener mListener;
 
-    public RecipeAdapter(Context context) {
+    public RecipeAdapter(Context context, RecipeAdapterListener listener) {
         mInflater = LayoutInflater.from(context);
+        mListener = listener;
     }
 
     @NonNull
@@ -47,34 +49,26 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
         return mRecipes.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder
-            implements View.OnClickListener, View.OnLongClickListener {
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
         public TextView mTextView;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             mTextView = itemView.findViewById(R.id.recipe_list_textview);
-        }
 
-        @Override
-        public void onClick(View v) {
-            mClickListener.onItemClick(getAdapterPosition(), v);
-        }
-
-        @Override
-        public boolean onLongClick(View v) {
-            mClickListener.onItemLongClick(getAdapterPosition(), v);
-            return false;
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // send selected ingredient in callback
+                    mListener.onRecipeSelected(mRecipes.get(getAdapterPosition()));
+                }
+            });
         }
     }
 
-    public void setOnItemClickListener(ClickListener clickListener) {
-        mClickListener = clickListener;
-    }
 
-    public interface ClickListener {
-        void onItemClick(int position, View v);
-        void onItemLongClick(int position, View v);
+    public interface RecipeAdapterListener {
+        void onRecipeSelected(Recipe recipe);
     }
 }

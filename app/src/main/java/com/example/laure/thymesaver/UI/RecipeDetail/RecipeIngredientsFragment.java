@@ -35,7 +35,7 @@ public class RecipeIngredientsFragment extends Fragment  implements IngredientAd
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mViewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
+        mViewModel = ViewModelProviders.of(getActivity()).get(RecipeDetailViewModel.class);
 
         mRecyclerView = view.findViewById(R.id.recipe_ingredients_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

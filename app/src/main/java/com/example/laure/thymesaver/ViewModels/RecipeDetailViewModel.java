@@ -25,7 +25,6 @@ public class RecipeDetailViewModel extends AndroidViewModel {
     }
 
     public Recipe getCurrentRecipe() {
-
         return mCurrentRecipe;
     }
 

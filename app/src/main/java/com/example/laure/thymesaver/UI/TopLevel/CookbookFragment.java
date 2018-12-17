@@ -13,8 +13,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.laure.thymesaver.Adapters.RecipeAdapter;
+import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.RecipeDetail.RecipeDetailActivity;
@@ -22,7 +24,7 @@ import com.example.laure.thymesaver.ViewModels.RecipeViewModel;
 
 import java.util.List;
 
-public class CookbookFragment extends Fragment {
+public class CookbookFragment extends Fragment implements RecipeAdapter.RecipeAdapterListener {
     private RecipeViewModel mRecipeViewModel;
     private RecipeAdapter mAdapter;
     private RecyclerView mRecyclerView;
@@ -46,26 +48,19 @@ public class CookbookFragment extends Fragment {
 
         mRecyclerView = view.findViewById(R.id.recipes_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new RecipeAdapter(getActivity());
+        mAdapter = new RecipeAdapter(getActivity(), this);
         mRecyclerView.setAdapter(mAdapter);
 
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
                 DividerItemDecoration.VERTICAL));
+    }
 
-        mAdapter.setOnItemClickListener(new RecipeAdapter.ClickListener() {
-            @Override
-            public void onItemClick(int position, View v) {
-                Intent intent = new Intent(getActivity(), RecipeDetailActivity.class);
-                intent.putExtra(
-                        RecipeDetailActivity.CURRENT_RECIPE_NAME,
-                        mRecipeViewModel.getRecipeName(position));
-                startActivity(intent);
-            }
-
-            @Override
-            public void onItemLongClick(int position, View v) {
-                //implement this later
-            }
-        });
+    @Override
+    public void onRecipeSelected(Recipe recipe) {
+        Intent intent = new Intent(getActivity(), RecipeDetailActivity.class);
+        intent.putExtra(
+                RecipeDetailActivity.CURRENT_RECIPE_NAME,
+                recipe.getName());
+        startActivity(intent);
     }
 }
