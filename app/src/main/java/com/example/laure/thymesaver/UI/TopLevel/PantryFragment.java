@@ -42,7 +42,7 @@ public class PantryFragment extends Fragment implements IngredientAdapter.Ingred
         mIngredientViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
             @Override
             public void onChanged(@Nullable List<Ingredient> ingredients) {
-                //update the cached copy of recipes in the adapter
+                //update the cached copy of ingredients in the adapter
                 mAdapter.setIngredients(ingredients);
             }
         });

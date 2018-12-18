@@ -5,16 +5,16 @@ import com.google.firebase.database.Exclude;
 public class Ingredient {
     private String name;
     private String unit;
-    private int pantryQuantity;
+    private int quantity;
 
     public Ingredient() {
         //required empty constructor for Firebase
     }
 
-    public Ingredient(String name, String unit, int pantryQuantity) {
+    public Ingredient(String name, String unit, int quantity) {
         this.name = name;
         this.unit = unit;
-        this.pantryQuantity = pantryQuantity;
+        this.quantity = quantity;
     }
 
     public String getUnit() {
@@ -25,12 +25,12 @@ public class Ingredient {
         this.unit = unit;
     }
 
-    public int getPantryQuantity() {
-        return pantryQuantity;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setPantryQuantity(int pantryQuantity) {
-        this.pantryQuantity = pantryQuantity;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     @Exclude

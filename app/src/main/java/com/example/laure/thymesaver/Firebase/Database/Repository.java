@@ -7,13 +7,10 @@ import android.content.res.Resources;
 import android.support.annotation.NonNull;
 
 import com.example.laure.thymesaver.Models.Ingredient;
-import com.example.laure.thymesaver.Models.MeasuredIngredient;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import java.nio.channels.NotYetConnectedException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -74,8 +71,8 @@ public class Repository {
         throw new Resources.NotFoundException();
     }
 
-    public List<Ingredient> getRecipeIngredients(Recipe recipe) {
-        List<Ingredient> measuredIngredients = new ArrayList<>();
+    public HashMap<Ingredient, Integer> getRecipeIngredients(Recipe recipe) {
+        HashMap<Ingredient, Integer> measuredIngredients = new HashMap<>();
 
         for (Map.Entry<String, Integer> entry : recipe.getRecipeIngredients().entrySet()) {
             String ingredientName = entry.getKey();
@@ -83,7 +80,7 @@ public class Repository {
 
             for (Ingredient i : mIngredients) {
                 if (i.getName().equals(ingredientName));
-                measuredIngredients.add(new MeasuredIngredient(i, quantity));
+                measuredIngredients.put(i, quantity);
             }
         }
         return measuredIngredients;

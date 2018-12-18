@@ -13,7 +13,9 @@ import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.MyViewHolder>
     implements Filterable {
@@ -23,6 +25,13 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
     private List<Ingredient> mFilteredIngredients;
     private IngredientAdapterListener mListener;
     private Ingredient mUserCreatedIngredient;
+
+    public IngredientAdapter(
+            Context context,
+            IngredientAdapterListener listener) {
+        mContext = context;
+        mListener = listener;
+    }
 
     public IngredientAdapter(
             Context context,
@@ -36,9 +45,34 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
 
     public IngredientAdapter(
             Context context,
+            HashMap<Ingredient, Integer> ingredients,
             IngredientAdapterListener listener) {
         mContext = context;
+        mIngredients = createMeasuredIngredientList(ingredients);
+        mFilteredIngredients = mIngredients;
         mListener = listener;
+    }
+
+    private List<Ingredient> createMeasuredIngredientList(HashMap<Ingredient, Integer> measuredIngredients) {
+        List<Ingredient> list = new ArrayList<>();
+        for (Map.Entry<Ingredient, Integer> entry : measuredIngredients.entrySet()) {
+            list.add(new MeasuredIngredient(entry.getKey(), entry.getValue()));
+        }
+        return list;
+    }
+
+    private class MeasuredIngredient extends Ingredient {
+        int mMeasuredQuantity;
+
+        MeasuredIngredient(Ingredient i, int measure) {
+            super(i.getName(), i.getUnit(), i.getQuantity());
+            mMeasuredQuantity = measure;
+        }
+
+        @Override
+        public int getQuantity() {
+            return mMeasuredQuantity;
+        }
     }
 
     public void setIngredients(List<Ingredient> ingredients) {
