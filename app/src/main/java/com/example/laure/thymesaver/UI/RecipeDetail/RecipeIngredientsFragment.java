@@ -57,8 +57,7 @@ public class RecipeIngredientsFragment extends Fragment  implements IngredientAd
         });
     }
 
-    @Override
-    public void onIngredientSelected(Ingredient ingredient) {
+    public void onIngredientQuantityChanged(Ingredient ingredient, int quantity) {
         Toast.makeText(
                 getContext(),
                 ingredient.getName(),

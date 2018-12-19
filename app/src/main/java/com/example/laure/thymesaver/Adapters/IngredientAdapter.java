@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.laure.thymesaver.Models.Ingredient;
@@ -73,6 +74,11 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
         public int getQuantity() {
             return mMeasuredQuantity;
         }
+
+        @Override
+        public void setQuantity(int quantity) {
+            mMeasuredQuantity = quantity;
+        }
     }
 
     public void setIngredients(List<Ingredient> ingredients) {
@@ -93,7 +99,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         final Ingredient ingredient = mFilteredIngredients.get(position);
         holder.mNameTV.setText(ingredient.getName());
-        holder.mNumberPicker.setText(Integer.toString(ingredient.getQuantity()));
+        holder.mQuantityTV.setText(Integer.toString(ingredient.getQuantity()));
     }
 
     @Override
@@ -152,24 +158,42 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView mNameTV;
-        public TextView mNumberPicker;
+        public TextView mQuantityTV;
+        public LinearLayout mDecrementer;
+        public LinearLayout mIncrementer;
 
         public MyViewHolder(View view) {
             super(view);
             mNameTV = view.findViewById(R.id.ingredient_textview);
-            mNumberPicker = view.findViewById(R.id.ingredient_quantity_picker);
+            mQuantityTV = view.findViewById(R.id.ingredient_quantity_picker);
+            mDecrementer = view.findViewById(R.id.decrement_quantity_layout);
+            mIncrementer = view.findViewById(R.id.increment_quantity_layout);
 
-            view.setOnClickListener(new View.OnClickListener() {
+            mDecrementer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // send selected ingredient in callback
-                    mListener.onIngredientSelected(mFilteredIngredients.get(getAdapterPosition()));
+                    Ingredient i = mFilteredIngredients.get(getAdapterPosition());
+                    if (i.getQuantity() == 0) return;
+                    i.setQuantity(i.getQuantity() - 1);
+                    mListener.onIngredientQuantityChanged(i, i.getQuantity());
+                    notifyDataSetChanged();
+                }
+            });
+
+            mIncrementer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Ingredient i = mFilteredIngredients.get(getAdapterPosition());
+                    if (i.getQuantity() > 100) return;
+                    i.setQuantity(i.getQuantity() + 1);
+                    mListener.onIngredientQuantityChanged(i, i.getQuantity());
+                    notifyDataSetChanged();
                 }
             });
         }
     }
 
     public interface IngredientAdapterListener {
-        void onIngredientSelected(Ingredient ingredient);
+        void onIngredientQuantityChanged(Ingredient ingredient, int quantity);
     }
 }

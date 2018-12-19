@@ -98,7 +98,9 @@ public class AddIngredientsActivity extends AppCompatActivity implements Ingredi
     }
 
     @Override
-    public void onIngredientSelected(Ingredient ingredient) {
+    public void onIngredientQuantityChanged(Ingredient ingredient, int quantity) {
+
+        //todo: update this method...
 
         //either add the ingredient to the dictionary, or increment its quantity
         if (mRecipeIngredients.containsKey(ingredient)) {
