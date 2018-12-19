@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.laure.thymesaver.Adapters.IngredientAdapter;
 import com.example.laure.thymesaver.Models.Ingredient;
@@ -20,7 +21,7 @@ import com.example.laure.thymesaver.ViewModels.PantryViewModel;
 
 import java.util.List;
 
-public class PantryFragment extends Fragment implements IngredientAdapter.IngredientAdapterListener{
+public class PantryFragment extends TopLevelFragment implements IngredientAdapter.IngredientAdapterListener{
     private PantryViewModel mIngredientViewModel;
     private IngredientAdapter mAdapter;
     private RecyclerView mRecyclerView;
@@ -53,5 +54,10 @@ public class PantryFragment extends Fragment implements IngredientAdapter.Ingred
 
     public void onIngredientQuantityChanged(Ingredient ingredient, int quantity) {
         mIngredientViewModel.updateIngredientPantryQuantity(ingredient, quantity);
+    }
+
+    @Override
+    void launchAddItemActivity() {
+        Toast.makeText(getActivity(), "Add Ingredient not implemented", Toast.LENGTH_SHORT).show();
     }
 }

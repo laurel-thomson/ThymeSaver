@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.laure.thymesaver.Adapters.RecipeAdapter;
 import com.example.laure.thymesaver.Models.Recipe;
@@ -22,7 +23,7 @@ import com.example.laure.thymesaver.ViewModels.CookBookViewModel;
 
 import java.util.List;
 
-public class CookbookFragment extends Fragment implements RecipeAdapter.RecipeAdapterListener {
+public class CookbookFragment extends TopLevelFragment implements RecipeAdapter.RecipeAdapterListener {
     private CookBookViewModel mRecipeViewModel;
     private RecipeAdapter mAdapter;
     private RecyclerView mRecyclerView;
@@ -60,5 +61,10 @@ public class CookbookFragment extends Fragment implements RecipeAdapter.RecipeAd
                 RecipeDetailActivity.CURRENT_RECIPE_NAME,
                 recipe.getName());
         startActivity(intent);
+    }
+
+    @Override
+    void launchAddItemActivity() {
+        Toast.makeText(getActivity(), "Add recipe not implemented", Toast.LENGTH_SHORT).show();
     }
 }

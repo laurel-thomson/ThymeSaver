@@ -15,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.laure.thymesaver.R;
+import com.example.laure.thymesaver.UI.AddNewIngredientActivity;
 import com.example.laure.thymesaver.UI.RecipeDetail.RecipeDetailActivity;
 
 import java.util.ArrayList;
@@ -38,8 +39,9 @@ public class MainActivity extends AppCompatActivity {
         mFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), RecipeDetailActivity.class);
-                startActivity(intent);
+                TopLevelFragment currentFragment = (TopLevelFragment) mAdapter.getItem(
+                        mViewPager.getCurrentItem());
+                currentFragment.launchAddItemActivity();
             }
         });
 
