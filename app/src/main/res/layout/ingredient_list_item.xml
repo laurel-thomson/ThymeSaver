@@ -1,19 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<android.support.constraint.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:background="@color/colorTextIcon"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <TextView
         style="@style/TextViewStyle"
         android:id="@+id/ingredient_textview"
-        android:layout_width="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <TextView
+        android:id="@+id/ing_unit_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingBottom="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ingredient_textview"
+        android:textStyle="italic"
+        android:text="unit: tsp"/>
+
+    <ImageView
+        android:id="@+id/decrement_ing_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/ingredient_quantity_picker"
+        android:src="@drawable/ic_remove"/>
+
+    <TextView
+        style="@style/TextViewStyle"
         android:id="@+id/ingredient_quantity_picker"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/increment_ing_button"
         android:layout_height="wrap_content"/>
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/increment_ing_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:src="@drawable/ic_add"/>
+
+</android.support.constraint.ConstraintLayout>
