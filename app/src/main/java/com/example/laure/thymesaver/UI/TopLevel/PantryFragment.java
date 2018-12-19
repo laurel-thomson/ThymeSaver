@@ -2,6 +2,7 @@ package com.example.laure.thymesaver.UI.TopLevel;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import com.example.laure.thymesaver.Adapters.IngredientAdapter;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
+import com.example.laure.thymesaver.UI.AddNewIngredientActivity;
 import com.example.laure.thymesaver.ViewModels.PantryViewModel;
 
 import java.util.List;
@@ -58,6 +60,7 @@ public class PantryFragment extends TopLevelFragment implements IngredientAdapte
 
     @Override
     void launchAddItemActivity() {
-        Toast.makeText(getActivity(), "Add Ingredient not implemented", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getActivity(), AddNewIngredientActivity.class);
+        startActivity(intent);
     }
 }
