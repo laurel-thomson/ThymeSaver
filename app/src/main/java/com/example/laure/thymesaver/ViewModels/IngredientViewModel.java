@@ -27,4 +27,9 @@ public class IngredientViewModel extends AndroidViewModel {
     public void addIngredient(Ingredient i) {
         mRepository.addIngredient(i);
     }
+
+    public void updateIngredientPantryQuantity(Ingredient i, int quantity) {
+        i.setQuantity(quantity);
+        mRepository.updateIngredient(i);
+    }
 }

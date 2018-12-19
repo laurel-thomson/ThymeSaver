@@ -53,6 +53,10 @@ public class Repository {
         mIngredientReference.child(i.getName()).setValue(i);
     }
 
+    public void updateIngredient(Ingredient i) {
+        mIngredientReference.child(i.getName()).setValue(i);
+    }
+
     @NonNull
     public LiveData<List<Recipe>> getAllRecipes() {
         return mRecipeLiveData;
