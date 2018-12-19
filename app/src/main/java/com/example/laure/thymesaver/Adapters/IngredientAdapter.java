@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.LinearLayout;
@@ -21,11 +22,11 @@ import java.util.Map;
 public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.MyViewHolder>
     implements Filterable {
 
-    private Context mContext;
-    private List<Ingredient> mIngredients;
-    private List<Ingredient> mFilteredIngredients;
-    private IngredientAdapterListener mListener;
-    private Ingredient mUserCreatedIngredient;
+    Context mContext;
+    List<Ingredient> mIngredients;
+    List<Ingredient> mFilteredIngredients;
+    IngredientAdapterListener mListener;
+    Ingredient mUserCreatedIngredient;
 
     public IngredientAdapter(
             Context context,
@@ -157,6 +158,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
+        public CheckBox mCheckBox;
         public TextView mNameTV;
         public TextView mQuantityTV;
         public LinearLayout mDecrementer;
@@ -164,10 +166,14 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
 
         public MyViewHolder(View view) {
             super(view);
+            mCheckBox = view.findViewById(R.id.ingredient_checkbox);
             mNameTV = view.findViewById(R.id.ingredient_textview);
             mQuantityTV = view.findViewById(R.id.ingredient_quantity_picker);
             mDecrementer = view.findViewById(R.id.decrement_quantity_layout);
             mIncrementer = view.findViewById(R.id.increment_quantity_layout);
+
+            //hide the checkbox in the base IngredientAdapter
+            mCheckBox.setVisibility(View.INVISIBLE);
 
             mDecrementer.setOnClickListener(new View.OnClickListener() {
                 @Override

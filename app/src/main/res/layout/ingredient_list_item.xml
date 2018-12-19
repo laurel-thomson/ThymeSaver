@@ -7,18 +7,26 @@
     android:orientation="horizontal"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <CheckBox
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/ingredient_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
+
+
     <TextView
         style="@style/TextViewStyle"
         android:id="@+id/ingredient_textview"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toEndOf="@id/ingredient_checkbox"/>
 
     <LinearLayout
         android:id="@+id/decrement_quantity_layout"
         app:layout_constraintEnd_toStartOf="@id/ingredient_quantity_picker"
         android:gravity="center"
         android:layout_width="60dp"
+        android:clickable="true"
         android:layout_height="match_parent">
 
         <ImageView

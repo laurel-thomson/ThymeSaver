@@ -1,8 +1,11 @@
 package com.example.laure.thymesaver.UI;
 
 import android.app.SearchManager;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,8 +16,10 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.laure.thymesaver.Adapters.IngredientAdapter;
+import com.example.laure.thymesaver.Adapters.MultiselectIngredientAdapter;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
+import com.example.laure.thymesaver.ViewModels.PantryViewModel;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -24,7 +29,7 @@ public class AddIngredientsActivity extends AppCompatActivity implements Ingredi
 
     private IngredientAdapter mAdapter;
     private SearchView mSearchView;
-    private Hashtable<Ingredient, Integer>  mRecipeIngredients = new Hashtable<>();
+    private PantryViewModel mViewModel;
 
 
     @Override
@@ -33,11 +38,17 @@ public class AddIngredientsActivity extends AppCompatActivity implements Ingredi
         setContentView(R.layout.activity_add_ingredients);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        List<Ingredient> ingredients = new ArrayList<Ingredient>();
-
+        mViewModel = ViewModelProviders.of(this).get(PantryViewModel.class);
         RecyclerView rv = findViewById(R.id.ingredient_recycler_view);
         rv.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new IngredientAdapter(this, ingredients, this);
+        mAdapter = new MultiselectIngredientAdapter(this,this);
+        mViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
+            @Override
+            public void onChanged(@Nullable List<Ingredient> ingredients) {
+                //update the cached copy of ingredients in the adapter
+                mAdapter.setIngredients(ingredients);
+            }
+        });
         rv.setAdapter(mAdapter);
     }
 
@@ -102,17 +113,9 @@ public class AddIngredientsActivity extends AppCompatActivity implements Ingredi
 
         //todo: update this method...
 
-        //either add the ingredient to the dictionary, or increment its quantity
-        if (mRecipeIngredients.containsKey(ingredient)) {
-            mRecipeIngredients.put(ingredient, mRecipeIngredients.get(ingredient) + 1);
-        }
-        else {
-            mRecipeIngredients.put(ingredient, 1);
-        }
-
         Toast.makeText(
                 getApplicationContext(),
-                ingredient.getName() + " recipe quantity = " +  mRecipeIngredients.get(ingredient),
+                ingredient.getName(),
                 Toast.LENGTH_SHORT)
                     .show();
     }
