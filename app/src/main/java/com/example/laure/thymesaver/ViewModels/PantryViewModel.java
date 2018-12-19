@@ -10,11 +10,11 @@ import com.example.laure.thymesaver.Models.Recipe;
 
 import java.util.List;
 
-public class IngredientViewModel extends AndroidViewModel {
+public class PantryViewModel extends AndroidViewModel {
     private Repository mRepository;
     private LiveData<List<Ingredient>> mIngredients;
 
-    public IngredientViewModel(Application application) {
+    public PantryViewModel(Application application) {
         super(application);
         mRepository = Repository.getInstance();
         mIngredients = mRepository.getAllIngredients();

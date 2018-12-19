@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
-import com.example.laure.thymesaver.ViewModels.RecipeViewModel;
 
 public class RecipeDetailActivity extends AppCompatActivity{
 

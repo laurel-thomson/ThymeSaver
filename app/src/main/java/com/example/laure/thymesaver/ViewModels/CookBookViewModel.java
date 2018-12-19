@@ -8,11 +8,11 @@ import com.example.laure.thymesaver.Firebase.Database.Repository;
 
 import java.util.List;
 
-public class RecipeViewModel extends AndroidViewModel {
+public class CookBookViewModel extends AndroidViewModel {
     private Repository mRepository;
     private LiveData<List<Recipe>> mAllRecipes;
 
-    public RecipeViewModel(Application application) {
+    public CookBookViewModel(Application application) {
         super(application);
         mRepository = Repository.getInstance();
         mAllRecipes = mRepository.getAllRecipes();

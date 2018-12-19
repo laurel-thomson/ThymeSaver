@@ -13,19 +13,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.laure.thymesaver.Adapters.RecipeAdapter;
-import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.RecipeDetail.RecipeDetailActivity;
-import com.example.laure.thymesaver.ViewModels.RecipeViewModel;
+import com.example.laure.thymesaver.ViewModels.CookBookViewModel;
 
 import java.util.List;
 
 public class CookbookFragment extends Fragment implements RecipeAdapter.RecipeAdapterListener {
-    private RecipeViewModel mRecipeViewModel;
+    private CookBookViewModel mRecipeViewModel;
     private RecipeAdapter mAdapter;
     private RecyclerView mRecyclerView;
 
@@ -37,7 +35,7 @@ public class CookbookFragment extends Fragment implements RecipeAdapter.RecipeAd
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mRecipeViewModel = ViewModelProviders.of(this).get(RecipeViewModel.class);
+        mRecipeViewModel = ViewModelProviders.of(this).get(CookBookViewModel.class);
         mRecipeViewModel.getAllRecipes().observe(this, new Observer<List<Recipe>>() {
             @Override
             public void onChanged(@Nullable List<Recipe> recipes) {
