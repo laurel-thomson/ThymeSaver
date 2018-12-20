@@ -43,4 +43,10 @@ public class RecipeDetailViewModel extends AndroidViewModel {
             updateRecipe();
         }
     }
+
+    public void updateIngredientQuantity(Ingredient i, int quantity) {
+        mCurrentRecipe.getRecipeIngredients().put(i.getName(), quantity);
+        //todo: only update the quantity in the database, not the whole recipe
+        updateRecipe();
+    }
 }

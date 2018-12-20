@@ -48,8 +48,14 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment  implements 
                 DividerItemDecoration.VERTICAL));
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mAdapter.setIngredients(mViewModel.getCurrentRecipeIngredients());
+    }
+
     public void onIngredientQuantityChanged(Ingredient ingredient, int quantity) {
-        //todo: save quantity
+        mViewModel.updateIngredientQuantity(ingredient, quantity);
     }
 
     @Override

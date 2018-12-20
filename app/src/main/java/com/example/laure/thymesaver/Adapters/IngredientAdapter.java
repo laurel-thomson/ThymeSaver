@@ -93,6 +93,12 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
         notifyDataSetChanged();
     }
 
+    public void setIngredients(HashMap<Ingredient, Integer> ingredients)  {
+        mIngredients = createMeasuredIngredientList(ingredients);
+        mFilteredIngredients = mIngredients;
+        notifyDataSetChanged();
+    }
+
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(mContext)

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,7 +23,7 @@ import com.example.laure.thymesaver.ViewModels.CookBookViewModel;
 import java.util.List;
 
 public class CookbookFragment extends TopLevelFragment implements RecipeAdapter.RecipeAdapterListener {
-    private CookBookViewModel mRecipeViewModel;
+    private CookBookViewModel mViewModel;
     private RecipeAdapter mAdapter;
     private RecyclerView mRecyclerView;
 
@@ -36,8 +35,8 @@ public class CookbookFragment extends TopLevelFragment implements RecipeAdapter.
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mRecipeViewModel = ViewModelProviders.of(this).get(CookBookViewModel.class);
-        mRecipeViewModel.getAllRecipes().observe(this, new Observer<List<Recipe>>() {
+        mViewModel = ViewModelProviders.of(this).get(CookBookViewModel.class);
+        mViewModel.getAllRecipes().observe(this, new Observer<List<Recipe>>() {
             @Override
             public void onChanged(@Nullable List<Recipe> recipes) {
                 //update the cached copy of recipes in the adapter
