@@ -8,9 +8,14 @@ import android.view.ViewGroup;
 
 import com.example.laure.thymesaver.R;
 
-public class RecipeStepsFragment extends Fragment {
+public class RecipeStepsFragment extends RecipeDetailFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState){
         return inflater.inflate(R.layout.fragment_recipe_steps, viewGroup, false);
+    }
+
+    @Override
+    void launchAddItemActivity() {
+        //not implemented
     }
 }

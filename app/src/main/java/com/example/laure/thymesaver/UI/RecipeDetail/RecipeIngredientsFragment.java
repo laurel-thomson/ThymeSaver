@@ -21,7 +21,7 @@ import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.BaseAddIngredientsActivity;
 import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 
-public class RecipeIngredientsFragment extends Fragment  implements IngredientAdapter.IngredientAdapterListener{
+public class RecipeIngredientsFragment extends RecipeDetailFragment  implements IngredientAdapter.IngredientAdapterListener{
     private RecipeDetailViewModel mViewModel;
     private IngredientAdapter mAdapter;
     private RecyclerView mRecyclerView;
@@ -46,22 +46,15 @@ public class RecipeIngredientsFragment extends Fragment  implements IngredientAd
 
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
                 DividerItemDecoration.VERTICAL));
-
-        FloatingActionButton button = view.findViewById(R.id.add_ingredient_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), AddRecipeIngredientsActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
     public void onIngredientQuantityChanged(Ingredient ingredient, int quantity) {
-        Toast.makeText(
-                getContext(),
-                ingredient.getName(),
-                Toast.LENGTH_SHORT)
-                .show();
+        //todo: save quantity
+    }
+
+    @Override
+    void launchAddItemActivity() {
+        Intent intent = new Intent(getActivity(), AddRecipeIngredientsActivity.class);
+        startActivity(intent);
     }
 }
