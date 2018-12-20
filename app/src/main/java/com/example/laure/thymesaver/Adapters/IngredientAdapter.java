@@ -63,6 +63,11 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
         return list;
     }
 
+    /**
+     * Class used to adapt a HashMap<Ingredient,int> to a subclass of Ingredient.  This allows the
+     * Adapter to be used for both a list of Ingredients (such as in the pantry) and a HashMap of
+     * Ingredients and quantities (such as with recipe ingredients or shopping list items).
+     */
     private class MeasuredIngredient extends Ingredient {
         int mMeasuredQuantity;
 
@@ -121,8 +126,6 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
                     List<Ingredient> filteredList = new ArrayList<>();
                     for (Ingredient row : mIngredients) {
 
-                        // name match condition. this might differ depending on your requirement
-                        // here we are looking for name or phone number match
                         if (row.getName().toLowerCase().contains(charString.toLowerCase())) {
                             filteredList.add(row);
                         }
