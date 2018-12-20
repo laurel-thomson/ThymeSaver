@@ -29,7 +29,7 @@ public class AddNewIngredientActivity extends AppCompatActivity {
     private void setUpActionBar() {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("Add Ingredient");
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_clear);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_done);
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
@@ -51,9 +51,6 @@ public class AddNewIngredientActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                onBackPressed();
-                break;
-            case R.id.action_save:
                 saveIngredient();
                 onBackPressed();
                 return true;

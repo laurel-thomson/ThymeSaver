@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -36,7 +37,7 @@ public class AddIngredientsActivity extends AppCompatActivity implements Ingredi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_ingredients);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setUpActionBar();
 
         mViewModel = ViewModelProviders.of(this).get(PantryViewModel.class);
         RecyclerView rv = findViewById(R.id.ingredient_recycler_view);
@@ -50,6 +51,13 @@ public class AddIngredientsActivity extends AppCompatActivity implements Ingredi
             }
         });
         rv.setAdapter(mAdapter);
+    }
+
+    private void setUpActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("Add Recipe Ingredients");
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_done);
+        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -85,27 +93,16 @@ public class AddIngredientsActivity extends AppCompatActivity implements Ingredi
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_search) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_search:
+                return true;
+            case android.R.id.home:
+                //todo: save recipes ingredients
+                onBackPressed();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        // close search view on back button pressed
-        if (!mSearchView.isIconified()) {
-            mSearchView.setIconified(true);
-            return;
-        }
-        super.onBackPressed();
     }
 
     @Override
