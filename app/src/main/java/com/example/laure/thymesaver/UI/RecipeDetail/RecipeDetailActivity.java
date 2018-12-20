@@ -66,7 +66,10 @@ public class RecipeDetailActivity extends AppCompatActivity{
             public void onPageScrollStateChanged(int state) {
                 switch (state) {
                     case ViewPager.SCROLL_STATE_IDLE:
-                        mFAB.show();
+                        //the Recipe Info tab doesn't have a FAB
+                        if (mViewPager.getCurrentItem() != 0) {
+                            mFAB.show();
+                        }
                         break;
                     case ViewPager.SCROLL_STATE_DRAGGING:
                     case ViewPager.SCROLL_STATE_SETTLING:
@@ -88,6 +91,8 @@ public class RecipeDetailActivity extends AppCompatActivity{
                 currentFragment.launchAddItemActivity();
             }
         });
+        //The activity starts on the Recipe Info tab, which doesn't have a FAB
+        mFAB.hide();
     }
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {
