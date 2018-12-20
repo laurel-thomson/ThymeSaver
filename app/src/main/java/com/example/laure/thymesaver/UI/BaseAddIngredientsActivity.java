@@ -26,7 +26,7 @@ import java.util.List;
 
 public abstract class BaseAddIngredientsActivity extends AppCompatActivity implements IngredientAdapter.IngredientAdapterListener {
 
-    private IngredientAdapter mAdapter;
+    protected MultiselectIngredientAdapter mAdapter;
     private SearchView mSearchView;
     private PantryViewModel mPantryViewModel;
 
@@ -95,11 +95,10 @@ public abstract class BaseAddIngredientsActivity extends AppCompatActivity imple
             case R.id.action_search:
                 return true;
             case android.R.id.home:
-                //todo: save recipes ingredients
+                saveIngredients();
                 onBackPressed();
                 break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -114,4 +113,6 @@ public abstract class BaseAddIngredientsActivity extends AppCompatActivity imple
                 Toast.LENGTH_SHORT)
                     .show();
     }
+
+    public abstract void saveIngredients();
 }

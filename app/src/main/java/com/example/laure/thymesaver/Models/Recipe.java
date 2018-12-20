@@ -31,7 +31,7 @@ public class Recipe {
         return recipeIngredients;
     }
 
-    public void addIngredient(String ingredientName, int quantity) {
+    public void addOrUpdateIngredient(String ingredientName, int quantity) {
         recipeIngredients.put(ingredientName, quantity);
     }
 

@@ -45,7 +45,7 @@ public class Repository {
                 new IngredientDeserializer());
     }
 
-    public void addRecipe(Recipe r) {
+    public void addOrUpdateRecipe(Recipe r) {
         mRecipeReference.child(r.getName()).setValue(r);
     }
 
