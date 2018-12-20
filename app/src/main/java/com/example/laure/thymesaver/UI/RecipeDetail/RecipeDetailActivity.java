@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.example.laure.thymesaver.R;
@@ -31,15 +32,13 @@ public class RecipeDetailActivity extends AppCompatActivity{
     private RecipeDetailViewModel mViewModel;
     private FloatingActionButton mFAB;
     private ViewPagerAdapter mAdapter;
-    private ActionBar mActionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
 
-        mActionBar = getSupportActionBar();
-        mActionBar.setElevation(0);
+        setUpActionBar();
 
         mViewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
         String recipeName = getIntent().getStringExtra(CURRENT_RECIPE_NAME);
@@ -93,6 +92,23 @@ public class RecipeDetailActivity extends AppCompatActivity{
         });
         //The activity starts on the Recipe Info tab, which doesn't have a FAB
         mFAB.hide();
+    }
+
+    private void setUpActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setElevation(0);
+        actionBar.setTitle("Recipe Details");
+        actionBar.setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return false;
     }
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {
