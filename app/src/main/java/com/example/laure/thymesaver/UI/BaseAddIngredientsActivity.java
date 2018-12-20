@@ -4,7 +4,6 @@ import android.app.SearchManager;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -21,17 +20,15 @@ import com.example.laure.thymesaver.Adapters.MultiselectIngredientAdapter;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.ViewModels.PantryViewModel;
+import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
 
-public class AddIngredientsActivity extends AppCompatActivity implements IngredientAdapter.IngredientAdapterListener {
+public abstract class BaseAddIngredientsActivity extends AppCompatActivity implements IngredientAdapter.IngredientAdapterListener {
 
     private IngredientAdapter mAdapter;
     private SearchView mSearchView;
-    private PantryViewModel mViewModel;
-
+    private PantryViewModel mPantryViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +36,12 @@ public class AddIngredientsActivity extends AppCompatActivity implements Ingredi
         setContentView(R.layout.activity_add_ingredients);
         setUpActionBar();
 
-        mViewModel = ViewModelProviders.of(this).get(PantryViewModel.class);
+        mPantryViewModel = ViewModelProviders.of(this).get(PantryViewModel.class);
+
         RecyclerView rv = findViewById(R.id.ingredient_recycler_view);
         rv.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new MultiselectIngredientAdapter(this,this);
-        mViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
+        mPantryViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
             @Override
             public void onChanged(@Nullable List<Ingredient> ingredients) {
                 //update the cached copy of ingredients in the adapter
@@ -55,7 +53,7 @@ public class AddIngredientsActivity extends AppCompatActivity implements Ingredi
 
     private void setUpActionBar() {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Add Recipe Ingredients");
+        actionBar.setTitle("Add Ingredients");
         actionBar.setHomeAsUpIndicator(R.drawable.ic_done);
         actionBar.setDisplayHomeAsUpEnabled(true);
     }

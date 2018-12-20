@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.example.laure.thymesaver.Adapters.IngredientAdapter;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
-import com.example.laure.thymesaver.UI.AddIngredientsActivity;
+import com.example.laure.thymesaver.UI.BaseAddIngredientsActivity;
 import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 
 public class RecipeIngredientsFragment extends Fragment  implements IngredientAdapter.IngredientAdapterListener{
@@ -51,7 +51,7 @@ public class RecipeIngredientsFragment extends Fragment  implements IngredientAd
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), AddIngredientsActivity.class);
+                Intent intent = new Intent(getActivity(), AddRecipeIngredientsActivity.class);
                 startActivity(intent);
             }
         });
