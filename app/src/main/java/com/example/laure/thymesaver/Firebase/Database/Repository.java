@@ -83,8 +83,9 @@ public class Repository {
             int quantity = entry.getValue();
 
             for (Ingredient i : mIngredients) {
-                if (i.getName().equals(ingredientName));
-                measuredIngredients.put(i, quantity);
+                if (i.getName().equals(ingredientName)){
+                    measuredIngredients.put(i, quantity);
+                }
             }
         }
         return measuredIngredients;
