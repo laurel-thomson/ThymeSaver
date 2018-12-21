@@ -2,6 +2,7 @@ package com.example.laure.thymesaver.UI.RecipeDetail;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.TopLevel.CookbookFragment;
@@ -47,9 +49,6 @@ public class RecipeDetailActivity extends AppCompatActivity{
         mViewPager = findViewById(R.id.pager);
 
         mAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        mAdapter.addFragment(new AboutRecipeFragment(), "Info");
-        mAdapter.addFragment(new RecipeIngredientsFragment(), "Ingredients");
-        mAdapter.addFragment(new RecipeStepsFragment(), "Steps");
         mViewPager.setAdapter(mAdapter);
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -112,30 +111,50 @@ public class RecipeDetailActivity extends AppCompatActivity{
     }
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
+        private final int NUMBER_OF_TABS = 3;
+        private Fragment[] mFragments = new Fragment[NUMBER_OF_TABS];
+        private String[] mFragmentTitles = {"Info", "Ingredients", "Steps"};
 
         public ViewPagerAdapter(FragmentManager manager) {
             super(manager);
         }
+
         @Override
         public Fragment getItem(int position) {
-            return mFragmentList.get(position);
+
+            if (mFragments[position] != null) {
+                return mFragments[position];
+            }
+            switch (position) {
+                case 0:
+                    return new AboutRecipeFragment();
+                case 1:
+                    return new RecipeIngredientsFragment();
+                case 2:
+                    return new RecipeStepsFragment();
+                default:
+                    return null;
+            }
+        }
+
+        @NonNull
+        @Override
+        public Object instantiateItem(@NonNull ViewGroup container, int position) {
+            Fragment fragment = (Fragment) super.instantiateItem(container, position);
+            mFragments[position] = fragment;
+            return fragment;
         }
 
         @Override
         public int getCount() {
-            return mFragmentList.size();
+            return NUMBER_OF_TABS;
         }
 
-        public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
+
+            return mFragmentTitles[position];
         }
     }
 }
