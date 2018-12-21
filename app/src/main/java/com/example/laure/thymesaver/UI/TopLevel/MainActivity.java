@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.AddNewIngredientActivity;
@@ -100,32 +101,48 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         mAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        mAdapter.addFragment(new MealPlannerFragment());
-        mAdapter.addFragment(new CookbookFragment());
-        mAdapter.addFragment(new PantryFragment());
-        mAdapter.addFragment(new ShoppingListFragment());
+
         mViewPager.setAdapter(mAdapter);
     }
 
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final int NUMBER_OF_TABS = 4;
+        private Fragment[] mFragments = new Fragment[NUMBER_OF_TABS];
 
         public ViewPagerAdapter(FragmentManager manager) {
             super(manager);
         }
         @Override
         public Fragment getItem(int position) {
-            return mFragmentList.get(position);
+            if (mFragments[position] != null)
+                return mFragments[position];
+
+            switch (position) {
+                case 0:
+                    return new MealPlannerFragment();
+                case 1:
+                    return new CookbookFragment();
+                case 2:
+                    return new PantryFragment();
+                case 3:
+                    return new ShoppingListFragment();
+                default:
+                    return null;
+            }
+        }
+
+        @NonNull
+        @Override
+        public Object instantiateItem(@NonNull ViewGroup container, int position) {
+            Fragment fragment = (Fragment) super.instantiateItem(container, position);
+            mFragments[position] = fragment;
+            return fragment;
         }
 
         @Override
         public int getCount() {
-            return mFragmentList.size();
-        }
-
-        public void addFragment(Fragment fragment) {
-            mFragmentList.add(fragment);
+            return NUMBER_OF_TABS;
         }
     }
 }
