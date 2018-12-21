@@ -27,6 +27,20 @@ public class MultiselectIngredientAdapter extends IngredientAdapter {
     }
 
     @Override
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
+        final Ingredient ingredient = mFilteredIngredients.get(position);
+        holder.mNameTV.setText(ingredient.getName());
+        holder.mCheckBox.setChecked(mSelectedMeasuredIngredients.containsKey(ingredient));
+        if (holder.mCheckBox.isChecked()) {
+            holder.mQuantityTV.setText(Integer.toString(ingredient.getQuantity()));
+        }
+        else {
+            holder.mIncrementer.setVisibility(View.GONE);
+            holder.mDecrementer.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(mContext)
                 .inflate(R.layout.ingredient_list_item, parent, false);
@@ -38,15 +52,22 @@ public class MultiselectIngredientAdapter extends IngredientAdapter {
         public MultiselectViewHolder(View view) {
             super(view);
             mCheckBox.setVisibility(View.VISIBLE);
+
             mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     Ingredient i = mFilteredIngredients.get(getAdapterPosition());
                     if (compoundButton.isChecked()) {
                         mSelectedMeasuredIngredients.put(i, i.getQuantity());
+                        mQuantityTV.setVisibility(View.VISIBLE);
+                        mIncrementer.setVisibility(View.VISIBLE);
+                        mDecrementer.setVisibility(View.VISIBLE);
                     }
                     else {
                         mSelectedMeasuredIngredients.remove(i);
+                        mQuantityTV.setVisibility(View.GONE);
+                        mIncrementer.setVisibility(View.GONE);
+                        mDecrementer.setVisibility(View.GONE);
                     }
                 }
             });
