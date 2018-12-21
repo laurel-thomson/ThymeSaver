@@ -32,7 +32,7 @@ public class MultiselectIngredientAdapter extends IngredientAdapter {
         holder.mNameTV.setText(ingredient.getName());
         holder.mCheckBox.setChecked(mSelectedMeasuredIngredients.containsKey(ingredient));
         if (holder.mCheckBox.isChecked()) {
-            holder.mQuantityTV.setText(Integer.toString(ingredient.getQuantity()));
+            holder.mQuantityTV.setText(Integer.toString(mSelectedMeasuredIngredients.get(ingredient)));
         }
         else {
             holder.mIncrementer.setVisibility(View.GONE);

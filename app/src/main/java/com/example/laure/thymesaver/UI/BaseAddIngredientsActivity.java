@@ -22,6 +22,7 @@ import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.ViewModels.PantryViewModel;
 import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 
+import java.util.HashMap;
 import java.util.List;
 
 public abstract class BaseAddIngredientsActivity extends AppCompatActivity implements IngredientAdapter.IngredientAdapterListener {
@@ -44,8 +45,12 @@ public abstract class BaseAddIngredientsActivity extends AppCompatActivity imple
         mPantryViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
             @Override
             public void onChanged(@Nullable List<Ingredient> ingredients) {
-                //update the cached copy of ingredients in the adapter
-                mAdapter.setIngredients(ingredients);
+                //create a new HashMap that maps all of the Ingredients with a quantity of 0
+                HashMap<Ingredient, Integer> measuredIngredients = new HashMap<>();
+                for (Ingredient i : ingredients) {
+                    measuredIngredients.put(i, 0);
+                }
+                mAdapter.setIngredients(measuredIngredients);
             }
         });
         rv.setAdapter(mAdapter);

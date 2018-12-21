@@ -68,7 +68,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
      * Adapter to be used for both a list of Ingredients (such as in the pantry) and a HashMap of
      * Ingredients and quantities (such as with recipe ingredients or shopping list items).
      */
-    private class MeasuredIngredient extends Ingredient {
+    protected class MeasuredIngredient extends Ingredient {
         int mMeasuredQuantity;
 
         MeasuredIngredient(Ingredient i, int measure) {
