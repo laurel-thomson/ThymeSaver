@@ -28,8 +28,8 @@ import java.util.List;
 public abstract class BaseAddIngredientsActivity extends AppCompatActivity implements IngredientAdapter.IngredientAdapterListener {
 
     protected MultiselectIngredientAdapter mAdapter;
-    private SearchView mSearchView;
-    private PantryViewModel mPantryViewModel;
+    protected SearchView mSearchView;
+    protected PantryViewModel mPantryViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,19 +42,11 @@ public abstract class BaseAddIngredientsActivity extends AppCompatActivity imple
         RecyclerView rv = findViewById(R.id.ingredient_recycler_view);
         rv.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new MultiselectIngredientAdapter(this,this);
-        mPantryViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
-            @Override
-            public void onChanged(@Nullable List<Ingredient> ingredients) {
-                //create a new HashMap that maps all of the Ingredients with a quantity of 0
-                HashMap<Ingredient, Integer> measuredIngredients = new HashMap<>();
-                for (Ingredient i : ingredients) {
-                    measuredIngredients.put(i, 0);
-                }
-                mAdapter.setIngredients(measuredIngredients);
-            }
-        });
+        setAdapterIngredients();
         rv.setAdapter(mAdapter);
     }
+
+    protected abstract void setAdapterIngredients();
 
     private void setUpActionBar() {
         ActionBar actionBar = getSupportActionBar();

@@ -37,16 +37,6 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
 
     public IngredientAdapter(
             Context context,
-            List<Ingredient> ingredients,
-            IngredientAdapterListener listener) {
-        mContext = context;
-        mIngredients = ingredients;
-        mFilteredIngredients = ingredients;
-        mListener = listener;
-    }
-
-    public IngredientAdapter(
-            Context context,
             HashMap<Ingredient, Integer> ingredients,
             IngredientAdapterListener listener) {
         mContext = context;

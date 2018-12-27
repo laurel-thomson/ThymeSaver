@@ -37,9 +37,9 @@ public class RecipeDetailViewModel extends AndroidViewModel {
         mRepository.addOrUpdateRecipe(mCurrentRecipe);
     }
 
-    public void updateRecipeIngredients(HashMap<Ingredient,Integer> recipeIngredients) {
-        for (Map.Entry<Ingredient, Integer> entry : recipeIngredients.entrySet()) {
-            mCurrentRecipe.addOrUpdateIngredient(entry.getKey().getName(), entry.getValue());
+    public void updateRecipeIngredients(HashMap<String,Integer> recipeIngredients) {
+        for (Map.Entry<String, Integer> entry : recipeIngredients.entrySet()) {
+            mCurrentRecipe.addOrUpdateIngredient(entry.getKey(), entry.getValue());
             updateRecipe();
         }
     }
