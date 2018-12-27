@@ -8,6 +8,7 @@ import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.Recipe;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class RecipeDetailViewModel extends AndroidViewModel {
@@ -29,8 +30,12 @@ public class RecipeDetailViewModel extends AndroidViewModel {
         return mCurrentRecipe;
     }
 
-    public HashMap<Ingredient, Integer> getCurrentRecipeIngredients() {
+    public HashMap<Ingredient, Integer> getRecipeIngredients() {
         return mRepository.getRecipeIngredients(mCurrentRecipe);
+    }
+
+    public List<String> getRecipeSteps() {
+        return mCurrentRecipe.getSteps();
     }
 
     public void updateRecipe() {

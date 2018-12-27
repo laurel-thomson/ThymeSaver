@@ -1,5 +1,6 @@
 package com.example.laure.thymesaver.UI.RecipeDetail;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.laure.thymesaver.Adapters.RecipeStepAdapter;
 import com.example.laure.thymesaver.R;
+import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,7 @@ public class RecipeStepsFragment extends RecipeDetailFragment
     private RecipeStepAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private List<String> mSteps;
+    private RecipeDetailViewModel mViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState){
@@ -34,11 +37,13 @@ public class RecipeStepsFragment extends RecipeDetailFragment
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mViewModel = ViewModelProviders.of(getActivity()).get(RecipeDetailViewModel.class);
+
         mRecyclerView = view.findViewById(R.id.steps_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        //empty steps list for now
-        mSteps = new ArrayList<>();
+        mSteps = mViewModel.getRecipeSteps();
+
         mAdapter = new RecipeStepAdapter(getActivity(), mSteps, this);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -57,6 +62,7 @@ public class RecipeStepsFragment extends RecipeDetailFragment
     public void onStepAdded(String step) {
         mSteps.add(step);
         mAdapter.notifyDataSetChanged();
+        mViewModel.updateRecipe();
     }
 
     @Override

@@ -5,20 +5,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.laure.thymesaver.Adapters.IngredientAdapter;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
-import com.example.laure.thymesaver.UI.BaseAddIngredientsActivity;
 import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 
 public class RecipeIngredientsFragment extends RecipeDetailFragment  implements IngredientAdapter.IngredientAdapterListener{
@@ -37,7 +33,7 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment  implements 
 
         mViewModel = ViewModelProviders.of(getActivity()).get(RecipeDetailViewModel.class);
         mAdapter = new IngredientAdapter(getActivity(),
-                mViewModel.getCurrentRecipeIngredients(),
+                mViewModel.getRecipeIngredients(),
                 this);
 
         mRecyclerView = view.findViewById(R.id.recipe_ingredients_recycler_view);
@@ -51,7 +47,7 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment  implements 
     @Override
     public void onResume() {
         super.onResume();
-        mAdapter.setIngredients(mViewModel.getCurrentRecipeIngredients());
+        mAdapter.setIngredients(mViewModel.getRecipeIngredients());
     }
 
     public void onIngredientQuantityChanged(Ingredient ingredient, int quantity) {

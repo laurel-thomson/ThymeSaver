@@ -22,7 +22,7 @@ public class AddRecipeIngredientsActivity extends BaseAddIngredientsActivity {
         mRecipeDetailViewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
         String recipeName = getIntent().getStringExtra(RECIPE_NAME);
         mRecipeDetailViewModel.setCurrentRecipe(recipeName);
-        mRecipeIngredients = mRecipeDetailViewModel.getCurrentRecipeIngredients();
+        mRecipeIngredients = mRecipeDetailViewModel.getRecipeIngredients();
         super.onCreate(savedInstanceState);
     }
 

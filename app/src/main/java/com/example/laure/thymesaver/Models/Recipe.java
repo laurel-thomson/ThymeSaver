@@ -2,13 +2,17 @@ package com.example.laure.thymesaver.Models;
 
 import com.google.firebase.database.Exclude;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Recipe {
     private String name;
 
     //for Firebase, keys need to be strings
     private HashMap<String, Integer> recipeIngredients = new HashMap<>();
+
+    private List<String> steps = new ArrayList<>();
 
     public Recipe() {
         //required empty constructor for Firebase
@@ -33,6 +37,18 @@ public class Recipe {
 
     public void addOrUpdateIngredient(String ingredientName, int quantity) {
         recipeIngredients.put(ingredientName, quantity);
+    }
+
+    public List<String> getSteps() {
+        return steps;
+    }
+
+    public void setSteps(List<String> steps) {
+        this.steps = steps;
+    }
+
+    public void addStep(String step) {
+        steps.add(step);
     }
 
     @Override
