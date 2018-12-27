@@ -51,6 +51,10 @@ public class MultiselectIngredientAdapter extends IngredientAdapter {
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     Ingredient i = mFilteredIngredients.get(getAdapterPosition());
                     if (compoundButton.isChecked()) {
+                        if (i.getQuantity() == 0) {
+                            i.setQuantity(1);
+                            mQuantityTV.setText("1");
+                        }
                         mQuantityTV.setVisibility(View.VISIBLE);
                         mIncrementer.setVisibility(View.VISIBLE);
                         mDecrementer.setVisibility(View.VISIBLE);
