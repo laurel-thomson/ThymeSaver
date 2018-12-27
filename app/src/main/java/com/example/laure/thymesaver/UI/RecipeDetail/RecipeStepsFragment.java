@@ -1,6 +1,7 @@
 package com.example.laure.thymesaver.UI.RecipeDetail;
 
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ public class RecipeStepsFragment extends RecipeDetailFragment {
 
     @Override
     void launchAddItemActivity() {
-        //not implemented
+        AddStepFragment fragment = new AddStepFragment();
+        fragment.show(getActivity().getSupportFragmentManager(), "TAG");
     }
 }

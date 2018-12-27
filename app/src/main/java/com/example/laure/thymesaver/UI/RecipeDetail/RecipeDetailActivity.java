@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.TopLevel.CookbookFragment;
@@ -41,6 +42,9 @@ public class RecipeDetailActivity extends AppCompatActivity{
         setContentView(R.layout.activity_recipe_detail);
 
         setUpActionBar();
+
+        //prevents the bottom window dialog from pushing the FAB up
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         mViewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
         String recipeName = getIntent().getStringExtra(CURRENT_RECIPE_NAME);
