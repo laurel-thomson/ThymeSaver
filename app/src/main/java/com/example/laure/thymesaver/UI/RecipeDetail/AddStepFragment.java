@@ -3,12 +3,10 @@ package com.example.laure.thymesaver.UI.RecipeDetail;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Context;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -17,6 +15,7 @@ import com.example.laure.thymesaver.R;
 
 public class AddStepFragment extends BottomSheetDialogFragment {
     private EditText mStepEditText;
+    private StepAddedListener mListener;
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -34,8 +33,19 @@ public class AddStepFragment extends BottomSheetDialogFragment {
             @Override
             public void onClick(View view) {
                 String step = mStepEditText.getText().toString();
-                Toast.makeText(getActivity(), step, Toast.LENGTH_SHORT).show();
+                mStepEditText.setText("");
+                if (mListener != null) {
+                    mListener.onStepAdded(step);
+                }
             }
         });
+    }
+
+    public void setListener(StepAddedListener listener) {
+        mListener = listener;
+    }
+
+    public interface StepAddedListener {
+        void onStepAdded(String step);
     }
 }

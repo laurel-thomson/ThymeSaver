@@ -36,6 +36,10 @@ public class CookbookFragment extends TopLevelFragment implements RecipeAdapter.
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(CookBookViewModel.class);
+        mRecyclerView = view.findViewById(R.id.recipes_recycler_view);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mAdapter = new RecipeAdapter(getActivity(), this);
+
         mViewModel.getAllRecipes().observe(this, new Observer<List<Recipe>>() {
             @Override
             public void onChanged(@Nullable List<Recipe> recipes) {
@@ -44,9 +48,6 @@ public class CookbookFragment extends TopLevelFragment implements RecipeAdapter.
             }
         });
 
-        mRecyclerView = view.findViewById(R.id.recipes_recycler_view);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new RecipeAdapter(getActivity(), this);
         mRecyclerView.setAdapter(mAdapter);
 
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
