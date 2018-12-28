@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeStepsFragment extends RecipeDetailFragment
-        implements AddStepFragment.StepAddedListener, RecipeStepAdapter.RecipeStepAdapterListener {
+        implements AddStepFragment.StepAddedListener {
     private RecipeStepAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private List<String> mSteps;
@@ -44,7 +44,7 @@ public class RecipeStepsFragment extends RecipeDetailFragment
 
         mSteps = mViewModel.getRecipeSteps();
 
-        mAdapter = new RecipeStepAdapter(getActivity(), mSteps, this);
+        mAdapter = new RecipeStepAdapter(getActivity(), mSteps);
         mRecyclerView.setAdapter(mAdapter);
 
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
@@ -63,10 +63,5 @@ public class RecipeStepsFragment extends RecipeDetailFragment
         mSteps.add(step);
         mAdapter.notifyDataSetChanged();
         mViewModel.updateRecipe();
-    }
-
-    @Override
-    public void onStepSelected(String step) {
-        //todo: do something when step selected
     }
 }

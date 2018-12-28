@@ -2,12 +2,18 @@
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="50dp"
+    android:orientation="horizontal"
     xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <CheckBox
+        android:id="@+id/step_list_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
 
     <TextView
         android:id="@+id/step_list_textview"
         style="@style/TextViewStyle"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent" />
 
 </LinearLayout>

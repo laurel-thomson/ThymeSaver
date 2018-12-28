@@ -11,9 +11,9 @@ import com.example.laure.thymesaver.R;
 
 import java.util.HashMap;
 
-public class MultiselectIngredientAdapter extends IngredientAdapter {
+public class AddIngredientAdapter extends IngredientAdapter {
 
-    public MultiselectIngredientAdapter(Context context, IngredientAdapterListener listener) {
+    public AddIngredientAdapter(Context context, IngredientQuantityChangedListener listener) {
         super(context, listener);
     }
 
@@ -37,12 +37,12 @@ public class MultiselectIngredientAdapter extends IngredientAdapter {
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(mContext)
                 .inflate(R.layout.ingredient_list_item, parent, false);
-        return new MultiselectViewHolder(itemView);
+        return new AddIngredientViewHolder(itemView);
     }
 
-    public class MultiselectViewHolder extends MyViewHolder {
+    public class AddIngredientViewHolder extends MyViewHolder {
 
-        public MultiselectViewHolder(View view) {
+        public AddIngredientViewHolder(View view) {
             super(view);
             mCheckBox.setVisibility(View.VISIBLE);
 

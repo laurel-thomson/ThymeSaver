@@ -25,24 +25,24 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
     Context mContext;
     List<Ingredient> mIngredients;
     List<Ingredient> mFilteredIngredients;
-    IngredientAdapterListener mListener;
+    IngredientQuantityChangedListener mQuantityChangedListener;
     Ingredient mUserCreatedIngredient;
 
     public IngredientAdapter(
             Context context,
-            IngredientAdapterListener listener) {
+            IngredientQuantityChangedListener listener) {
         mContext = context;
-        mListener = listener;
+        mQuantityChangedListener = listener;
     }
 
     public IngredientAdapter(
             Context context,
             HashMap<Ingredient, Integer> ingredients,
-            IngredientAdapterListener listener) {
+            IngredientQuantityChangedListener listener) {
         mContext = context;
         mIngredients = createMeasuredIngredientList(ingredients);
         mFilteredIngredients = mIngredients;
-        mListener = listener;
+        mQuantityChangedListener = listener;
     }
 
     private List<Ingredient> createMeasuredIngredientList(HashMap<Ingredient, Integer> measuredIngredients) {
@@ -180,7 +180,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
                     Ingredient i = mFilteredIngredients.get(getAdapterPosition());
                     if (i.getQuantity() == 0) return;
                     i.setQuantity(i.getQuantity() - 1);
-                    mListener.onIngredientQuantityChanged(i, i.getQuantity());
+                    mQuantityChangedListener.onIngredientQuantityChanged(i, i.getQuantity());
                     notifyDataSetChanged();
                 }
             });
@@ -191,14 +191,14 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
                     Ingredient i = mFilteredIngredients.get(getAdapterPosition());
                     if (i.getQuantity() > 100) return;
                     i.setQuantity(i.getQuantity() + 1);
-                    mListener.onIngredientQuantityChanged(i, i.getQuantity());
+                    mQuantityChangedListener.onIngredientQuantityChanged(i, i.getQuantity());
                     notifyDataSetChanged();
                 }
             });
         }
     }
 
-    public interface IngredientAdapterListener {
+    public interface IngredientQuantityChangedListener {
         void onIngredientQuantityChanged(Ingredient ingredient, int quantity);
     }
 }

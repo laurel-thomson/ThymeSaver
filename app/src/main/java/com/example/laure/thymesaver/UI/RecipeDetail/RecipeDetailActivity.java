@@ -52,6 +52,10 @@ public class RecipeDetailActivity extends AppCompatActivity{
 
         mViewPager = findViewById(R.id.pager);
 
+        //prevents the view pager from recreating the Recipe Steps fragment, which would remove
+        //the checks from the checkboxes
+        mViewPager.setOffscreenPageLimit(2);
+
         mAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mAdapter);
 

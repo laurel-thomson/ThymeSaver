@@ -1,10 +1,8 @@
 package com.example.laure.thymesaver.UI;
 
 import android.app.SearchManager;
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,18 +14,14 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.laure.thymesaver.Adapters.IngredientAdapter;
-import com.example.laure.thymesaver.Adapters.MultiselectIngredientAdapter;
+import com.example.laure.thymesaver.Adapters.AddIngredientAdapter;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.ViewModels.PantryViewModel;
-import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 
-import java.util.HashMap;
-import java.util.List;
+public abstract class BaseAddIngredientsActivity extends AppCompatActivity implements IngredientAdapter.IngredientQuantityChangedListener {
 
-public abstract class BaseAddIngredientsActivity extends AppCompatActivity implements IngredientAdapter.IngredientAdapterListener {
-
-    protected MultiselectIngredientAdapter mAdapter;
+    protected AddIngredientAdapter mAdapter;
     protected SearchView mSearchView;
     protected PantryViewModel mPantryViewModel;
 
@@ -41,7 +35,7 @@ public abstract class BaseAddIngredientsActivity extends AppCompatActivity imple
 
         RecyclerView rv = findViewById(R.id.ingredient_recycler_view);
         rv.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new MultiselectIngredientAdapter(this,this);
+        mAdapter = new AddIngredientAdapter(this,this);
         setAdapterIngredients();
         rv.setAdapter(mAdapter);
     }
