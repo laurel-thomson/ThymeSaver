@@ -13,18 +13,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.laure.thymesaver.Adapters.ChecklistIngredientAdapter;
-import com.example.laure.thymesaver.Adapters.IngredientAdapter;
+import com.example.laure.thymesaver.Adapters.IngredientAdapters.ChecklistIngredientAdapter;
+import com.example.laure.thymesaver.Adapters.IngredientAdapters.MeasuredIngredientAdapter;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 
 public class RecipeIngredientsFragment extends RecipeDetailFragment
-        implements IngredientAdapter.IngredientQuantityChangedListener,
+        implements MeasuredIngredientAdapter.IngredientQuantityChangedListener,
                    ChecklistIngredientAdapter.IngredientCheckedListener {
 
     private RecipeDetailViewModel mViewModel;
-    private IngredientAdapter mAdapter;
+    private ChecklistIngredientAdapter mAdapter;
     private RecyclerView mRecyclerView;
 
     @Override
@@ -48,12 +48,6 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
 
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
                 DividerItemDecoration.VERTICAL));
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mAdapter.setIngredients(mViewModel.getRecipeIngredients());
     }
 
     public void onIngredientQuantityChanged(Ingredient ingredient, int quantity) {

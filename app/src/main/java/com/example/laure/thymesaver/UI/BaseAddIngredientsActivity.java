@@ -13,13 +13,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.laure.thymesaver.Adapters.IngredientAdapter;
-import com.example.laure.thymesaver.Adapters.AddIngredientAdapter;
+import com.example.laure.thymesaver.Adapters.IngredientAdapters.AddIngredientAdapter;
+import com.example.laure.thymesaver.Adapters.IngredientAdapters.MeasuredIngredientAdapter;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.ViewModels.PantryViewModel;
 
-public abstract class BaseAddIngredientsActivity extends AppCompatActivity implements IngredientAdapter.IngredientQuantityChangedListener {
+public abstract class BaseAddIngredientsActivity extends AppCompatActivity implements MeasuredIngredientAdapter.IngredientQuantityChangedListener {
 
     protected AddIngredientAdapter mAdapter;
     protected SearchView mSearchView;

@@ -1,4 +1,4 @@
-package com.example.laure.thymesaver.Adapters;
+package com.example.laure.thymesaver.Adapters.IngredientAdapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,7 +11,7 @@ import com.example.laure.thymesaver.R;
 
 import java.util.HashMap;
 
-public class AddIngredientAdapter extends IngredientAdapter {
+public class AddIngredientAdapter extends MeasuredIngredientAdapter {
 
     public AddIngredientAdapter(Context context, IngredientQuantityChangedListener listener) {
         super(context, listener);

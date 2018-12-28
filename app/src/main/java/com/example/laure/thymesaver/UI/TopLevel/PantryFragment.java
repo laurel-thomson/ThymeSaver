@@ -13,7 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.laure.thymesaver.Adapters.IngredientAdapter;
+import com.example.laure.thymesaver.Adapters.IngredientAdapters.IngredientAdapter;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.AddNewIngredientActivity;

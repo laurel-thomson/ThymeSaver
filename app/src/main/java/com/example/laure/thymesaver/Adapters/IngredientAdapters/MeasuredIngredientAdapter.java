@@ -1,4 +1,4 @@
-package com.example.laure.thymesaver.Adapters;
+package com.example.laure.thymesaver.Adapters.IngredientAdapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -17,79 +17,42 @@ import com.example.laure.thymesaver.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.MyViewHolder>
+public class MeasuredIngredientAdapter extends RecyclerView.Adapter<MeasuredIngredientAdapter.MyViewHolder>
     implements Filterable {
 
     Context mContext;
-    List<Ingredient> mIngredients;
+    HashMap<Ingredient, Integer> mMeasuredIngredients;
+    List<Ingredient> mIngredients = new ArrayList<>();
     List<Ingredient> mFilteredIngredients;
     IngredientQuantityChangedListener mQuantityChangedListener;
     Ingredient mUserCreatedIngredient;
 
-    public IngredientAdapter(
+    public MeasuredIngredientAdapter(
             Context context,
             IngredientQuantityChangedListener listener) {
         mContext = context;
         mQuantityChangedListener = listener;
     }
 
-    public IngredientAdapter(
+    public MeasuredIngredientAdapter(
             Context context,
-            HashMap<Ingredient, Integer> ingredients,
+            HashMap<Ingredient, Integer> measuredIngredients,
             IngredientQuantityChangedListener listener) {
         mContext = context;
-        mIngredients = createMeasuredIngredientList(ingredients);
+        mMeasuredIngredients = measuredIngredients;
+        for (Ingredient i : measuredIngredients.keySet()) {
+            mIngredients.add(i);
+        }
         mFilteredIngredients = mIngredients;
         mQuantityChangedListener = listener;
     }
 
-    private List<Ingredient> createMeasuredIngredientList(HashMap<Ingredient, Integer> measuredIngredients) {
-        List<Ingredient> list = new ArrayList<>();
-        for (Map.Entry<Ingredient, Integer> entry : measuredIngredients.entrySet()) {
-            list.add(new MeasuredIngredient(entry.getKey(), entry.getValue()));
+    public void setIngredients(HashMap<Ingredient, Integer> measuredIngredients) {
+        mMeasuredIngredients = measuredIngredients;
+        for (Ingredient i : measuredIngredients.keySet()) {
+            mIngredients.add(i);
         }
-        return list;
-    }
-
-    /**
-     * Class used to adapt a HashMap<Ingredient,int> to a subclass of Ingredient.  This allows the
-     * Adapter to be used for both a list of Ingredients (such as in the pantry) and a HashMap of
-     * Ingredients and quantities (such as with recipe ingredients or shopping list items).
-     */
-    protected class MeasuredIngredient extends Ingredient {
-        int mMeasuredQuantity;
-
-        MeasuredIngredient(Ingredient i, int measure) {
-            super(i.getName(), i.getUnit(), i.getQuantity());
-            mMeasuredQuantity = measure;
-        }
-
-        @Override
-        public int getQuantity() {
-            return mMeasuredQuantity;
-        }
-
-        @Override
-        public void setQuantity(int quantity) {
-            mMeasuredQuantity = quantity;
-        }
-
-        //Converts the Measured Ingredient back to an ordinary pantry ingredient
-        public Ingredient getPantryIngredient() {
-            return new Ingredient(name, unit, quantity);
-        }
-    }
-
-    public void setIngredients(List<Ingredient> ingredients) {
-        mIngredients = ingredients;
-        mFilteredIngredients = ingredients;
-        notifyDataSetChanged();
-    }
-
-    public void setIngredients(HashMap<Ingredient, Integer> ingredients)  {
-        mIngredients = createMeasuredIngredientList(ingredients);
         mFilteredIngredients = mIngredients;
         notifyDataSetChanged();
     }
@@ -106,7 +69,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         final Ingredient ingredient = mFilteredIngredients.get(position);
         holder.mNameTV.setText(ingredient.getName());
-        holder.mQuantityTV.setText(Integer.toString(ingredient.getQuantity()));
+        holder.mQuantityTV.setText(Integer.toString(mMeasuredIngredients.get(ingredient)));
     }
 
     @Override
@@ -183,9 +146,10 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
                 @Override
                 public void onClick(View view) {
                     Ingredient i = mFilteredIngredients.get(getAdapterPosition());
-                    if (i.getQuantity() == 0) return;
-                    i.setQuantity(i.getQuantity() - 1);
-                    mQuantityChangedListener.onIngredientQuantityChanged(i, i.getQuantity());
+                    int measuredQuantity = mMeasuredIngredients.get(i);
+                    if (measuredQuantity == 0) return;
+                    mMeasuredIngredients.put(i, measuredQuantity - 1);
+                    mQuantityChangedListener.onIngredientQuantityChanged(i, mMeasuredIngredients.get(i));
                     notifyDataSetChanged();
                 }
             });
@@ -194,9 +158,10 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
                 @Override
                 public void onClick(View view) {
                     Ingredient i = mFilteredIngredients.get(getAdapterPosition());
-                    if (i.getQuantity() > 100) return;
-                    i.setQuantity(i.getQuantity() + 1);
-                    mQuantityChangedListener.onIngredientQuantityChanged(i, i.getQuantity());
+                    int measuredQuantity = mMeasuredIngredients.get(i);
+                    if (measuredQuantity > 100) return;
+                    mMeasuredIngredients.put(i, measuredQuantity + 1);
+                    mQuantityChangedListener.onIngredientQuantityChanged(i, mMeasuredIngredients.get(i));
                     notifyDataSetChanged();
                 }
             });

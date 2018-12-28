@@ -1,4 +1,4 @@
-package com.example.laure.thymesaver.Adapters;
+package com.example.laure.thymesaver.Adapters.IngredientAdapters;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -13,7 +13,7 @@ import com.example.laure.thymesaver.R;
 
 import java.util.HashMap;
 
-public class ChecklistIngredientAdapter extends IngredientAdapter {
+public class ChecklistIngredientAdapter extends MeasuredIngredientAdapter {
     private IngredientCheckedListener mCheckListener;
 
     public ChecklistIngredientAdapter(
@@ -51,9 +51,7 @@ public class ChecklistIngredientAdapter extends IngredientAdapter {
                         mNameTV.setPaintFlags(0);
                         mNameTV.setTextColor(Color.BLACK);
                     }
-                    mCheckListener.onIngredientChecked(
-                            ((MeasuredIngredient) i).getPantryIngredient(),
-                            checked);
+                    mCheckListener.onIngredientChecked(i, checked);
                 }
             });
         }
