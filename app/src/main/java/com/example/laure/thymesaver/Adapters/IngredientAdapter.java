@@ -75,6 +75,11 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
         public void setQuantity(int quantity) {
             mMeasuredQuantity = quantity;
         }
+
+        //Converts the Measured Ingredient back to an ordinary pantry ingredient
+        public Ingredient getPantryIngredient() {
+            return new Ingredient(name, unit, quantity);
+        }
     }
 
     public void setIngredients(List<Ingredient> ingredients) {

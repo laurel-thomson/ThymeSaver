@@ -51,7 +51,9 @@ public class ChecklistIngredientAdapter extends IngredientAdapter {
                         mNameTV.setPaintFlags(0);
                         mNameTV.setTextColor(Color.BLACK);
                     }
-                    mCheckListener.onIngredientChecked(i, checked);
+                    mCheckListener.onIngredientChecked(
+                            ((MeasuredIngredient) i).getPantryIngredient(),
+                            checked);
                 }
             });
         }

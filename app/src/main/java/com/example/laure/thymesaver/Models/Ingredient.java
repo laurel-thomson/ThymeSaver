@@ -3,9 +3,9 @@ package com.example.laure.thymesaver.Models;
 import com.google.firebase.database.Exclude;
 
 public class Ingredient {
-    private String name;
-    private String unit;
-    private int quantity;
+    protected String name;
+    protected String unit;
+    protected int quantity;
 
     public Ingredient() {
         //required empty constructor for Firebase

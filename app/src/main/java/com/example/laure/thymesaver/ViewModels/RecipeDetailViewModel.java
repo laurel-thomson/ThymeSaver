@@ -49,9 +49,29 @@ public class RecipeDetailViewModel extends AndroidViewModel {
         }
     }
 
-    public void updateIngredientQuantity(Ingredient i, int quantity) {
+    public void updateRecipeIngredientQuantity(Ingredient i, int quantity) {
         mCurrentRecipe.getRecipeIngredients().put(i.getName(), quantity);
         //todo: only update the quantity in the database, not the whole recipe
         updateRecipe();
+    }
+
+    public void addToPantryQuantity(Ingredient i) {
+        i.setQuantity(i.getQuantity() + getRecipeQuantity(i));
+        mRepository.updateIngredient(i);
+    }
+
+    public void removeFromPantryQuantity(Ingredient i) {
+        i.setQuantity(Math.max(0, i.getQuantity() - getRecipeQuantity(i)));
+        mRepository.updateIngredient(i);
+    }
+
+    private int getRecipeQuantity(Ingredient i) {
+        int quantity = 0;
+        for (String name : mCurrentRecipe.getRecipeIngredients().keySet()) {
+            if (name.equals(i.getName())) {
+                quantity = mCurrentRecipe.getRecipeIngredients().get(name);
+            }
+        }
+        return quantity;
     }
 }

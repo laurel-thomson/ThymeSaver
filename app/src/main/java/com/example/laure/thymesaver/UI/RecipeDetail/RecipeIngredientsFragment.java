@@ -12,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.laure.thymesaver.Adapters.ChecklistIngredientAdapter;
 import com.example.laure.thymesaver.Adapters.IngredientAdapter;
@@ -58,7 +57,7 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
     }
 
     public void onIngredientQuantityChanged(Ingredient ingredient, int quantity) {
-        mViewModel.updateIngredientQuantity(ingredient, quantity);
+        mViewModel.updateRecipeIngredientQuantity(ingredient, quantity);
     }
 
     @Override
@@ -72,9 +71,11 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
     public void onIngredientChecked(Ingredient ingredient, boolean checked) {
         String message;
         if (checked) {
+            mViewModel.removeFromPantryQuantity(ingredient);
             message = ingredient.getName() + " quantity subtracted from pantry.";
         }
         else {
+            mViewModel.addToPantryQuantity(ingredient);
             message = ingredient.getName() + " quantity added back to pantry.";
         }
         Snackbar.make(getView().findViewById(R.id.recipe_ingredients_layout),
