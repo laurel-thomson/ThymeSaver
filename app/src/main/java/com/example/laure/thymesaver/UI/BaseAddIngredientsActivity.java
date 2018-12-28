@@ -95,14 +95,7 @@ public abstract class BaseAddIngredientsActivity extends AppCompatActivity imple
 
     @Override
     public void onIngredientQuantityChanged(Ingredient ingredient, int quantity) {
-
-        //todo: update this method...
-
-        Toast.makeText(
-                getApplicationContext(),
-                ingredient.getName(),
-                Toast.LENGTH_SHORT)
-                    .show();
+        //do nothing
     }
 
     public abstract void saveIngredients();

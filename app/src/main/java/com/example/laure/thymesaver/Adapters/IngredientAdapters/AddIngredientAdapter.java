@@ -21,9 +21,9 @@ public class AddIngredientAdapter extends MeasuredIngredientAdapter {
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         final Ingredient ingredient = mFilteredIngredients.get(position);
         holder.mNameTV.setText(ingredient.getName());
-        holder.mCheckBox.setChecked(ingredient.getQuantity() > 0);
+        holder.mCheckBox.setChecked(mMeasuredIngredients.get(ingredient) > 0);
         if (holder.mCheckBox.isChecked()) {
-            holder.mQuantityTV.setText(Integer.toString(ingredient.getQuantity()));
+            holder.mQuantityTV.setText(Integer.toString(mMeasuredIngredients.get(ingredient)));
         }
         else {
             holder.mQuantityTV.setText("0");
@@ -51,8 +51,8 @@ public class AddIngredientAdapter extends MeasuredIngredientAdapter {
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     Ingredient i = mFilteredIngredients.get(getAdapterPosition());
                     if (compoundButton.isChecked()) {
-                        if (i.getQuantity() == 0) {
-                            i.setQuantity(1);
+                        if (mMeasuredIngredients.get(i) == 0) {
+                            mMeasuredIngredients.put(i, 1);
                             mQuantityTV.setText("1");
                         }
                         mQuantityTV.setVisibility(View.VISIBLE);
@@ -60,7 +60,7 @@ public class AddIngredientAdapter extends MeasuredIngredientAdapter {
                         mDecrementer.setVisibility(View.VISIBLE);
                     }
                     else {
-                        i.setQuantity(0);
+                        mMeasuredIngredients.put(i,0);
                         mQuantityTV.setVisibility(View.GONE);
                         mIncrementer.setVisibility(View.GONE);
                         mDecrementer.setVisibility(View.GONE);
@@ -73,7 +73,7 @@ public class AddIngredientAdapter extends MeasuredIngredientAdapter {
     public HashMap<String, Integer> getRecipeIngredients() {
         HashMap<String, Integer> recipeIngredients = new HashMap<>();
         for (Ingredient i : mIngredients) {
-            int recipeQuantity = i.getQuantity();
+            int recipeQuantity = mMeasuredIngredients.get(i);
             if (recipeQuantity > 0) {
                 recipeIngredients.put(i.getName(), recipeQuantity);
             }

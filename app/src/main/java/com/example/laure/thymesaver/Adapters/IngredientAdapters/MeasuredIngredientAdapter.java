@@ -50,6 +50,7 @@ public class MeasuredIngredientAdapter extends RecyclerView.Adapter<MeasuredIngr
 
     public void setIngredients(HashMap<Ingredient, Integer> measuredIngredients) {
         mMeasuredIngredients = measuredIngredients;
+        mIngredients.clear();
         for (Ingredient i : measuredIngredients.keySet()) {
             mIngredients.add(i);
         }

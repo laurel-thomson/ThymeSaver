@@ -50,6 +50,15 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
                 DividerItemDecoration.VERTICAL));
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //when the fragment is resumed after the AddRecipeIngredientsActivity is completed, we
+        //want to refresh the list of recipe ingredients
+        mAdapter.setIngredients(mViewModel.getRecipeIngredients());
+    }
+
     public void onIngredientQuantityChanged(Ingredient ingredient, int quantity) {
         mViewModel.updateRecipeIngredientQuantity(ingredient, quantity);
     }
