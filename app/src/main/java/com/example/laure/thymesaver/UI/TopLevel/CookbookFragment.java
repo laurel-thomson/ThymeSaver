@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,7 +24,8 @@ import com.example.laure.thymesaver.ViewModels.CookBookViewModel;
 
 import java.util.List;
 
-public class CookbookFragment extends AddableFragment implements RecipeAdapter.RecipeAdapterListener {
+public class CookbookFragment extends AddableFragment
+        implements RecipeAdapter.RecipeSelectedListener, RecipeAdapter.RecipeCheckedListener {
     private CookBookViewModel mViewModel;
     private RecipeAdapter mAdapter;
     private RecyclerView mRecyclerView;
@@ -38,7 +41,7 @@ public class CookbookFragment extends AddableFragment implements RecipeAdapter.R
         mViewModel = ViewModelProviders.of(this).get(CookBookViewModel.class);
         mRecyclerView = view.findViewById(R.id.recipes_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new RecipeAdapter(getActivity(), this);
+        mAdapter = new RecipeAdapter(getActivity(), this, this);
 
         mViewModel.getAllRecipes().observe(this, new Observer<List<Recipe>>() {
             @Override
@@ -66,5 +69,22 @@ public class CookbookFragment extends AddableFragment implements RecipeAdapter.R
     @Override
     void launchAddItemActivity() {
         Toast.makeText(getActivity(), "Add recipe not implemented", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onRecipeChecked(Recipe recipe, boolean checked) {
+        String message;
+        if (checked) {
+            mViewModel.addToMealPlan(recipe);
+            message = recipe.getName() + " added to meal plan.";
+        }
+        else {
+            mViewModel.removeFromMealPlan(recipe);
+            message = recipe.getName() + " removed from meal plan.";
+        }
+        Snackbar snack = Snackbar.make(getView().findViewById(R.id.cookbook_layout),
+                message,
+                Snackbar.LENGTH_SHORT);
+        snack.show();
     }
 }

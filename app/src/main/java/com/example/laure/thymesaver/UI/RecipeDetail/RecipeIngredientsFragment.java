@@ -20,8 +20,7 @@ import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 
 public class RecipeIngredientsFragment extends RecipeDetailFragment
-        implements MeasuredIngredientAdapter.IngredientQuantityChangedListener,
-                   ChecklistIngredientAdapter.IngredientCheckedListener {
+        implements MeasuredIngredientAdapter.IngredientQuantityChangedListener {
 
     private RecipeDetailViewModel mViewModel;
     private ChecklistIngredientAdapter mAdapter;
@@ -39,7 +38,6 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
         mViewModel = ViewModelProviders.of(getActivity()).get(RecipeDetailViewModel.class);
         mAdapter = new ChecklistIngredientAdapter(getActivity(),
                 mViewModel.getRecipeIngredients(),
-                this,
                 this);
 
         mRecyclerView = view.findViewById(R.id.recipe_ingredients_recycler_view);
@@ -68,22 +66,5 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
         Intent intent = new Intent(getActivity(), AddRecipeIngredientsActivity.class);
         intent.putExtra(AddRecipeIngredientsActivity.RECIPE_NAME, mViewModel.getCurrentRecipe().getName());
         startActivity(intent);
-    }
-
-    @Override
-    public void onIngredientChecked(Ingredient ingredient, boolean checked) {
-        String message;
-        if (checked) {
-            mViewModel.removeFromPantryQuantity(ingredient);
-            message = ingredient.getName() + " quantity subtracted from pantry.";
-        }
-        else {
-            mViewModel.addToPantryQuantity(ingredient);
-            message = ingredient.getName() + " quantity added back to pantry.";
-        }
-        Snackbar.make(getView().findViewById(R.id.recipe_ingredients_layout),
-                message,
-                Snackbar.LENGTH_SHORT
-                ).show();
     }
 }

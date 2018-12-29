@@ -14,15 +14,12 @@ import com.example.laure.thymesaver.R;
 import java.util.HashMap;
 
 public class ChecklistIngredientAdapter extends MeasuredIngredientAdapter {
-    private IngredientCheckedListener mCheckListener;
 
     public ChecklistIngredientAdapter(
             Context context,
             HashMap<Ingredient, Integer> ingredients,
-            IngredientQuantityChangedListener quantityChangedListener,
-            IngredientCheckedListener checkListener) {
+            IngredientQuantityChangedListener quantityChangedListener) {
         super(context, ingredients, quantityChangedListener);
-        mCheckListener = checkListener;
     }
 
     @Override
@@ -51,13 +48,8 @@ public class ChecklistIngredientAdapter extends MeasuredIngredientAdapter {
                         mNameTV.setPaintFlags(0);
                         mNameTV.setTextColor(Color.BLACK);
                     }
-                    mCheckListener.onIngredientChecked(i, checked);
                 }
             });
         }
-    }
-
-    public interface IngredientCheckedListener {
-        void onIngredientChecked (Ingredient ingredient, boolean checked);
     }
 }

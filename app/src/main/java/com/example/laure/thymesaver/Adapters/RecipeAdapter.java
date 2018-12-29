@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.example.laure.thymesaver.Models.Recipe;
@@ -14,13 +16,18 @@ import com.example.laure.thymesaver.R;
 import java.util.List;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHolder> {
-    protected List<Recipe> mRecipes;
-    protected final LayoutInflater mInflater;
-    protected RecipeAdapter.RecipeAdapterListener mListener;
+    private List<Recipe> mRecipes;
+    private final LayoutInflater mInflater;
+    private RecipeSelectedListener mSelectedListener;
+    private RecipeCheckedListener mCheckListener;
 
-    public RecipeAdapter(Context context, RecipeAdapterListener listener) {
+    public RecipeAdapter(
+            Context context,
+            RecipeSelectedListener selectedListener,
+            RecipeCheckedListener checkListener) {
         mInflater = LayoutInflater.from(context);
-        mListener = listener;
+        mSelectedListener = selectedListener;
+        mCheckListener = checkListener;
     }
 
     @NonNull
@@ -49,23 +56,38 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView mTextView;
+        private TextView mTextView;
+        private CheckBox mCheckBox;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             mTextView = itemView.findViewById(R.id.recipe_list_textview);
+            mCheckBox = itemView.findViewById(R.id.recipe_checkbox);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mListener.onRecipeSelected(mRecipes.get(getAdapterPosition()));
+                    mSelectedListener.onRecipeSelected(mRecipes.get(getAdapterPosition()));
+                }
+            });
+
+            mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    Recipe recipe = mRecipes.get(getAdapterPosition());
+                    boolean checked = compoundButton.isChecked();
+                    mCheckListener.onRecipeChecked(recipe, checked);
                 }
             });
         }
     }
 
 
-    public interface RecipeAdapterListener {
+    public interface RecipeSelectedListener {
         void onRecipeSelected(Recipe recipe);
+    }
+
+    public interface RecipeCheckedListener {
+        void onRecipeChecked (Recipe recipe, boolean checked);
     }
 }
