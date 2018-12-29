@@ -1,6 +1,5 @@
 package com.example.laure.thymesaver.UI.TopLevel;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -11,16 +10,10 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.laure.thymesaver.R;
-import com.example.laure.thymesaver.UI.AddNewIngredientActivity;
-import com.example.laure.thymesaver.UI.RecipeDetail.RecipeDetailActivity;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     
@@ -40,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         mFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TopLevelFragment currentFragment = (TopLevelFragment) mAdapter.getItem(
+                AddableFragment currentFragment = (AddableFragment) mAdapter.getItem(
                         mViewPager.getCurrentItem());
                 currentFragment.launchAddItemActivity();
             }
@@ -91,7 +84,10 @@ public class MainActivity extends AppCompatActivity {
             public void onPageScrollStateChanged(int state) {
                 switch (state) {
                     case ViewPager.SCROLL_STATE_IDLE:
-                        mFAB.show();
+                        //the Meal Planner tab doesn't have a FAB
+                        if (mViewPager.getCurrentItem() != 0) {
+                            mFAB.show();
+                        }
                         break;
                     case ViewPager.SCROLL_STATE_DRAGGING:
                     case ViewPager.SCROLL_STATE_SETTLING:
@@ -103,6 +99,9 @@ public class MainActivity extends AppCompatActivity {
         mAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         mViewPager.setAdapter(mAdapter);
+
+        //The activity starts on the Meal Planner tab, which doesn't have a FAB
+        mFAB.hide();
     }
 
 

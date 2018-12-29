@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.example.laure.thymesaver.Models.Ingredient;
-import com.example.laure.thymesaver.UI.BaseAddIngredientsActivity;
+import com.example.laure.thymesaver.UI.AddIngredients.BaseAddIngredientsActivity;
 import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 
 import java.util.HashMap;

@@ -22,7 +22,7 @@ import com.example.laure.thymesaver.ViewModels.CookBookViewModel;
 
 import java.util.List;
 
-public class CookbookFragment extends TopLevelFragment implements RecipeAdapter.RecipeAdapterListener {
+public class CookbookFragment extends AddableFragment implements RecipeAdapter.RecipeAdapterListener {
     private CookBookViewModel mViewModel;
     private RecipeAdapter mAdapter;
     private RecyclerView mRecyclerView;

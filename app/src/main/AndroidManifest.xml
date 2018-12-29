@@ -16,7 +16,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UI.BaseAddIngredientsActivity">
+        <activity android:name=".UI.AddIngredients.BaseAddIngredientsActivity">
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
@@ -26,7 +26,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".UI.RecipeDetail.RecipeDetailActivity" />
-        <activity android:name=".UI.AddNewIngredientActivity" />
+        <activity android:name=".UI.AddIngredients.AddNewIngredientActivity" />
         <activity android:name=".UI.RecipeDetail.AddRecipeIngredientsActivity" />
         <activity android:name=".UI.AddPlannedMealsActivity"></activity>
     </application>

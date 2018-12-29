@@ -8,8 +8,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -19,14 +17,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import com.example.laure.thymesaver.R;
-import com.example.laure.thymesaver.UI.TopLevel.CookbookFragment;
-import com.example.laure.thymesaver.UI.TopLevel.PantryFragment;
-import com.example.laure.thymesaver.UI.TopLevel.ShoppingListFragment;
-import com.example.laure.thymesaver.UI.TopLevel.TopLevelFragment;
 import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class RecipeDetailActivity extends AppCompatActivity{
 

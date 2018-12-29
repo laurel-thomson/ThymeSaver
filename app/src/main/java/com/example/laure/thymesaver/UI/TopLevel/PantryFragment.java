@@ -16,12 +16,12 @@ import android.view.ViewGroup;
 import com.example.laure.thymesaver.Adapters.IngredientAdapters.IngredientAdapter;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
-import com.example.laure.thymesaver.UI.AddNewIngredientActivity;
+import com.example.laure.thymesaver.UI.AddIngredients.AddNewIngredientActivity;
 import com.example.laure.thymesaver.ViewModels.PantryViewModel;
 
 import java.util.List;
 
-public class PantryFragment extends TopLevelFragment implements IngredientAdapter.IngredientQuantityChangedListener {
+public class PantryFragment extends AddableFragment implements IngredientAdapter.IngredientQuantityChangedListener {
     private PantryViewModel mIngredientViewModel;
     private IngredientAdapter mAdapter;
     private RecyclerView mRecyclerView;

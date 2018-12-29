@@ -1,4 +1,4 @@
-package com.example.laure.thymesaver.UI;
+package com.example.laure.thymesaver.UI.AddIngredients;
 
 import android.app.SearchManager;
 import android.arch.lifecycle.ViewModelProviders;
