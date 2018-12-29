@@ -1,6 +1,8 @@
 package com.example.laure.thymesaver.Adapters.MealPlannerAdapters;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -8,12 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.laure.thymesaver.R;
+
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Comparator;
 
 //Source: https://gist.github.com/gabrielemariotti/4c189fb1124df4556058
 
-public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class SectionedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final Context mContext;
     private static final int SECTION_TYPE = 0;
@@ -23,11 +28,11 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private int mTextResourceId;
     private LayoutInflater mLayoutInflater;
     private RecyclerView.Adapter mBaseAdapter;
-    private SparseArray<Section> mSections = new SparseArray<Section>();
+    private SparseArray<DaySection> mSections = new SparseArray<DaySection>();
 
 
-    public MyAdapter(Context context, int sectionResourceId, int textResourceId,
-                     RecyclerView.Adapter baseAdapter) {
+    public SectionedAdapter(Context context, int sectionResourceId, int textResourceId,
+                            RecyclerView.Adapter baseAdapter) {
 
         mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mSectionResourceId = sectionResourceId;
@@ -87,10 +92,19 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(RecyclerView.ViewHolder sectionViewHolder, int position) {
         if (isSectionHeaderPosition(position)) {
             ((SectionViewHolder) sectionViewHolder).title.setText(mSections.get(position).title);
+            if (isCurrentDay(mSections.get(position))) {
+                ((SectionViewHolder) sectionViewHolder).title.
+                        setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
+            }
         } else {
             mBaseAdapter.onBindViewHolder(sectionViewHolder, sectionedPositionToPosition(position));
         }
 
+    }
+
+    private boolean isCurrentDay(DaySection section) {
+        int currentDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+        return section.dayOfWeek == currentDay;
     }
 
     @Override
@@ -101,14 +115,17 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
 
-    public static class Section {
+    public static class DaySection {
         int firstPosition;
         int sectionedPosition;
+        int dayOfWeek;
+
         CharSequence title;
 
-        public Section(int firstPosition, CharSequence title) {
+        public DaySection(int firstPosition, CharSequence title, int dayOfWeek) {
             this.firstPosition = firstPosition;
             this.title = title;
+            this.dayOfWeek = dayOfWeek;
         }
 
         public CharSequence getTitle() {
@@ -117,12 +134,12 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
 
-    public void setSections(Section[] sections) {
+    public void setSections(DaySection[] sections) {
         mSections.clear();
 
-        Arrays.sort(sections, new Comparator<Section>() {
+        Arrays.sort(sections, new Comparator<DaySection>() {
             @Override
-            public int compare(Section o, Section o1) {
+            public int compare(DaySection o, DaySection o1) {
                 return (o.firstPosition == o1.firstPosition)
                         ? 0
                         : ((o.firstPosition < o1.firstPosition) ? -1 : 1);
@@ -130,7 +147,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         });
 
         int offset = 0; // offset positions for the headers we're adding
-        for (Section section : sections) {
+        for (DaySection section : sections) {
             section.sectionedPosition = section.firstPosition + offset;
             mSections.append(section.sectionedPosition, section);
             ++offset;

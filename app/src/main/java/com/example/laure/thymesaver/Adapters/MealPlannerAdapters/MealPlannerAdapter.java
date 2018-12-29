@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,22 +34,24 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<MealPlannerAdapter.
 
     public static class SimpleViewHolder extends RecyclerView.ViewHolder {
         public final TextView title;
+        public final CheckBox checkbox;
 
         public SimpleViewHolder(View view) {
             super(view);
-            title = (TextView) view.findViewById(R.id.simple_text);
+            title = view.findViewById(R.id.recipe_list_textview);
+            checkbox = view.findViewById(R.id.recipe_checkbox);
         }
     }
 
     public MealPlannerAdapter(Context context, String[] data) {
         mContext = context;
         if (data != null)
-            mData = new ArrayList<String>(Arrays.asList(data));
-        else mData = new ArrayList<String>();
+            mData = new ArrayList<>(Arrays.asList(data));
+        else mData = new ArrayList<>();
     }
 
     public SimpleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        final View view = LayoutInflater.from(mContext).inflate(R.layout.simple_item, parent, false);
+        final View view = LayoutInflater.from(mContext).inflate(R.layout.recipe_list_item, parent, false);
         return new SimpleViewHolder(view);
     }
 

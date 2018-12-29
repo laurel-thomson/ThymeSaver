@@ -12,8 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.laure.thymesaver.Adapters.MealPlannerAdapters.MealPlannerAdapter;
-import com.example.laure.thymesaver.Adapters.MealPlannerAdapters.MyAdapter;
+import com.example.laure.thymesaver.Adapters.MealPlannerAdapters.SectionedAdapter;
 import com.example.laure.thymesaver.R;
+
+import java.util.Calendar;
 
 
 public class MealPlannerFragment extends Fragment{
@@ -39,17 +41,17 @@ public class MealPlannerFragment extends Fragment{
         mAdapter = new MealPlannerAdapter(getActivity(),meals);
 
 
-        MyAdapter.Section[] sections = {
-                new MyAdapter.Section(0,"Sunday"),
-                new MyAdapter.Section(1,"Monday"),
-                new MyAdapter.Section(2,"Tuesday"),
-                new MyAdapter.Section(2,"Wednesday"),
-                new MyAdapter.Section(4,"Thursday"),
-                new MyAdapter.Section(5,"Friday"),
-                new MyAdapter.Section(7,"Saturday")
+        SectionedAdapter.DaySection[] sections = {
+                new SectionedAdapter.DaySection(0,"Sunday", Calendar.SUNDAY),
+                new SectionedAdapter.DaySection(0,"Monday", Calendar.MONDAY),
+                new SectionedAdapter.DaySection(1,"Tuesday", Calendar.TUESDAY),
+                new SectionedAdapter.DaySection(1,"Wednesday", Calendar.WEDNESDAY),
+                new SectionedAdapter.DaySection(3,"Thursday", Calendar.THURSDAY),
+                new SectionedAdapter.DaySection(4,"Friday", Calendar.FRIDAY),
+                new SectionedAdapter.DaySection(5,"Saturday", Calendar.SATURDAY)
         };
-        MyAdapter mSectionedAdapter = new
-                MyAdapter(getActivity(),R.layout.section,R.id.section_text,mAdapter);
+        SectionedAdapter mSectionedAdapter = new
+                SectionedAdapter(getActivity(),R.layout.section,R.id.section_text,mAdapter);
 
         mSectionedAdapter.setSections(sections);
 
