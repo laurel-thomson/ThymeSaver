@@ -1,5 +1,6 @@
 package com.example.laure.thymesaver.UI.TopLevel;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.laure.thymesaver.R;
+import com.example.laure.thymesaver.UI.AddPlannedMealsActivity;
 
 public class MealPlannerFragment extends TopLevelFragment {
     @Override
@@ -17,6 +19,7 @@ public class MealPlannerFragment extends TopLevelFragment {
 
     @Override
     void launchAddItemActivity() {
-        Toast.makeText(getActivity(), "Add Recipe to Meal Plan not implemented", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getActivity(), AddPlannedMealsActivity.class);
+        startActivity(intent);
     }
 }

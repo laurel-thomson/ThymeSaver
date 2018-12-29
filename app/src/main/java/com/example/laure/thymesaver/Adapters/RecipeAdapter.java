@@ -14,9 +14,9 @@ import com.example.laure.thymesaver.R;
 import java.util.List;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHolder> {
-    private List<Recipe> mRecipes;
-    private final LayoutInflater mInflater;
-    private RecipeAdapter.RecipeAdapterListener mListener;
+    protected List<Recipe> mRecipes;
+    protected final LayoutInflater mInflater;
+    protected RecipeAdapter.RecipeAdapterListener mListener;
 
     public RecipeAdapter(Context context, RecipeAdapterListener listener) {
         mInflater = LayoutInflater.from(context);
@@ -58,7 +58,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // send selected ingredient in callback
                     mListener.onRecipeSelected(mRecipes.get(getAdapterPosition()));
                 }
             });

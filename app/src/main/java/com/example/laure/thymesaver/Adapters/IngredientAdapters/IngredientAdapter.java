@@ -42,7 +42,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(mContext)
-                .inflate(R.layout.ingredient_list_item, parent, false);
+                .inflate(R.layout.multiselect_list_item, parent, false);
 
         return new MyViewHolder(itemView);
     }
@@ -115,9 +115,9 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
 
         public MyViewHolder(View view) {
             super(view);
-            mCheckBox = view.findViewById(R.id.ingredient_checkbox);
-            mNameTV = view.findViewById(R.id.ingredient_textview);
-            mQuantityTV = view.findViewById(R.id.ingredient_quantity_picker);
+            mCheckBox = view.findViewById(R.id.multiselect_item_checkbox);
+            mNameTV = view.findViewById(R.id.multiselect_item_textview);
+            mQuantityTV = view.findViewById(R.id.item_quantity_picker);
             mDecrementer = view.findViewById(R.id.decrement_quantity_layout);
             mIncrementer = view.findViewById(R.id.increment_quantity_layout);
 

@@ -9,28 +9,28 @@
 
     <CheckBox
         app:layout_constraintStart_toStartOf="parent"
-        android:id="@+id/ingredient_checkbox"
+        android:id="@+id/multiselect_item_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="match_parent" />
 
 
     <TextView
         style="@style/TextViewStyle"
-        android:id="@+id/ingredient_textview"
+        android:id="@+id/multiselect_item_textview"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        app:layout_constraintStart_toEndOf="@id/ingredient_checkbox"/>
+        app:layout_constraintStart_toEndOf="@id/multiselect_item_checkbox"/>
 
     <LinearLayout
         android:id="@+id/decrement_quantity_layout"
-        app:layout_constraintEnd_toStartOf="@id/ingredient_quantity_picker"
+        app:layout_constraintEnd_toStartOf="@id/item_quantity_picker"
         android:gravity="center"
         android:layout_width="60dp"
         android:clickable="true"
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/decrement_ing_button"
+            android:id="@+id/decrement_button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
@@ -41,7 +41,7 @@
 
     <TextView
         style="@style/TextViewStyle"
-        android:id="@+id/ingredient_quantity_picker"
+        android:id="@+id/item_quantity_picker"
         android:layout_width="wrap_content"
         android:layout_gravity="center"
         app:layout_constraintEnd_toStartOf="@+id/increment_quantity_layout"
@@ -55,7 +55,7 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/increment_ing_button"
+            android:id="@+id/increment_button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"

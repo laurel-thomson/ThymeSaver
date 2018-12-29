@@ -36,7 +36,7 @@ public class AddIngredientAdapter extends MeasuredIngredientAdapter {
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(mContext)
-                .inflate(R.layout.ingredient_list_item, parent, false);
+                .inflate(R.layout.multiselect_list_item, parent, false);
         return new AddIngredientViewHolder(itemView);
     }
 
