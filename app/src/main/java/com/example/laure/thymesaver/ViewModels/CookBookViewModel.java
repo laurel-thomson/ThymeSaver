@@ -27,7 +27,7 @@ public class CookBookViewModel extends AndroidViewModel {
     }
 
     public void addToMealPlan(Recipe r) {
-        //todo: add to meal plan
+        mRepository.addRecipeToMealPlan(r);
     }
 
     public void removeFromMealPlan(Recipe r) {

@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.support.annotation.NonNull;
 
 import com.example.laure.thymesaver.Models.Ingredient;
+import com.example.laure.thymesaver.Models.MealPlan;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -20,6 +21,7 @@ public class Repository {
     private FirebaseDatabase mDatabase;
     private DatabaseReference mRecipeReference;
     private DatabaseReference mIngredientReference;
+    private DatabaseReference mMealPlanReference;
     private static Repository mSoleInstance;
     private List<Recipe> mRecipes = new ArrayList<>();
     private List<Ingredient> mIngredients = new ArrayList<>();
@@ -37,6 +39,7 @@ public class Repository {
         mDatabase = FirebaseDatabase.getInstance();
         mRecipeReference = mDatabase.getReference("recipes");
         mIngredientReference = mDatabase.getReference("ingredients");
+        mMealPlanReference = mDatabase.getReference("mealplan");
         mRecipeLiveData = Transformations.map(
                 new FirebaseQueryLiveData<Recipe>(mRecipeReference, Recipe.class),
                 new RecipeListDeserializer());
@@ -55,6 +58,11 @@ public class Repository {
 
     public void updateIngredient(Ingredient i) {
         mIngredientReference.child(i.getName()).setValue(i);
+    }
+
+    public void addRecipeToMealPlan(Recipe r) {
+        MealPlan mealPlan = new MealPlan(r.getName());
+        mMealPlanReference.push().setValue(mealPlan);
     }
 
     @NonNull
