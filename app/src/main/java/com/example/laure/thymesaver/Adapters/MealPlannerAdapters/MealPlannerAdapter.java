@@ -113,9 +113,8 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             newPosition = 1;
         }
         MealPlan targetMeal = mMealPlans.get(oldPosition);
-        MealPlan meal = new MealPlan(targetMeal.getRecipeName(), targetMeal.getScheduledDay());
         mMealPlans.remove(oldPosition);
-        mMealPlans.add(newPosition, meal);
+        mMealPlans.add(newPosition, targetMeal);
         notifyItemMoved(oldPosition, newPosition);
     }
 

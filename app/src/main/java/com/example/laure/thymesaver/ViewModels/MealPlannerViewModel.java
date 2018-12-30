@@ -25,11 +25,15 @@ public class MealPlannerViewModel extends AndroidViewModel {
         return mMealPlans;
     }
 
-    public void addToMealPlan(MealPlan mealPlan) {
-        mRepository.addRecipeToMealPlan(mealPlan);
+    public void addMealPlan(MealPlan mealPlan) {
+        mRepository.addMealPlan(mealPlan);
     }
 
-    public void removeFromMealPlan(Recipe r) {
+    public void updateMealPlan(MealPlan mealPlan) {
+        mRepository.updateMealPlan(mealPlan);
+    }
+
+    public void removeMealPlan(MealPlan mealPlan) {
         //todo: remove meal plan
     }
 }

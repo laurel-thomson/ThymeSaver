@@ -1,10 +1,11 @@
 package com.example.laure.thymesaver.Models;
 
-import java.util.Date;
+import com.google.firebase.database.Exclude;
 
 public class MealPlan {
     private String recipeName;
     private String scheduledDay;
+    private String firebaseKey;
 
     public MealPlan() {
         //required empty constructor for Firebase
@@ -30,5 +31,14 @@ public class MealPlan {
 
     public void setScheduledDate(String day) {
         this.scheduledDay = day;
+    }
+
+    @Exclude
+    public String getFirebaseKey() {
+        return firebaseKey;
+    }
+
+    public void setFirebaseKey(String firebaseKey) {
+        this.firebaseKey = firebaseKey;
     }
 }

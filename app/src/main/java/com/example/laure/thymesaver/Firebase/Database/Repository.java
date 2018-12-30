@@ -65,8 +65,12 @@ public class Repository {
         mIngredientReference.child(i.getName()).setValue(i);
     }
 
-    public void addRecipeToMealPlan(MealPlan mealPlan) {
+    public void addMealPlan(MealPlan mealPlan) {
         mMealPlanReference.push().setValue(mealPlan);
+    }
+
+    public void updateMealPlan(MealPlan mealPlan) {
+        mMealPlanReference.child(mealPlan.getFirebaseKey()).setValue(mealPlan);
     }
 
     @NonNull
@@ -143,6 +147,7 @@ public class Repository {
 
             for(DataSnapshot snap : dataSnapshot.getChildren()){
                 MealPlan m = snap.getValue(MealPlan.class);
+                m.setFirebaseKey(snap.getKey());
                 mMealPlans.add(m);
             }
             return mMealPlans;

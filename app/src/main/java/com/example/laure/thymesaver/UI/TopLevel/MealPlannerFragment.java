@@ -57,6 +57,6 @@ public class MealPlannerFragment extends Fragment implements MealPlannerAdapter.
 
     @Override
     public void onMealScheduleChanged(MealPlan mealPlan) {
-        //todo: save new schedule in the database
+        mViewModel.updateMealPlan(mealPlan);
     }
 }
