@@ -1,5 +1,7 @@
 package com.example.laure.thymesaver.UI.TopLevel;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,7 +16,9 @@ import android.view.ViewGroup;
 import com.example.laure.thymesaver.Adapters.MealPlannerAdapters.ItemTouchHelper.SwipeAndDragHelper;
 import com.example.laure.thymesaver.Adapters.MealPlannerAdapters.MealPlannerAdapter;
 import com.example.laure.thymesaver.Models.MealPlan;
+import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.R;
+import com.example.laure.thymesaver.ViewModels.MealPlannerViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +27,7 @@ import java.util.List;
 public class MealPlannerFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private MealPlannerAdapter mAdapter;
-    private ItemTouchHelper mItemTouchHelper;
+    private MealPlannerViewModel mViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState){
@@ -34,6 +38,7 @@ public class MealPlannerFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mViewModel = ViewModelProviders.of(getActivity()).get(MealPlannerViewModel.class);
         mRecyclerView = view.findViewById(R.id.meal_planner_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new MealPlannerAdapter();
@@ -43,9 +48,11 @@ public class MealPlannerFragment extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
         touchHelper.attachToRecyclerView(mRecyclerView);
 
-        List<MealPlan> meals = new ArrayList<>();
-        meals.add(new MealPlan("Soup", "Monday"));
-        meals.add(new MealPlan("Spaghetti", "Wednesday"));
-        mAdapter.setMealPlans(meals);
+        mViewModel.getMealPlans().observe(this, new Observer<List<MealPlan>>() {
+            @Override
+            public void onChanged(@Nullable List<MealPlan> mealPlans) {
+                mAdapter.setMealPlans(mealPlans);
+            }
+        });
     }
 }

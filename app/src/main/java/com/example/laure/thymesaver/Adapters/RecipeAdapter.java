@@ -19,15 +19,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
     private List<Recipe> mRecipes;
     private final LayoutInflater mInflater;
     private RecipeSelectedListener mSelectedListener;
-    private RecipeCheckedListener mCheckListener;
 
     public RecipeAdapter(
             Context context,
-            RecipeSelectedListener selectedListener,
-            RecipeCheckedListener checkListener) {
+            RecipeSelectedListener selectedListener) {
         mInflater = LayoutInflater.from(context);
         mSelectedListener = selectedListener;
-        mCheckListener = checkListener;
     }
 
     @NonNull
@@ -57,12 +54,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         private TextView mTextView;
-        private CheckBox mCheckBox;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             mTextView = itemView.findViewById(R.id.recipe_list_textview);
-            mCheckBox = itemView.findViewById(R.id.recipe_checkbox);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -70,24 +65,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
                     mSelectedListener.onRecipeSelected(mRecipes.get(getAdapterPosition()));
                 }
             });
-
-            mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    Recipe recipe = mRecipes.get(getAdapterPosition());
-                    boolean checked = compoundButton.isChecked();
-                    mCheckListener.onRecipeChecked(recipe, checked);
-                }
-            });
         }
     }
 
-
     public interface RecipeSelectedListener {
         void onRecipeSelected(Recipe recipe);
-    }
-
-    public interface RecipeCheckedListener {
-        void onRecipeChecked (Recipe recipe, boolean checked);
     }
 }

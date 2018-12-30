@@ -25,8 +25,10 @@ public class Repository {
     private static Repository mSoleInstance;
     private List<Recipe> mRecipes = new ArrayList<>();
     private List<Ingredient> mIngredients = new ArrayList<>();
+    private List<MealPlan> mMealPlans = new ArrayList<>();
     private final LiveData<List<Recipe>> mRecipeLiveData;
     private final LiveData<List<Ingredient>> mIngredientLiveData;
+    private final LiveData<List<MealPlan>> mMealPlanLiveData;
 
     public static Repository getInstance() {
         if (mSoleInstance == null) {
@@ -46,6 +48,9 @@ public class Repository {
         mIngredientLiveData = Transformations.map(
                 new FirebaseQueryLiveData<Ingredient>(mIngredientReference, Ingredient.class),
                 new IngredientDeserializer());
+        mMealPlanLiveData = Transformations.map(
+                new FirebaseQueryLiveData<MealPlan>(mMealPlanReference, MealPlan.class),
+                new MealPlanDeserializer());
     }
 
     public void addOrUpdateRecipe(Recipe r) {
@@ -60,8 +65,8 @@ public class Repository {
         mIngredientReference.child(i.getName()).setValue(i);
     }
 
-    public void addRecipeToMealPlan(Recipe r) {
-        //todo: update this later
+    public void addRecipeToMealPlan(MealPlan mealPlan) {
+        mMealPlanReference.push().setValue(mealPlan);
     }
 
     @NonNull
@@ -72,6 +77,11 @@ public class Repository {
     @NonNull
     public LiveData<List<Ingredient>> getAllIngredients() {
         return mIngredientLiveData;
+    }
+
+    @NonNull
+    public LiveData<List<MealPlan>> getMealPlans() {
+        return mMealPlanLiveData;
     }
 
     public Recipe getRecipe(String recipeName) {
@@ -123,6 +133,19 @@ public class Repository {
                 mIngredients.add(i);
             }
             return mIngredients;
+        }
+    }
+
+    private class MealPlanDeserializer implements Function<DataSnapshot, List<MealPlan>> {
+        @Override
+        public List<MealPlan> apply(DataSnapshot dataSnapshot) {
+            mMealPlans.clear();
+
+            for(DataSnapshot snap : dataSnapshot.getChildren()){
+                MealPlan m = snap.getValue(MealPlan.class);
+                mMealPlans.add(m);
+            }
+            return mMealPlans;
         }
     }
 }
