@@ -4,14 +4,16 @@ import java.util.Date;
 
 public class MealPlan {
     private String recipeName;
-    private Date scheduledDate;
+    private String scheduledDay;
 
     public MealPlan() {
         //required empty constructor for Firebase
     }
 
-    public MealPlan(String recipeName) {
+    public MealPlan(String recipeName, String scheduledDay) {
+
         this.recipeName = recipeName;
+        this.scheduledDay = scheduledDay;
     }
 
     public String getRecipeName() {
@@ -22,11 +24,11 @@ public class MealPlan {
         this.recipeName = recipeName;
     }
 
-    public Date getScheduledDate() {
-        return scheduledDate;
+    public String getScheduledDay() {
+        return scheduledDay;
     }
 
-    public void setScheduledDate(Date scheduledDate) {
-        this.scheduledDate = scheduledDate;
+    public void setScheduledDate(String day) {
+        this.scheduledDay = day;
     }
 }

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:orientation="horizontal"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <CheckBox
+        android:id="@+id/planned_meal_checkbox"
+        android:background="@color/colorTextIcon"
+        android:layout_width="0dp"
+        android:layout_weight="0.1"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/planned_meal_textview"
+        style="@style/TextViewStyle"
+        android:layout_width="0dp"
+        android:layout_weight="0.8"
+        android:layout_height="match_parent" />
+
+    <ImageView
+        android:id="@+id/planned_meal_handle"
+        android:layout_width="0dp"
+        android:layout_weight="0.1"
+        android:paddingRight="10dp"
+        android:background="@color/colorTextIcon"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_reorder"/>
+
+</LinearLayout>

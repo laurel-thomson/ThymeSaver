@@ -61,8 +61,7 @@ public class Repository {
     }
 
     public void addRecipeToMealPlan(Recipe r) {
-        MealPlan mealPlan = new MealPlan(r.getName());
-        mMealPlanReference.push().setValue(mealPlan);
+        //todo: update this later
     }
 
     @NonNull
