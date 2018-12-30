@@ -30,8 +30,8 @@ public class RecipeDetailViewModel extends AndroidViewModel {
         return mCurrentRecipe;
     }
 
-    public HashMap<Ingredient, Integer> getRecipeIngredients() {
-        return mRepository.getRecipeIngredients(mCurrentRecipe);
+    public HashMap<String, Integer> getRecipeIngredients() {
+        return mCurrentRecipe.getRecipeIngredients();
     }
 
     public List<String> getRecipeSteps() {
@@ -49,8 +49,8 @@ public class RecipeDetailViewModel extends AndroidViewModel {
         }
     }
 
-    public void updateRecipeIngredientQuantity(Ingredient i, int quantity) {
-        mCurrentRecipe.getRecipeIngredients().put(i.getName(), quantity);
+    public void updateRecipeIngredientQuantity(String ingredientName, int quantity) {
+        mCurrentRecipe.getRecipeIngredients().put(ingredientName, quantity);
         updateRecipe();
     }
 

@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         mFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AddableFragment currentFragment = (AddableFragment) mAdapter.getItem(
+                AddButtonFragment currentFragment = (AddButtonFragment) mAdapter.getItem(
                         mViewPager.getCurrentItem());
                 currentFragment.launchAddItemActivity();
             }

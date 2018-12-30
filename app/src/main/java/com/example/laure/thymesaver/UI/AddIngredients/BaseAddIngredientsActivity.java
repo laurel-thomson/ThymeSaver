@@ -23,15 +23,12 @@ public abstract class BaseAddIngredientsActivity extends AppCompatActivity imple
 
     protected AddIngredientAdapter mAdapter;
     protected SearchView mSearchView;
-    protected PantryViewModel mPantryViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_ingredients);
         setUpActionBar();
-
-        mPantryViewModel = ViewModelProviders.of(this).get(PantryViewModel.class);
 
         RecyclerView rv = findViewById(R.id.ingredient_recycler_view);
         rv.setLayoutManager(new LinearLayoutManager(this));
@@ -94,7 +91,7 @@ public abstract class BaseAddIngredientsActivity extends AppCompatActivity imple
     }
 
     @Override
-    public void onIngredientQuantityChanged(Ingredient ingredient, int quantity) {
+    public void onIngredientQuantityChanged(String ingredientName, int quantity) {
         //do nothing
     }
 

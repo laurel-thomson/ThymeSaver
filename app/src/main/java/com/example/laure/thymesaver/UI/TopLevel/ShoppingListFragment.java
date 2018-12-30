@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.example.laure.thymesaver.R;
 
-public class ShoppingListFragment extends AddableFragment {
+public class ShoppingListFragment extends AddButtonFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState){
         return inflater.inflate(R.layout.fragment_shopping_list, viewGroup, false);
@@ -20,7 +20,7 @@ public class ShoppingListFragment extends AddableFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        final ProgressBar progressBar = view.findViewById(R.id.cookbook_progress);
+        final ProgressBar progressBar = view.findViewById(R.id.shopping_list_progress);
 
         progressBar.setVisibility(View.GONE);
     }

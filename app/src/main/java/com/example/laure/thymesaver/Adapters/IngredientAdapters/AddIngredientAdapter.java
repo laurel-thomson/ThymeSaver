@@ -19,11 +19,11 @@ public class AddIngredientAdapter extends MeasuredIngredientAdapter {
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-        final Ingredient ingredient = mFilteredIngredients.get(position);
-        holder.mNameTV.setText(ingredient.getName());
-        holder.mCheckBox.setChecked(mMeasuredIngredients.get(ingredient) > 0);
+        final String name = mFilteredIngredients.get(position);
+        holder.mNameTV.setText(name);
+        holder.mCheckBox.setChecked(mMeasuredIngredients.get(name) > 0);
         if (holder.mCheckBox.isChecked()) {
-            holder.mQuantityTV.setText(Integer.toString(mMeasuredIngredients.get(ingredient)));
+            holder.mQuantityTV.setText(Integer.toString(mMeasuredIngredients.get(name)));
         }
         else {
             holder.mQuantityTV.setText("0");
@@ -49,10 +49,10 @@ public class AddIngredientAdapter extends MeasuredIngredientAdapter {
             mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    Ingredient i = mFilteredIngredients.get(getAdapterPosition());
+                    String name = mFilteredIngredients.get(getAdapterPosition());
                     if (compoundButton.isChecked()) {
-                        if (mMeasuredIngredients.get(i) == 0) {
-                            mMeasuredIngredients.put(i, 1);
+                        if (mMeasuredIngredients.get(name) == 0) {
+                            mMeasuredIngredients.put(name, 1);
                             mQuantityTV.setText("1");
                         }
                         mQuantityTV.setVisibility(View.VISIBLE);
@@ -60,7 +60,7 @@ public class AddIngredientAdapter extends MeasuredIngredientAdapter {
                         mDecrementer.setVisibility(View.VISIBLE);
                     }
                     else {
-                        mMeasuredIngredients.put(i,0);
+                        mMeasuredIngredients.put(name,0);
                         mQuantityTV.setVisibility(View.GONE);
                         mIncrementer.setVisibility(View.GONE);
                         mDecrementer.setVisibility(View.GONE);
@@ -72,10 +72,10 @@ public class AddIngredientAdapter extends MeasuredIngredientAdapter {
 
     public HashMap<String, Integer> getRecipeIngredients() {
         HashMap<String, Integer> recipeIngredients = new HashMap<>();
-        for (Ingredient i : mIngredients) {
+        for (String i : mIngredients) {
             int recipeQuantity = mMeasuredIngredients.get(i);
             if (recipeQuantity > 0) {
-                recipeIngredients.put(i.getName(), recipeQuantity);
+                recipeIngredients.put(i, recipeQuantity);
             }
         }
         return recipeIngredients;

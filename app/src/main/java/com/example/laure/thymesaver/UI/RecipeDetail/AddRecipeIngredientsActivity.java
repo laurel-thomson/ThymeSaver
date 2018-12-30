@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.UI.AddIngredients.BaseAddIngredientsActivity;
+import com.example.laure.thymesaver.ViewModels.PantryViewModel;
 import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 
 import java.util.HashMap;
@@ -15,14 +16,14 @@ import java.util.List;
 public class AddRecipeIngredientsActivity extends BaseAddIngredientsActivity {
     public static String RECIPE_NAME = "My recipe name";
     private RecipeDetailViewModel mRecipeDetailViewModel;
-    private HashMap<Ingredient, Integer> mRecipeIngredients;
+    private PantryViewModel mPantryViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mRecipeDetailViewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
         String recipeName = getIntent().getStringExtra(RECIPE_NAME);
         mRecipeDetailViewModel.setCurrentRecipe(recipeName);
-        mRecipeIngredients = mRecipeDetailViewModel.getRecipeIngredients();
+        mPantryViewModel = ViewModelProviders.of(this).get(PantryViewModel.class);
         super.onCreate(savedInstanceState);
     }
 
@@ -40,16 +41,17 @@ public class AddRecipeIngredientsActivity extends BaseAddIngredientsActivity {
 
                 //create a new HashMap that includes all of the ingredients in the pantry
                 //the value is 0 if the ingredient is not in the recipe, and nonzero otherwise
-                HashMap<Ingredient, Integer> measuredIngredients = new HashMap<>();
+                HashMap<String, Integer> totalMeasuredIngredients = new HashMap<>();
+                HashMap<String, Integer> recipeIngredients = mRecipeDetailViewModel.getRecipeIngredients();
                 for (Ingredient i : ingredients) {
-                    if (mRecipeIngredients.containsKey(i)) {
-                        measuredIngredients.put(i, mRecipeIngredients.get(i));
+                    if (recipeIngredients.containsKey(i.getName())) {
+                        totalMeasuredIngredients.put(i.getName(), recipeIngredients.get(i.getName()));
                     }
                     else {
-                        measuredIngredients.put(i, 0);
+                        totalMeasuredIngredients.put(i.getName(), 0);
                     }
                 }
-                mAdapter.setIngredients(measuredIngredients);
+                mAdapter.setIngredients(totalMeasuredIngredients);
             }
         });
     }

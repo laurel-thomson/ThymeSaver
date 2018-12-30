@@ -57,8 +57,8 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
         mAdapter.setIngredients(mViewModel.getRecipeIngredients());
     }
 
-    public void onIngredientQuantityChanged(Ingredient ingredient, int quantity) {
-        mViewModel.updateRecipeIngredientQuantity(ingredient, quantity);
+    public void onIngredientQuantityChanged(String ingredientName, int quantity) {
+        mViewModel.updateRecipeIngredientQuantity(ingredientName, quantity);
     }
 
     @Override

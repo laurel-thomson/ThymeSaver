@@ -22,7 +22,7 @@ import com.example.laure.thymesaver.ViewModels.PantryViewModel;
 
 import java.util.List;
 
-public class PantryFragment extends AddableFragment implements IngredientAdapter.IngredientQuantityChangedListener {
+public class PantryFragment extends AddButtonFragment implements IngredientAdapter.IngredientQuantityChangedListener {
     private PantryViewModel mIngredientViewModel;
     private IngredientAdapter mAdapter;
     private RecyclerView mRecyclerView;

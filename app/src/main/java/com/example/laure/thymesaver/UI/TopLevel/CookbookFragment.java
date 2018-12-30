@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,7 +23,7 @@ import com.example.laure.thymesaver.ViewModels.CookBookViewModel;
 
 import java.util.List;
 
-public class CookbookFragment extends AddableFragment
+public class CookbookFragment extends AddButtonFragment
         implements RecipeAdapter.RecipeSelectedListener {
     private CookBookViewModel mViewModel;
     private RecipeAdapter mAdapter;

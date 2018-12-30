@@ -17,7 +17,7 @@ public class ChecklistIngredientAdapter extends MeasuredIngredientAdapter {
 
     public ChecklistIngredientAdapter(
             Context context,
-            HashMap<Ingredient, Integer> ingredients,
+            HashMap<String, Integer> ingredients,
             IngredientQuantityChangedListener quantityChangedListener) {
         super(context, ingredients, quantityChangedListener);
     }
@@ -38,7 +38,6 @@ public class ChecklistIngredientAdapter extends MeasuredIngredientAdapter {
             mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    Ingredient i = mFilteredIngredients.get(getAdapterPosition());
                     boolean checked = compoundButton.isChecked();
                     if (checked) {
                         mNameTV.setPaintFlags(mNameTV.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
