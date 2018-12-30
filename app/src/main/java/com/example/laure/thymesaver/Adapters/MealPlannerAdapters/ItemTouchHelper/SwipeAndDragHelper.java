@@ -22,8 +22,7 @@ public class SwipeAndDragHelper extends ItemTouchHelper.Callback {
             return 0;
         }
         int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
-        int swipeFlags = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
-        return makeMovementFlags(dragFlags, swipeFlags);
+        return makeMovementFlags(dragFlags, 0);
     }
 
     @Override
@@ -34,7 +33,7 @@ public class SwipeAndDragHelper extends ItemTouchHelper.Callback {
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-        contract.onViewSwiped(viewHolder.getAdapterPosition());
+        //do nothing
     }
 
     @Override
@@ -59,8 +58,6 @@ public class SwipeAndDragHelper extends ItemTouchHelper.Callback {
 
     public interface ActionCompletionContract {
         void onViewMoved(int oldPosition, int newPosition);
-
-        void onViewSwiped(int position);
     }
 
 }

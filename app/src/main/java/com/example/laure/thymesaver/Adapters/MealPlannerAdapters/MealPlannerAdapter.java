@@ -18,8 +18,6 @@ import com.example.laure.thymesaver.Models.MealPlan;
 import com.example.laure.thymesaver.R;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -124,12 +122,6 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         mMealPlans.remove(oldPosition);
         mMealPlans.add(newPosition, meal);
         notifyItemMoved(oldPosition, newPosition);
-    }
-
-    @Override
-    public void onViewSwiped(int position) {
-        mMealPlans.remove(position);
-        notifyItemRemoved(position);
     }
 
     public void setTouchHelper(ItemTouchHelper touchHelper) {
