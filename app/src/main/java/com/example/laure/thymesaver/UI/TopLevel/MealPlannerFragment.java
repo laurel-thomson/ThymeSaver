@@ -13,6 +13,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.example.laure.thymesaver.Adapters.MealPlannerAdapters.ItemTouchHelper.DragHelper;
 import com.example.laure.thymesaver.Adapters.MealPlannerAdapters.MealPlannerAdapter;
@@ -37,6 +38,8 @@ public class MealPlannerFragment extends Fragment implements MealPlannerAdapter.
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        final ProgressBar progressBar = view.findViewById(R.id.meal_planner_progress);
+
         mViewModel = ViewModelProviders.of(getActivity()).get(MealPlannerViewModel.class);
         mRecyclerView = view.findViewById(R.id.meal_planner_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -51,6 +54,7 @@ public class MealPlannerFragment extends Fragment implements MealPlannerAdapter.
             @Override
             public void onChanged(@Nullable List<MealPlan> mealPlans) {
                 mAdapter.setMealPlans(mealPlans);
+                progressBar.setVisibility(View.GONE);
             }
         });
     }

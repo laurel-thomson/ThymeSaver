@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.example.laure.thymesaver.Adapters.IngredientAdapters.IngredientAdapter;
 import com.example.laure.thymesaver.Models.Ingredient;
@@ -34,13 +35,14 @@ public class PantryFragment extends AddableFragment implements IngredientAdapter
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        final ProgressBar progressBar = view.findViewById(R.id.pantry_progress);
         mIngredientViewModel = ViewModelProviders.of(this).get(PantryViewModel.class);
         mAdapter = new IngredientAdapter(getActivity(),this);
         mIngredientViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
             @Override
             public void onChanged(@Nullable List<Ingredient> ingredients) {
-                //update the cached copy of ingredients in the adapter
                 mAdapter.setIngredients(ingredients);
+                progressBar.setVisibility(View.GONE);
             }
         });
 

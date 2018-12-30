@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.laure.thymesaver.Adapters.RecipeAdapter;
@@ -38,6 +39,8 @@ public class CookbookFragment extends AddableFragment
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        final ProgressBar progressBar = view.findViewById(R.id.cookbook_progress);
+
         mViewModel = ViewModelProviders.of(this).get(CookBookViewModel.class);
         mRecyclerView = view.findViewById(R.id.recipes_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -48,6 +51,7 @@ public class CookbookFragment extends AddableFragment
             public void onChanged(@Nullable List<Recipe> recipes) {
                 //update the cached copy of recipes in the adapter
                 mAdapter.setRecipes(recipes);
+                progressBar.setVisibility(View.GONE);
             }
         });
 
