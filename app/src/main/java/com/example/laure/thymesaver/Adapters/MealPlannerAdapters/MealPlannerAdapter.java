@@ -17,6 +17,9 @@ import com.example.laure.thymesaver.Adapters.MealPlannerAdapters.ItemTouchHelper
 import com.example.laure.thymesaver.Models.MealPlan;
 import com.example.laure.thymesaver.R;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -27,7 +30,7 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         SwipeAndDragHelper.ActionCompletionContract {
     private static final int USER_TYPE = 1;
     private static final int HEADER_TYPE = 2;
-    private List<MealPlan> mMealPlans;
+    private List<MealPlan> mMealPlans = new ArrayList<>();
     private ItemTouchHelper mTouchHelper;
 
     @Override
@@ -83,13 +86,39 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
-    public void setMealPlans(List<MealPlan> usersList) {
-        this.mMealPlans = usersList;
+    public void setMealPlans(List<MealPlan> mealPlans) {
+        mMealPlans.clear();
+        MealPlan[] dayHeaders = {
+                new MealPlan("","Sunday"),
+                new MealPlan("","Monday"),
+                new MealPlan("","Tuesday"),
+                new MealPlan("","Wednesday"),
+                new MealPlan("","Thursday"),
+                new MealPlan("","Friday"),
+                new MealPlan("","Saturday")
+        };
+        for (MealPlan m : dayHeaders) {
+            mMealPlans.add(m);
+        }
+        for (MealPlan m : mealPlans) {
+            int position = 0;
+            for (int i = 0; i < dayHeaders.length; i++) {
+                if (dayHeaders[i].getScheduledDay().equals(m.getScheduledDay())) {
+                    position = mMealPlans.indexOf(dayHeaders[i]);
+                    break;
+                }
+            }
+            mMealPlans.add(position+1, m);
+        }
         notifyDataSetChanged();
     }
 
     @Override
     public void onViewMoved(int oldPosition, int newPosition) {
+        //User can't drag a meal plan above the first day header
+        if (newPosition == 0) {
+            newPosition = 1;
+        }
         MealPlan targetMeal = mMealPlans.get(oldPosition);
         MealPlan meal = new MealPlan(targetMeal.getRecipeName(), targetMeal.getScheduledDay());
         mMealPlans.remove(oldPosition);
