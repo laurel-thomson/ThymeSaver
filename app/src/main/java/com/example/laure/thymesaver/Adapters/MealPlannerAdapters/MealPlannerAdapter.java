@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Srijith on 08-10-2017.
+ * Code adapted from : https://github.com/sjthn/RecyclerViewDemo/tree/advanced-usecases
  */
 
 public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements
@@ -29,9 +29,9 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private static final int HEADER_TYPE = 2;
     private List<MealPlan> mMealPlans = new ArrayList<>();
     private ItemTouchHelper mTouchHelper;
-    private MealScheduleChangedListener mListener;
+    private MealPlanListener mListener;
 
-    public MealPlannerAdapter(MealScheduleChangedListener listener) {
+    public MealPlannerAdapter(MealPlanListener listener) {
         mListener = listener;
     }
 
@@ -59,6 +59,12 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         int itemViewType = getItemViewType(position);
         if (itemViewType == USER_TYPE) {
             ((MealPlanViewHolder) holder).mTextView.setText(mMealPlans.get(position).getRecipeName());
+            ((MealPlanViewHolder) holder).itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onMealClicked(mMealPlans.get(holder.getAdapterPosition()));
+                }
+            });
         } else {
             SectionHeaderViewHolder headerViewHolder = (SectionHeaderViewHolder) holder;
             headerViewHolder.sectionTitle.setText(mMealPlans.get(position).getScheduledDay());
@@ -156,7 +162,9 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
-    public interface MealScheduleChangedListener {
+    public interface MealPlanListener {
         void onMealScheduleChanged(MealPlan mealPlan);
+
+        void onMealClicked(MealPlan mealPlan);
     }
 }

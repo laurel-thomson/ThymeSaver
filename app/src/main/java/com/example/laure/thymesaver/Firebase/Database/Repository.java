@@ -39,6 +39,7 @@ public class Repository {
 
     private Repository() {
         mDatabase = FirebaseDatabase.getInstance();
+        mDatabase.setPersistenceEnabled(true);
         mRecipeReference = mDatabase.getReference("recipes");
         mIngredientReference = mDatabase.getReference("ingredients");
         mMealPlanReference = mDatabase.getReference("mealplan");

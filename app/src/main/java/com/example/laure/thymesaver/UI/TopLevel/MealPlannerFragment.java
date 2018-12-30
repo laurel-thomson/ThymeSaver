@@ -2,10 +2,10 @@ package com.example.laure.thymesaver.UI.TopLevel;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,12 +19,13 @@ import com.example.laure.thymesaver.Adapters.MealPlannerAdapters.ItemTouchHelper
 import com.example.laure.thymesaver.Adapters.MealPlannerAdapters.MealPlannerAdapter;
 import com.example.laure.thymesaver.Models.MealPlan;
 import com.example.laure.thymesaver.R;
+import com.example.laure.thymesaver.UI.RecipeDetail.RecipeDetailActivity;
 import com.example.laure.thymesaver.ViewModels.MealPlannerViewModel;
 
 import java.util.List;
 
 
-public class MealPlannerFragment extends Fragment implements MealPlannerAdapter.MealScheduleChangedListener {
+public class MealPlannerFragment extends Fragment implements MealPlannerAdapter.MealPlanListener {
     private RecyclerView mRecyclerView;
     private MealPlannerAdapter mAdapter;
     private MealPlannerViewModel mViewModel;
@@ -62,5 +63,14 @@ public class MealPlannerFragment extends Fragment implements MealPlannerAdapter.
     @Override
     public void onMealScheduleChanged(MealPlan mealPlan) {
         mViewModel.updateMealPlan(mealPlan);
+    }
+
+    @Override
+    public void onMealClicked(MealPlan mealPlan) {
+        Intent intent = new Intent(getActivity(), RecipeDetailActivity.class);
+        intent.putExtra(
+                RecipeDetailActivity.CURRENT_RECIPE_NAME,
+                mealPlan.getRecipeName());
+        startActivity(intent);
     }
 }

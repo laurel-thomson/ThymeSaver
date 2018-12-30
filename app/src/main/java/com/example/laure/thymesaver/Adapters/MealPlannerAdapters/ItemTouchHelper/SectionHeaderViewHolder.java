@@ -8,6 +8,7 @@ import com.example.laure.thymesaver.R;
 
 /**
  * Created by Srijith on 08-10-2017.
+ * https://github.com/sjthn/RecyclerViewDemo/tree/advanced-usecases
  */
 
 public class SectionHeaderViewHolder extends RecyclerView.ViewHolder {
