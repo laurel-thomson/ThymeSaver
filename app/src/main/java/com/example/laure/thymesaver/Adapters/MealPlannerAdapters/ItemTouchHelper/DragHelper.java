@@ -1,6 +1,7 @@
 package com.example.laure.thymesaver.Adapters.MealPlannerAdapters.ItemTouchHelper;
 
 import android.graphics.Canvas;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
@@ -8,11 +9,11 @@ import android.support.v7.widget.helper.ItemTouchHelper;
  * Created by Srijith on 22-10-2017.
  */
 
-public class SwipeAndDragHelper extends ItemTouchHelper.Callback {
+public class DragHelper extends ItemTouchHelper.Callback {
 
     private ActionCompletionContract contract;
 
-    public SwipeAndDragHelper(ActionCompletionContract contract) {
+    public DragHelper(ActionCompletionContract contract) {
         this.contract = contract;
     }
 
@@ -32,12 +33,23 @@ public class SwipeAndDragHelper extends ItemTouchHelper.Callback {
     }
 
     @Override
+    public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+        super.clearView(recyclerView, viewHolder);
+        contract.onMoveComplete(viewHolder.getAdapterPosition());
+    }
+
+    @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
         //do nothing
     }
 
     @Override
     public boolean isLongPressDragEnabled() {
+        return true;
+    }
+
+    @Override
+    public boolean isItemViewSwipeEnabled() {
         return false;
     }
 
@@ -58,6 +70,8 @@ public class SwipeAndDragHelper extends ItemTouchHelper.Callback {
 
     public interface ActionCompletionContract {
         void onViewMoved(int oldPosition, int newPosition);
+
+        void onMoveComplete(int newPosition);
     }
 
 }

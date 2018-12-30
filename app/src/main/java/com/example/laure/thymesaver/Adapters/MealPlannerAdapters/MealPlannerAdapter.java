@@ -4,7 +4,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -13,7 +12,7 @@ import android.widget.TextView;
 
 
 import com.example.laure.thymesaver.Adapters.MealPlannerAdapters.ItemTouchHelper.SectionHeaderViewHolder;
-import com.example.laure.thymesaver.Adapters.MealPlannerAdapters.ItemTouchHelper.SwipeAndDragHelper;
+import com.example.laure.thymesaver.Adapters.MealPlannerAdapters.ItemTouchHelper.DragHelper;
 import com.example.laure.thymesaver.Models.MealPlan;
 import com.example.laure.thymesaver.R;
 
@@ -25,11 +24,16 @@ import java.util.List;
  */
 
 public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements
-        SwipeAndDragHelper.ActionCompletionContract {
+        DragHelper.ActionCompletionContract {
     private static final int USER_TYPE = 1;
     private static final int HEADER_TYPE = 2;
     private List<MealPlan> mMealPlans = new ArrayList<>();
     private ItemTouchHelper mTouchHelper;
+    private MealScheduleChangedListener mListener;
+
+    public MealPlannerAdapter(MealScheduleChangedListener listener) {
+        mListener = listener;
+    }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -55,15 +59,6 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         int itemViewType = getItemViewType(position);
         if (itemViewType == USER_TYPE) {
             ((MealPlanViewHolder) holder).mTextView.setText(mMealPlans.get(position).getRecipeName());
-            ((MealPlanViewHolder) holder).mHandle.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
-                        mTouchHelper.startDrag(holder);
-                    }
-                    return false;
-                }
-            });
         } else {
             SectionHeaderViewHolder headerViewHolder = (SectionHeaderViewHolder) holder;
             headerViewHolder.sectionTitle.setText(mMealPlans.get(position).getScheduledDay());
@@ -124,6 +119,24 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         notifyItemMoved(oldPosition, newPosition);
     }
 
+
+    @Override
+    public void onMoveComplete(int newPosition) {
+        //new position can't be zero (due to if statement in onViewMoved callback)
+        MealPlan currentMeal = mMealPlans.get(newPosition);
+        String scheduledDay = currentMeal.getScheduledDay();
+        for (int i = newPosition-1; i >= 0; i--) {
+            if (getItemViewType(i) == HEADER_TYPE) {
+                if (!scheduledDay.equals(mMealPlans.get(i).getScheduledDay())) {
+                    currentMeal.setScheduledDate(mMealPlans.get(i).getScheduledDay());
+                    mListener.onMealScheduleChanged(currentMeal);
+                    break;
+                }
+            }
+        }
+    }
+
+
     public void setTouchHelper(ItemTouchHelper touchHelper) {
 
         this.mTouchHelper = touchHelper;
@@ -142,5 +155,9 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             mTextView = itemView.findViewById(R.id.planned_meal_textview);
             mHandle = itemView.findViewById(R.id.planned_meal_handle);
         }
+    }
+
+    public interface MealScheduleChangedListener {
+        void onMealScheduleChanged(MealPlan mealPlan);
     }
 }

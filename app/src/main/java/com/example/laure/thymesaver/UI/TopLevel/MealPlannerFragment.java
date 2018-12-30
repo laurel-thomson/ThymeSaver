@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,18 +14,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.laure.thymesaver.Adapters.MealPlannerAdapters.ItemTouchHelper.SwipeAndDragHelper;
+import com.example.laure.thymesaver.Adapters.MealPlannerAdapters.ItemTouchHelper.DragHelper;
 import com.example.laure.thymesaver.Adapters.MealPlannerAdapters.MealPlannerAdapter;
 import com.example.laure.thymesaver.Models.MealPlan;
-import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.ViewModels.MealPlannerViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
-public class MealPlannerFragment extends Fragment {
+public class MealPlannerFragment extends Fragment implements MealPlannerAdapter.MealScheduleChangedListener {
     private RecyclerView mRecyclerView;
     private MealPlannerAdapter mAdapter;
     private MealPlannerViewModel mViewModel;
@@ -41,8 +40,8 @@ public class MealPlannerFragment extends Fragment {
         mViewModel = ViewModelProviders.of(getActivity()).get(MealPlannerViewModel.class);
         mRecyclerView = view.findViewById(R.id.meal_planner_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new MealPlannerAdapter();
-        SwipeAndDragHelper swipeAndDragHelper = new SwipeAndDragHelper(mAdapter);
+        mAdapter = new MealPlannerAdapter(this);
+        DragHelper swipeAndDragHelper = new DragHelper(mAdapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(swipeAndDragHelper);
         mAdapter.setTouchHelper(touchHelper);
         mRecyclerView.setAdapter(mAdapter);
@@ -54,5 +53,10 @@ public class MealPlannerFragment extends Fragment {
                 mAdapter.setMealPlans(mealPlans);
             }
         });
+    }
+
+    @Override
+    public void onMealScheduleChanged(MealPlan mealPlan) {
+        //todo: save new schedule in the database
     }
 }
