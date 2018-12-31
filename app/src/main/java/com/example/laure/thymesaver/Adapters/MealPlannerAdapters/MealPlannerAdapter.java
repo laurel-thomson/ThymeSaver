@@ -8,14 +8,11 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-
-import com.example.laure.thymesaver.Adapters.MealPlannerAdapters.ItemTouchHelper.SectionHeaderViewHolder;
-import com.example.laure.thymesaver.Adapters.MealPlannerAdapters.ItemTouchHelper.DragHelper;
 import com.example.laure.thymesaver.Models.MealPlan;
 import com.example.laure.thymesaver.R;
 
@@ -93,7 +90,14 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         else {
             SectionHeaderViewHolder headerViewHolder = (SectionHeaderViewHolder) holder;
-            headerViewHolder.sectionTitle.setText(mMealPlans.get(position).getScheduledDay());
+            final String scheduledDay = mMealPlans.get(position).getScheduledDay();
+            headerViewHolder.sectionTitle.setText(scheduledDay);
+            headerViewHolder.addButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onAddButtonClicked(scheduledDay);
+                }
+            });
         }
 
     }
@@ -179,7 +183,7 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         CheckBox mCheckBox;
         TextView mTextView;
 
-        public MealPlanViewHolder(View itemView) {
+        MealPlanViewHolder(View itemView) {
             super(itemView);
 
             mCheckBox = itemView.findViewById(R.id.planned_meal_checkbox);
@@ -194,11 +198,25 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
+    class SectionHeaderViewHolder extends RecyclerView.ViewHolder {
+        TextView sectionTitle;
+        Button addButton;
+
+        SectionHeaderViewHolder(View itemView) {
+            super(itemView);
+            sectionTitle = itemView.findViewById(R.id.section_text);
+            addButton = itemView.findViewById(R.id.section_add_button);
+        }
+
+    }
+
     public interface MealPlanListener {
         void onMealScheduleChanged(MealPlan mealPlan);
 
         void onMealClicked(MealPlan mealPlan);
 
         void onMealChecked(MealPlan mealPlan, boolean checked);
+
+        void onAddButtonClicked(String scheduledDay);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.laure.thymesaver.Adapters.MealPlannerAdapters.ItemTouchHelper;
+package com.example.laure.thymesaver.Adapters.MealPlannerAdapters;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -21,7 +21,7 @@ public class DragHelper extends ItemTouchHelper.Callback {
 
     @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-        if (viewHolder instanceof SectionHeaderViewHolder) {
+        if (viewHolder instanceof MealPlannerAdapter.SectionHeaderViewHolder) {
             return 0;
         }
         int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;

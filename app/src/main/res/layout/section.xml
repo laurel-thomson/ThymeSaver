@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#f0f0f0"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     
-    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    <TextView
+        android:id="@+id/section_text"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:gravity="center_vertical"
@@ -14,12 +16,11 @@
         android:singleLine="true"
         android:textAllCaps="true"
         android:textColor="@color/colorPrimaryDark"
-
-        android:id="@+id/section_text"
         app:layout_constraintStart_toStartOf="parent"
         android:textStyle="bold" />
     
     <Button
+        android:id="@+id/section_add_button"
         android:layout_width="32dp"
         android:layout_height="32dp"
         app:layout_constraintEnd_toEndOf="parent"

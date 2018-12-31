@@ -28,7 +28,7 @@
         <activity android:name=".UI.RecipeDetail.RecipeDetailActivity" />
         <activity android:name=".UI.AddIngredients.AddNewIngredientActivity" />
         <activity android:name=".UI.RecipeDetail.AddRecipeIngredientsActivity" />
-        <activity android:name=".UI.AddPlannedMealsActivity"></activity>
+        <activity android:name=".UI.AddPlannedMealsActivity" />
     </application>
 
 </manifest>
