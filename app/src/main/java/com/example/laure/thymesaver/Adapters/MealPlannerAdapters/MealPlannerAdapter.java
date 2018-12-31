@@ -166,8 +166,8 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 if (!scheduledDay.equals(mMealPlans.get(i).getScheduledDay())) {
                     currentMeal.setScheduledDate(mMealPlans.get(i).getScheduledDay());
                     mListener.onMealScheduleChanged(currentMeal);
-                    break;
                 }
+                break;
             }
         }
     }
