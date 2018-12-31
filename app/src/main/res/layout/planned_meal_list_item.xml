@@ -19,13 +19,4 @@
         android:layout_weight="0.8"
         android:layout_height="match_parent" />
 
-    <ImageView
-        android:id="@+id/planned_meal_handle"
-        android:layout_width="0dp"
-        android:layout_weight="0.1"
-        android:paddingRight="10dp"
-        android:background="@color/colorTextIcon"
-        android:layout_height="match_parent"
-        android:src="@drawable/ic_reorder"/>
-
 </LinearLayout>

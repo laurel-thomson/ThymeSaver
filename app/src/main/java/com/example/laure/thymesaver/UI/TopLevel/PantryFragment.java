@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,6 +38,7 @@ public class PantryFragment extends AddButtonFragment implements IngredientAdapt
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         final ProgressBar progressBar = view.findViewById(R.id.pantry_progress);
+
         mIngredientViewModel = ViewModelProviders.of(this).get(PantryViewModel.class);
         mAdapter = new IngredientAdapter(getActivity(),this);
         mIngredientViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {

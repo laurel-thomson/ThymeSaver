@@ -14,7 +14,7 @@
         android:singleLine="true"
         android:textAllCaps="true"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="16sp"
+
         android:id="@+id/section_text"
         app:layout_constraintStart_toStartOf="parent"
         android:textStyle="bold" />

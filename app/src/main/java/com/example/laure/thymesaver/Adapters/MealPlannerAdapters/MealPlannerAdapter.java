@@ -151,14 +151,12 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         CheckBox mCheckBox;
         TextView mTextView;
-        ImageView mHandle;
 
         public MealPlanViewHolder(View itemView) {
             super(itemView);
 
             mCheckBox = itemView.findViewById(R.id.planned_meal_checkbox);
             mTextView = itemView.findViewById(R.id.planned_meal_textview);
-            mHandle = itemView.findViewById(R.id.planned_meal_handle);
         }
     }
 

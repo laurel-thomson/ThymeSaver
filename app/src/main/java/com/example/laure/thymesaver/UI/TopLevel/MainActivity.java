@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,12 +23,12 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private ViewPagerAdapter mAdapter;
     private FloatingActionButton mFAB;
+    private ActionBar mActionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         mFAB = findViewById(R.id.main_add_button);
         mFAB.setOnClickListener(new View.OnClickListener() {
@@ -38,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
                 currentFragment.launchAddItemActivity();
             }
         });
+
+        mActionBar = getSupportActionBar();
+        mActionBar.setTitle("Meal Planner");
 
         mNavigationView = findViewById(R.id.navigation);
         mViewPager = findViewById(R.id.main_viewpager);
@@ -78,6 +82,20 @@ public class MainActivity extends AppCompatActivity {
                 }
                 mNavigationView.getMenu().getItem(position).setChecked(true);
                 mPreviousMenuItem = mNavigationView.getMenu().getItem(position);
+                switch (position) {
+                    case 0:
+                        mActionBar.setTitle("Meal Planner");
+                        break;
+                    case 1:
+                        mActionBar.setTitle("Cookbook");
+                        break;
+                    case 2:
+                        mActionBar.setTitle("Pantry");
+                        break;
+                    case 3:
+                        mActionBar.setTitle("Shopping List");
+                        break;
+                }
             }
 
             @Override
