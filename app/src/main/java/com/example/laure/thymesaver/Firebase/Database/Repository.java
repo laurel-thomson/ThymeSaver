@@ -10,8 +10,11 @@ import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.MealPlan;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,6 +55,40 @@ public class Repository {
         mMealPlanLiveData = Transformations.map(
                 new FirebaseQueryLiveData<MealPlan>(mMealPlanReference, MealPlan.class),
                 new MealPlanDeserializer());
+
+
+        //force recipes & ingredients to cache
+        mRecipeReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snap : dataSnapshot.getChildren()){
+                    Recipe r = snap.getValue(Recipe.class);
+                    r.setName(snap.getKey());
+                    mRecipes.add(r);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        mIngredientReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snap : dataSnapshot.getChildren()){
+                    Ingredient i = snap.getValue(Ingredient.class);
+                    i.setName(snap.getKey());
+                    mIngredients.add(i);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void addOrUpdateRecipe(Recipe r) {
@@ -72,6 +109,54 @@ public class Repository {
 
     public void updateMealPlan(MealPlan mealPlan) {
         mMealPlanReference.child(mealPlan.getFirebaseKey()).setValue(mealPlan);
+    }
+
+    public void removeMealPlanIngredientsFromPantry(MealPlan mealPlan) {
+        HashMap<String, Integer> recipeIngredients = null;
+        for (Recipe recipe : mRecipes) {
+            if (recipe.getName().equals(mealPlan.getRecipeName())) {
+                recipeIngredients = recipe.getRecipeIngredients();
+                break;
+            }
+        }
+        HashMap ingredientData = new HashMap();
+        for (String ingredientName : recipeIngredients.keySet()) {
+            Ingredient matchingIngredient = null;
+            for (Ingredient i : mIngredients) {
+                if (i.getName().equals(ingredientName)) {
+                    matchingIngredient = i;
+                    break;
+                }
+            }
+            matchingIngredient.setQuantity(
+                    Math.max(0, matchingIngredient.getQuantity() - recipeIngredients.get(ingredientName)));
+            ingredientData.put(ingredientName,matchingIngredient);
+        }
+        mIngredientReference.updateChildren(ingredientData);
+    }
+
+    public void addMealPlanIngredientsToPantry(MealPlan mealPlan) {
+        HashMap<String, Integer> recipeIngredients = null;
+        for (Recipe recipe : mRecipes) {
+            if (recipe.getName().equals(mealPlan.getRecipeName())) {
+                recipeIngredients = recipe.getRecipeIngredients();
+                break;
+            }
+        }
+        HashMap ingredientData = new HashMap();
+        for (String ingredientName : recipeIngredients.keySet()) {
+            Ingredient matchingIngredient = null;
+            for (Ingredient i : mIngredients) {
+                if (i.getName().equals(ingredientName)) {
+                    matchingIngredient = i;
+                    break;
+                }
+            }
+            matchingIngredient.setQuantity(
+                    matchingIngredient.getQuantity() + recipeIngredients.get(ingredientName));
+            ingredientData.put(ingredientName,matchingIngredient);
+        }
+        mIngredientReference.updateChildren(ingredientData);
     }
 
     @NonNull
@@ -95,22 +180,6 @@ public class Repository {
                 return r;
         }
         throw new Resources.NotFoundException();
-    }
-
-    public HashMap<Ingredient, Integer> getRecipeIngredients(Recipe recipe) {
-        HashMap<Ingredient, Integer> measuredIngredients = new HashMap<>();
-
-        for (Map.Entry<String, Integer> entry : recipe.getRecipeIngredients().entrySet()) {
-            String ingredientName = entry.getKey();
-            int quantity = entry.getValue();
-
-            for (Ingredient i : mIngredients) {
-                if (i.getName().equals(ingredientName)){
-                    measuredIngredients.put(i, quantity);
-                }
-            }
-        }
-        return measuredIngredients;
     }
 
     private class RecipeListDeserializer implements Function<DataSnapshot, List<Recipe>> {

@@ -87,7 +87,7 @@ public class MealPlannerFragment extends Fragment implements MealPlannerAdapter.
             message = "Ingredients from " + mealPlan.getRecipeName() + " added back to pantry.";
         }
         mealPlan.setCooked(checked);
-        mViewModel.updateMealPlan(mealPlan);
+        mViewModel.mealPlanCookChanged(mealPlan);
         Snackbar.make(getView(), message, Snackbar.LENGTH_SHORT).show();
     }
 }

@@ -33,6 +33,16 @@ public class MealPlannerViewModel extends AndroidViewModel {
         mRepository.updateMealPlan(mealPlan);
     }
 
+    public void mealPlanCookChanged(MealPlan mealPlan) {
+        updateMealPlan(mealPlan);
+        if (mealPlan.isCooked()) {
+            mRepository.removeMealPlanIngredientsFromPantry(mealPlan);
+        }
+        else {
+            mRepository.addMealPlanIngredientsToPantry(mealPlan);
+        }
+    }
+
     public void removeMealPlan(MealPlan mealPlan) {
         //todo: remove meal plan
     }
