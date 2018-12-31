@@ -1,5 +1,7 @@
 package com.example.laure.thymesaver.Adapters.MealPlannerAdapters;
 
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
@@ -7,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -58,17 +61,41 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         int itemViewType = getItemViewType(position);
         if (itemViewType == USER_TYPE) {
-            ((MealPlanViewHolder) holder).mTextView.setText(mMealPlans.get(position).getRecipeName());
-            ((MealPlanViewHolder) holder).itemView.setOnClickListener(new View.OnClickListener() {
+
+            final TextView textView = ((MealPlanViewHolder) holder).mTextView;
+            final CheckBox checkBox = ((MealPlanViewHolder) holder).mCheckBox;
+
+            textView.setText(mMealPlans.get(position).getRecipeName());
+            checkBox.setChecked(mMealPlans.get(position).isCooked());
+
+            if (checkBox.isChecked()) {
+                textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                textView.setTextColor(Color.GRAY);
+            }
+
+            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public void onClick(View view) {
-                    mListener.onMealClicked(mMealPlans.get(holder.getAdapterPosition()));
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    boolean checked = compoundButton.isChecked();
+                    if (checked) {
+                        textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                        textView.setTextColor(Color.GRAY);
+                    }
+                    else {
+                        textView.setPaintFlags(0);
+                        textView.setTextColor(Color.BLACK);
+                    }
+                    mListener.onMealChecked(mMealPlans.get(holder.getAdapterPosition()), checked);
                 }
             });
-        } else {
+        }
+
+
+        else {
             SectionHeaderViewHolder headerViewHolder = (SectionHeaderViewHolder) holder;
             headerViewHolder.sectionTitle.setText(mMealPlans.get(position).getScheduledDay());
         }
+
     }
 
     @Override
@@ -157,6 +184,13 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
             mCheckBox = itemView.findViewById(R.id.planned_meal_checkbox);
             mTextView = itemView.findViewById(R.id.planned_meal_textview);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onMealClicked(mMealPlans.get(getAdapterPosition()));
+                }
+            });
         }
     }
 
@@ -164,5 +198,7 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         void onMealScheduleChanged(MealPlan mealPlan);
 
         void onMealClicked(MealPlan mealPlan);
+
+        void onMealChecked(MealPlan mealPlan, boolean checked);
     }
 }
