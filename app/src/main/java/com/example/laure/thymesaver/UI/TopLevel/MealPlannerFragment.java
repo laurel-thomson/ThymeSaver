@@ -97,6 +97,7 @@ public class MealPlannerFragment extends Fragment implements MealPlannerAdapter.
     @Override
     public void onAddButtonClicked(String scheduledDay) {
         Intent intent = new Intent(getActivity(), AddPlannedMealsActivity.class);
+        intent.putExtra(AddPlannedMealsActivity.SCHEDULED_DAY, scheduledDay);
         startActivity(intent);
     }
 }

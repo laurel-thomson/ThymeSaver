@@ -25,10 +25,6 @@ public class MealPlannerViewModel extends AndroidViewModel {
         return mMealPlans;
     }
 
-    public void addMealPlan(MealPlan mealPlan) {
-        mRepository.addMealPlan(mealPlan);
-    }
-
     public void updateMealPlan(MealPlan mealPlan) {
         mRepository.updateMealPlan(mealPlan);
     }
