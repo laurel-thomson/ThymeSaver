@@ -66,11 +66,16 @@ public class AddPlannedMealsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                addMealPlans();
                 onBackPressed();
                 return true;
         }
         return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        addMealPlans();
+        super.onBackPressed();
     }
 
     private void addMealPlans() {
