@@ -58,6 +58,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             mTextView = itemView.findViewById(R.id.recipe_list_textview);
+            CheckBox checkBox = itemView.findViewById(R.id.recipe_checkbox);
+            checkBox.setVisibility(View.GONE);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

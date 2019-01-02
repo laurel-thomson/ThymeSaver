@@ -22,6 +22,10 @@ public class ChecklistIngredientAdapter extends MeasuredIngredientAdapter {
         super(context, ingredients, quantityChangedListener);
     }
 
+    public ChecklistIngredientAdapter(Context context, IngredientQuantityChangedListener quantityChangedListener ) {
+        super(context, quantityChangedListener);
+    }
+
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(mContext)

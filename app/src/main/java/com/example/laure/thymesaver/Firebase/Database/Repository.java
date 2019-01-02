@@ -29,9 +29,11 @@ public class Repository {
     private List<Recipe> mRecipes = new ArrayList<>();
     private List<Ingredient> mIngredients = new ArrayList<>();
     private List<MealPlan> mMealPlans = new ArrayList<>();
+    private HashMap<String, Integer> mShoppingList = new HashMap<>();
     private final LiveData<List<Recipe>> mRecipeLiveData;
     private final LiveData<List<Ingredient>> mIngredientLiveData;
     private final LiveData<List<MealPlan>> mMealPlanLiveData;
+    private final LiveData<HashMap<String,Integer>> mShoppingLiveData;
 
     public static Repository getInstance() {
         if (mSoleInstance == null) {
@@ -55,6 +57,9 @@ public class Repository {
         mMealPlanLiveData = Transformations.map(
                 new FirebaseQueryLiveData<MealPlan>(mMealPlanReference, MealPlan.class),
                 new MealPlanDeserializer());
+        mShoppingLiveData = Transformations.map(
+                new ShoppingListLiveData(mDatabase.getReference()),
+                new ShoppingListDeserializer());
 
 
         //force recipes & ingredients to cache
@@ -180,6 +185,11 @@ public class Repository {
     }
 
     @NonNull
+    public LiveData<HashMap<String, Integer>> getShoppingList() {
+        return mShoppingLiveData;
+    }
+
+    @NonNull
     public LiveData<List<MealPlan>> getMealPlans() {
         return mMealPlanLiveData;
     }
@@ -231,6 +241,56 @@ public class Repository {
                 mMealPlans.add(m);
             }
             return mMealPlans;
+        }
+    }
+
+    private class ShoppingListDeserializer implements  Function<DataSnapshot, HashMap<String, Integer>> {
+
+        @Override
+        public HashMap<String, Integer> apply(DataSnapshot dataSnapshot) {
+            mShoppingList.clear();
+
+            HashMap<String, HashMap<String, Integer>> mealPlans = new HashMap<>();
+            for (DataSnapshot snap : dataSnapshot.child("mealplan").getChildren()) {
+                MealPlan mealPlan = snap.getValue(MealPlan.class);
+                mealPlans.put(mealPlan.getRecipeName(), null);
+            }
+
+            for (DataSnapshot snap : dataSnapshot.child("recipes").getChildren()) {
+                if (mealPlans.containsKey(snap.getKey())) {
+                    Recipe r = snap.getValue(Recipe.class);
+                    mealPlans.put(snap.getKey(), r.getRecipeIngredients());
+                }
+            }
+
+            HashMap<String, Integer> neededIngredients = new HashMap<>();
+
+            for (String recipeName : mealPlans.keySet()) {
+                for (String ingName : mealPlans.get(recipeName).keySet()) {
+                    if (!neededIngredients.containsKey(ingName)) {
+                        neededIngredients.put(ingName, mealPlans.get(recipeName).get(ingName));
+                    }
+                    else {
+                        neededIngredients.put(
+                                ingName,
+                                neededIngredients.get(ingName) + mealPlans.get(recipeName).get(ingName)
+                        );
+                    }
+                }
+            }
+
+            for (DataSnapshot snap : dataSnapshot.child("ingredients").getChildren()) {
+                if (neededIngredients.containsKey(snap.getKey())) {
+                    Ingredient i = snap.getValue(Ingredient.class);
+                    i.setName(snap.getKey());
+                    int neededQuantity = neededIngredients.get(i.getName());
+                    int pantryQuantity = i.getQuantity();
+                    if (neededQuantity > pantryQuantity) {
+                        mShoppingList.put(i.getName(), neededQuantity - pantryQuantity);
+                    }
+                }
+            }
+            return mShoppingList;
         }
     }
 }

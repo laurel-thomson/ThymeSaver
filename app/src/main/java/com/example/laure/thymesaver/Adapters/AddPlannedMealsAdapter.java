@@ -44,9 +44,15 @@ public class AddPlannedMealsAdapter extends RecyclerView.Adapter<AddPlannedMeals
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
         Recipe recipe = mTotalRecipes.get(position);
         holder.mNameTV.setText(recipe.getName());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                holder.mCheckBox.setChecked(!holder.mCheckBox.isChecked());
+            }
+        });
     }
 
     @Override
