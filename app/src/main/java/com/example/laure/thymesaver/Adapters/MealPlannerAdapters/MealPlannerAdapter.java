@@ -179,20 +179,28 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public class MealPlanViewHolder extends RecyclerView.ViewHolder {
-
         CheckBox mCheckBox;
         TextView mTextView;
+        Button mDeleteButton;
 
         MealPlanViewHolder(View itemView) {
             super(itemView);
 
             mCheckBox = itemView.findViewById(R.id.planned_meal_checkbox);
             mTextView = itemView.findViewById(R.id.planned_meal_textview);
+            mDeleteButton = itemView.findViewById(R.id.planned_meal_delete);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     mListener.onMealClicked(mMealPlans.get(getAdapterPosition()));
+                }
+            });
+
+            mDeleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onMealDeleteClicked(mMealPlans.get(getAdapterPosition()));
                 }
             });
         }
@@ -218,5 +226,7 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         void onMealChecked(MealPlan mealPlan, boolean checked);
 
         void onAddButtonClicked(String scheduledDay);
+
+        void onMealDeleteClicked(MealPlan mealPlan);
     }
 }

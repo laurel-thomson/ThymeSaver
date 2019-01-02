@@ -103,6 +103,10 @@ public class Repository {
         mIngredientReference.child(i.getName()).setValue(i);
     }
 
+    public void addMealPlan(MealPlan mealPlan) {
+        mMealPlanReference.push().setValue(mealPlan);
+    }
+
     public void addMealPlans(List<MealPlan> mealPlans) {
         for (MealPlan m : mealPlans) {
             mMealPlanReference.push().setValue(m);
@@ -111,6 +115,10 @@ public class Repository {
 
     public void updateMealPlan(MealPlan mealPlan) {
         mMealPlanReference.child(mealPlan.getFirebaseKey()).setValue(mealPlan);
+    }
+
+    public void removeMealPlan(MealPlan mealPlan) {
+        mMealPlanReference.child(mealPlan.getFirebaseKey()).removeValue();
     }
 
     public void removeMealPlanIngredientsFromPantry(MealPlan mealPlan) {

@@ -100,4 +100,23 @@ public class MealPlannerFragment extends Fragment implements MealPlannerAdapter.
         intent.putExtra(AddPlannedMealsActivity.SCHEDULED_DAY, scheduledDay);
         startActivity(intent);
     }
+
+    @Override
+    public void onMealDeleteClicked(final MealPlan mealPlan) {
+        mViewModel.removeMealPlan(mealPlan);
+        Snackbar snackbar = Snackbar
+                .make(getView(), mealPlan.getRecipeName() +
+                        " removed from meal plan.", Snackbar.LENGTH_LONG)
+                .setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mViewModel.addMealPlan(mealPlan);
+                        Snackbar newSnackBar = Snackbar
+                                .make(getView(), "Meal plan restored.", Snackbar.LENGTH_SHORT);
+                        newSnackBar.show();
+                    }
+                });
+
+        snackbar.show();
+    }
 }
