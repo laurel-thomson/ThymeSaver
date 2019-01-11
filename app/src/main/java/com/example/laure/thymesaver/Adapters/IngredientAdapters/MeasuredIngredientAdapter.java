@@ -11,7 +11,6 @@ import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
 
 import java.util.ArrayList;
@@ -25,27 +24,27 @@ public class MeasuredIngredientAdapter extends RecyclerView.Adapter<MeasuredIngr
     HashMap<String, Integer> mMeasuredIngredients;
     List<String> mIngredients = new ArrayList<>();
     List<String> mFilteredIngredients;
-    IngredientQuantityChangedListener mQuantityChangedListener;
+    IngredientAdapterListener mListener;
     String mUserCreatedIngredient;
 
     public MeasuredIngredientAdapter(
             Context context,
-            IngredientQuantityChangedListener listener) {
+            IngredientAdapterListener listener) {
         mContext = context;
-        mQuantityChangedListener = listener;
+        mListener = listener;
     }
 
     public MeasuredIngredientAdapter(
             Context context,
             HashMap<String, Integer> measuredIngredients,
-            IngredientQuantityChangedListener listener) {
+            IngredientAdapterListener listener) {
         mContext = context;
         mMeasuredIngredients = measuredIngredients;
         for (String i : measuredIngredients.keySet()) {
             mIngredients.add(i);
         }
         mFilteredIngredients = mIngredients;
-        mQuantityChangedListener = listener;
+        mListener = listener;
     }
 
     public void setIngredients(HashMap<String, Integer> measuredIngredients) {
@@ -144,7 +143,7 @@ public class MeasuredIngredientAdapter extends RecyclerView.Adapter<MeasuredIngr
                     int measuredQuantity = mMeasuredIngredients.get(name);
                     if (measuredQuantity == 0) return;
                     mMeasuredIngredients.put(name, measuredQuantity - 1);
-                    mQuantityChangedListener.onIngredientQuantityChanged(name, mMeasuredIngredients.get(name));
+                    mListener.onIngredientQuantityChanged(name, mMeasuredIngredients.get(name));
                     notifyDataSetChanged();
                 }
             });
@@ -154,16 +153,18 @@ public class MeasuredIngredientAdapter extends RecyclerView.Adapter<MeasuredIngr
                 public void onClick(View view) {
                     String name = mFilteredIngredients.get(getAdapterPosition());
                     int measuredQuantity = mMeasuredIngredients.get(name);
-                    if (measuredQuantity > 100) return;
+                    if (measuredQuantity > 9999) return;
                     mMeasuredIngredients.put(name, measuredQuantity + 1);
-                    mQuantityChangedListener.onIngredientQuantityChanged(name, mMeasuredIngredients.get(name));
+                    mListener.onIngredientQuantityChanged(name, mMeasuredIngredients.get(name));
                     notifyDataSetChanged();
                 }
             });
         }
     }
 
-    public interface IngredientQuantityChangedListener {
+    public interface IngredientAdapterListener {
         void onIngredientQuantityChanged(String ingredientName, int quantity);
+
+        void onIngredientCheckedOff(String ingredientName, int quantity);
     }
 }

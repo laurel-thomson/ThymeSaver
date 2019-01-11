@@ -5,8 +5,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,7 +22,7 @@ import com.example.laure.thymesaver.ViewModels.ShoppingViewModel;
 
 import java.util.HashMap;
 
-public class ShoppingListFragment extends AddButtonFragment implements MeasuredIngredientAdapter.IngredientQuantityChangedListener{
+public class ShoppingListFragment extends AddButtonFragment implements MeasuredIngredientAdapter.IngredientAdapterListener {
     private ShoppingViewModel mViewModel;
     private ChecklistIngredientAdapter mAdapter;
     private RecyclerView mRecyclerView;
@@ -64,5 +63,24 @@ public class ShoppingListFragment extends AddButtonFragment implements MeasuredI
     @Override
     public void onIngredientQuantityChanged(String ingredientName, int quantity) {
 
+    }
+
+    @Override
+    public void onIngredientCheckedOff(final String ingredientName, final int quantity) {
+        mViewModel.addQuantityToPantry(ingredientName, quantity);
+        Snackbar snackbar = Snackbar
+                .make(getView(), ingredientName +
+                        " added back to pantry.", Snackbar.LENGTH_LONG)
+                .setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mViewModel.removeQuantityFromPantry(ingredientName, quantity);
+                        Snackbar newSnackBar = Snackbar
+                                .make(getView(), "Shopping list item restored.", Snackbar.LENGTH_SHORT);
+                        newSnackBar.show();
+                    }
+                });
+
+        snackbar.show();
     }
 }

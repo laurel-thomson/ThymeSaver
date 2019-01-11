@@ -23,4 +23,12 @@ public class ShoppingViewModel extends AndroidViewModel {
     public LiveData<HashMap<String, Integer>> getShoppingList() {
         return mShoppingList;
     }
+
+    public void addQuantityToPantry(String ingredientName, int quantity) {
+        mRepository.addQuantityToIngredient(ingredientName, quantity);
+    }
+
+    public void removeQuantityFromPantry(String ingredientName, int quantity) {
+        mRepository.removeQuantityFromIngredient(ingredientName, quantity);
+    }
 }

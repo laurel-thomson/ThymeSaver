@@ -6,14 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
-import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
 
 import java.util.HashMap;
 
 public class AddIngredientAdapter extends MeasuredIngredientAdapter {
 
-    public AddIngredientAdapter(Context context, IngredientQuantityChangedListener listener) {
+    public AddIngredientAdapter(Context context, IngredientAdapterListener listener) {
         super(context, listener);
     }
 

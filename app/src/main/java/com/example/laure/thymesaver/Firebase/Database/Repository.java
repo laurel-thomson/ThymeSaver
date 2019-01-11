@@ -108,6 +108,40 @@ public class Repository {
         mIngredientReference.child(i.getName()).setValue(i);
     }
 
+    public void addQuantityToIngredient(String ingName, final int quantity) {
+        mIngredientReference.child(ingName).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Ingredient i = dataSnapshot.getValue(Ingredient.class);
+                i.setName(dataSnapshot.getKey());
+                i.setQuantity(i.getQuantity() + quantity);
+                updateIngredient(i);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void removeQuantityFromIngredient(String ingName, final int quantity) {
+        mIngredientReference.child(ingName).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Ingredient i = dataSnapshot.getValue(Ingredient.class);
+                i.setName(dataSnapshot.getKey());
+                i.setQuantity(Math.max(0, i.getQuantity() - quantity));
+                updateIngredient(i);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     public void addMealPlan(MealPlan mealPlan) {
         mMealPlanReference.push().setValue(mealPlan);
     }

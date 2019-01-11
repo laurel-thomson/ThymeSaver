@@ -1,7 +1,6 @@
 package com.example.laure.thymesaver.UI.AddIngredients;
 
 import android.app.SearchManager;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -11,15 +10,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.example.laure.thymesaver.Adapters.IngredientAdapters.AddIngredientAdapter;
 import com.example.laure.thymesaver.Adapters.IngredientAdapters.MeasuredIngredientAdapter;
-import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
-import com.example.laure.thymesaver.ViewModels.PantryViewModel;
 
-public abstract class BaseAddIngredientsActivity extends AppCompatActivity implements MeasuredIngredientAdapter.IngredientQuantityChangedListener {
+public abstract class BaseAddIngredientsActivity extends AppCompatActivity implements MeasuredIngredientAdapter.IngredientAdapterListener {
 
     protected AddIngredientAdapter mAdapter;
     protected SearchView mSearchView;

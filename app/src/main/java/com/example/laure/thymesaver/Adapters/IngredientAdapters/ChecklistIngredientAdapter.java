@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
-import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
 
 import java.util.HashMap;
@@ -18,11 +17,11 @@ public class ChecklistIngredientAdapter extends MeasuredIngredientAdapter {
     public ChecklistIngredientAdapter(
             Context context,
             HashMap<String, Integer> ingredients,
-            IngredientQuantityChangedListener quantityChangedListener) {
+            IngredientAdapterListener quantityChangedListener) {
         super(context, ingredients, quantityChangedListener);
     }
 
-    public ChecklistIngredientAdapter(Context context, IngredientQuantityChangedListener quantityChangedListener ) {
+    public ChecklistIngredientAdapter(Context context, IngredientAdapterListener quantityChangedListener ) {
         super(context, quantityChangedListener);
     }
 
@@ -51,6 +50,10 @@ public class ChecklistIngredientAdapter extends MeasuredIngredientAdapter {
                         mNameTV.setPaintFlags(0);
                         mNameTV.setTextColor(Color.BLACK);
                     }
+                    String ing = mIngredients.get(getAdapterPosition());
+                    mListener.onIngredientCheckedOff(
+                            ing,
+                            mMeasuredIngredients.get(ing));
                 }
             });
         }

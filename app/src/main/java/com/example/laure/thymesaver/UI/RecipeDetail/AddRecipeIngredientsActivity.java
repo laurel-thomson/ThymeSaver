@@ -55,4 +55,9 @@ public class AddRecipeIngredientsActivity extends BaseAddIngredientsActivity {
             }
         });
     }
+
+    @Override
+    public void onIngredientCheckedOff(String ingredientName, int quantity) {
+
+    }
 }
