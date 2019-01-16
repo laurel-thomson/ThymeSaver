@@ -233,7 +233,7 @@ public class Repository {
             if (r.getName().equals(recipeName))
                 return r;
         }
-        throw new Resources.NotFoundException();
+        return null;
     }
 
     private class RecipeListDeserializer implements Function<DataSnapshot, List<Recipe>> {

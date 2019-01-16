@@ -92,7 +92,6 @@ public class CookbookFragment extends AddButtonFragment
                 .setPositiveButton("Create", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        mViewModel.addRecipe(new Recipe(et.getText().toString()));
                         Intent intent = new Intent(getActivity(), RecipeDetailActivity.class);
                         intent.putExtra(RecipeDetailActivity.CURRENT_RECIPE_NAME, et.getText().toString());
                         startActivity(intent);

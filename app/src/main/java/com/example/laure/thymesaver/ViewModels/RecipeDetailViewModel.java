@@ -23,7 +23,9 @@ public class RecipeDetailViewModel extends AndroidViewModel {
 
     public void setCurrentRecipe(String currentRecipeName) {
         mCurrentRecipeName = currentRecipeName;
-        mCurrentRecipe = mRepository.getRecipe(currentRecipeName);
+        mCurrentRecipe = mRepository.getRecipe(currentRecipeName) != null ?
+                mRepository.getRecipe(currentRecipeName) :
+                new Recipe(currentRecipeName);
     }
 
     public Recipe getCurrentRecipe() {

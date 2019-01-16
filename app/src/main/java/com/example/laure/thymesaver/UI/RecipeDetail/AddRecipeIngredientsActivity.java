@@ -20,7 +20,7 @@ public class AddRecipeIngredientsActivity extends BaseAddIngredientsActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        mRecipeDetailViewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
+        mRecipeDetailViewModel = ViewModelProviders.of(getParent().getApplicationContext()).get(RecipeDetailViewModel.class);
         String recipeName = getIntent().getStringExtra(RECIPE_NAME);
         mRecipeDetailViewModel.setCurrentRecipe(recipeName);
         mPantryViewModel = ViewModelProviders.of(this).get(PantryViewModel.class);
