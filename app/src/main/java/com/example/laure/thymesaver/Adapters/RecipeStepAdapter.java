@@ -25,9 +25,11 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.My
     private final LayoutInflater mInflater;
 
     public RecipeStepAdapter(
-            Context context,
-            List<String> steps) {
+            Context context) {
         mInflater = LayoutInflater.from(context);
+    }
+
+    public void setSteps(List<String> steps){
         mSteps = steps;
     }
 

@@ -1,5 +1,6 @@
 package com.example.laure.thymesaver.UI.RecipeDetail;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.laure.thymesaver.Adapters.RecipeStepAdapter;
+import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 
@@ -42,9 +44,18 @@ public class RecipeStepsFragment extends RecipeDetailFragment
         mRecyclerView = view.findViewById(R.id.steps_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        mSteps = mViewModel.getRecipeSteps();
+        mViewModel.getCurrentRecipe().observe(this, new Observer<Recipe>() {
+            @Override
+            public void onChanged(@Nullable Recipe recipe) {
+                if (recipe == null) {
+                    return;
+                }
+                mSteps = recipe.getSteps();
+                mAdapter.setSteps(recipe.getSteps());
+            }
+        });
 
-        mAdapter = new RecipeStepAdapter(getActivity(), mSteps);
+        mAdapter = new RecipeStepAdapter(getActivity());
         mRecyclerView.setAdapter(mAdapter);
 
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),

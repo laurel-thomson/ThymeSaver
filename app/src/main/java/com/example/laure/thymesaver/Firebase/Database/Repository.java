@@ -2,8 +2,8 @@ package com.example.laure.thymesaver.Firebase.Database;
 
 import android.arch.core.util.Function;
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
-import android.content.res.Resources;
 import android.support.annotation.NonNull;
 
 import com.example.laure.thymesaver.Models.Ingredient;
@@ -18,7 +18,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Repository {
     private FirebaseDatabase mDatabase;
@@ -34,6 +33,7 @@ public class Repository {
     private final LiveData<List<Ingredient>> mIngredientLiveData;
     private final LiveData<List<MealPlan>> mMealPlanLiveData;
     private final LiveData<HashMap<String,Integer>> mShoppingLiveData;
+    private LiveData<Recipe> mRecipe;
 
     public static Repository getInstance() {
         if (mSoleInstance == null) {
@@ -49,18 +49,17 @@ public class Repository {
         mIngredientReference = mDatabase.getReference("ingredients");
         mMealPlanReference = mDatabase.getReference("mealplan");
         mRecipeLiveData = Transformations.map(
-                new FirebaseQueryLiveData<Recipe>(mRecipeReference, Recipe.class),
+                new ListLiveData<Recipe>(mRecipeReference, Recipe.class),
                 new RecipeListDeserializer());
         mIngredientLiveData = Transformations.map(
-                new FirebaseQueryLiveData<Ingredient>(mIngredientReference, Ingredient.class),
+                new ListLiveData<Ingredient>(mIngredientReference, Ingredient.class),
                 new IngredientDeserializer());
         mMealPlanLiveData = Transformations.map(
-                new FirebaseQueryLiveData<MealPlan>(mMealPlanReference, MealPlan.class),
+                new ListLiveData<MealPlan>(mMealPlanReference, MealPlan.class),
                 new MealPlanDeserializer());
         mShoppingLiveData = Transformations.map(
                 new ShoppingListLiveData(mDatabase.getReference()),
                 new ShoppingListDeserializer());
-
 
         //force recipes & ingredients to cache
         mRecipeReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -228,12 +227,11 @@ public class Repository {
         return mMealPlanLiveData;
     }
 
-    public Recipe getRecipe(String recipeName) {
-        for (Recipe r : mRecipes) {
-            if (r.getName().equals(recipeName))
-                return r;
-        }
-        return null;
+    public LiveData<Recipe> getRecipe(String recipeName) {
+        mRecipe = Transformations.map(
+                new RecipeLiveData(mRecipeReference.child(recipeName)),
+                new RecipeDeserializer());
+        return mRecipe;
     }
 
     private class RecipeListDeserializer implements Function<DataSnapshot, List<Recipe>> {
@@ -247,6 +245,18 @@ public class Repository {
                 mRecipes.add(r);
             }
             return mRecipes;
+        }
+    }
+
+    private class RecipeDeserializer implements Function<DataSnapshot, Recipe> {
+        @Override
+        public Recipe apply(DataSnapshot input) {
+            Recipe r = input.getValue(Recipe.class);
+            if (r == null) {
+                return null;
+            }
+            r.setName(input.getKey());
+            return r;
         }
     }
 

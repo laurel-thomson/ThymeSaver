@@ -1,5 +1,6 @@
 package com.example.laure.thymesaver.UI.RecipeDetail;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.example.laure.thymesaver.Adapters.IngredientAdapters.ChecklistIngredientAdapter;
 import com.example.laure.thymesaver.Adapters.IngredientAdapters.MeasuredIngredientAdapter;
+import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 
@@ -33,10 +35,19 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mViewModel = ViewModelProviders.of(getActivity()).get(RecipeDetailViewModel.class);
         mAdapter = new ChecklistIngredientAdapter(getActivity(),
-                mViewModel.getRecipeIngredients(),
                 this);
+
+        mViewModel = ViewModelProviders.of(getActivity()).get(RecipeDetailViewModel.class);
+        mViewModel.getCurrentRecipe().observe(this, new Observer<Recipe>() {
+            @Override
+            public void onChanged(@Nullable Recipe recipe) {
+                if (recipe == null) {
+                    return;
+                }
+                mAdapter.setIngredients(recipe.getRecipeIngredients());
+            }
+        });
 
         mRecyclerView = view.findViewById(R.id.recipe_ingredients_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -44,15 +55,6 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
 
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
                 DividerItemDecoration.VERTICAL));
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        //when the fragment is resumed after the AddRecipeIngredientsActivity is completed, we
-        //want to refresh the list of recipe ingredients
-        mAdapter.setIngredients(mViewModel.getRecipeIngredients());
     }
 
     public void onIngredientQuantityChanged(String ingredientName, int quantity) {
@@ -67,7 +69,7 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
     @Override
     void launchAddItemActivity() {
         Intent intent = new Intent(getActivity(), AddRecipeIngredientsActivity.class);
-        intent.putExtra(AddRecipeIngredientsActivity.RECIPE_NAME, mViewModel.getCurrentRecipe().getName());
+        intent.putExtra(AddRecipeIngredientsActivity.RECIPE_NAME, mViewModel.getCurrentRecipeName());
         startActivity(intent);
     }
 }
