@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 
 import com.example.laure.thymesaver.Firebase.Database.Repository;
 import com.example.laure.thymesaver.Models.MealPlan;
-import com.example.laure.thymesaver.Models.Recipe;
 
 import java.util.List;
 
@@ -44,6 +43,6 @@ public class MealPlannerViewModel extends AndroidViewModel {
     }
 
     public void removeMealPlan(MealPlan mealPlan) {
-        mRepository.removeMealPlan(mealPlan);
+        mRepository.deleteMealPlan(mealPlan);
     }
 }

@@ -1,20 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="40dp"
     android:orientation="horizontal"
+    android:background="@color/colorTextIcon"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <CheckBox
         android:id="@+id/recipe_checkbox"
         android:background="@color/colorTextIcon"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="0.1"
         android:layout_height="match_parent" />
 
     <TextView
-        android:id="@+id/recipe_list_textview"
+        android:id="@+id/recipe_textview"
         style="@style/TextViewStyle"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="0.8"
         android:layout_height="match_parent" />
+
+    <Button
+        android:id="@+id/recipe_delete"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/ic_delete"/>
 
 </LinearLayout>

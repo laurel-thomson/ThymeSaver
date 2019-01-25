@@ -25,8 +25,8 @@ public class CookBookViewModel extends AndroidViewModel {
         return mAllRecipes;
     }
 
-    public void addRecipe(Recipe r) {
-        mRepository.addOrUpdateRecipe(r);
+    public void deleteRecipe(Recipe recipe) {
+        mRepository.deleteRecipe(recipe);
     }
 
     public void addRecipesToMealPlan(List<Recipe> recipes, String scheduledDay) {

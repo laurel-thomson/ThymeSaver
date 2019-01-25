@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.laure.thymesaver.Models.MealPlan;
 import com.example.laure.thymesaver.R;
@@ -41,7 +40,7 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         switch (viewType) {
             case USER_TYPE:
                 view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.planned_meal_list_item, parent, false);
+                        .inflate(R.layout.recipe_list_item, parent, false);
                 return new MealPlanViewHolder(view);
             case HEADER_TYPE:
                 view = LayoutInflater.from(parent.getContext())
@@ -49,7 +48,7 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 return new SectionHeaderViewHolder(view);
             default:
                 view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.planned_meal_list_item, parent, false);
+                        .inflate(R.layout.recipe_list_item, parent, false);
                 return new MealPlanViewHolder(view);
         }
     }
@@ -186,9 +185,9 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         MealPlanViewHolder(View itemView) {
             super(itemView);
 
-            mCheckBox = itemView.findViewById(R.id.planned_meal_checkbox);
-            mTextView = itemView.findViewById(R.id.planned_meal_textview);
-            mDeleteButton = itemView.findViewById(R.id.planned_meal_delete);
+            mCheckBox = itemView.findViewById(R.id.recipe_checkbox);
+            mTextView = itemView.findViewById(R.id.recipe_textview);
+            mDeleteButton = itemView.findViewById(R.id.recipe_delete);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

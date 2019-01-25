@@ -2,7 +2,6 @@ package com.example.laure.thymesaver.Firebase.Database;
 
 import android.arch.core.util.Function;
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
 import android.support.annotation.NonNull;
 
@@ -99,6 +98,10 @@ public class Repository {
         mRecipeReference.child(r.getName()).setValue(r);
     }
 
+    public void deleteRecipe(Recipe r) {
+        mRecipeReference.child(r.getName()).removeValue();
+    }
+
     public void addIngredient(Ingredient i) {
         mIngredientReference.child(i.getName()).setValue(i);
     }
@@ -155,7 +158,7 @@ public class Repository {
         mMealPlanReference.child(mealPlan.getFirebaseKey()).setValue(mealPlan);
     }
 
-    public void removeMealPlan(MealPlan mealPlan) {
+    public void deleteMealPlan(MealPlan mealPlan) {
         mMealPlanReference.child(mealPlan.getFirebaseKey()).removeValue();
     }
 

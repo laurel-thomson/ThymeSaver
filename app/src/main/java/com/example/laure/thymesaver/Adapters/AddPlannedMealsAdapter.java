@@ -68,7 +68,7 @@ public class AddPlannedMealsAdapter extends RecyclerView.Adapter<AddPlannedMeals
         public MyViewHolder(@NonNull View view) {
             super(view);
             mCheckBox = view.findViewById(R.id.recipe_checkbox);
-            mNameTV = view.findViewById(R.id.recipe_list_textview);
+            mNameTV = view.findViewById(R.id.recipe_textview);
 
             mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override

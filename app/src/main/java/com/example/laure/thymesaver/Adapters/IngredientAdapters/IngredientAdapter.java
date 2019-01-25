@@ -122,7 +122,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
             mIncrementer = view.findViewById(R.id.increment_quantity_layout);
 
             //hide the checkbox in the base IngredientAdapter
-            mCheckBox.setVisibility(View.INVISIBLE);
+            mCheckBox.setVisibility(View.GONE);
 
             mDecrementer.setOnClickListener(new View.OnClickListener() {
                 @Override

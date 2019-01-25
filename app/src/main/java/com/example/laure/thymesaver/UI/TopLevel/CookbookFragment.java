@@ -8,24 +8,17 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.method.KeyListener;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.example.laure.thymesaver.Adapters.RecipeAdapter;
 import com.example.laure.thymesaver.Models.Recipe;
@@ -36,7 +29,7 @@ import com.example.laure.thymesaver.ViewModels.CookBookViewModel;
 import java.util.List;
 
 public class CookbookFragment extends AddButtonFragment
-        implements RecipeAdapter.RecipeSelectedListener {
+        implements RecipeAdapter.RecipeListener {
     private CookBookViewModel mViewModel;
     private RecipeAdapter mAdapter;
     private RecyclerView mRecyclerView;
@@ -78,6 +71,23 @@ public class CookbookFragment extends AddButtonFragment
                 RecipeDetailActivity.CURRENT_RECIPE_NAME,
                 recipe.getName());
         startActivity(intent);
+    }
+
+    @Override
+    public void onDeleteClicked(final Recipe recipe) {
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Delete Recipe?")
+                .setMessage("Are you sure you want to delete this recipe?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mViewModel.deleteRecipe(recipe);
+                    }
+
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 
     @Override

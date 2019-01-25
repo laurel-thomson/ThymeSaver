@@ -6,8 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.example.laure.thymesaver.Models.Recipe;
@@ -18,13 +18,13 @@ import java.util.List;
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHolder> {
     private List<Recipe> mRecipes;
     private final LayoutInflater mInflater;
-    private RecipeSelectedListener mSelectedListener;
+    private RecipeListener mListener;
 
     public RecipeAdapter(
             Context context,
-            RecipeSelectedListener selectedListener) {
+            RecipeListener listener) {
         mInflater = LayoutInflater.from(context);
-        mSelectedListener = selectedListener;
+        mListener = listener;
     }
 
     @NonNull
@@ -54,23 +54,35 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         private TextView mTextView;
+        private Button mDeleteButton;
+        private CheckBox mCheckBox;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            mTextView = itemView.findViewById(R.id.recipe_list_textview);
-            CheckBox checkBox = itemView.findViewById(R.id.recipe_checkbox);
-            checkBox.setVisibility(View.GONE);
+            mTextView = itemView.findViewById(R.id.recipe_textview);
+            mDeleteButton = itemView.findViewById(R.id.recipe_delete);
+            mCheckBox = itemView.findViewById(R.id.recipe_checkbox);
+            mCheckBox.setVisibility(View.GONE);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mSelectedListener.onRecipeSelected(mRecipes.get(getAdapterPosition()));
+                    mListener.onRecipeSelected(mRecipes.get(getAdapterPosition()));
+                }
+            });
+
+            mDeleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onDeleteClicked(mRecipes.get(getAdapterPosition()));
                 }
             });
         }
     }
 
-    public interface RecipeSelectedListener {
+    public interface RecipeListener {
         void onRecipeSelected(Recipe recipe);
+
+        void onDeleteClicked(Recipe recipe);
     }
 }
