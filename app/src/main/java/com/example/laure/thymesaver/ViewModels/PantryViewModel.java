@@ -28,6 +28,10 @@ public class PantryViewModel extends AndroidViewModel {
         mRepository.addIngredient(i);
     }
 
+    public void deleteIngredient(Ingredient i) {
+        mRepository.deleteIngredient(i);
+    }
+
     public void updateIngredientPantryQuantity(Ingredient i, int quantity) {
         i.setQuantity(quantity);
         mRepository.updateIngredient(i);

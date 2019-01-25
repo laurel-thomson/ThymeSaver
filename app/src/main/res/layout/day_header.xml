@@ -8,7 +8,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     
     <TextView
-        android:id="@+id/section_text"
+        android:id="@+id/header_text"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:gravity="center_vertical"
@@ -20,7 +20,7 @@
         android:textStyle="bold" />
     
     <Button
-        android:id="@+id/section_add_button"
+        android:id="@+id/header_add_button"
         android:layout_width="32dp"
         android:layout_height="32dp"
         app:layout_constraintEnd_toEndOf="parent"

@@ -44,7 +44,7 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 return new MealPlanViewHolder(view);
             case HEADER_TYPE:
                 view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.section, parent, false);
+                        .inflate(R.layout.day_header, parent, false);
                 return new SectionHeaderViewHolder(view);
             default:
                 view = LayoutInflater.from(parent.getContext())
@@ -211,8 +211,8 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         SectionHeaderViewHolder(View itemView) {
             super(itemView);
-            sectionTitle = itemView.findViewById(R.id.section_text);
-            addButton = itemView.findViewById(R.id.section_add_button);
+            sectionTitle = itemView.findViewById(R.id.header_text);
+            addButton = itemView.findViewById(R.id.header_add_button);
         }
 
     }

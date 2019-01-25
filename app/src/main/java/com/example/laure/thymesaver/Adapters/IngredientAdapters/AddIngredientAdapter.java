@@ -35,7 +35,7 @@ public class AddIngredientAdapter extends MeasuredIngredientAdapter {
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(mContext)
-                .inflate(R.layout.multiselect_list_item, parent, false);
+                .inflate(R.layout.ingredient_list_item, parent, false);
         return new AddIngredientViewHolder(itemView);
     }
 
@@ -44,6 +44,7 @@ public class AddIngredientAdapter extends MeasuredIngredientAdapter {
         public AddIngredientViewHolder(View view) {
             super(view);
             mCheckBox.setVisibility(View.VISIBLE);
+            mDeleteButton.setVisibility(View.GONE);
 
             mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override

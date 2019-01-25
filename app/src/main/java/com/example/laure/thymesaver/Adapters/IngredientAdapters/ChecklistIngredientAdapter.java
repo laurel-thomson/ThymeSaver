@@ -28,7 +28,7 @@ public class ChecklistIngredientAdapter extends MeasuredIngredientAdapter {
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(mContext)
-                .inflate(R.layout.multiselect_list_item, parent, false);
+                .inflate(R.layout.ingredient_list_item, parent, false);
         return new ChecklistViewHolder(itemView);
     }
 
@@ -41,19 +41,13 @@ public class ChecklistIngredientAdapter extends MeasuredIngredientAdapter {
             mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    boolean checked = compoundButton.isChecked();
-                    if (checked) {
-                        mNameTV.setPaintFlags(mNameTV.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                        mNameTV.setTextColor(Color.GRAY);
-                    }
-                    else {
-                        mNameTV.setPaintFlags(0);
-                        mNameTV.setTextColor(Color.BLACK);
-                    }
                     String ing = mIngredients.get(getAdapterPosition());
                     mListener.onIngredientCheckedOff(
                             ing,
                             mMeasuredIngredients.get(ing));
+                    if (compoundButton.isChecked()) {
+                        compoundButton.setChecked(false);
+                    }
                 }
             });
         }

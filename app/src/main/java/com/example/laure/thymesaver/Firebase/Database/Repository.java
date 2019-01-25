@@ -106,6 +106,16 @@ public class Repository {
         mIngredientReference.child(i.getName()).setValue(i);
     }
 
+    public void deleteIngredient(Ingredient i) {
+        mIngredientReference.child(i.getName()).removeValue();
+
+        //remove this ingredient from all recipes
+        for (Recipe r : mRecipes) {
+            r.getRecipeIngredients().remove(i.getName());
+            addOrUpdateRecipe(r);
+        }
+    }
+
     public void updateIngredient(Ingredient i) {
         mIngredientReference.child(i.getName()).setValue(i);
     }

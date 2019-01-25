@@ -85,8 +85,6 @@ public class RecipeDetailActivity extends AppCompatActivity{
                 currentFragment.launchAddItemActivity();
             }
         });
-        //The activity starts on the Recipe Info tab, which doesn't have a FAB
-        mFAB.hide();
     }
 
     private void setUpActionBar() {

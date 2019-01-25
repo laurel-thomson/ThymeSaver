@@ -25,8 +25,7 @@
         android:id="@+id/decrement_quantity_layout"
         app:layout_constraintEnd_toStartOf="@id/item_quantity_picker"
         android:gravity="center"
-        android:layout_width="60dp"
-        android:clickable="true"
+        android:layout_width="50dp"
         android:layout_height="match_parent">
 
         <ImageView
@@ -49,9 +48,10 @@
 
     <LinearLayout
         android:id="@+id/increment_quantity_layout"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ingredient_delete"
         android:gravity="center"
-        android:layout_width="60dp"
+        android:layout_marginRight="5dp"
+        android:layout_width="50dp"
         android:layout_height="match_parent">
 
         <ImageView
@@ -62,5 +62,15 @@
             android:src="@drawable/ic_add"/>
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/ingredient_delete"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginRight="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/ic_delete"/>
 
 </android.support.constraint.ConstraintLayout>

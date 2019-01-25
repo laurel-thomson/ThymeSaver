@@ -76,8 +76,8 @@ public class CookbookFragment extends AddButtonFragment
     @Override
     public void onDeleteClicked(final Recipe recipe) {
         new AlertDialog.Builder(getActivity())
-                .setTitle("Delete Recipe?")
-                .setMessage("Are you sure you want to delete this recipe?")
+                .setTitle("Delete " + recipe.getName() + " ?")
+                .setMessage("Are you sure you want to delete this recipe? This cannot be undone.")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener()
                 {
                     @Override

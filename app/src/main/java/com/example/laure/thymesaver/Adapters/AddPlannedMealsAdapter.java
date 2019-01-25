@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
@@ -69,6 +70,9 @@ public class AddPlannedMealsAdapter extends RecyclerView.Adapter<AddPlannedMeals
             super(view);
             mCheckBox = view.findViewById(R.id.recipe_checkbox);
             mNameTV = view.findViewById(R.id.recipe_textview);
+
+            Button deleteButton = view.findViewById(R.id.recipe_delete);
+            deleteButton.setVisibility(View.GONE);
 
             mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override

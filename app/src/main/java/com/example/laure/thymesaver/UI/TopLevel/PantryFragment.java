@@ -2,12 +2,12 @@ package com.example.laure.thymesaver.UI.TopLevel;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,8 +24,8 @@ import com.example.laure.thymesaver.ViewModels.PantryViewModel;
 
 import java.util.List;
 
-public class PantryFragment extends AddButtonFragment implements IngredientAdapter.IngredientQuantityChangedListener {
-    private PantryViewModel mIngredientViewModel;
+public class PantryFragment extends AddButtonFragment implements IngredientAdapter.IngredientListener {
+    private PantryViewModel mViewModel;
     private IngredientAdapter mAdapter;
     private RecyclerView mRecyclerView;
 
@@ -39,9 +39,9 @@ public class PantryFragment extends AddButtonFragment implements IngredientAdapt
         super.onViewCreated(view, savedInstanceState);
         final ProgressBar progressBar = view.findViewById(R.id.pantry_progress);
 
-        mIngredientViewModel = ViewModelProviders.of(this).get(PantryViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(PantryViewModel.class);
         mAdapter = new IngredientAdapter(getActivity(),this);
-        mIngredientViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
+        mViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
             @Override
             public void onChanged(@Nullable List<Ingredient> ingredients) {
                 mAdapter.setIngredients(ingredients);
@@ -58,7 +58,25 @@ public class PantryFragment extends AddButtonFragment implements IngredientAdapt
     }
 
     public void onIngredientQuantityChanged(Ingredient ingredient, int quantity) {
-        mIngredientViewModel.updateIngredientPantryQuantity(ingredient, quantity);
+        mViewModel.updateIngredientPantryQuantity(ingredient, quantity);
+    }
+
+    @Override
+    public void onDeleteClicked(final Ingredient ingredient) {
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Delete " + ingredient.getName() + " ?")
+                .setMessage("Are you sure you want to delete this ingredient? This will remove" +
+                        " this ingredient from all recipes.")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mViewModel.deleteIngredient(ingredient);
+                    }
+
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 
     @Override

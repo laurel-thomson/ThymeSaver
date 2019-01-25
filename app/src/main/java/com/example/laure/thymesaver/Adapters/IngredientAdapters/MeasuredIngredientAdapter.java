@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -60,7 +61,7 @@ public class MeasuredIngredientAdapter extends RecyclerView.Adapter<MeasuredIngr
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(mContext)
-                .inflate(R.layout.multiselect_list_item, parent, false);
+                .inflate(R.layout.ingredient_list_item, parent, false);
 
         return new MyViewHolder(itemView);
     }
@@ -124,6 +125,7 @@ public class MeasuredIngredientAdapter extends RecyclerView.Adapter<MeasuredIngr
         public TextView mQuantityTV;
         public LinearLayout mDecrementer;
         public LinearLayout mIncrementer;
+        public Button mDeleteButton;
 
         public MyViewHolder(View view) {
             super(view);
@@ -132,6 +134,7 @@ public class MeasuredIngredientAdapter extends RecyclerView.Adapter<MeasuredIngr
             mQuantityTV = view.findViewById(R.id.item_quantity_picker);
             mDecrementer = view.findViewById(R.id.decrement_quantity_layout);
             mIncrementer = view.findViewById(R.id.increment_quantity_layout);
+            mDeleteButton = view.findViewById(R.id.ingredient_delete);
 
             //hide the checkbox in the base IngredientAdapter
             mCheckBox.setVisibility(View.INVISIBLE);

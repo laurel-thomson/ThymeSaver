@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -23,14 +24,14 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
     Context mContext;
     List<Ingredient> mIngredients;
     List<Ingredient> mFilteredIngredients;
-    IngredientQuantityChangedListener mQuantityChangedListener;
+    IngredientListener mListener;
     Ingredient mUserCreatedIngredient;
 
     public IngredientAdapter(
             Context context,
-            IngredientQuantityChangedListener listener) {
+            IngredientListener listener) {
         mContext = context;
-        mQuantityChangedListener = listener;
+        mListener = listener;
     }
 
     public void setIngredients(List<Ingredient> ingredients) {
@@ -42,7 +43,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(mContext)
-                .inflate(R.layout.multiselect_list_item, parent, false);
+                .inflate(R.layout.ingredient_list_item, parent, false);
 
         return new MyViewHolder(itemView);
     }
@@ -106,22 +107,23 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
         };
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public CheckBox mCheckBox;
-        public TextView mNameTV;
-        public TextView mQuantityTV;
-        public LinearLayout mDecrementer;
-        public LinearLayout mIncrementer;
+    class MyViewHolder extends RecyclerView.ViewHolder {
+        CheckBox mCheckBox;
+        TextView mNameTV;
+        TextView mQuantityTV;
+        LinearLayout mDecrementer;
+        LinearLayout mIncrementer;
+        Button mDeleteButton;
 
-        public MyViewHolder(View view) {
+        MyViewHolder(View view) {
             super(view);
             mCheckBox = view.findViewById(R.id.multiselect_item_checkbox);
             mNameTV = view.findViewById(R.id.multiselect_item_textview);
             mQuantityTV = view.findViewById(R.id.item_quantity_picker);
             mDecrementer = view.findViewById(R.id.decrement_quantity_layout);
             mIncrementer = view.findViewById(R.id.increment_quantity_layout);
+            mDeleteButton = view.findViewById(R.id.ingredient_delete);
 
-            //hide the checkbox in the base IngredientAdapter
             mCheckBox.setVisibility(View.GONE);
 
             mDecrementer.setOnClickListener(new View.OnClickListener() {
@@ -131,7 +133,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
                     Ingredient i = mFilteredIngredients.get(getAdapterPosition());
                     if (i.getQuantity() == 0) return;
                     i.setQuantity(i.getQuantity() - 1);
-                    mQuantityChangedListener.onIngredientQuantityChanged(i, i.getQuantity());
+                    mListener.onIngredientQuantityChanged(i, i.getQuantity());
                     notifyDataSetChanged();
                 }
             });
@@ -143,14 +145,23 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
                     Ingredient i = mFilteredIngredients.get(getAdapterPosition());
                     if (i.getQuantity() > 100) return;
                     i.setQuantity(i.getQuantity() + 1);
-                    mQuantityChangedListener.onIngredientQuantityChanged(i, i.getQuantity());
+                    mListener.onIngredientQuantityChanged(i, i.getQuantity());
                     notifyDataSetChanged();
+                }
+            });
+
+            mDeleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onDeleteClicked(mFilteredIngredients.get(getAdapterPosition()));
                 }
             });
         }
     }
 
-    public interface IngredientQuantityChangedListener {
+    public interface IngredientListener {
         void onIngredientQuantityChanged(Ingredient ingredient, int quantity);
+
+        void onDeleteClicked(Ingredient ingredient);
     }
 }
