@@ -63,10 +63,7 @@ public class RecipeDetailActivity extends AppCompatActivity{
             public void onPageScrollStateChanged(int state) {
                 switch (state) {
                     case ViewPager.SCROLL_STATE_IDLE:
-                        //the Recipe Info tab doesn't have a FAB
-                        if (mViewPager.getCurrentItem() != 0) {
-                            mFAB.show();
-                        }
+                        mFAB.show();
                         break;
                     case ViewPager.SCROLL_STATE_DRAGGING:
                     case ViewPager.SCROLL_STATE_SETTLING:
@@ -110,9 +107,9 @@ public class RecipeDetailActivity extends AppCompatActivity{
     }
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final int NUMBER_OF_TABS = 3;
+        private final int NUMBER_OF_TABS = 2;
         private Fragment[] mFragments = new Fragment[NUMBER_OF_TABS];
-        private String[] mFragmentTitles = {"Info", "Ingredients", "Steps"};
+        private String[] mFragmentTitles = {"Ingredients", "Steps"};
 
         public ViewPagerAdapter(FragmentManager manager) {
             super(manager);
@@ -126,10 +123,8 @@ public class RecipeDetailActivity extends AppCompatActivity{
             }
             switch (position) {
                 case 0:
-                    return new AboutRecipeFragment();
-                case 1:
                     return new RecipeIngredientsFragment();
-                case 2:
+                case 1:
                     return new RecipeStepsFragment();
                 default:
                     return null;
