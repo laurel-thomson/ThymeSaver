@@ -31,7 +31,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LinearLayout v = (LinearLayout) mInflater
-                .inflate(R.layout.recipe_list_item, parent, false);
+                .inflate(R.layout.checklist_item, parent, false);
         return new MyViewHolder(v);
     }
 
@@ -59,9 +59,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            mTextView = itemView.findViewById(R.id.recipe_textview);
-            mDeleteButton = itemView.findViewById(R.id.recipe_delete);
-            mCheckBox = itemView.findViewById(R.id.recipe_checkbox);
+            mTextView = itemView.findViewById(R.id.checklist_textview);
+            mDeleteButton = itemView.findViewById(R.id.checklist_delete);
+            mCheckBox = itemView.findViewById(R.id.checklist_checkbox);
             mCheckBox.setVisibility(View.GONE);
 
             itemView.setOnClickListener(new View.OnClickListener() {

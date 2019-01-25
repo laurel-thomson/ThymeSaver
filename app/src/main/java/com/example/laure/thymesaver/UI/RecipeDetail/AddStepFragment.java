@@ -15,7 +15,7 @@ import com.example.laure.thymesaver.R;
 
 public class AddStepFragment extends BottomSheetDialogFragment {
     private EditText mStepEditText;
-    private StepAddedListener mListener;
+    private RecipeStepListener mListener;
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -41,11 +41,7 @@ public class AddStepFragment extends BottomSheetDialogFragment {
         });
     }
 
-    public void setListener(StepAddedListener listener) {
+    public void setListener(RecipeStepListener listener) {
         mListener = listener;
-    }
-
-    public interface StepAddedListener {
-        void onStepAdded(String step);
     }
 }

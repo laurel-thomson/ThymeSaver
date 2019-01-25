@@ -7,21 +7,21 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <CheckBox
-        android:id="@+id/recipe_checkbox"
+        android:id="@+id/checklist_checkbox"
         android:background="@color/colorTextIcon"
         android:layout_width="0dp"
         android:layout_weight="0.1"
         android:layout_height="match_parent" />
 
     <TextView
-        android:id="@+id/recipe_textview"
+        android:id="@+id/checklist_textview"
         style="@style/TextViewStyle"
         android:layout_width="0dp"
         android:layout_weight="0.8"
         android:layout_height="match_parent" />
 
     <Button
-        android:id="@+id/recipe_delete"
+        android:id="@+id/checklist_delete"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginRight="10dp"

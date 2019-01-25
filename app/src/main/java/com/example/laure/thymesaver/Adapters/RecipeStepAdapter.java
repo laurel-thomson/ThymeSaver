@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
+import com.example.laure.thymesaver.UI.RecipeDetail.RecipeStepListener;
 
 import java.util.List;
 
@@ -22,11 +24,14 @@ import java.util.List;
 public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.MyViewHolder> {
 
     private List<String> mSteps;
+    private RecipeStepListener mListener;
     private final LayoutInflater mInflater;
 
     public RecipeStepAdapter(
-            Context context) {
+            Context context,
+            RecipeStepListener listener) {
         mInflater = LayoutInflater.from(context);
+        mListener = listener;
     }
 
     public void setSteps(List<String> steps){
@@ -39,7 +44,7 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.My
     @Override
     public RecipeStepAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LinearLayout v = (LinearLayout) mInflater
-                .inflate(R.layout.step_list_item, parent, false);
+                .inflate(R.layout.checklist_item, parent, false);
         return new RecipeStepAdapter.MyViewHolder(v);
     }
 
@@ -59,11 +64,13 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.My
 
         private TextView mTextView;
         private CheckBox mCheckBox;
+        private Button mDeleteButton;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            mTextView = itemView.findViewById(R.id.step_list_textview);
-            mCheckBox = itemView.findViewById(R.id.step_list_checkbox);
+            mTextView = itemView.findViewById(R.id.checklist_textview);
+            mCheckBox = itemView.findViewById(R.id.checklist_checkbox);
+            mDeleteButton = itemView.findViewById(R.id.checklist_delete);
 
             mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -77,6 +84,13 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.My
                         mTextView.setPaintFlags(0);
                         mTextView.setTextColor(Color.BLACK);
                     }
+                }
+            });
+
+            mDeleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onStepDeleted(getAdapterPosition());
                 }
             });
         }

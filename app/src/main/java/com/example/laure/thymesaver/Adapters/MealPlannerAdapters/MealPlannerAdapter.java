@@ -40,7 +40,7 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         switch (viewType) {
             case USER_TYPE:
                 view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.recipe_list_item, parent, false);
+                        .inflate(R.layout.checklist_item, parent, false);
                 return new MealPlanViewHolder(view);
             case HEADER_TYPE:
                 view = LayoutInflater.from(parent.getContext())
@@ -48,7 +48,7 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 return new SectionHeaderViewHolder(view);
             default:
                 view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.recipe_list_item, parent, false);
+                        .inflate(R.layout.checklist_item, parent, false);
                 return new MealPlanViewHolder(view);
         }
     }
@@ -185,9 +185,9 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         MealPlanViewHolder(View itemView) {
             super(itemView);
 
-            mCheckBox = itemView.findViewById(R.id.recipe_checkbox);
-            mTextView = itemView.findViewById(R.id.recipe_textview);
-            mDeleteButton = itemView.findViewById(R.id.recipe_delete);
+            mCheckBox = itemView.findViewById(R.id.checklist_checkbox);
+            mTextView = itemView.findViewById(R.id.checklist_textview);
+            mDeleteButton = itemView.findViewById(R.id.checklist_delete);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

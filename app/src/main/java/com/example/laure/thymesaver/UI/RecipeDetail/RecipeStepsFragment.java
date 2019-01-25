@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeStepsFragment extends RecipeDetailFragment
-        implements AddStepFragment.StepAddedListener {
+        implements RecipeStepListener {
     private RecipeStepAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private List<String> mSteps;
@@ -55,7 +56,7 @@ public class RecipeStepsFragment extends RecipeDetailFragment
             }
         });
 
-        mAdapter = new RecipeStepAdapter(getActivity());
+        mAdapter = new RecipeStepAdapter(getActivity(), this);
         mRecyclerView.setAdapter(mAdapter);
 
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
@@ -74,5 +75,28 @@ public class RecipeStepsFragment extends RecipeDetailFragment
         mSteps.add(step);
         mAdapter.notifyDataSetChanged();
         mViewModel.updateRecipe();
+    }
+
+    @Override
+    public void onStepDeleted(final int position) {
+        final String step = mSteps.get(position);
+        mSteps.remove(position);
+        mAdapter.notifyDataSetChanged();
+        mViewModel.updateRecipe();
+        Snackbar snackbar = Snackbar
+                .make(getView(), "Step removed from recipe.", Snackbar.LENGTH_LONG)
+                .setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mSteps.add(position, step);
+                        mAdapter.notifyDataSetChanged();
+                        mViewModel.updateRecipe();
+                        Snackbar newSnackBar = Snackbar
+                                .make(getView(), "Recipe step restored.", Snackbar.LENGTH_SHORT);
+                        newSnackBar.show();
+                    }
+                });
+
+        snackbar.show();
     }
 }

@@ -2,7 +2,6 @@ package com.example.laure.thymesaver.Adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,14 +9,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.R;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class AddPlannedMealsAdapter extends RecyclerView.Adapter<AddPlannedMealsAdapter.MyViewHolder> {
@@ -40,7 +37,7 @@ public class AddPlannedMealsAdapter extends RecyclerView.Adapter<AddPlannedMeals
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = mInflater.inflate(R.layout.recipe_list_item, parent, false);
+        View v = mInflater.inflate(R.layout.checklist_item, parent, false);
         return new MyViewHolder(v);
     }
 
@@ -68,10 +65,10 @@ public class AddPlannedMealsAdapter extends RecyclerView.Adapter<AddPlannedMeals
 
         public MyViewHolder(@NonNull View view) {
             super(view);
-            mCheckBox = view.findViewById(R.id.recipe_checkbox);
-            mNameTV = view.findViewById(R.id.recipe_textview);
+            mCheckBox = view.findViewById(R.id.checklist_checkbox);
+            mNameTV = view.findViewById(R.id.checklist_textview);
 
-            Button deleteButton = view.findViewById(R.id.recipe_delete);
+            Button deleteButton = view.findViewById(R.id.checklist_delete);
             deleteButton.setVisibility(View.GONE);
 
             mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
