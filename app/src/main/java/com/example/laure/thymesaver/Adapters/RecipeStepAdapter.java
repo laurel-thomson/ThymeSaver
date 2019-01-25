@@ -30,7 +30,9 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.My
     }
 
     public void setSteps(List<String> steps){
+
         mSteps = steps;
+        notifyDataSetChanged();
     }
 
     @NonNull

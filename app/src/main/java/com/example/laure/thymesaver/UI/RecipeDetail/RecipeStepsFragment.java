@@ -63,7 +63,7 @@ public class RecipeStepsFragment extends RecipeDetailFragment
     }
 
     @Override
-    void launchAddItemActivity() {
+    void addNewItem() {
         AddStepFragment fragment = new AddStepFragment();
         fragment.setListener(this);
         fragment.show(getActivity().getSupportFragmentManager(), "TAG");

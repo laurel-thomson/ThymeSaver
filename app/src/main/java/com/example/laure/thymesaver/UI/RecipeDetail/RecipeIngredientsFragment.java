@@ -67,7 +67,7 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
     }
 
     @Override
-    void launchAddItemActivity() {
+    void addNewItem() {
         Intent intent = new Intent(getActivity(), AddRecipeIngredientsActivity.class);
         intent.putExtra(AddRecipeIngredientsActivity.RECIPE_NAME, mViewModel.getCurrentRecipeName());
         startActivity(intent);

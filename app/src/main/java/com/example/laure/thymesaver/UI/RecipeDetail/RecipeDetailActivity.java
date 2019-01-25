@@ -82,7 +82,7 @@ public class RecipeDetailActivity extends AppCompatActivity{
             public void onClick(View view) {
                 RecipeDetailFragment currentFragment = (RecipeDetailFragment) mAdapter.getItem(
                         mViewPager.getCurrentItem());
-                currentFragment.launchAddItemActivity();
+                currentFragment.addNewItem();
             }
         });
     }
