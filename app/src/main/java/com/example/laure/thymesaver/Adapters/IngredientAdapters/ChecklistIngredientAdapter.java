@@ -1,8 +1,6 @@
 package com.example.laure.thymesaver.Adapters.IngredientAdapters;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +15,11 @@ public class ChecklistIngredientAdapter extends MeasuredIngredientAdapter {
     public ChecklistIngredientAdapter(
             Context context,
             HashMap<String, Integer> ingredients,
-            IngredientAdapterListener quantityChangedListener) {
+            MeasuredIngredientListener quantityChangedListener) {
         super(context, ingredients, quantityChangedListener);
     }
 
-    public ChecklistIngredientAdapter(Context context, IngredientAdapterListener quantityChangedListener ) {
+    public ChecklistIngredientAdapter(Context context, MeasuredIngredientListener quantityChangedListener ) {
         super(context, quantityChangedListener);
     }
 

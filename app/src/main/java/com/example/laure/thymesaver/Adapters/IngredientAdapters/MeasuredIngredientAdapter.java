@@ -12,6 +12,7 @@ import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
 
 import java.util.ArrayList;
@@ -25,12 +26,12 @@ public class MeasuredIngredientAdapter extends RecyclerView.Adapter<MeasuredIngr
     HashMap<String, Integer> mMeasuredIngredients;
     List<String> mIngredients = new ArrayList<>();
     List<String> mFilteredIngredients;
-    IngredientAdapterListener mListener;
+    MeasuredIngredientListener mListener;
     String mUserCreatedIngredient;
 
     public MeasuredIngredientAdapter(
             Context context,
-            IngredientAdapterListener listener) {
+            MeasuredIngredientListener listener) {
         mContext = context;
         mListener = listener;
     }
@@ -38,7 +39,7 @@ public class MeasuredIngredientAdapter extends RecyclerView.Adapter<MeasuredIngr
     public MeasuredIngredientAdapter(
             Context context,
             HashMap<String, Integer> measuredIngredients,
-            IngredientAdapterListener listener) {
+            MeasuredIngredientListener listener) {
         mContext = context;
         mMeasuredIngredients = measuredIngredients;
         for (String i : measuredIngredients.keySet()) {
@@ -162,12 +163,22 @@ public class MeasuredIngredientAdapter extends RecyclerView.Adapter<MeasuredIngr
                     notifyDataSetChanged();
                 }
             });
+
+            mDeleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String name = mFilteredIngredients.get(getAdapterPosition());
+                    mListener.onDeleteClicked(name, mMeasuredIngredients.get(name));
+                }
+            });
         }
     }
 
-    public interface IngredientAdapterListener {
+    public interface MeasuredIngredientListener {
         void onIngredientQuantityChanged(String ingredientName, int quantity);
 
         void onIngredientCheckedOff(String ingredientName, int quantity);
+
+        void onDeleteClicked(String ingredientName, int quantity);
     }
 }

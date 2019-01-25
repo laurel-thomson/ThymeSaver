@@ -15,7 +15,7 @@ import com.example.laure.thymesaver.Adapters.IngredientAdapters.AddIngredientAda
 import com.example.laure.thymesaver.Adapters.IngredientAdapters.MeasuredIngredientAdapter;
 import com.example.laure.thymesaver.R;
 
-public abstract class BaseAddIngredientsActivity extends AppCompatActivity implements MeasuredIngredientAdapter.IngredientAdapterListener {
+public abstract class BaseAddIngredientsActivity extends AppCompatActivity implements MeasuredIngredientAdapter.MeasuredIngredientListener {
 
     protected AddIngredientAdapter mAdapter;
     protected SearchView mSearchView;

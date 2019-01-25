@@ -12,7 +12,7 @@ import java.util.HashMap;
 
 public class AddIngredientAdapter extends MeasuredIngredientAdapter {
 
-    public AddIngredientAdapter(Context context, IngredientAdapterListener listener) {
+    public AddIngredientAdapter(Context context, MeasuredIngredientListener listener) {
         super(context, listener);
     }
 

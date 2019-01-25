@@ -77,4 +77,9 @@ public class AddRecipeIngredientsActivity extends BaseAddIngredientsActivity {
     public void onIngredientCheckedOff(String ingredientName, int quantity) {
 
     }
+
+    @Override
+    public void onDeleteClicked(String ingredientName, int quantity) {
+        //do nothing
+    }
 }

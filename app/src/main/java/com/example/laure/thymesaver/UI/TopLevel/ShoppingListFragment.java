@@ -22,7 +22,7 @@ import com.example.laure.thymesaver.ViewModels.ShoppingViewModel;
 
 import java.util.HashMap;
 
-public class ShoppingListFragment extends AddButtonFragment implements MeasuredIngredientAdapter.IngredientAdapterListener {
+public class ShoppingListFragment extends AddButtonFragment implements MeasuredIngredientAdapter.MeasuredIngredientListener {
     private ShoppingViewModel mViewModel;
     private ChecklistIngredientAdapter mAdapter;
     private RecyclerView mRecyclerView;
@@ -82,5 +82,10 @@ public class ShoppingListFragment extends AddButtonFragment implements MeasuredI
                 });
 
         snackbar.show();
+    }
+
+    @Override
+    public void onDeleteClicked(String ingredientName, int quantity) {
+        //todo: remove this item from the list
     }
 }

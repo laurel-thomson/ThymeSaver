@@ -44,4 +44,10 @@ public class RecipeDetailViewModel extends AndroidViewModel {
         mCurrentRecipe.getValue().getRecipeIngredients().put(ingredientName, quantity);
         updateRecipe();
     }
+
+    public void deleteRecipeIngredient(String ingredientName) {
+        Recipe recipe = mCurrentRecipe.getValue();
+        recipe.getRecipeIngredients().remove(ingredientName);
+        mRepository.addOrUpdateRecipe(recipe);
+    }
 }
