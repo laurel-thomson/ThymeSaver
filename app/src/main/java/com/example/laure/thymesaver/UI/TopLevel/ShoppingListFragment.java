@@ -14,9 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import com.example.laure.thymesaver.Adapters.IngredientAdapters.RecipeIngredientsAdapter;
 import com.example.laure.thymesaver.Adapters.IngredientAdapters.MeasuredIngredientAdapter;
 import com.example.laure.thymesaver.Adapters.IngredientAdapters.ShoppingListAdapter;
 import com.example.laure.thymesaver.R;
@@ -72,6 +70,7 @@ public class ShoppingListFragment extends AddButtonFragment implements MeasuredI
     @Override
     public void onIngredientCheckedOff(final String ingredientName, final int quantity) {
         mViewModel.addQuantityToPantry(ingredientName, quantity);
+        mViewModel.deleteModifier(ingredientName);
         Snackbar snackbar = Snackbar
                 .make(getView(), ingredientName +
                         " added back to pantry.", Snackbar.LENGTH_LONG)
@@ -79,6 +78,7 @@ public class ShoppingListFragment extends AddButtonFragment implements MeasuredI
                     @Override
                     public void onClick(View view) {
                         mViewModel.removeQuantityFromPantry(ingredientName, quantity);
+                        mViewModel.addShoppingModification(ingredientName, quantity);
                         Snackbar newSnackBar = Snackbar
                                 .make(getView(), "Shopping list item restored.", Snackbar.LENGTH_SHORT);
                         newSnackBar.show();
