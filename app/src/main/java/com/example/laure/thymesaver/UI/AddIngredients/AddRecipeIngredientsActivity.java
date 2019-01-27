@@ -1,4 +1,4 @@
-package com.example.laure.thymesaver.UI.RecipeDetail;
+package com.example.laure.thymesaver.UI.AddIngredients;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.Recipe;
-import com.example.laure.thymesaver.UI.AddIngredients.BaseAddIngredientsActivity;
 import com.example.laure.thymesaver.ViewModels.PantryViewModel;
 import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 
@@ -41,7 +40,7 @@ public class AddRecipeIngredientsActivity extends BaseAddIngredientsActivity {
         if (mRecipe == null) {
             mRecipe = new Recipe(mRecipeDetailViewModel.getCurrentRecipeName());
         }
-        for (Map.Entry<String, Integer> entry : mAdapter.getRecipeIngredients().entrySet()) {
+        for (Map.Entry<String, Integer> entry : mAdapter.getMeasuredIngredients().entrySet()) {
             mRecipe.addOrUpdateIngredient(entry.getKey(), entry.getValue());
         }
         mRecipeDetailViewModel.updateRecipe(mRecipe);

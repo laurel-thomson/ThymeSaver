@@ -2,6 +2,7 @@ package com.example.laure.thymesaver.UI.TopLevel;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,6 +20,7 @@ import com.example.laure.thymesaver.Adapters.IngredientAdapters.RecipeIngredient
 import com.example.laure.thymesaver.Adapters.IngredientAdapters.MeasuredIngredientAdapter;
 import com.example.laure.thymesaver.Adapters.IngredientAdapters.ShoppingListAdapter;
 import com.example.laure.thymesaver.R;
+import com.example.laure.thymesaver.UI.AddIngredients.AddShoppingListItemsActivity;
 import com.example.laure.thymesaver.ViewModels.ShoppingViewModel;
 
 import java.util.HashMap;
@@ -58,7 +60,8 @@ public class ShoppingListFragment extends AddButtonFragment implements MeasuredI
 
     @Override
     void launchAddItemActivity() {
-        Toast.makeText(getActivity(), "Add Shopping List not implemented", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getActivity(), AddShoppingListItemsActivity.class);
+        startActivity(intent);
     }
 
     @Override

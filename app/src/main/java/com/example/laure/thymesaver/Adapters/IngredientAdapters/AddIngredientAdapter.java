@@ -69,14 +69,14 @@ public class AddIngredientAdapter extends MeasuredIngredientAdapter {
         }
     }
 
-    public HashMap<String, Integer> getRecipeIngredients() {
-        HashMap<String, Integer> recipeIngredients = new HashMap<>();
+    public HashMap<String, Integer> getMeasuredIngredients() {
+        HashMap<String, Integer> measuredIngredients = new HashMap<>();
         for (String i : mIngredients) {
             int recipeQuantity = mMeasuredIngredients.get(i);
             if (recipeQuantity > 0) {
-                recipeIngredients.put(i, recipeQuantity);
+                measuredIngredients.put(i, recipeQuantity);
             }
         }
-        return recipeIngredients;
+        return measuredIngredients;
     }
 }
