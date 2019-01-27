@@ -57,6 +57,17 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
 
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
                 DividerItemDecoration.VERTICAL));
+
+        if (savedInstanceState != null) {
+            boolean[] arr = (boolean[]) savedInstanceState.get("check_states");
+            mAdapter.restoreCheckStates(arr);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putBooleanArray("check_states", mAdapter.getCheckStates());
+        super.onSaveInstanceState(outState);
     }
 
     public void onIngredientQuantityChanged(String ingredientName, int quantity) {
