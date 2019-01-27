@@ -10,16 +10,16 @@ import com.example.laure.thymesaver.R;
 
 import java.util.HashMap;
 
-public class ChecklistIngredientAdapter extends MeasuredIngredientAdapter {
+public class RecipeIngredientsAdapter extends MeasuredIngredientAdapter {
 
-    public ChecklistIngredientAdapter(
+    public RecipeIngredientsAdapter(
             Context context,
             HashMap<String, Integer> ingredients,
             MeasuredIngredientListener quantityChangedListener) {
         super(context, ingredients, quantityChangedListener);
     }
 
-    public ChecklistIngredientAdapter(Context context, MeasuredIngredientListener quantityChangedListener ) {
+    public RecipeIngredientsAdapter(Context context, MeasuredIngredientListener quantityChangedListener ) {
         super(context, quantityChangedListener);
     }
 
@@ -34,7 +34,6 @@ public class ChecklistIngredientAdapter extends MeasuredIngredientAdapter {
 
         public ChecklistViewHolder(View view) {
             super(view);
-            mCheckBox.setVisibility(View.VISIBLE);
 
             mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override

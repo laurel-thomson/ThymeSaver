@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MeasuredIngredientAdapter extends RecyclerView.Adapter<MeasuredIngredientAdapter.MyViewHolder>
+public abstract class MeasuredIngredientAdapter extends RecyclerView.Adapter<MeasuredIngredientAdapter.MyViewHolder>
     implements Filterable {
 
     Context mContext;
@@ -136,9 +136,6 @@ public class MeasuredIngredientAdapter extends RecyclerView.Adapter<MeasuredIngr
             mDecrementer = view.findViewById(R.id.decrement_quantity_layout);
             mIncrementer = view.findViewById(R.id.increment_quantity_layout);
             mDeleteButton = view.findViewById(R.id.ingredient_delete);
-
-            //hide the checkbox in the base IngredientAdapter
-            mCheckBox.setVisibility(View.INVISIBLE);
 
             mDecrementer.setOnClickListener(new View.OnClickListener() {
                 @Override

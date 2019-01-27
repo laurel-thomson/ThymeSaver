@@ -5,15 +5,13 @@ import android.arch.lifecycle.LiveData;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.MealPlan;
 import com.example.laure.thymesaver.Models.Recipe;
-import com.example.laure.thymesaver.Models.ShoppingListItem;
+import com.example.laure.thymesaver.Models.ShoppingListMod;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class ShoppingListLiveData extends LiveData<DataSnapshot> {
     private HashMap<String, Integer> mShoppingList = new HashMap<>();
@@ -78,8 +76,9 @@ public class ShoppingListLiveData extends LiveData<DataSnapshot> {
                     }
                 }
 
-                for (DataSnapshot snap : dataSnapshot.child("shoppinglist").getChildren()) {
-                    ShoppingListItem item = snap.getValue(ShoppingListItem.class);
+                for (DataSnapshot snap : dataSnapshot.child("shoppinglistmods").getChildren()) {
+                    ShoppingListMod item = snap.getValue(ShoppingListMod.class);
+                    item.setName(snap.getKey());
                     mShoppingList.put(item.getName(), item.getQuantity());
                 }
             }

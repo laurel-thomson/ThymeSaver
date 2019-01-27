@@ -14,7 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.laure.thymesaver.Adapters.IngredientAdapters.ChecklistIngredientAdapter;
+import com.example.laure.thymesaver.Adapters.IngredientAdapters.RecipeIngredientsAdapter;
 import com.example.laure.thymesaver.Adapters.IngredientAdapters.MeasuredIngredientAdapter;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.R;
@@ -24,7 +24,7 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
         implements MeasuredIngredientAdapter.MeasuredIngredientListener {
 
     private RecipeDetailViewModel mViewModel;
-    private ChecklistIngredientAdapter mAdapter;
+    private RecipeIngredientsAdapter mAdapter;
     private RecyclerView mRecyclerView;
 
     @Override
@@ -36,7 +36,7 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mAdapter = new ChecklistIngredientAdapter(getActivity(),
+        mAdapter = new RecipeIngredientsAdapter(getActivity(),
                 this);
 
         mViewModel = ViewModelProviders.of(getActivity()).get(RecipeDetailViewModel.class);

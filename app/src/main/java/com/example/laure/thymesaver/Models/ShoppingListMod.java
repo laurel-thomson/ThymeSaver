@@ -1,11 +1,19 @@
 package com.example.laure.thymesaver.Models;
 
-public class ShoppingListItem {
+import com.google.firebase.database.Exclude;
+
+public class ShoppingListMod {
     private String name;
     private int quantity;
 
-    public ShoppingListItem() {};
+    public ShoppingListMod() {}
 
+    public ShoppingListMod(String name, int quantity) {
+        this.name = name;
+        this.quantity = quantity;
+    }
+
+    @Exclude
     public String getName() {
         return name;
     }

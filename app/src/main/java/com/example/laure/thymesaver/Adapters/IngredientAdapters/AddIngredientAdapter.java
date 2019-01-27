@@ -43,7 +43,6 @@ public class AddIngredientAdapter extends MeasuredIngredientAdapter {
 
         public AddIngredientViewHolder(View view) {
             super(view);
-            mCheckBox.setVisibility(View.VISIBLE);
             mDeleteButton.setVisibility(View.GONE);
 
             mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

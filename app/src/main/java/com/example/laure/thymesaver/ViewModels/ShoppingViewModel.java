@@ -6,6 +6,7 @@ import android.arch.lifecycle.LiveData;
 
 import com.example.laure.thymesaver.Firebase.Database.Repository;
 import com.example.laure.thymesaver.Models.Ingredient;
+import com.example.laure.thymesaver.Models.ShoppingListMod;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,5 +31,9 @@ public class ShoppingViewModel extends AndroidViewModel {
 
     public void removeQuantityFromPantry(String ingredientName, int quantity) {
         mRepository.removeQuantityFromIngredient(ingredientName, quantity);
+    }
+
+    public void addShoppingModification(String name, int modifier) {
+        mRepository.addShoppingModification(new ShoppingListMod(name, modifier));
     }
 }
