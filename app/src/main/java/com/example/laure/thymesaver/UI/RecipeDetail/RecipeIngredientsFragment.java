@@ -18,6 +18,7 @@ import com.example.laure.thymesaver.Adapters.IngredientAdapters.RecipeIngredient
 import com.example.laure.thymesaver.Adapters.IngredientAdapters.MeasuredIngredientAdapter;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.R;
+import com.example.laure.thymesaver.UI.AddIngredients.AddRecipeIngredientsActivity;
 import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 
 public class RecipeIngredientsFragment extends RecipeDetailFragment
