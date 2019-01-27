@@ -5,6 +5,7 @@ import android.arch.lifecycle.LiveData;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.MealPlan;
 import com.example.laure.thymesaver.Models.Recipe;
+import com.example.laure.thymesaver.Models.ShoppingListItem;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
@@ -75,6 +76,11 @@ public class ShoppingListLiveData extends LiveData<DataSnapshot> {
                             mShoppingList.put(i.getName(), neededQuantity - pantryQuantity);
                         }
                     }
+                }
+
+                for (DataSnapshot snap : dataSnapshot.child("shoppinglist").getChildren()) {
+                    ShoppingListItem item = snap.getValue(ShoppingListItem.class);
+                    mShoppingList.put(item.getName(), item.getQuantity());
                 }
             }
         }

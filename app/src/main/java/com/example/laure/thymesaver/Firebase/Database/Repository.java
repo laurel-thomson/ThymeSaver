@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.MealPlan;
 import com.example.laure.thymesaver.Models.Recipe;
+import com.example.laure.thymesaver.Models.ShoppingListItem;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -220,6 +221,10 @@ public class Repository {
         mIngredientReference.updateChildren(ingredientData);
     }
 
+    public void addShoppingListItem(ShoppingListItem item) {
+        mDatabase.getReference("shoppinglist").push().setValue(item);
+    }
+
     @NonNull
     public LiveData<List<Recipe>> getAllRecipes() {
         return mRecipeLiveData;
@@ -343,6 +348,12 @@ public class Repository {
                     }
                 }
             }
+
+            for (DataSnapshot snap : dataSnapshot.child("shoppinglist").getChildren()) {
+                ShoppingListItem item = snap.getValue(ShoppingListItem.class);
+                mShoppingList.put(item.getName(), item.getQuantity());
+            }
+
             return mShoppingList;
         }
     }
