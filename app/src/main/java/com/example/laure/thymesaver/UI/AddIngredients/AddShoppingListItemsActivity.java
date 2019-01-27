@@ -40,7 +40,7 @@ public class AddShoppingListItemsActivity extends BaseAddIngredientsActivity {
                 if (ingredients == null) return;
 
                 //create a new HashMap that includes all of the ingredients in the pantry
-                //the value is 0 if the ingredient is not in the recipe, and nonzero otherwise
+                //the value is 0 if the ingredient is not in the shopping list, and nonzero otherwise
                 HashMap<String, Integer> totalMeasuredIngredients = new HashMap<>();
                 HashMap<String, Integer> shoppingList = mShoppingViewModel.getShoppingList().getValue();
                 for (Ingredient i : ingredients) {
