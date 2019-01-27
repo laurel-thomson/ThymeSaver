@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +62,18 @@ public class RecipeStepsFragment extends RecipeDetailFragment
 
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
                 DividerItemDecoration.VERTICAL));
+
+
+        if (savedInstanceState != null) {
+            boolean[] arr = (boolean[]) savedInstanceState.get("check_states");
+            mAdapter.restoreCheckStates(arr);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putBooleanArray("check_states", mAdapter.getCheckStates());
+        super.onSaveInstanceState(outState);
     }
 
     @Override

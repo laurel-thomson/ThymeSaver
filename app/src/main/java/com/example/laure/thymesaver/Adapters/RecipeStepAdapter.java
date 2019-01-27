@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +19,14 @@ import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.RecipeDetail.RecipeStepListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.MyViewHolder> {
 
     private List<String> mSteps;
+    private SparseBooleanArray mStepCheckStates = new SparseBooleanArray();
     private RecipeStepListener mListener;
     private final LayoutInflater mInflater;
 
@@ -51,8 +54,27 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.My
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.mTextView.setText(mSteps.get(position));
+        if (!mStepCheckStates.get(position, false)) {
+            holder.mCheckBox.setChecked(false);}
+        else {
+            holder.mCheckBox.setChecked(true);
+        }
     }
 
+    public boolean[] getCheckStates() {
+        boolean[] arr = new boolean[mSteps.size()];
+        for (int i = 0; i < mSteps.size(); i++) {
+            arr[i] = mStepCheckStates.get(i);
+        }
+        return arr;
+    }
+
+    public void restoreCheckStates(boolean[] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            mStepCheckStates.put(i, arr[i]);
+        }
+        notifyDataSetChanged();
+    }
 
     @Override
     public int getItemCount() {
@@ -84,6 +106,7 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.My
                         mTextView.setPaintFlags(0);
                         mTextView.setTextColor(Color.BLACK);
                     }
+                    mStepCheckStates.put(getAdapterPosition(), checked);
                 }
             });
 

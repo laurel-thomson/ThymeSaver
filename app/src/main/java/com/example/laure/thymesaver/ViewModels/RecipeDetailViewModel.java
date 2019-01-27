@@ -50,4 +50,6 @@ public class RecipeDetailViewModel extends AndroidViewModel {
         recipe.getRecipeIngredients().remove(ingredientName);
         mRepository.addOrUpdateRecipe(recipe);
     }
+
+
 }
