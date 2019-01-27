@@ -27,26 +27,6 @@ public class RecipeIngredientsAdapter extends MeasuredIngredientAdapter {
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(mContext)
                 .inflate(R.layout.ingredient_list_item, parent, false);
-        return new ChecklistViewHolder(itemView);
-    }
-
-    public class ChecklistViewHolder extends MyViewHolder {
-
-        public ChecklistViewHolder(View view) {
-            super(view);
-
-            mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    String ing = mIngredients.get(getAdapterPosition());
-                    mListener.onIngredientCheckedOff(
-                            ing,
-                            mMeasuredIngredients.get(ing));
-                    if (compoundButton.isChecked()) {
-                        compoundButton.setChecked(false);
-                    }
-                }
-            });
-        }
+        return new MyViewHolder(itemView);
     }
 }

@@ -142,7 +142,7 @@ public abstract class MeasuredIngredientAdapter extends RecyclerView.Adapter<Mea
                 public void onClick(View view) {
                     String name = mFilteredIngredients.get(getAdapterPosition());
                     int measuredQuantity = mMeasuredIngredients.get(name);
-                    if (measuredQuantity == 0) return;
+                    if (measuredQuantity == 1) return;
                     mMeasuredIngredients.put(name, measuredQuantity - 1);
                     mListener.onIngredientQuantityChanged(name, mMeasuredIngredients.get(name));
                     notifyDataSetChanged();
