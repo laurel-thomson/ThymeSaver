@@ -25,7 +25,7 @@ import java.util.List;
 
 public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.MyViewHolder> {
 
-    private List<String> mSteps;
+    private List<String> mSteps = new ArrayList<>();
     private SparseBooleanArray mStepCheckStates = new SparseBooleanArray();
     private RecipeStepListener mListener;
     private final LayoutInflater mInflater;
