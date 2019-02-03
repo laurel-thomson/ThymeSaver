@@ -25,7 +25,7 @@ import java.util.List;
 
 public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.MyViewHolder> {
 
-    private List<String> mSteps;
+    private List<String> mSteps = new ArrayList<>();
     private SparseBooleanArray mStepCheckStates = new SparseBooleanArray();
     private RecipeStepListener mListener;
     private final LayoutInflater mInflater;
@@ -82,13 +82,13 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.My
         return mSteps.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    class MyViewHolder extends RecyclerView.ViewHolder {
 
         private TextView mTextView;
         private CheckBox mCheckBox;
         private Button mDeleteButton;
 
-        public MyViewHolder(@NonNull View itemView) {
+        MyViewHolder(@NonNull View itemView) {
             super(itemView);
             mTextView = itemView.findViewById(R.id.checklist_textview);
             mCheckBox = itemView.findViewById(R.id.checklist_checkbox);
