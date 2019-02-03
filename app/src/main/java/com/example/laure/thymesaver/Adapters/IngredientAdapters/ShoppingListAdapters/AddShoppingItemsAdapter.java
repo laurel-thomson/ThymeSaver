@@ -1,4 +1,4 @@
-package com.example.laure.thymesaver.Adapters.IngredientAdapters;
+package com.example.laure.thymesaver.Adapters.IngredientAdapters.ShoppingListAdapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,23 +6,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
+import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
 
 import java.util.HashMap;
 
-public class AddIngredientAdapter extends MeasuredIngredientAdapter {
+public class AddShoppingItemsAdapter extends MeasuredIngredientAdapter {
 
-    public AddIngredientAdapter(Context context, MeasuredIngredientListener listener) {
+    public AddShoppingItemsAdapter(Context context, MeasuredIngredientListener listener) {
         super(context, listener);
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-        final String name = mFilteredIngredients.get(position);
-        holder.mNameTV.setText(name);
-        holder.mCheckBox.setChecked(mMeasuredIngredients.get(name) > 0);
+        final Ingredient i = mFilteredIngredients.get(position);
+        holder.mNameTV.setText(i.getName());
+        holder.mCheckBox.setChecked(mMeasuredIngredients.get(i) > 0);
         if (holder.mCheckBox.isChecked()) {
-            holder.mQuantityTV.setText(Integer.toString(mMeasuredIngredients.get(name)));
+            holder.mQuantityTV.setText(Integer.toString(mMeasuredIngredients.get(i)));
         }
         else {
             holder.mQuantityTV.setText("0");
@@ -49,10 +50,10 @@ public class AddIngredientAdapter extends MeasuredIngredientAdapter {
             mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    String name = mFilteredIngredients.get(getAdapterPosition());
+                    Ingredient i = mFilteredIngredients.get(getAdapterPosition());
                     if (compoundButton.isChecked()) {
-                        if (mMeasuredIngredients.get(name) == 0) {
-                            mMeasuredIngredients.put(name, 1);
+                        if (mMeasuredIngredients.get(i) == 0) {
+                            mMeasuredIngredients.put(i, 1);
                             mQuantityTV.setText("1");
                         }
                         mQuantityTV.setVisibility(View.VISIBLE);
@@ -60,7 +61,7 @@ public class AddIngredientAdapter extends MeasuredIngredientAdapter {
                         mDecrementer.setVisibility(View.VISIBLE);
                     }
                     else {
-                        mMeasuredIngredients.put(name,0);
+                        mMeasuredIngredients.put(i,0);
                         mQuantityTV.setVisibility(View.GONE);
                         mIncrementer.setVisibility(View.GONE);
                         mDecrementer.setVisibility(View.GONE);
@@ -70,9 +71,9 @@ public class AddIngredientAdapter extends MeasuredIngredientAdapter {
         }
     }
 
-    public HashMap<String, Integer> getMeasuredIngredients() {
-        HashMap<String, Integer> measuredIngredients = new HashMap<>();
-        for (String i : mIngredients) {
+    public HashMap<Ingredient, Integer> getMeasuredIngredients() {
+        HashMap<Ingredient, Integer> measuredIngredients = new HashMap<>();
+        for (Ingredient i : mIngredients) {
             int recipeQuantity = mMeasuredIngredients.get(i);
             if (recipeQuantity > 0) {
                 measuredIngredients.put(i, recipeQuantity);

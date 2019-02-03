@@ -11,13 +11,14 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.laure.thymesaver.Adapters.IngredientAdapters.AddIngredientAdapter;
-import com.example.laure.thymesaver.Adapters.IngredientAdapters.MeasuredIngredientAdapter;
+import com.example.laure.thymesaver.Adapters.IngredientAdapters.ShoppingListAdapters.AddShoppingItemsAdapter;
+import com.example.laure.thymesaver.Adapters.IngredientAdapters.ShoppingListAdapters.MeasuredIngredientAdapter;
+import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
 
 public abstract class BaseAddIngredientsActivity extends AppCompatActivity implements MeasuredIngredientAdapter.MeasuredIngredientListener {
 
-    protected AddIngredientAdapter mAdapter;
+    protected AddShoppingItemsAdapter mAdapter;
     protected SearchView mSearchView;
 
     @Override
@@ -28,7 +29,7 @@ public abstract class BaseAddIngredientsActivity extends AppCompatActivity imple
 
         RecyclerView rv = findViewById(R.id.ingredient_recycler_view);
         rv.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new AddIngredientAdapter(this,this);
+        mAdapter = new AddShoppingItemsAdapter(this,this);
         setAdapterIngredients();
         rv.setAdapter(mAdapter);
     }
@@ -87,7 +88,7 @@ public abstract class BaseAddIngredientsActivity extends AppCompatActivity imple
     }
 
     @Override
-    public void onIngredientQuantityChanged(String ingredientName, int quantity) {
+    public void onIngredientQuantityChanged(Ingredient i, int quantity) {
         //do nothing
     }
 

@@ -1,4 +1,4 @@
-package com.example.laure.thymesaver.Adapters.IngredientAdapters;
+package com.example.laure.thymesaver.Adapters.IngredientAdapters.ShoppingListAdapters;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
+import com.example.laure.thymesaver.Adapters.IngredientAdapters.ShoppingListAdapters.MeasuredIngredientAdapter;
+import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
 
 import java.util.HashMap;
@@ -19,7 +21,7 @@ public class RecipeIngredientsAdapter extends MeasuredIngredientAdapter {
 
     public RecipeIngredientsAdapter(
             Context context,
-            HashMap<String, Integer> ingredients,
+            HashMap<Ingredient, Integer> ingredients,
             MeasuredIngredientListener quantityChangedListener) {
         super(context, ingredients, quantityChangedListener);
     }

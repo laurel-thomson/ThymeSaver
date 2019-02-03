@@ -14,8 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.laure.thymesaver.Adapters.IngredientAdapters.RecipeIngredientsAdapter;
-import com.example.laure.thymesaver.Adapters.IngredientAdapters.MeasuredIngredientAdapter;
+import com.example.laure.thymesaver.Adapters.IngredientAdapters.ShoppingListAdapters.RecipeIngredientsAdapter;
+import com.example.laure.thymesaver.Adapters.IngredientAdapters.ShoppingListAdapters.MeasuredIngredientAdapter;
+import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.AddIngredients.AddRecipeIngredientsActivity;
@@ -47,7 +48,7 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
                 if (recipe == null) {
                     return;
                 }
-                mAdapter.setIngredients(recipe.getRecipeIngredients());
+                //todo : update recipe ingredients
             }
         });
 
@@ -70,25 +71,33 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
         super.onSaveInstanceState(outState);
     }
 
-    public void onIngredientQuantityChanged(String ingredientName, int quantity) {
-        mViewModel.updateRecipeIngredientQuantity(ingredientName, quantity);
+    @Override
+    void addNewItem() {
+        Intent intent = new Intent(getActivity(), AddRecipeIngredientsActivity.class);
+        intent.putExtra(AddRecipeIngredientsActivity.RECIPE_NAME, mViewModel.getCurrentRecipeName());
+        startActivity(intent);
     }
 
     @Override
-    public void onIngredientCheckedOff(String ingredientName, int quantity) {
+    public void onIngredientQuantityChanged(Ingredient i, int quantity) {
+        mViewModel.updateRecipeIngredientQuantity(i.getName(), quantity);
+    }
+
+    @Override
+    public void onIngredientCheckedOff(Ingredient i, int quantity) {
         //do nothing
     }
 
     @Override
-    public void onDeleteClicked(final String ingredientName, final int quantity) {
-        mViewModel.deleteRecipeIngredient(ingredientName);
+    public void onDeleteClicked(final Ingredient i, final int quantity) {
+        mViewModel.deleteRecipeIngredient(i.getName());
         Snackbar snackbar = Snackbar
-                .make(getView(), ingredientName +
+                .make(getView(), i.getName() +
                         " removed from recipe.", Snackbar.LENGTH_LONG)
                 .setAction("UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        mViewModel.updateRecipeIngredientQuantity(ingredientName, quantity);
+                        mViewModel.updateRecipeIngredientQuantity(i.getName(), quantity);
                         Snackbar newSnackBar = Snackbar
                                 .make(getView(), "Recipe ingredient restored.", Snackbar.LENGTH_SHORT);
                         newSnackBar.show();
@@ -96,12 +105,5 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
                 });
 
         snackbar.show();
-    }
-
-    @Override
-    void addNewItem() {
-        Intent intent = new Intent(getActivity(), AddRecipeIngredientsActivity.class);
-        intent.putExtra(AddRecipeIngredientsActivity.RECIPE_NAME, mViewModel.getCurrentRecipeName());
-        startActivity(intent);
     }
 }

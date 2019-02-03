@@ -15,8 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.example.laure.thymesaver.Adapters.IngredientAdapters.MeasuredIngredientAdapter;
-import com.example.laure.thymesaver.Adapters.IngredientAdapters.ShoppingListAdapter;
+import com.example.laure.thymesaver.Adapters.IngredientAdapters.ShoppingListAdapters.MeasuredIngredientAdapter;
+import com.example.laure.thymesaver.Adapters.IngredientAdapters.ShoppingListAdapters.ShoppingListAdapter;
+import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.AddIngredients.AddShoppingListItemsActivity;
 import com.example.laure.thymesaver.ViewModels.ShoppingViewModel;
@@ -34,17 +35,17 @@ public class ShoppingListFragment extends AddButtonFragment implements MeasuredI
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         final ProgressBar progressBar = view.findViewById(R.id.shopping_list_progress);
 
         mViewModel = ViewModelProviders.of(this).get(ShoppingViewModel.class);
         mAdapter = new ShoppingListAdapter(getActivity(), this);
-        mViewModel.getShoppingList().observe(this, new Observer<HashMap<String,Integer>>() {
+        mViewModel.getShoppingList().observe(this, new Observer<HashMap<Ingredient, Integer>>() {
             @Override
-            public void onChanged(@Nullable HashMap<String, Integer> shoppingList) {
-                mAdapter.setIngredients(shoppingList);
-                progressBar.setVisibility(View.GONE);
+            public void onChanged(@Nullable HashMap<Ingredient, Integer> ingredientIntegerHashMap) {
+                mAdapter.setIngredients(ingredientIntegerHashMap);
+                progressBar.setVisibility(view.GONE);
             }
         });
 
@@ -63,22 +64,22 @@ public class ShoppingListFragment extends AddButtonFragment implements MeasuredI
     }
 
     @Override
-    public void onIngredientQuantityChanged(String ingredientName, int quantity) {
-        mViewModel.addShoppingModification(ingredientName, quantity);
+    public void onIngredientQuantityChanged(Ingredient i, int quantity) {
+        mViewModel.addShoppingModification(i.getName(), quantity);
     }
 
     @Override
-    public void onIngredientCheckedOff(final String ingredientName, final int quantity) {
-        mViewModel.addQuantityToPantry(ingredientName, quantity);
-        mViewModel.deleteModifier(ingredientName);
+    public void onIngredientCheckedOff(final Ingredient i, final int quantity) {
+        mViewModel.addQuantityToPantry(i.getName(), quantity);
+        mViewModel.deleteModifier(i.getName());
         Snackbar snackbar = Snackbar
-                .make(getView(), ingredientName +
+                .make(getView(), i +
                         " added back to pantry.", Snackbar.LENGTH_LONG)
                 .setAction("UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        mViewModel.removeQuantityFromPantry(ingredientName, quantity);
-                        mViewModel.addShoppingModification(ingredientName, quantity);
+                        mViewModel.removeQuantityFromPantry(i.getName(), quantity);
+                        mViewModel.addShoppingModification(i.getName(), quantity);
                         Snackbar newSnackBar = Snackbar
                                 .make(getView(), "Shopping list item restored.", Snackbar.LENGTH_SHORT);
                         newSnackBar.show();
@@ -89,7 +90,7 @@ public class ShoppingListFragment extends AddButtonFragment implements MeasuredI
     }
 
     @Override
-    public void onDeleteClicked(String ingredientName, int quantity) {
+    public void onDeleteClicked(Ingredient i, int quantity) {
         //todo: remove this item from the list
     }
 }

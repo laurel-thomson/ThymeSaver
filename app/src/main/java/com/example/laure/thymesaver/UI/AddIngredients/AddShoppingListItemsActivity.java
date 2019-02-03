@@ -27,8 +27,8 @@ public class AddShoppingListItemsActivity extends BaseAddIngredientsActivity {
 
     @Override
     public void saveIngredients() {
-        for (Map.Entry<String, Integer> entry : mAdapter.getMeasuredIngredients().entrySet()) {
-            mShoppingViewModel.addShoppingModification(entry.getKey(), entry.getValue());
+        for (Map.Entry<Ingredient, Integer> entry : mAdapter.getMeasuredIngredients().entrySet()) {
+            mShoppingViewModel.addShoppingModification(entry.getKey().getName(), entry.getValue());
         }
     }
 
@@ -41,14 +41,14 @@ public class AddShoppingListItemsActivity extends BaseAddIngredientsActivity {
 
                 //create a new HashMap that includes all of the ingredients in the pantry
                 //the value is 0 if the ingredient is not in the shopping list, and nonzero otherwise
-                HashMap<String, Integer> totalMeasuredIngredients = new HashMap<>();
-                HashMap<String, Integer> shoppingList = mShoppingViewModel.getShoppingList().getValue();
+                HashMap<Ingredient, Integer> totalMeasuredIngredients = new HashMap<>();
+                HashMap<Ingredient, Integer> shoppingList = mShoppingViewModel.getShoppingList().getValue();
                 for (Ingredient i : ingredients) {
                     if (shoppingList.containsKey(i.getName())) {
-                        totalMeasuredIngredients.put(i.getName(), shoppingList.get(i.getName()));
+                        totalMeasuredIngredients.put(i, shoppingList.get(i.getName()));
                     }
                     else {
-                        totalMeasuredIngredients.put(i.getName(), 0);
+                        totalMeasuredIngredients.put(i, 0);
                     }
                 }
                 mAdapter.setIngredients(totalMeasuredIngredients);
@@ -57,12 +57,17 @@ public class AddShoppingListItemsActivity extends BaseAddIngredientsActivity {
     }
 
     @Override
-    public void onIngredientCheckedOff(String ingredientName, int quantity) {
+    public void onIngredientQuantityChanged(Ingredient i, int quantity) {
 
     }
 
     @Override
-    public void onDeleteClicked(String ingredientName, int quantity) {
+    public void onIngredientCheckedOff(Ingredient i, int quantity) {
+
+    }
+
+    @Override
+    public void onDeleteClicked(Ingredient i, int quantity) {
         //do nothing
     }
 }

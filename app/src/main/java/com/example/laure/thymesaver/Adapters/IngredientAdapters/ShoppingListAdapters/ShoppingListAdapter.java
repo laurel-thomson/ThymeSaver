@@ -1,4 +1,4 @@
-package com.example.laure.thymesaver.Adapters.IngredientAdapters;
+package com.example.laure.thymesaver.Adapters.IngredientAdapters.ShoppingListAdapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
+import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
 
 import java.util.HashMap;
@@ -14,7 +15,7 @@ public class ShoppingListAdapter extends MeasuredIngredientAdapter {
 
     public ShoppingListAdapter(
             Context context,
-            HashMap<String, Integer> ingredients,
+            HashMap<Ingredient, Integer> ingredients,
             MeasuredIngredientListener quantityChangedListener) {
         super(context, ingredients, quantityChangedListener);
     }
@@ -39,7 +40,7 @@ public class ShoppingListAdapter extends MeasuredIngredientAdapter {
             mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    String ing = mIngredients.get(getAdapterPosition());
+                    Ingredient ing = mIngredients.get(getAdapterPosition());
                     mListener.onIngredientCheckedOff(
                             ing,
                             mMeasuredIngredients.get(ing));

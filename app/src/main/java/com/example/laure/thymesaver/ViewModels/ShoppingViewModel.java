@@ -13,7 +13,7 @@ import java.util.List;
 
 public class ShoppingViewModel extends AndroidViewModel {
     private Repository mRepository;
-    private LiveData<HashMap<String, Integer>> mShoppingList;
+    private LiveData<HashMap<Ingredient, Integer>> mShoppingList;
 
     public ShoppingViewModel(Application application) {
         super(application);
@@ -21,7 +21,7 @@ public class ShoppingViewModel extends AndroidViewModel {
         mShoppingList = mRepository.getShoppingList();
     }
 
-    public LiveData<HashMap<String, Integer>> getShoppingList() {
+    public LiveData<HashMap<Ingredient, Integer>> getShoppingList() {
         return mShoppingList;
     }
 

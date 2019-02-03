@@ -28,11 +28,11 @@ public class Repository {
     private List<Recipe> mRecipes = new ArrayList<>();
     private List<Ingredient> mIngredients = new ArrayList<>();
     private List<MealPlan> mMealPlans = new ArrayList<>();
-    private HashMap<String, Integer> mShoppingList = new HashMap<>();
+    private HashMap<Ingredient, Integer> mShoppingList = new HashMap<>();
     private final LiveData<List<Recipe>> mRecipeLiveData;
     private final LiveData<List<Ingredient>> mIngredientLiveData;
     private final LiveData<List<MealPlan>> mMealPlanLiveData;
-    private final LiveData<HashMap<String,Integer>> mShoppingLiveData;
+    private final LiveData<HashMap<Ingredient,Integer>> mShoppingLiveData;
     private LiveData<Recipe> mRecipe;
 
     public static Repository getInstance() {
@@ -240,7 +240,7 @@ public class Repository {
     }
 
     @NonNull
-    public LiveData<HashMap<String, Integer>> getShoppingList() {
+    public LiveData<HashMap<Ingredient, Integer>> getShoppingList() {
         return mShoppingLiveData;
     }
 
@@ -310,10 +310,10 @@ public class Repository {
         }
     }
 
-    private class ShoppingListDeserializer implements  Function<DataSnapshot, HashMap<String, Integer>> {
+    private class ShoppingListDeserializer implements  Function<DataSnapshot, HashMap<Ingredient, Integer>> {
 
         @Override
-        public HashMap<String, Integer> apply(DataSnapshot dataSnapshot) {
+        public HashMap<Ingredient, Integer> apply(DataSnapshot dataSnapshot) {
             mShoppingList.clear();
 
             HashMap<String, Integer> neededIngredients = new HashMap<>();
@@ -341,6 +341,14 @@ public class Repository {
                 }
             }
 
+            HashMap<String, Integer> mods = new HashMap<>();
+
+            for (DataSnapshot snap : dataSnapshot.child("shoppinglistmods").getChildren()) {
+                ShoppingListMod item = snap.getValue(ShoppingListMod.class);
+                item.setName(snap.getKey());
+                mods.put(item.getName(), item.getQuantity());
+            }
+
             for (DataSnapshot snap : dataSnapshot.child("ingredients").getChildren()) {
                 if (neededIngredients.containsKey(snap.getKey())) {
                     Ingredient i = snap.getValue(Ingredient.class);
@@ -348,15 +356,19 @@ public class Repository {
                     int neededQuantity = neededIngredients.get(i.getName());
                     int pantryQuantity = i.getQuantity();
                     if (neededQuantity > pantryQuantity) {
-                        mShoppingList.put(i.getName(), neededQuantity - pantryQuantity);
+                        mShoppingList.put(i, neededQuantity - pantryQuantity);
                     }
                 }
-            }
-
-            for (DataSnapshot snap : dataSnapshot.child("shoppinglistmods").getChildren()) {
-                ShoppingListMod item = snap.getValue(ShoppingListMod.class);
-                item.setName(snap.getKey());
-                mShoppingList.put(item.getName(), item.getQuantity());
+                if (mods.containsKey(snap.getKey())) {
+                    Ingredient i = snap.getValue(Ingredient.class);
+                    i.setName(snap.getKey());
+                    if (mShoppingList.containsKey(i)) {
+                        mShoppingList.put(i, mShoppingList.get(i) + mods.get(i.getName()));
+                    }
+                    else {
+                        mShoppingList.put(i, mods.get(i.getName()));
+                    }
+                }
             }
 
             return mShoppingList;
