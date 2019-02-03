@@ -41,16 +41,27 @@
     <TextView
         style="@style/TextViewStyle"
         android:id="@+id/item_quantity_picker"
+        android:padding="0dp"
+        android:layout_marginRight="5dp"
         android:layout_width="wrap_content"
         android:layout_gravity="center"
-        app:layout_constraintEnd_toStartOf="@+id/increment_quantity_layout"
+        app:layout_constraintEnd_toStartOf="@+id/ing_unit_label"
         android:layout_height="match_parent"/>
+
+    <TextView
+        style="@style/TextViewStyle"
+        android:id="@+id/ing_unit_label"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:text="tbsp"
+        android:padding="0dp"
+        app:layout_constraintEnd_toStartOf="@id/increment_quantity_layout"/>
 
     <LinearLayout
         android:id="@+id/increment_quantity_layout"
         app:layout_constraintEnd_toStartOf="@+id/ingredient_delete"
         android:gravity="center"
-        android:layout_marginRight="5dp"
         android:layout_width="50dp"
         android:layout_height="match_parent">
 

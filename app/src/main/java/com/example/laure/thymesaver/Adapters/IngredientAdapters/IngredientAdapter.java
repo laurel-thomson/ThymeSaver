@@ -53,6 +53,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
         final Ingredient ingredient = mFilteredIngredients.get(position);
         holder.mNameTV.setText(ingredient.getName());
         holder.mQuantityTV.setText(Integer.toString(ingredient.getQuantity()));
+        holder.mUnitTV.setText(ingredient.getUnit());
     }
 
     @Override
@@ -111,6 +112,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
         CheckBox mCheckBox;
         TextView mNameTV;
         TextView mQuantityTV;
+        TextView mUnitTV;
         LinearLayout mDecrementer;
         LinearLayout mIncrementer;
         Button mDeleteButton;
@@ -120,6 +122,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
             mCheckBox = view.findViewById(R.id.multiselect_item_checkbox);
             mNameTV = view.findViewById(R.id.multiselect_item_textview);
             mQuantityTV = view.findViewById(R.id.item_quantity_picker);
+            mUnitTV = view.findViewById(R.id.ing_unit_label);
             mDecrementer = view.findViewById(R.id.decrement_quantity_layout);
             mIncrementer = view.findViewById(R.id.increment_quantity_layout);
             mDeleteButton = view.findViewById(R.id.ingredient_delete);
