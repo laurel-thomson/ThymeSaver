@@ -61,6 +61,28 @@ public class Ingredient {
         this.name = name;
     }
 
+    @Exclude
+    public String getShortUnitName() {
+        switch (unit) {
+            case "Quantity":
+                return "";
+            case "Grams":
+                return "g";
+            case "Ounces":
+                return "oz";
+            case "Pounds":
+                return "lbs";
+            case "Tablespoons":
+                return "T";
+            case "Teaspoons":
+                return "tsp";
+            case "Cups":
+                return "c";
+            default:
+                return "";
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this) {

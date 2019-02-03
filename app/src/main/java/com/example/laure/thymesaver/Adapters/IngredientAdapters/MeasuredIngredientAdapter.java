@@ -123,6 +123,7 @@ public abstract class MeasuredIngredientAdapter extends RecyclerView.Adapter<Mea
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public CheckBox mCheckBox;
         public TextView mNameTV;
+        public TextView mUnitTV;
         public TextView mQuantityTV;
         public LinearLayout mDecrementer;
         public LinearLayout mIncrementer;
@@ -132,6 +133,7 @@ public abstract class MeasuredIngredientAdapter extends RecyclerView.Adapter<Mea
             super(view);
             mCheckBox = view.findViewById(R.id.multiselect_item_checkbox);
             mNameTV = view.findViewById(R.id.multiselect_item_textview);
+            mUnitTV = view.findViewById(R.id.ing_unit_label);
             mQuantityTV = view.findViewById(R.id.item_quantity_picker);
             mDecrementer = view.findViewById(R.id.decrement_quantity_layout);
             mIncrementer = view.findViewById(R.id.increment_quantity_layout);
