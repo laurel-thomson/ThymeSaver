@@ -49,21 +49,6 @@ public class AddNewIngredientActivity extends AppCompatActivity {
                 return true;
             }
         });
-
-        final AutoCompleteTextView unitTV = findViewById(R.id.ingredient_unit);
-        ArrayAdapter<CharSequence> unitAdapter = ArrayAdapter.createFromResource(
-                this,
-                R.array.ingredient_units,
-                android.R.layout.select_dialog_item);
-        unitTV.setThreshold(0);
-        unitTV.setAdapter(unitAdapter);
-        unitTV.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                unitTV.showDropDown();
-                return true;
-            }
-        });
     }
 
 
@@ -80,9 +65,6 @@ public class AddNewIngredientActivity extends AppCompatActivity {
 
         AutoCompleteTextView categoryTV = findViewById(R.id.ingredient_category);
         String category = categoryTV.getText().toString();
-
-        AutoCompleteTextView unitTV = findViewById(R.id.ingredient_unit);
-        String unit = unitTV.getText().toString();
 
         Switch bulkSwitch = findViewById(R.id.is_bulk_switch);
         boolean isBulk = bulkSwitch.isChecked();

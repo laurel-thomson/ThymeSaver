@@ -54,21 +54,4 @@
 
     </android.support.design.widget.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_marginEnd="20dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginBottom="10dp">
-
-        <AutoCompleteTextView
-            android:id="@+id/ingredient_unit"
-            android:hint="Unit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="15dp"/>
-
-    </android.support.design.widget.TextInputLayout>
-
 </LinearLayout>
