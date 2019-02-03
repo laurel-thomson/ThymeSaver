@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.Recipe;
+import com.example.laure.thymesaver.Models.RecipeQuantity;
 import com.example.laure.thymesaver.ViewModels.PantryViewModel;
 import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 
@@ -41,7 +42,9 @@ public class AddRecipeIngredientsActivity extends BaseAddIngredientsActivity {
             mRecipe = new Recipe(mRecipeDetailViewModel.getCurrentRecipeName());
         }
         for (Map.Entry<Ingredient, Integer> entry : mAdapter.getMeasuredIngredients().entrySet()) {
-            mRecipe.addOrUpdateIngredient(entry.getKey().getName(), entry.getValue());
+            mRecipe.addOrUpdateIngredient(
+                    entry.getKey().getName(),
+                    new RecipeQuantity("tsp",entry.getValue()));
         }
         mRecipeDetailViewModel.updateRecipe(mRecipe);
     }

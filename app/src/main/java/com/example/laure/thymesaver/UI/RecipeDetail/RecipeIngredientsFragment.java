@@ -18,6 +18,7 @@ import com.example.laure.thymesaver.Adapters.IngredientAdapters.ShoppingListAdap
 import com.example.laure.thymesaver.Adapters.IngredientAdapters.ShoppingListAdapters.MeasuredIngredientAdapter;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.Recipe;
+import com.example.laure.thymesaver.Models.RecipeQuantity;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.AddIngredients.AddRecipeIngredientsActivity;
 import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
@@ -80,7 +81,7 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
 
     @Override
     public void onIngredientQuantityChanged(Ingredient i, int quantity) {
-        mViewModel.updateRecipeIngredientQuantity(i.getName(), quantity);
+        mViewModel.updateRecipeIngredientQuantity(i.getName(), new RecipeQuantity("tsp",quantity));
     }
 
     @Override
@@ -97,7 +98,9 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
                 .setAction("UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        mViewModel.updateRecipeIngredientQuantity(i.getName(), quantity);
+                        mViewModel.updateRecipeIngredientQuantity(
+                                i.getName(),
+                                new RecipeQuantity("tsp", quantity));
                         Snackbar newSnackBar = Snackbar
                                 .make(getView(), "Recipe ingredient restored.", Snackbar.LENGTH_SHORT);
                         newSnackBar.show();

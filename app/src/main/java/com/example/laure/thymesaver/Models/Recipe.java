@@ -10,7 +10,7 @@ public class Recipe {
     private String name;
 
     //for Firebase, keys need to be strings
-    private HashMap<String, Integer> recipeIngredients = new HashMap<>();
+    private HashMap<String, RecipeQuantity> recipeIngredients = new HashMap<>();
 
     private List<String> steps = new ArrayList<>();
 
@@ -31,11 +31,11 @@ public class Recipe {
         this.name = name;
     }
 
-    public HashMap<String, Integer> getRecipeIngredients() {
+    public HashMap<String, RecipeQuantity> getRecipeIngredients() {
         return recipeIngredients;
     }
 
-    public void addOrUpdateIngredient(String ingredientName, int quantity) {
+    public void addOrUpdateIngredient(String ingredientName, RecipeQuantity quantity) {
         recipeIngredients.put(ingredientName, quantity);
     }
 

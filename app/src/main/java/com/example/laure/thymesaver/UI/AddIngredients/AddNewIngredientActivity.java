@@ -87,7 +87,7 @@ public class AddNewIngredientActivity extends AppCompatActivity {
         Switch bulkSwitch = findViewById(R.id.is_bulk_switch);
         boolean isBulk = bulkSwitch.isChecked();
 
-        Ingredient i = new Ingredient(name, category, isBulk, unit);
+        Ingredient i = new Ingredient(name, category, isBulk);
         mViewModel.addIngredient(i);
     }
 

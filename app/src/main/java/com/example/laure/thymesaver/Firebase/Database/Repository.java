@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.MealPlan;
 import com.example.laure.thymesaver.Models.Recipe;
+import com.example.laure.thymesaver.Models.RecipeQuantity;
 import com.example.laure.thymesaver.Models.ShoppingListMod;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,11 +30,12 @@ public class Repository {
     private List<Ingredient> mIngredients = new ArrayList<>();
     private List<MealPlan> mMealPlans = new ArrayList<>();
     private HashMap<Ingredient, Integer> mShoppingList = new HashMap<>();
-    private final LiveData<List<Recipe>> mRecipeLiveData;
+    private final LiveData<List<Recipe>> mRecipeListLiveData;
     private final LiveData<List<Ingredient>> mIngredientLiveData;
     private final LiveData<List<MealPlan>> mMealPlanLiveData;
     private final LiveData<HashMap<Ingredient,Integer>> mShoppingLiveData;
-    private LiveData<Recipe> mRecipe;
+    private LiveData<Recipe> mRecipeLiveData;
+    private Recipe mRecipe;
 
     public static Repository getInstance() {
         if (mSoleInstance == null) {
@@ -48,7 +50,7 @@ public class Repository {
         mRecipeReference = mDatabase.getReference("recipes");
         mIngredientReference = mDatabase.getReference("ingredients");
         mMealPlanReference = mDatabase.getReference("mealplan");
-        mRecipeLiveData = Transformations.map(
+        mRecipeListLiveData = Transformations.map(
                 new ListLiveData<Recipe>(mRecipeReference, Recipe.class),
                 new RecipeListDeserializer());
         mIngredientLiveData = Transformations.map(
@@ -60,6 +62,7 @@ public class Repository {
         mShoppingLiveData = Transformations.map(
                 new ShoppingListLiveData(mDatabase.getReference()),
                 new ShoppingListDeserializer());
+
 
         //force recipes & ingredients to cache
         mRecipeReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -93,6 +96,14 @@ public class Repository {
 
             }
         });
+    }
+
+    public LiveData<HashMap<Ingredient, RecipeQuantity>> getRecipeIngredients(Recipe r) {
+        mRecipe = r;
+        return Transformations.map(
+                        new RecipeIngredientsLiveData(mDatabase.getReference(), r),
+                        new RecipeIngredientsDeserializer()
+                );
     }
 
     public void addOrUpdateRecipe(Recipe r) {
@@ -174,7 +185,7 @@ public class Repository {
     }
 
     public void removeMealPlanIngredientsFromPantry(MealPlan mealPlan) {
-        HashMap<String, Integer> recipeIngredients = null;
+        HashMap<String, RecipeQuantity> recipeIngredients = null;
         for (Recipe recipe : mRecipes) {
             if (recipe.getName().equals(mealPlan.getRecipeName())) {
                 recipeIngredients = recipe.getRecipeIngredients();
@@ -191,14 +202,14 @@ public class Repository {
                 }
             }
             matchingIngredient.setQuantity(
-                    Math.max(0, matchingIngredient.getQuantity() - recipeIngredients.get(ingredientName)));
+                    Math.max(0, matchingIngredient.getQuantity() - recipeIngredients.get(ingredientName).getRecipeQuantity()));
             ingredientData.put(ingredientName,matchingIngredient);
         }
         mIngredientReference.updateChildren(ingredientData);
     }
 
     public void addMealPlanIngredientsToPantry(MealPlan mealPlan) {
-        HashMap<String, Integer> recipeIngredients = null;
+        HashMap<String, RecipeQuantity> recipeIngredients = null;
         for (Recipe recipe : mRecipes) {
             if (recipe.getName().equals(mealPlan.getRecipeName())) {
                 recipeIngredients = recipe.getRecipeIngredients();
@@ -215,7 +226,8 @@ public class Repository {
                 }
             }
             matchingIngredient.setQuantity(
-                    matchingIngredient.getQuantity() + recipeIngredients.get(ingredientName));
+                    matchingIngredient.getQuantity()
+                            + recipeIngredients.get(ingredientName).getRecipeQuantity());
             ingredientData.put(ingredientName,matchingIngredient);
         }
         mIngredientReference.updateChildren(ingredientData);
@@ -231,7 +243,7 @@ public class Repository {
 
     @NonNull
     public LiveData<List<Recipe>> getAllRecipes() {
-        return mRecipeLiveData;
+        return mRecipeListLiveData;
     }
 
     @NonNull
@@ -250,10 +262,10 @@ public class Repository {
     }
 
     public LiveData<Recipe> getRecipe(String recipeName) {
-        mRecipe = Transformations.map(
+        mRecipeLiveData = Transformations.map(
                 new RecipeLiveData(mRecipeReference.child(recipeName)),
                 new RecipeDeserializer());
-        return mRecipe;
+        return mRecipeLiveData;
     }
 
     private class RecipeListDeserializer implements Function<DataSnapshot, List<Recipe>> {
@@ -310,6 +322,33 @@ public class Repository {
         }
     }
 
+    private class RecipeIngredientsDeserializer implements Function<DataSnapshot, HashMap<Ingredient, RecipeQuantity>> {
+
+        @Override
+        public HashMap<Ingredient, RecipeQuantity> apply(DataSnapshot dataSnapshot) {
+            HashMap<Ingredient, RecipeQuantity> recipeIngredients = new HashMap<>();
+            HashMap<String, RecipeQuantity> neededIngredients = new HashMap<>();
+
+            for (DataSnapshot snap : dataSnapshot.child("recipes")
+                    .child(mRecipe.getName())
+                    .child("recipeIngredients")
+                    .getChildren()) {
+                RecipeQuantity quantity = snap.getValue(RecipeQuantity.class);
+                String ingName = snap.getKey();
+                neededIngredients.put(ingName, quantity);
+            }
+
+            for (DataSnapshot snap : dataSnapshot.child("ingredients").getChildren()) {
+                if (neededIngredients.containsKey(snap.getKey())) {
+                    Ingredient i = snap.getValue(Ingredient.class);
+                    i.setName(snap.getKey());
+                    recipeIngredients.put(i, neededIngredients.get(i.getName()));
+                }
+            }
+            return recipeIngredients;
+        }
+    }
+
     private class ShoppingListDeserializer implements  Function<DataSnapshot, HashMap<Ingredient, Integer>> {
 
         @Override
@@ -327,13 +366,15 @@ public class Repository {
                         Recipe recipe = recipeSnap.getValue(Recipe.class);
                         for (String ingName : recipe.getRecipeIngredients().keySet()) {
                             if (!neededIngredients.containsKey(ingName)) {
-                                neededIngredients.put(ingName, recipe.getRecipeIngredients().get(ingName));
+                                neededIngredients.put(
+                                        ingName,
+                                        recipe.getRecipeIngredients().get(ingName).getRecipeQuantity());
                             }
                             else {
                                 neededIngredients.put(
                                         ingName,
                                         neededIngredients.get(ingName)
-                                                + recipe.getRecipeIngredients().get(ingName)
+                                                + recipe.getRecipeIngredients().get(ingName).getRecipeQuantity()
                                 );
                             }
                         }

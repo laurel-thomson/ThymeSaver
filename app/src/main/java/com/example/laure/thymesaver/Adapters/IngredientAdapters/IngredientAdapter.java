@@ -53,7 +53,6 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
         final Ingredient ingredient = mFilteredIngredients.get(position);
         holder.mNameTV.setText(ingredient.getName());
         holder.mQuantityTV.setText(Integer.toString(ingredient.getQuantity()));
-        holder.mUnitTV.setText(ingredient.getShortUnitName());
     }
 
     @Override

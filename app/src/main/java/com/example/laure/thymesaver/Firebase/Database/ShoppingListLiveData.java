@@ -32,7 +32,7 @@ public class ShoppingListLiveData extends LiveData<DataSnapshot> {
         mQuery.removeEventListener(mListener);
     }
 
-    private class MyEventListener implements ValueEventListener {
+    class MyEventListener implements ValueEventListener {
 
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -50,13 +50,15 @@ public class ShoppingListLiveData extends LiveData<DataSnapshot> {
                             Recipe recipe = recipeSnap.getValue(Recipe.class);
                             for (String ingName : recipe.getRecipeIngredients().keySet()) {
                                 if (!neededIngredients.containsKey(ingName)) {
-                                    neededIngredients.put(ingName, recipe.getRecipeIngredients().get(ingName));
+                                    neededIngredients.put(
+                                            ingName,
+                                            recipe.getRecipeIngredients().get(ingName).getRecipeQuantity());
                                 }
                                 else {
                                     neededIngredients.put(
                                             ingName,
                                             neededIngredients.get(ingName)
-                                                    + recipe.getRecipeIngredients().get(ingName)
+                                                    + recipe.getRecipeIngredients().get(ingName).getRecipeQuantity()
                                     );
                                 }
                             }

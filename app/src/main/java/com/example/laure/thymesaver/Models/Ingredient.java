@@ -6,18 +6,16 @@ public class Ingredient {
     private String name;
     private boolean isBulk;
     private String category;
-    private String unit;
     private int quantity;
 
     public Ingredient() {
         //required empty constructor for Firebase
     }
 
-    public Ingredient(String name, String category, boolean isBulk, String unit) {
+    public Ingredient(String name, String category, boolean isBulk) {
         this.name = name;
         this.category = category;
         this.isBulk = isBulk;
-        this.unit = unit;
     }
 
     public String getCategory() {
@@ -36,14 +34,6 @@ public class Ingredient {
         isBulk = bulk;
     }
 
-    public String getUnit() {
-        return unit;
-    }
-
-    public void setUnit(String unit) {
-        this.unit = unit;
-    }
-
     public int getQuantity() {
         return quantity;
     }
@@ -59,28 +49,6 @@ public class Ingredient {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @Exclude
-    public String getShortUnitName() {
-        switch (unit) {
-            case "Quantity":
-                return "";
-            case "Grams":
-                return "g";
-            case "Ounces":
-                return "oz";
-            case "Pounds":
-                return "lbs";
-            case "Tablespoons":
-                return "T";
-            case "Teaspoons":
-                return "tsp";
-            case "Cups":
-                return "c";
-            default:
-                return "";
-        }
     }
 
     @Override
