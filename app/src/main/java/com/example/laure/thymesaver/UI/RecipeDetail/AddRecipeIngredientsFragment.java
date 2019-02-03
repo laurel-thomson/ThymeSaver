@@ -1,38 +1,36 @@
-package com.example.laure.thymesaver.UI.AddIngredients;
+package com.example.laure.thymesaver.UI.RecipeDetail;
 
+import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import android.support.design.widget.BottomSheetDialogFragment;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
 import com.example.laure.thymesaver.Models.Ingredient;
-import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.ViewModels.PantryViewModel;
-import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddRecipeIngredientActivity extends AppCompatActivity {
+public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
     public static String RECIPE_NAME = "My recipe name";
-    private RecipeDetailViewModel mRecipeDetailViewModel;
     private PantryViewModel mPantryViewModel;
-    private Recipe mRecipe;
     private List<Ingredient> mTotalIngredients;
 
+    @SuppressLint("RestrictedApi")
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_recipe_ingredients);
-        mRecipeDetailViewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
-        String recipeName = getIntent().getStringExtra(RECIPE_NAME);
-        mRecipeDetailViewModel.setCurrentRecipe(recipeName);
+    public void setupDialog(Dialog dialog, int style) {
+        super.setupDialog(dialog, style);
+        final View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_add_recipe_ingredients, null);
+        dialog.setContentView(view);
         mPantryViewModel = ViewModelProviders.of(this).get(PantryViewModel.class);
         mPantryViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
             @Override
@@ -42,22 +40,19 @@ public class AddRecipeIngredientActivity extends AppCompatActivity {
                 for (Ingredient i : ingredients) {
                     names.add(i.getName());
                 }
-                setUpIngredientNameTV(names);
+                final AutoCompleteTextView nameTV = view.findViewById(R.id.recipe_ingredient_name);
+                ArrayAdapter<String> nameAdapter = new ArrayAdapter<>(
+                        view.getContext(),
+                        android.R.layout.select_dialog_item,
+                        names);
+                nameTV.setThreshold(1);
+                nameTV.setAdapter(nameAdapter);
             }
         });
-        mRecipeDetailViewModel.getCurrentRecipe().observe(this, new Observer<Recipe>() {
-            @Override
-            public void onChanged(@Nullable Recipe recipe) {
-                mRecipe = recipe;
-            }
-        });
-        setUpUnitTV();
-    }
 
-    private void setUpUnitTV() {
-        final AutoCompleteTextView unitTV = findViewById(R.id.ingredient_unit);
+        final AutoCompleteTextView unitTV = view.findViewById(R.id.ingredient_unit);
         ArrayAdapter<CharSequence> unitAdapter = ArrayAdapter.createFromResource(
-                this,
+                view.getContext(),
                 R.array.ingredient_units,
                 android.R.layout.select_dialog_item);
         unitTV.setThreshold(0);
@@ -69,15 +64,8 @@ public class AddRecipeIngredientActivity extends AppCompatActivity {
                 return true;
             }
         });
-    }
 
-    private void setUpIngredientNameTV(List<String> ingredientNames) {
-        final AutoCompleteTextView nameTV = findViewById(R.id.recipe_ingredient_name);
-        ArrayAdapter<String> nameAdapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.select_dialog_item,
-                ingredientNames);
-        nameTV.setThreshold(1);
-        nameTV.setAdapter(nameAdapter);
+        //todo: fix this so that bottom dialog fragment always visible
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 }

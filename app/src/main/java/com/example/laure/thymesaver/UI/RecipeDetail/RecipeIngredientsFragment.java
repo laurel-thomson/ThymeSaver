@@ -19,7 +19,6 @@ import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.Models.RecipeQuantity;
 import com.example.laure.thymesaver.R;
-import com.example.laure.thymesaver.UI.AddIngredients.AddRecipeIngredientActivity;
 import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 
 public class RecipeIngredientsFragment extends RecipeDetailFragment
@@ -73,9 +72,8 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
 
     @Override
     void addNewItem() {
-        Intent intent = new Intent(getActivity(), AddRecipeIngredientActivity.class);
-        intent.putExtra(AddRecipeIngredientActivity.RECIPE_NAME, mViewModel.getCurrentRecipeName());
-        startActivity(intent);
+        AddRecipeIngredientsFragment fragment = new AddRecipeIngredientsFragment();
+        fragment.show(getActivity().getSupportFragmentManager(), "TAG");
     }
 
     @Override
