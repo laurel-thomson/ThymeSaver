@@ -36,6 +36,10 @@ public abstract class MeasuredIngredientAdapter extends RecyclerView.Adapter<Mea
         mListener = listener;
     }
 
+    public MeasuredIngredientAdapter(Context context) {
+        mContext = context;
+    }
+
     public MeasuredIngredientAdapter(
             Context context,
             HashMap<Ingredient, Integer> measuredIngredients,

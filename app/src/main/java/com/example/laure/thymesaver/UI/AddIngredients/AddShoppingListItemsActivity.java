@@ -1,12 +1,24 @@
 package com.example.laure.thymesaver.UI.AddIngredients;
 
+import android.app.SearchManager;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
+import android.view.MenuItem;
 
+import com.example.laure.thymesaver.Adapters.IngredientAdapters.ShoppingListAdapters.AddShoppingItemsAdapter;
+import com.example.laure.thymesaver.Adapters.IngredientAdapters.ShoppingListAdapters.MeasuredIngredientAdapter;
 import com.example.laure.thymesaver.Models.Ingredient;
+import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.ViewModels.PantryViewModel;
 import com.example.laure.thymesaver.ViewModels.ShoppingViewModel;
 
@@ -14,25 +26,84 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AddShoppingListItemsActivity extends BaseAddIngredientsActivity {
+public class AddShoppingListItemsActivity
+        extends AppCompatActivity  {
     private ShoppingViewModel mShoppingViewModel;
     private PantryViewModel mPantryViewModel;
+    private AddShoppingItemsAdapter mAdapter;
+    private SearchView mSearchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_ingredients);
+        setUpActionBar();
         mShoppingViewModel = ViewModelProviders.of(this).get(ShoppingViewModel.class);
         mPantryViewModel = ViewModelProviders.of(this).get(PantryViewModel.class);
-        super.onCreate(savedInstanceState);
+        RecyclerView rv = findViewById(R.id.ingredient_recycler_view);
+        rv.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter = new AddShoppingItemsAdapter(this);
+        setAdapterIngredients();
+        rv.setAdapter(mAdapter);
     }
 
-    @Override
     public void saveIngredients() {
         for (Map.Entry<Ingredient, Integer> entry : mAdapter.getMeasuredIngredients().entrySet()) {
             mShoppingViewModel.addShoppingModification(entry.getKey().getName(), entry.getValue());
         }
     }
 
+    private void setUpActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("Add Ingredients");
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_done);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+    }
+
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_ingredient, menu);
+
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        mSearchView = (SearchView) menu.findItem(R.id.action_search)
+                .getActionView();
+        mSearchView.setSearchableInfo(searchManager
+                .getSearchableInfo(getComponentName()));
+        mSearchView.setMaxWidth(Integer.MAX_VALUE);
+
+        // listening to search query text change
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // filter recycler view when query submitted
+                mAdapter.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                // filter recycler view when text is changed
+                mAdapter.getFilter().filter(query);
+                return false;
+            }
+        });
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_search:
+                return true;
+            case android.R.id.home:
+                saveIngredients();
+                onBackPressed();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     public void setAdapterIngredients() {
         mPantryViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
             @Override
@@ -54,20 +125,5 @@ public class AddShoppingListItemsActivity extends BaseAddIngredientsActivity {
                 mAdapter.setIngredients(totalMeasuredIngredients);
             }
         });
-    }
-
-    @Override
-    public void onIngredientQuantityChanged(Ingredient i, int quantity) {
-
-    }
-
-    @Override
-    public void onIngredientCheckedOff(Ingredient i, int quantity) {
-
-    }
-
-    @Override
-    public void onDeleteClicked(Ingredient i, int quantity) {
-        //do nothing
     }
 }

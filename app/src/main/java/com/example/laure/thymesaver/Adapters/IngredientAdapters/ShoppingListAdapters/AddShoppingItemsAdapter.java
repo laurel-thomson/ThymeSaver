@@ -13,8 +13,8 @@ import java.util.HashMap;
 
 public class AddShoppingItemsAdapter extends MeasuredIngredientAdapter {
 
-    public AddShoppingItemsAdapter(Context context, MeasuredIngredientListener listener) {
-        super(context, listener);
+    public AddShoppingItemsAdapter(Context context) {
+        super(context);
     }
 
     @Override

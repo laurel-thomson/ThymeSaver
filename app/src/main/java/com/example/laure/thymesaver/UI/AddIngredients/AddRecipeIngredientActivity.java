@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.Recipe;
@@ -15,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AddRecipeIngredientsActivity extends BaseAddIngredientsActivity {
+public class AddRecipeIngredientActivity extends AppCompatActivity {
     public static String RECIPE_NAME = "My recipe name";
     private RecipeDetailViewModel mRecipeDetailViewModel;
     private PantryViewModel mPantryViewModel;
@@ -34,44 +35,7 @@ public class AddRecipeIngredientsActivity extends BaseAddIngredientsActivity {
                 mRecipe = recipe;
             }
         });
-    }
 
-    @Override
-    public void saveIngredients() {
-        if (mRecipe == null) {
-            mRecipe = new Recipe(mRecipeDetailViewModel.getCurrentRecipeName());
-        }
-        for (Map.Entry<Ingredient, Integer> entry : mAdapter.getMeasuredIngredients().entrySet()) {
-            mRecipe.addOrUpdateIngredient(
-                    entry.getKey().getName(),
-                    new RecipeQuantity("tsp",entry.getValue()));
-        }
-        mRecipeDetailViewModel.updateRecipe(mRecipe);
-    }
-
-    @Override
-    public void setAdapterIngredients() {
-        mPantryViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
-            @Override
-            public void onChanged(@Nullable List<Ingredient> ingredients) {
-                if (ingredients == null) return;
-
-            }
-        });
-    }
-
-    @Override
-    public void onIngredientQuantityChanged(Ingredient i, int quantity) {
-
-    }
-
-    @Override
-    public void onIngredientCheckedOff(Ingredient i, int quantity) {
-
-    }
-
-    @Override
-    public void onDeleteClicked(Ingredient i, int quantity) {
-
+        //todo update this activity
     }
 }

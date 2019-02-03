@@ -14,17 +14,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.laure.thymesaver.Adapters.IngredientAdapters.ShoppingListAdapters.RecipeIngredientsAdapter;
-import com.example.laure.thymesaver.Adapters.IngredientAdapters.ShoppingListAdapters.MeasuredIngredientAdapter;
+import com.example.laure.thymesaver.Adapters.IngredientAdapters.RecipeIngredientsAdapter;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.Models.RecipeQuantity;
 import com.example.laure.thymesaver.R;
-import com.example.laure.thymesaver.UI.AddIngredients.AddRecipeIngredientsActivity;
+import com.example.laure.thymesaver.UI.AddIngredients.AddRecipeIngredientActivity;
 import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 
 public class RecipeIngredientsFragment extends RecipeDetailFragment
-        implements MeasuredIngredientAdapter.MeasuredIngredientListener {
+        implements RecipeIngredientsAdapter.Listener{
 
     private RecipeDetailViewModel mViewModel;
     private RecipeIngredientsAdapter mAdapter;
@@ -74,23 +73,18 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
 
     @Override
     void addNewItem() {
-        Intent intent = new Intent(getActivity(), AddRecipeIngredientsActivity.class);
-        intent.putExtra(AddRecipeIngredientsActivity.RECIPE_NAME, mViewModel.getCurrentRecipeName());
+        Intent intent = new Intent(getActivity(), AddRecipeIngredientActivity.class);
+        intent.putExtra(AddRecipeIngredientActivity.RECIPE_NAME, mViewModel.getCurrentRecipeName());
         startActivity(intent);
     }
 
     @Override
-    public void onIngredientQuantityChanged(Ingredient i, int quantity) {
-        mViewModel.updateRecipeIngredientQuantity(i.getName(), new RecipeQuantity("tsp",quantity));
+    public void onIngredientQuantityChanged(Ingredient i, RecipeQuantity quantity) {
+        mViewModel.updateRecipeIngredientQuantity(i.getName(), quantity);
     }
 
     @Override
-    public void onIngredientCheckedOff(Ingredient i, int quantity) {
-        //do nothing
-    }
-
-    @Override
-    public void onDeleteClicked(final Ingredient i, final int quantity) {
+    public void onDeleteClicked(final Ingredient i, final RecipeQuantity quantity) {
         mViewModel.deleteRecipeIngredient(i.getName());
         Snackbar snackbar = Snackbar
                 .make(getView(), i.getName() +
@@ -100,7 +94,7 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
                     public void onClick(View view) {
                         mViewModel.updateRecipeIngredientQuantity(
                                 i.getName(),
-                                new RecipeQuantity("tsp", quantity));
+                                quantity);
                         Snackbar newSnackBar = Snackbar
                                 .make(getView(), "Recipe ingredient restored.", Snackbar.LENGTH_SHORT);
                         newSnackBar.show();
