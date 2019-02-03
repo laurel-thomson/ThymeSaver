@@ -3,18 +3,37 @@ package com.example.laure.thymesaver.Models;
 import com.google.firebase.database.Exclude;
 
 public class Ingredient {
-    protected String name;
-    protected String unit;
-    protected int quantity;
+    private String name;
+    private boolean isBulk;
+    private String category;
+    private String unit;
+    private int quantity;
 
     public Ingredient() {
         //required empty constructor for Firebase
     }
 
-    public Ingredient(String name, String unit, int quantity) {
+    public Ingredient(String name, String category, boolean isBulk, String unit) {
         this.name = name;
+        this.category = category;
+        this.isBulk = isBulk;
         this.unit = unit;
-        this.quantity = quantity;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public boolean isBulk() {
+        return isBulk;
+    }
+
+    public void setBulk(boolean bulk) {
+        isBulk = bulk;
     }
 
     public String getUnit() {

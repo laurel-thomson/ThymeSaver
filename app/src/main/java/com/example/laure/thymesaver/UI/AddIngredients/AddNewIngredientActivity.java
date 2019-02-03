@@ -1,12 +1,20 @@
 package com.example.laure.thymesaver.UI.AddIngredients;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.graphics.Color;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.laure.thymesaver.Models.Ingredient;
@@ -22,9 +30,42 @@ public class AddNewIngredientActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_ingredient);
         setUpActionBar();
-
+        setUpAutoCompleteTVs();
         mViewModel = ViewModelProviders.of(this).get(PantryViewModel.class);
     }
+
+    private void setUpAutoCompleteTVs() {
+        final AutoCompleteTextView categoryTV = findViewById(R.id.ingredient_category);
+        ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource(
+                this,
+                R.array.ingredient_categories,
+                android.R.layout.select_dialog_item);
+        categoryTV.setThreshold(0);
+        categoryTV.setAdapter(categoryAdapter);
+        categoryTV.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                categoryTV.showDropDown();
+                return true;
+            }
+        });
+
+        final AutoCompleteTextView unitTV = findViewById(R.id.ingredient_unit);
+        ArrayAdapter<CharSequence> unitAdapter = ArrayAdapter.createFromResource(
+                this,
+                R.array.ingredient_units,
+                android.R.layout.select_dialog_item);
+        unitTV.setThreshold(0);
+        unitTV.setAdapter(unitAdapter);
+        unitTV.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                unitTV.showDropDown();
+                return true;
+            }
+        });
+    }
+
 
     private void setUpActionBar() {
         ActionBar actionBar = getSupportActionBar();
@@ -37,13 +78,16 @@ public class AddNewIngredientActivity extends AppCompatActivity {
         EditText nameET = findViewById(R.id.ingredient_name_edittext);
         String name = nameET.getText().toString();
 
-        EditText unitET = findViewById(R.id.ingredient_unit_edittext);
-        String unit = unitET.getText().toString();
+        AutoCompleteTextView categoryTV = findViewById(R.id.ingredient_category);
+        String category = categoryTV.getText().toString();
 
-        EditText quantityET = findViewById(R.id.pantry_quantity_edittext);
-        int quantity = Integer.parseInt(quantityET.getText().toString());
+        AutoCompleteTextView unitTV = findViewById(R.id.ingredient_unit);
+        String unit = unitTV.getText().toString();
 
-        Ingredient i = new Ingredient(name, unit, quantity);
+        Switch bulkSwitch = findViewById(R.id.is_bulk_switch);
+        boolean isBulk = bulkSwitch.isChecked();
+
+        Ingredient i = new Ingredient(name, category, isBulk, unit);
         mViewModel.addIngredient(i);
     }
 

@@ -1,6 +1,22 @@
 <resources>
     <string name="app_name">ThymeSaver</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="ingredient_categories">
+        <item>Produce</item>
+        <item>Refrigerated</item>
+        <item>Dry Goods</item>
+        <item>Canned Goods</item>
+        <item>Spices</item>
+        <item>Misc.</item>
+    </string-array>
+
+    <string-array name="ingredient_units">
+        <item>Quantity</item>
+        <item>Grams</item>
+        <item>Ounces</item>
+        <item>Pounds</item>
+        <item>Tablespoons</item>
+        <item>Teaspoons</item>
+        <item>Cups</item>
+    </string-array>
 </resources>
