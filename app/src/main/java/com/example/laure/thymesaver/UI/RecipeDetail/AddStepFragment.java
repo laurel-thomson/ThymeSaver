@@ -28,15 +28,15 @@ public class AddStepFragment extends BottomSheetDialogFragment {
         mStepEditText.requestFocus();
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
-        ImageView addButton = view.findViewById(R.id.add_step_button);
-        addButton.setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.add_step_button)
+                .setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String step = mStepEditText.getText().toString();
-                mStepEditText.setText("");
-                if (mListener != null) {
-                    mListener.onStepAdded(step);
-                }
+                    String step = mStepEditText.getText().toString();
+                    mStepEditText.setText("");
+                    if (mListener != null) {
+                        mListener.onStepAdded(step);
+                    }
             }
         });
     }

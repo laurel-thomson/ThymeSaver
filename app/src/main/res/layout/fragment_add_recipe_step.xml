@@ -4,21 +4,39 @@
     android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:paddingBottom="30dp"
-    android:orientation="horizontal">
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/add_step_button"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent">
+
+        <ImageView
+            android:layout_weight="0.3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_done"/>
+
+        <TextView
+            android:layout_weight="0.7"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextIcon"
+            android:textSize="18dp"
+            android:text="Add Recipe Step"/>
+
+    </LinearLayout>
 
 <EditText
     android:id="@+id/new_step_edittext"
-    android:layout_width="0dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="10dp"
-    android:layout_weight="0.85"/>
-
-<ImageView
-    android:id="@+id/add_step_button"
-    android:layout_width="0dp"
-    android:layout_weight="0.15"
-    android:layout_height="match_parent"
-    android:src="@drawable/ic_done_box"/>
+    android:layout_marginRight="10dp"/>
 
 
 </LinearLayout>
