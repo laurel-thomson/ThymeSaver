@@ -130,8 +130,9 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecipeIngredi
                 public void onClick(View view) {
                     if (getAdapterPosition() < 0) return;
                     Ingredient i = mIngredients.get(getAdapterPosition());
-                    if (i.getQuantity() == 0) return;
-                    i.setQuantity(i.getQuantity() - 1);
+                    RecipeQuantity quantity = mRecipeQuantities.get(i);
+                    if (quantity.getRecipeQuantity() == 0) return;
+                    quantity.setRecipeQuantity(quantity.getRecipeQuantity() - 1);
                     mListener.onIngredientQuantityChanged(i, mRecipeQuantities.get(i));
                     notifyDataSetChanged();
                 }
@@ -142,8 +143,8 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecipeIngredi
                 public void onClick(View view) {
                     if (getAdapterPosition() < 0) return;
                     Ingredient i = mIngredients.get(getAdapterPosition());
-                    if (i.getQuantity() > 100) return;
-                    i.setQuantity(i.getQuantity() + 1);
+                    RecipeQuantity quantity = mRecipeQuantities.get(i);
+                    quantity.setRecipeQuantity(quantity.getRecipeQuantity() + 1);
                     mListener.onIngredientQuantityChanged(i, mRecipeQuantities.get(i));
                     notifyDataSetChanged();
                 }
