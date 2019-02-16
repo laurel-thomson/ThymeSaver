@@ -19,4 +19,14 @@
         <item>Teaspoons</item>
         <item>Cups</item>
     </string-array>
+
+    <string-array name="recipe_categories">
+        <item>Entrees</item>
+        <item>Breakfast</item>
+        <item>Salads</item>
+        <item>Sides</item>
+        <item>Desserts</item>
+        <item>Snacks</item>
+        <item>Drinks</item>
+    </string-array>
 </resources>

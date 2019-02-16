@@ -15,8 +15,11 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
@@ -98,7 +101,7 @@ public class CookbookFragment extends AddButtonFragment
 
         final AlertDialog dialog = new AlertDialog.Builder(getActivity())
                 .setView(view)
-                .setTitle("Enter Recipe Name")
+                .setTitle("Create New Recipe")
                 .setPositiveButton("Create", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -138,5 +141,22 @@ public class CookbookFragment extends AddButtonFragment
                 textInputLayout.setError(null);
             }
         });
+
+        //set up category autocomplete textview
+        final AutoCompleteTextView categoryTV = view.findViewById(R.id.recipe_category_edittext);
+        ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource(
+                view.getContext(),
+                R.array.recipe_categories,
+                android.R.layout.select_dialog_item);
+        categoryTV.setThreshold(0);
+        categoryTV.setAdapter(categoryAdapter);
+        categoryTV.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                categoryTV.showDropDown();
+                return true;
+            }
+        });
+        categoryTV.setText(getResources().getTextArray(R.array.recipe_categories)[0]);
     }
 }

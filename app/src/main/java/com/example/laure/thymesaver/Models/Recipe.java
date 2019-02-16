@@ -14,6 +14,8 @@ public class Recipe {
 
     private List<String> steps = new ArrayList<>();
 
+    private String category;
+
     public Recipe() {
         //required empty constructor for Firebase
     }
@@ -49,6 +51,15 @@ public class Recipe {
 
     public void addStep(String step) {
         steps.add(step);
+    }
+
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     @Override
