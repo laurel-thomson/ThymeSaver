@@ -37,6 +37,10 @@ public class CookBookViewModel extends AndroidViewModel {
         mRepository.addMealPlans(mealPlans);
     }
 
+    public void addRecipe(Recipe recipe) {
+        mRepository.addOrUpdateRecipe(recipe);
+    }
+
     public boolean recipeNameExists(String name) {
         List<Recipe> recipes = mAllRecipes.getValue();
         for (Recipe r : recipes) {

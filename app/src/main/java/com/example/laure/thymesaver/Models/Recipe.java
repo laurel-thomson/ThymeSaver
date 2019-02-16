@@ -20,8 +20,10 @@ public class Recipe {
         //required empty constructor for Firebase
     }
 
-    public Recipe(String name) {
+    public Recipe(String name, String category) {
+
         this.name = name;
+        this.category = category;
     }
 
     @Exclude

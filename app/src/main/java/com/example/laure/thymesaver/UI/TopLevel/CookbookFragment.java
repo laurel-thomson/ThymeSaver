@@ -96,7 +96,8 @@ public class CookbookFragment extends AddButtonFragment
     @Override
     void launchAddItemActivity() {
         final View view = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_name_dialog, null);
-        final EditText et = view.findViewById(R.id.recipe_name_edittext);
+        final EditText nameET = view.findViewById(R.id.recipe_name_edittext);
+        final AutoCompleteTextView categoryET = view.findViewById(R.id.recipe_category_edittext);
         final TextInputLayout textInputLayout = view.findViewById(R.id.text_input_layout);
 
         final AlertDialog dialog = new AlertDialog.Builder(getActivity())
@@ -105,8 +106,10 @@ public class CookbookFragment extends AddButtonFragment
                 .setPositiveButton("Create", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        Recipe recipe = new Recipe(nameET.getText().toString(), categoryET.getText().toString());
+                        mViewModel.addRecipe(recipe);
                         Intent intent = new Intent(getActivity(), RecipeDetailActivity.class);
-                        intent.putExtra(RecipeDetailActivity.CURRENT_RECIPE_NAME, et.getText().toString());
+                        intent.putExtra(RecipeDetailActivity.CURRENT_RECIPE_NAME, nameET.getText().toString());
                         startActivity(intent);
                     }
                 })
@@ -114,7 +117,7 @@ public class CookbookFragment extends AddButtonFragment
         dialog.show();
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
 
-        et.addTextChangedListener(new TextWatcher() {
+        nameET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -143,20 +146,19 @@ public class CookbookFragment extends AddButtonFragment
         });
 
         //set up category autocomplete textview
-        final AutoCompleteTextView categoryTV = view.findViewById(R.id.recipe_category_edittext);
         ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource(
                 view.getContext(),
                 R.array.recipe_categories,
                 android.R.layout.select_dialog_item);
-        categoryTV.setThreshold(0);
-        categoryTV.setAdapter(categoryAdapter);
-        categoryTV.setOnTouchListener(new View.OnTouchListener() {
+        categoryET.setThreshold(0);
+        categoryET.setAdapter(categoryAdapter);
+        categoryET.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                categoryTV.showDropDown();
+                categoryET.showDropDown();
                 return true;
             }
         });
-        categoryTV.setText(getResources().getTextArray(R.array.recipe_categories)[0]);
+        categoryET.setText(getResources().getTextArray(R.array.recipe_categories)[0]);
     }
 }
