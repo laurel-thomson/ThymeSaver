@@ -326,6 +326,9 @@ public class Repository {
 
         @Override
         public HashMap<Ingredient, RecipeQuantity> apply(DataSnapshot dataSnapshot) {
+
+            if (mRecipe == null) return null;
+
             HashMap<Ingredient, RecipeQuantity> recipeIngredients = new HashMap<>();
             HashMap<String, RecipeQuantity> neededIngredients = new HashMap<>();
 

@@ -40,6 +40,8 @@ public class RecipeIngredientsLiveData extends LiveData<DataSnapshot> {
             if(dataSnapshot != null){
                 setValue(dataSnapshot);
 
+                if (mRecipe == null) return;
+
                 HashMap<String, RecipeQuantity> neededIngredients = new HashMap<>();
 
                 for (DataSnapshot snap : dataSnapshot.child("recipes")

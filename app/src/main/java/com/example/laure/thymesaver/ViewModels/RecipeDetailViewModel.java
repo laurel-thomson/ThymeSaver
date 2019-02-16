@@ -5,6 +5,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 
 import com.example.laure.thymesaver.Firebase.Database.Repository;
+import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.Models.RecipeQuantity;
 
@@ -16,6 +17,7 @@ public class RecipeDetailViewModel extends AndroidViewModel {
     private Repository mRepository;
     private String mCurrentRecipeName;
     private LiveData<Recipe> mCurrentRecipe;
+    private LiveData<HashMap<Ingredient, RecipeQuantity>> mRecipeIngredients;
 
     public RecipeDetailViewModel(Application application) {
         super(application);
@@ -31,17 +33,15 @@ public class RecipeDetailViewModel extends AndroidViewModel {
         return mCurrentRecipe;
     }
 
-    public String getCurrentRecipeName() { return mCurrentRecipeName; }
-
     public void updateRecipe() {
         mRepository.addOrUpdateRecipe(mCurrentRecipe.getValue());
     }
 
-    public void updateRecipe(Recipe recipe) {
-        mRepository.addOrUpdateRecipe(recipe);
+    public LiveData<HashMap<Ingredient, RecipeQuantity>> getRecipeIngredients() {
+        return mRepository.getRecipeIngredients(mCurrentRecipe.getValue());
     }
 
-    public void updateRecipeIngredientQuantity(String ingredientName, RecipeQuantity quantity) {
+    public void updateRecipeIngredient(String ingredientName, RecipeQuantity quantity) {
         mCurrentRecipe.getValue().getRecipeIngredients().put(ingredientName, quantity);
         updateRecipe();
     }

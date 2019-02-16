@@ -28,7 +28,7 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecipeIngredi
     private SparseBooleanArray mStepCheckStates = new SparseBooleanArray();
     private Context mContext;
     private Listener mListener;
-    private HashMap<Ingredient, RecipeQuantity> mRecipeQuantities;
+    private HashMap<Ingredient, RecipeQuantity> mRecipeQuantities = new HashMap<>();
     private List<Ingredient> mIngredients = new ArrayList<>();
 
     public RecipeIngredientsAdapter(Context context, Listener listener ) {
@@ -37,10 +37,10 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecipeIngredi
     }
 
     public void setIngredients(HashMap<Ingredient, RecipeQuantity> recipeIngredients) {
-        mRecipeQuantities = recipeIngredients;
         mRecipeQuantities.clear();
-        for (Ingredient i : mRecipeQuantities.keySet()) {
+        for (Ingredient i : recipeIngredients.keySet()) {
             mIngredients.add(i);
+            mRecipeQuantities.put(i, recipeIngredients.get(i));
         }
         notifyDataSetChanged();
     }
@@ -55,6 +55,12 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecipeIngredi
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
+        Ingredient ingredient = mIngredients.get(position);
+
+        holder.mNameTV.setText(ingredient.getName());
+        holder.mQuantityTV.setText(Integer.toString(mRecipeQuantities.get(ingredient).getRecipeQuantity()));
+        holder.mUnitTV.setText(mRecipeQuantities.get(ingredient).getShortUnitName());
+
         holder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {

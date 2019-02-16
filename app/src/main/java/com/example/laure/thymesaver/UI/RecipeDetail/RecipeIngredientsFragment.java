@@ -2,7 +2,6 @@ package com.example.laure.thymesaver.UI.RecipeDetail;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,8 +20,10 @@ import com.example.laure.thymesaver.Models.RecipeQuantity;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 
+import java.util.HashMap;
+
 public class RecipeIngredientsFragment extends RecipeDetailFragment
-        implements RecipeIngredientsAdapter.Listener{
+        implements RecipeIngredientsAdapter.Listener, AddRecipeIngredientListener{
 
     private RecipeDetailViewModel mViewModel;
     private RecipeIngredientsAdapter mAdapter;
@@ -44,10 +45,8 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
         mViewModel.getCurrentRecipe().observe(this, new Observer<Recipe>() {
             @Override
             public void onChanged(@Nullable Recipe recipe) {
-                if (recipe == null) {
-                    return;
-                }
-                //todo : update recipe ingredients
+                if (recipe == null) return;
+                observeRecipeIngredients();
             }
         });
 
@@ -64,6 +63,17 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
         }
     }
 
+    private void observeRecipeIngredients() {
+        mViewModel.getRecipeIngredients().observe(this, new Observer<HashMap<Ingredient, RecipeQuantity>>() {
+            @Override
+            public void onChanged(@Nullable HashMap<Ingredient, RecipeQuantity> ingredients) {
+                if (ingredients == null) return;
+
+                mAdapter.setIngredients(ingredients);
+            }
+        });
+    }
+
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putBooleanArray("check_states", mAdapter.getCheckStates());
@@ -73,12 +83,13 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
     @Override
     void addNewItem() {
         AddRecipeIngredientsFragment fragment = new AddRecipeIngredientsFragment();
+        fragment.setListener(this);
         fragment.show(getActivity().getSupportFragmentManager(), "TAG");
     }
 
     @Override
     public void onIngredientQuantityChanged(Ingredient i, RecipeQuantity quantity) {
-        mViewModel.updateRecipeIngredientQuantity(i.getName(), quantity);
+        mViewModel.updateRecipeIngredient(i.getName(), quantity);
     }
 
     @Override
@@ -90,7 +101,7 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
                 .setAction("UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        mViewModel.updateRecipeIngredientQuantity(
+                        mViewModel.updateRecipeIngredient(
                                 i.getName(),
                                 quantity);
                         Snackbar newSnackBar = Snackbar
@@ -100,5 +111,10 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
                 });
 
         snackbar.show();
+    }
+
+    @Override
+    public void onIngredientAdded(Ingredient ingredient, RecipeQuantity quantity) {
+        mViewModel.updateRecipeIngredient(ingredient.getName(), quantity);
     }
 }
