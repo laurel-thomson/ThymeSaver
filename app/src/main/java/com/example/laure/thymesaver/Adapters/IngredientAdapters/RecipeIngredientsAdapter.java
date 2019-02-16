@@ -38,6 +38,7 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecipeIngredi
 
     public void setIngredients(HashMap<Ingredient, RecipeQuantity> recipeIngredients) {
         mRecipeQuantities.clear();
+        mIngredients.clear();
         for (Ingredient i : recipeIngredients.keySet()) {
             mIngredients.add(i);
             mRecipeQuantities.put(i, recipeIngredients.get(i));
