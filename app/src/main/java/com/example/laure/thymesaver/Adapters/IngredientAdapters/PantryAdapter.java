@@ -56,6 +56,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.MyViewHold
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         final Ingredient ingredient = mFilteredIngredients.get(position);
         holder.mNameTV.setText(ingredient.getName());
+        holder.mUnitTV.setVisibility(View.GONE);
 
         //Bulk ingredients
         if (ingredient.isBulk()) {
@@ -76,6 +77,9 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.MyViewHold
         //Non-bulk ingredients
         else {
             holder.mQuantityTV.setText(Integer.toString(ingredient.getQuantity()));
+            holder.mDecrementer.setVisibility(View.VISIBLE);
+            holder.mIncrementer.setVisibility(View.VISIBLE);
+            holder.mQuantityTV.setTextColor(Color.parseColor("#000000"));
         }
     }
 
@@ -192,6 +196,18 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.MyViewHold
                 @Override
                 public void onClick(View view) {
                     mListener.onDeleteClicked(mFilteredIngredients.get(getAdapterPosition()));
+                }
+            });
+
+            mQuantityTV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Ingredient ingredient = mFilteredIngredients.get(getAdapterPosition());
+                    if (!ingredient.isBulk()) return;
+
+                    mListener.onIngredientQuantityChanged(
+                            ingredient,
+                            ingredient.getQuantity() == 0 ? 1 : 0);
                 }
             });
         }
