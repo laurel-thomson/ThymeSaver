@@ -16,6 +16,7 @@ import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.laure.thymesaver.Models.BulkIngredientStates;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
 
@@ -64,8 +65,16 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.MyViewHold
             holder.mIncrementer.setVisibility(View.GONE);
             holder.mQuantityTV.setPadding(0,0,35,0);
 
-            if (ingredient.getQuantity() == 0) {
+            if (ingredient.getQuantity() == BulkIngredientStates
+                    .convertEnumToInt(BulkIngredientStates.OUT_OF_STOCK)) {
+
                 holder.mQuantityTV.setText("Out of stock");
+                holder.mQuantityTV.setTextColor(getAccentColor());
+            }
+            else if (ingredient.getQuantity() == BulkIngredientStates
+                    .convertEnumToInt(BulkIngredientStates.RUNNING_LOW)) {
+
+                holder.mQuantityTV.setText("Running low");
                 holder.mQuantityTV.setTextColor(getAccentColor());
             }
             else {
@@ -205,9 +214,8 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.MyViewHold
                     Ingredient ingredient = mFilteredIngredients.get(getAdapterPosition());
                     if (!ingredient.isBulk()) return;
 
-                    mListener.onIngredientQuantityChanged(
-                            ingredient,
-                            ingredient.getQuantity() == 0 ? 1 : 0);
+                    int newQuantity = BulkIngredientStates.getNextStateAsInt(ingredient.getQuantity());
+                    mListener.onIngredientQuantityChanged(ingredient, newQuantity);
                 }
             });
         }
