@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.example.laure.thymesaver.Adapters.IngredientAdapters.ShoppingListAdapters.MeasuredIngredientAdapter;
 import com.example.laure.thymesaver.Adapters.IngredientAdapters.ShoppingListAdapters.ShoppingListAdapter;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
@@ -24,7 +23,7 @@ import com.example.laure.thymesaver.ViewModels.ShoppingViewModel;
 
 import java.util.HashMap;
 
-public class ShoppingListFragment extends AddButtonFragment implements MeasuredIngredientAdapter.MeasuredIngredientListener {
+public class ShoppingListFragment extends AddButtonFragment implements ShoppingListAdapter.ShoppingListListener {
     private ShoppingViewModel mViewModel;
     private ShoppingListAdapter mAdapter;
     private RecyclerView mRecyclerView;

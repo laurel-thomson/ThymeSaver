@@ -16,7 +16,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.laure.thymesaver.Adapters.IngredientAdapters.ShoppingListAdapters.AddShoppingItemsAdapter;
-import com.example.laure.thymesaver.Adapters.IngredientAdapters.ShoppingListAdapters.MeasuredIngredientAdapter;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.ViewModels.PantryViewModel;
@@ -26,8 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AddShoppingListItemsActivity
-        extends AppCompatActivity implements MeasuredIngredientAdapter.MeasuredIngredientListener {
+public class AddShoppingListItemsActivity extends AppCompatActivity {
     private ShoppingViewModel mShoppingViewModel;
     private PantryViewModel mPantryViewModel;
     private AddShoppingItemsAdapter mAdapter;
@@ -100,20 +98,5 @@ public class AddShoppingListItemsActivity
                 mAdapter.setIngredients(totalMeasuredIngredients);
             }
         });
-    }
-
-    @Override
-    public void onIngredientQuantityChanged(Ingredient i, int quantity) {
-
-    }
-
-    @Override
-    public void onIngredientCheckedOff(Ingredient i, int quantity) {
-
-    }
-
-    @Override
-    public void onDeleteClicked(Ingredient i, int quantity) {
-
     }
 }
