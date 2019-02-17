@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 public class AddShoppingListItemsActivity
-        extends AppCompatActivity  {
+        extends AppCompatActivity implements MeasuredIngredientAdapter.MeasuredIngredientListener {
     private ShoppingViewModel mShoppingViewModel;
     private PantryViewModel mPantryViewModel;
     private AddShoppingItemsAdapter mAdapter;
@@ -63,31 +63,6 @@ public class AddShoppingListItemsActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_ingredient, menu);
-
-        // Associate searchable configuration with the SearchView
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        mSearchView = (SearchView) menu.findItem(R.id.action_search)
-                .getActionView();
-        mSearchView.setSearchableInfo(searchManager
-                .getSearchableInfo(getComponentName()));
-        mSearchView.setMaxWidth(Integer.MAX_VALUE);
-
-        // listening to search query text change
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                // filter recycler view when query submitted
-                mAdapter.getFilter().filter(query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String query) {
-                // filter recycler view when text is changed
-                mAdapter.getFilter().filter(query);
-                return false;
-            }
-        });
         return true;
     }
 
@@ -125,5 +100,20 @@ public class AddShoppingListItemsActivity
                 mAdapter.setIngredients(totalMeasuredIngredients);
             }
         });
+    }
+
+    @Override
+    public void onIngredientQuantityChanged(Ingredient i, int quantity) {
+
+    }
+
+    @Override
+    public void onIngredientCheckedOff(Ingredient i, int quantity) {
+
+    }
+
+    @Override
+    public void onDeleteClicked(Ingredient i, int quantity) {
+
     }
 }

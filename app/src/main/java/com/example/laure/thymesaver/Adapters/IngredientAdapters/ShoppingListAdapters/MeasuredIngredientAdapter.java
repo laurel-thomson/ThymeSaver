@@ -36,23 +36,6 @@ public abstract class MeasuredIngredientAdapter extends RecyclerView.Adapter<Mea
         mListener = listener;
     }
 
-    public MeasuredIngredientAdapter(Context context) {
-        mContext = context;
-    }
-
-    public MeasuredIngredientAdapter(
-            Context context,
-            HashMap<Ingredient, Integer> measuredIngredients,
-            MeasuredIngredientListener listener) {
-        mContext = context;
-        mMeasuredIngredients = measuredIngredients;
-        for (Ingredient i : measuredIngredients.keySet()) {
-            mIngredients.add(i);
-        }
-        mFilteredIngredients = mIngredients;
-        mListener = listener;
-    }
-
     public void setIngredients(HashMap<Ingredient, Integer> measuredIngredients) {
         mMeasuredIngredients = measuredIngredients;
         mIngredients.clear();
@@ -75,7 +58,18 @@ public abstract class MeasuredIngredientAdapter extends RecyclerView.Adapter<Mea
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         final Ingredient i = mFilteredIngredients.get(position);
         holder.mNameTV.setText(i.getName());
-        holder.mQuantityTV.setText(Integer.toString(mMeasuredIngredients.get(i)));
+
+        if (i.isBulk()) {
+            holder.mDecrementer.setVisibility(View.GONE);
+            holder.mIncrementer.setVisibility(View.GONE);
+            holder.mQuantityTV.setVisibility(View.GONE);
+        }
+        else {
+            holder.mDecrementer.setVisibility(View.VISIBLE);
+            holder.mIncrementer.setVisibility(View.VISIBLE);
+            holder.mQuantityTV.setVisibility(View.VISIBLE);
+            holder.mQuantityTV.setText(Integer.toString(mMeasuredIngredients.get(i)));
+        }
     }
 
     @Override
@@ -135,6 +129,8 @@ public abstract class MeasuredIngredientAdapter extends RecyclerView.Adapter<Mea
             mDecrementer = view.findViewById(R.id.decrement_quantity_layout);
             mIncrementer = view.findViewById(R.id.increment_quantity_layout);
             mDeleteButton = view.findViewById(R.id.ingredient_delete);
+
+            mUnitTV.setVisibility(View.GONE);
 
             mDecrementer.setOnClickListener(new View.OnClickListener() {
                 @Override

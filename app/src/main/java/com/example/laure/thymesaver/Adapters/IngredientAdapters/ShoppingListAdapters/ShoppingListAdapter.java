@@ -13,13 +13,6 @@ import java.util.HashMap;
 
 public class ShoppingListAdapter extends MeasuredIngredientAdapter {
 
-    public ShoppingListAdapter(
-            Context context,
-            HashMap<Ingredient, Integer> ingredients,
-            MeasuredIngredientListener quantityChangedListener) {
-        super(context, ingredients, quantityChangedListener);
-    }
-
     public ShoppingListAdapter(Context context, MeasuredIngredientListener quantityChangedListener ) {
         super(context, quantityChangedListener);
     }
