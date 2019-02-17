@@ -116,6 +116,13 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
                                 mUnitET.getText().toString(),
                                 Integer.parseInt(mQuantityET.getText().toString()));
                         mListener.onIngredientAdded(ingredient, quantity);
+
+                        //clear text fields after ingredient added
+
+                        mNameET.setText("");
+                        mQuantityET.setText("");
+                        mUnitET.setText("");
+                        mNameET.requestFocus();
                     }
                 });
     }
