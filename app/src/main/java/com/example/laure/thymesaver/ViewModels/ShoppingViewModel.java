@@ -5,6 +5,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 
 import com.example.laure.thymesaver.Firebase.Database.Repository;
+import com.example.laure.thymesaver.Models.BulkIngredientStates;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.ShoppingListMod;
 
@@ -25,8 +26,14 @@ public class ShoppingViewModel extends AndroidViewModel {
         return mShoppingList;
     }
 
-    public void addQuantityToPantry(String ingredientName, int quantity) {
-        mRepository.addQuantityToIngredient(ingredientName, quantity);
+    public void addQuantityToPantry(Ingredient ingredient, int quantity) {
+        if (ingredient.isBulk()) {
+            ingredient.setQuantity(BulkIngredientStates.convertEnumToInt(BulkIngredientStates.IN_STOCK));
+            mRepository.updateIngredient(ingredient);
+        }
+        else {
+            mRepository.addQuantityToIngredient(ingredient.getName(), quantity);
+        }
     }
 
     public void removeQuantityFromPantry(String ingredientName, int quantity) {

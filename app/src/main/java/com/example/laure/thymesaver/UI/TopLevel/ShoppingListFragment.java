@@ -70,7 +70,7 @@ public class ShoppingListFragment extends AddButtonFragment implements MeasuredI
 
     @Override
     public void onIngredientCheckedOff(final Ingredient i, final int quantity) {
-        mViewModel.addQuantityToPantry(i.getName(), quantity);
+        mViewModel.addQuantityToPantry(i, quantity);
         mViewModel.deleteModifier(i.getName());
         Snackbar snackbar = Snackbar
                 .make(getView(), i +
