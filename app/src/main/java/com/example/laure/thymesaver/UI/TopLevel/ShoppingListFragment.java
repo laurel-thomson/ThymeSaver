@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.example.laure.thymesaver.Adapters.IngredientAdapters.ShoppingListAdapters.ShoppingListAdapter;
+import com.example.laure.thymesaver.Adapters.IngredientAdapters.ShoppingListAdapter;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.AddIngredients.AddShoppingListItemsActivity;
@@ -91,6 +91,6 @@ public class ShoppingListFragment extends AddButtonFragment implements ShoppingL
 
     @Override
     public void onDeleteClicked(Ingredient i, int quantity) {
-        //todo: remove this item from the list
+        mViewModel.deleteModifier(i.getName());
     }
 }

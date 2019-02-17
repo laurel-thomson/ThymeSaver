@@ -1,10 +1,7 @@
 package com.example.laure.thymesaver.UI.AddIngredients;
 
-import android.app.SearchManager;
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -15,7 +12,7 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.laure.thymesaver.Adapters.IngredientAdapters.ShoppingListAdapters.AddShoppingItemsAdapter;
+import com.example.laure.thymesaver.Adapters.IngredientAdapters.AddShoppingItemsAdapter;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.ViewModels.PantryViewModel;

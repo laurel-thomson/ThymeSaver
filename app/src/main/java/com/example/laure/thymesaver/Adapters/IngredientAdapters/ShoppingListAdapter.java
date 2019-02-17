@@ -1,4 +1,4 @@
-package com.example.laure.thymesaver.Adapters.IngredientAdapters.ShoppingListAdapters;
+package com.example.laure.thymesaver.Adapters.IngredientAdapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

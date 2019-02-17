@@ -112,6 +112,11 @@ public class Repository {
 
     public void deleteRecipe(Recipe r) {
         mRecipeReference.child(r.getName()).removeValue();
+
+        //delete all meal plans with this reference
+        for (MealPlan mp : mMealPlans) {
+            mMealPlanReference.child(mp.getFirebaseKey()).removeValue();
+        }
     }
 
     public void addIngredient(Ingredient i) {
