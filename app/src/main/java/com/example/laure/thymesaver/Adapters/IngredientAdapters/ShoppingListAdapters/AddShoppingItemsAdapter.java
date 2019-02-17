@@ -88,14 +88,45 @@ public class AddShoppingItemsAdapter extends RecyclerView.Adapter<AddShoppingIte
             mDeleteButton.setVisibility(View.GONE);
             mUnitTV.setVisibility(View.GONE);
 
+            mIncrementer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Ingredient i = mIngredients.get(getAdapterPosition());
+                    int newQuantity = mMeasuredIngredients.get(i) + 1;
+                    mMeasuredIngredients.put(i, newQuantity);
+                    mQuantityTV.setText(Integer.toString(newQuantity));
+                }
+            });
+
+            mDecrementer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Ingredient i = mIngredients.get(getAdapterPosition());
+                    if (mMeasuredIngredients.get(i) == 0) return;
+
+                    if (mMeasuredIngredients.get(i) == 1) {
+                        mMeasuredIngredients.put(i, 0);
+                        mCheckBox.setChecked(false);
+                        return;
+                    }
+
+                    int newQuantity = mMeasuredIngredients.get(i) - 1;
+                    mMeasuredIngredients.put(i, newQuantity);
+                    mQuantityTV.setText(Integer.toString(newQuantity));
+                }
+            });
+
             mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     Ingredient i = mIngredients.get(getAdapterPosition());
 
-                    if (i.isBulk()) return;
-
                     if (compoundButton.isChecked()) {
+                        if (i.isBulk()) {
+                            mMeasuredIngredients.put(i, 1);
+                            return;
+                        }
+
                         if (mMeasuredIngredients.get(i) == 0) {
                             mMeasuredIngredients.put(i, 1);
                             mQuantityTV.setText("1");
@@ -105,6 +136,10 @@ public class AddShoppingItemsAdapter extends RecyclerView.Adapter<AddShoppingIte
                         mDecrementer.setVisibility(View.VISIBLE);
                     }
                     else {
+                        if (i.isBulk()) {
+                            mMeasuredIngredients.put(i, 0);
+                            return;
+                        }
                         mMeasuredIngredients.put(i,0);
                         mQuantityTV.setVisibility(View.GONE);
                         mIncrementer.setVisibility(View.GONE);
@@ -118,9 +153,9 @@ public class AddShoppingItemsAdapter extends RecyclerView.Adapter<AddShoppingIte
     public HashMap<Ingredient, Integer> getMeasuredIngredients() {
         HashMap<Ingredient, Integer> measuredIngredients = new HashMap<>();
         for (Ingredient i : mIngredients) {
-            int recipeQuantity = mMeasuredIngredients.get(i);
-            if (recipeQuantity > 0) {
-                measuredIngredients.put(i, recipeQuantity);
+            int quantity = mMeasuredIngredients.get(i);
+            if (quantity > 0) {
+                measuredIngredients.put(i, quantity);
             }
         }
         return measuredIngredients;
