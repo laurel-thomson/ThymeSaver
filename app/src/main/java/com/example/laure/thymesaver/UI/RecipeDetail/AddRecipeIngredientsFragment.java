@@ -6,6 +6,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.design.widget.TextInputLayout;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -28,6 +29,9 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
     private EditText mQuantityET;
     private AutoCompleteTextView mUnitET;
     private List<Ingredient> mTotalIngredients;
+    private TextInputLayout mNameLayout;
+    private TextInputLayout mQuantityLayout;
+    private TextInputLayout mUnitLayout;
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -39,6 +43,9 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
         mNameET = view.findViewById(R.id.recipe_ingredient_name);
         mUnitET = view.findViewById(R.id.ingredient_unit);
         mQuantityET = view.findViewById(R.id.recipe_quantity);
+        mNameLayout = view.findViewById(R.id.name_text_input_layout);
+        mQuantityLayout = view.findViewById(R.id.quantity_text_input_layout);
+        mUnitLayout = view.findViewById(R.id.unit_text_input_layout);
 
         mPantryViewModel = ViewModelProviders.of(this).get(PantryViewModel.class);
         mPantryViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
@@ -76,6 +83,27 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+
+                        boolean hasError = false;
+
+                        //check for incomplete fields
+                        if (mNameET.getText().toString().equals("")) {
+                            mNameLayout.setError("Ingredient name required.");
+                            hasError = true;
+                        }
+
+                        if (mQuantityET.getText().toString().equals("")) {
+                            mQuantityLayout.setError("Recipe quantity required.");
+                            hasError = true;
+                        }
+
+                        if (mUnitET.getText().toString().equals("")) {
+                            mUnitLayout.setError("Quantity unit required.");
+                            hasError = true;
+                        }
+
+                        if (hasError) return;
+
                         Ingredient ingredient = getIngredientFromName(mNameET.getText().toString());
                         if (ingredient == null) {
                             ingredient = new Ingredient(
