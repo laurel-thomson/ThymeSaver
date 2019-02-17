@@ -1,7 +1,11 @@
 package com.example.laure.thymesaver.Adapters.IngredientAdapters;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +22,7 @@ import com.example.laure.thymesaver.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.MyViewHolder>
+public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.MyViewHolder>
     implements Filterable {
 
     Context mContext;
@@ -27,7 +31,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
     IngredientListener mListener;
     Ingredient mUserCreatedIngredient;
 
-    public IngredientAdapter(
+    public PantryAdapter(
             Context context,
             IngredientListener listener) {
         mContext = context;
@@ -52,7 +56,38 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         final Ingredient ingredient = mFilteredIngredients.get(position);
         holder.mNameTV.setText(ingredient.getName());
-        holder.mQuantityTV.setText(Integer.toString(ingredient.getQuantity()));
+
+        //Bulk ingredients
+        if (ingredient.isBulk()) {
+            holder.mDecrementer.setVisibility(View.GONE);
+            holder.mIncrementer.setVisibility(View.GONE);
+            holder.mQuantityTV.setPadding(0,0,35,0);
+
+            if (ingredient.getQuantity() == 0) {
+                holder.mQuantityTV.setText("Out of stock");
+                holder.mQuantityTV.setTextColor(getAccentColor());
+            }
+            else {
+                holder.mQuantityTV.setText("In stock");
+                holder.mQuantityTV.setTextColor(Color.parseColor("#000000"));
+            }
+        }
+
+        //Non-bulk ingredients
+        else {
+            holder.mQuantityTV.setText(Integer.toString(ingredient.getQuantity()));
+        }
+    }
+
+    private int getAccentColor() {
+        TypedValue typedValue = new TypedValue();
+
+        TypedArray a = mContext.obtainStyledAttributes(typedValue.data, new int[] { R.attr.colorAccent });
+        int color = a.getColor(0, 0);
+
+        a.recycle();
+
+        return color;
     }
 
     @Override
@@ -127,6 +162,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
             mDeleteButton = view.findViewById(R.id.ingredient_delete);
 
             mCheckBox.setVisibility(View.GONE);
+            mUnitTV.setVisibility(View.GONE);
 
             mDecrementer.setOnClickListener(new View.OnClickListener() {
                 @Override

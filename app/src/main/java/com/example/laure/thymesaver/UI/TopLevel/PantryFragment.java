@@ -16,7 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.example.laure.thymesaver.Adapters.IngredientAdapters.IngredientAdapter;
+import com.example.laure.thymesaver.Adapters.IngredientAdapters.PantryAdapter;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.AddIngredients.AddNewIngredientActivity;
@@ -24,9 +24,9 @@ import com.example.laure.thymesaver.ViewModels.PantryViewModel;
 
 import java.util.List;
 
-public class PantryFragment extends AddButtonFragment implements IngredientAdapter.IngredientListener {
+public class PantryFragment extends AddButtonFragment implements PantryAdapter.IngredientListener {
     private PantryViewModel mViewModel;
-    private IngredientAdapter mAdapter;
+    private PantryAdapter mAdapter;
     private RecyclerView mRecyclerView;
 
     @Override
@@ -40,7 +40,7 @@ public class PantryFragment extends AddButtonFragment implements IngredientAdapt
         final ProgressBar progressBar = view.findViewById(R.id.pantry_progress);
 
         mViewModel = ViewModelProviders.of(this).get(PantryViewModel.class);
-        mAdapter = new IngredientAdapter(getActivity(),this);
+        mAdapter = new PantryAdapter(getActivity(),this);
         mViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
             @Override
             public void onChanged(@Nullable List<Ingredient> ingredients) {
