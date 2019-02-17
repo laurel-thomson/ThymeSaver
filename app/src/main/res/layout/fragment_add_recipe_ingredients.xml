@@ -50,7 +50,8 @@
             android:maxLength="30"
             android:padding="15dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:imeOptions="actionNext" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -87,6 +88,8 @@
             android:hint="Unit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:imeOptions="actionDone"
             android:padding="15dp"/>
 
     </android.support.design.widget.TextInputLayout>
