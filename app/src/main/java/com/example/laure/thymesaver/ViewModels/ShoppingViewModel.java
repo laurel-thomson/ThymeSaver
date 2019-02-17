@@ -32,12 +32,14 @@ public class ShoppingViewModel extends AndroidViewModel {
             mRepository.updateIngredient(ingredient);
         }
         else {
-            mRepository.addQuantityToIngredient(ingredient.getName(), quantity);
+            ingredient.setQuantity(ingredient.getQuantity() + 1);
         }
+        mRepository.updateIngredient(ingredient);
     }
 
-    public void removeQuantityFromPantry(String ingredientName, int quantity) {
-        mRepository.removeQuantityFromIngredient(ingredientName, quantity);
+    public void resetPantryQuantity(Ingredient ingredient, int oldQuantity) {
+        ingredient.setQuantity(oldQuantity);
+        mRepository.updateIngredient(ingredient);
     }
 
     public void addShoppingModification(String name, int modifier) {

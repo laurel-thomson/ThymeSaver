@@ -70,15 +70,16 @@ public class ShoppingListFragment extends AddButtonFragment implements MeasuredI
 
     @Override
     public void onIngredientCheckedOff(final Ingredient i, final int quantity) {
+        final int oldQuantity = i.getQuantity();
         mViewModel.addQuantityToPantry(i, quantity);
         mViewModel.deleteModifier(i.getName());
         Snackbar snackbar = Snackbar
-                .make(getView(), i +
+                .make(getView(), i.getName() +
                         " added back to pantry.", Snackbar.LENGTH_LONG)
                 .setAction("UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        mViewModel.removeQuantityFromPantry(i.getName(), quantity);
+                        mViewModel.resetPantryQuantity(i, oldQuantity);
                         mViewModel.addShoppingModification(i.getName(), quantity);
                         Snackbar newSnackBar = Snackbar
                                 .make(getView(), "Shopping list item restored.", Snackbar.LENGTH_SHORT);
