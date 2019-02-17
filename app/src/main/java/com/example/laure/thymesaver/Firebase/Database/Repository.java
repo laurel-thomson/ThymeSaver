@@ -5,6 +5,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Transformations;
 import android.support.annotation.NonNull;
 
+import com.example.laure.thymesaver.Models.BulkIngredientStates;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.MealPlan;
 import com.example.laure.thymesaver.Models.Recipe;
@@ -372,10 +373,19 @@ public class Repository {
                 if (neededIngredients.containsKey(snap.getKey())) {
                     Ingredient i = snap.getValue(Ingredient.class);
                     i.setName(snap.getKey());
-                    int neededQuantity = neededIngredients.get(i.getName());
-                    int pantryQuantity = i.getQuantity();
-                    if (neededQuantity > pantryQuantity) {
-                        mShoppingList.put(i, neededQuantity - pantryQuantity);
+
+                    if (i.isBulk()) {
+                        if (i.getQuantity() != BulkIngredientStates
+                                .convertEnumToInt(BulkIngredientStates.IN_STOCK)) {
+                            mShoppingList.put(i, 1);
+                        }
+                    }
+                    else {
+                        int neededQuantity = neededIngredients.get(i.getName());
+                        int pantryQuantity = i.getQuantity();
+                        if (neededQuantity > pantryQuantity) {
+                            mShoppingList.put(i, neededQuantity - pantryQuantity);
+                        }
                     }
                 }
                 if (mods.containsKey(snap.getKey())) {
