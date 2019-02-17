@@ -201,6 +201,8 @@ public class Repository {
                     break;
                 }
             }
+            // we only want to remove quantity from non-bulk ingredients
+            if (matchingIngredient.isBulk()) continue;
             matchingIngredient.setQuantity(
                     Math.max(0, matchingIngredient.getQuantity() - recipeIngredients.get(ingredientName).getRecipeQuantity()));
             ingredientData.put(ingredientName,matchingIngredient);
@@ -225,6 +227,8 @@ public class Repository {
                     break;
                 }
             }
+            // we only want to add quantity from non-bulk ingredients
+            if (matchingIngredient.isBulk()) continue;
             matchingIngredient.setQuantity(
                     matchingIngredient.getQuantity()
                             + recipeIngredients.get(ingredientName).getRecipeQuantity());
