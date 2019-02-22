@@ -3,10 +3,11 @@
 
     <string-array name="ingredient_categories">
         <item>Produce</item>
-        <item>Refrigerated</item>
+        <item>Protein</item>
         <item>Dry Goods</item>
         <item>Canned Goods</item>
         <item>Spices</item>
+        <item>Sauces</item>
         <item>Misc</item>
     </string-array>
 
