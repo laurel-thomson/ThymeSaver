@@ -1,7 +1,6 @@
 package com.example.laure.thymesaver.Adapters.IngredientAdapters;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
@@ -57,13 +56,11 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.MyViewHold
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         final Ingredient ingredient = mFilteredIngredients.get(position);
         holder.mNameTV.setText(ingredient.getName());
-        holder.mUnitTV.setVisibility(View.GONE);
 
         //Bulk ingredients
         if (ingredient.isBulk()) {
             holder.mDecrementer.setVisibility(View.GONE);
             holder.mIncrementer.setVisibility(View.GONE);
-            holder.mQuantityTV.setPadding(0,0,35,0);
 
             if (ingredient.getQuantity() == BulkIngredientStates
                     .convertEnumToInt(BulkIngredientStates.OUT_OF_STOCK)) {
@@ -159,7 +156,6 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.MyViewHold
         CheckBox mCheckBox;
         TextView mNameTV;
         TextView mQuantityTV;
-        TextView mUnitTV;
         LinearLayout mDecrementer;
         LinearLayout mIncrementer;
         Button mDeleteButton;
@@ -169,13 +165,11 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.MyViewHold
             mCheckBox = view.findViewById(R.id.multiselect_item_checkbox);
             mNameTV = view.findViewById(R.id.multiselect_item_textview);
             mQuantityTV = view.findViewById(R.id.item_quantity_picker);
-            mUnitTV = view.findViewById(R.id.ing_unit_label);
             mDecrementer = view.findViewById(R.id.decrement_quantity_layout);
             mIncrementer = view.findViewById(R.id.increment_quantity_layout);
             mDeleteButton = view.findViewById(R.id.ingredient_delete);
 
             mCheckBox.setVisibility(View.GONE);
-            mUnitTV.setVisibility(View.GONE);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

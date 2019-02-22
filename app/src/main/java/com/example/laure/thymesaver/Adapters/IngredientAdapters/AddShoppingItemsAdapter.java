@@ -69,7 +69,6 @@ public class AddShoppingItemsAdapter extends RecyclerView.Adapter<AddShoppingIte
     public class AddShoppingItemsViewHolder extends RecyclerView.ViewHolder {
         public CheckBox mCheckBox;
         public TextView mNameTV;
-        public TextView mUnitTV;
         public TextView mQuantityTV;
         public LinearLayout mDecrementer;
         public LinearLayout mIncrementer;
@@ -79,14 +78,12 @@ public class AddShoppingItemsAdapter extends RecyclerView.Adapter<AddShoppingIte
             super(view);
             mCheckBox = view.findViewById(R.id.multiselect_item_checkbox);
             mNameTV = view.findViewById(R.id.multiselect_item_textview);
-            mUnitTV = view.findViewById(R.id.ing_unit_label);
             mQuantityTV = view.findViewById(R.id.item_quantity_picker);
             mDecrementer = view.findViewById(R.id.decrement_quantity_layout);
             mIncrementer = view.findViewById(R.id.increment_quantity_layout);
             mDeleteButton = view.findViewById(R.id.ingredient_delete);
 
             mDeleteButton.setVisibility(View.GONE);
-            mUnitTV.setVisibility(View.GONE);
 
             mIncrementer.setOnClickListener(new View.OnClickListener() {
                 @Override
