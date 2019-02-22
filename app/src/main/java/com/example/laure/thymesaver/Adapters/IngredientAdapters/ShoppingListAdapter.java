@@ -19,6 +19,7 @@ import com.example.laure.thymesaver.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ListIterator;
 
 public class ShoppingListAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHolder> {
     Context mContext;
@@ -44,10 +45,12 @@ public class ShoppingListAdapter extends  RecyclerView.Adapter<RecyclerView.View
             headers[i] = new Ingredient("", categories[i].toString(), false);
         }
 
+        //add the headers in to the list
         for (Ingredient i : headers) {
             mIngredients.add(i);
         }
 
+        //add all the ingredients in under their headers
         for (Ingredient ingredient : measuredIngredients.keySet()) {
             int position = 0;
             for (int i = 0; i < headers.length; i++) {
@@ -58,6 +61,19 @@ public class ShoppingListAdapter extends  RecyclerView.Adapter<RecyclerView.View
             }
             mIngredients.add(position+1, ingredient);
         }
+
+        //remove any headers that don't have ingredients under them
+        ListIterator<Ingredient> iterator = mIngredients.listIterator();
+        while (iterator.hasNext()) {
+            Ingredient ingredient = iterator.next();
+            if (getItemViewType(ingredient) == HEADER_TYPE) {
+                int nextIndex = iterator.nextIndex();
+                if (nextIndex >= mIngredients.size() || getItemViewType(nextIndex) == HEADER_TYPE) {
+                    iterator.remove();
+                }
+            }
+        }
+
         notifyDataSetChanged();
     }
 
@@ -113,6 +129,14 @@ public class ShoppingListAdapter extends  RecyclerView.Adapter<RecyclerView.View
     @Override
     public int getItemViewType(int position) {
         if (TextUtils.isEmpty(mIngredients.get(position).getName())) {
+            return HEADER_TYPE;
+        } else {
+            return INGREDIENT_TYPE;
+        }
+    }
+
+    public int getItemViewType(Ingredient ingredient) {
+        if (TextUtils.isEmpty(ingredient.getName())) {
             return HEADER_TYPE;
         } else {
             return INGREDIENT_TYPE;
@@ -191,6 +215,7 @@ public class ShoppingListAdapter extends  RecyclerView.Adapter<RecyclerView.View
             super(itemView);
             sectionTitle = itemView.findViewById(R.id.header_text);
             addButton = itemView.findViewById(R.id.header_add_button);
+            addButton.setVisibility(View.GONE);
         }
     }
 
