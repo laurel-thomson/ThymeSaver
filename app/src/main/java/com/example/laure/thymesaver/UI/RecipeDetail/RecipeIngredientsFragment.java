@@ -2,6 +2,7 @@ package com.example.laure.thymesaver.UI.RecipeDetail;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,6 +19,7 @@ import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.Models.RecipeQuantity;
 import com.example.laure.thymesaver.R;
+import com.example.laure.thymesaver.UI.AddIngredients.AddOrEditIngredientActivity;
 import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 
 import java.util.HashMap;
@@ -90,6 +92,13 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
     @Override
     public void onIngredientQuantityChanged(Ingredient i, RecipeQuantity quantity) {
         mViewModel.updateRecipeIngredient(i.getName(), quantity);
+    }
+
+    @Override
+    public void onIngredientClicked(Ingredient i) {
+        Intent intent = new Intent(getContext(), AddOrEditIngredientActivity.class);
+        intent.putExtra(AddOrEditIngredientActivity.INGREDIENT_NAME_KEY, i.getName());
+        startActivity(intent);
     }
 
     @Override

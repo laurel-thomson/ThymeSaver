@@ -227,6 +227,13 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecyclerView.
                             mRecipeQuantities.get(mIngredients.get(getAdapterPosition())));
                 }
             });
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onIngredientClicked(mIngredients.get(getAdapterPosition()));
+                }
+            });
         }
     }
 
@@ -245,5 +252,6 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecyclerView.
     public interface Listener {
         void onDeleteClicked(Ingredient i, RecipeQuantity quantity);
         void onIngredientQuantityChanged(Ingredient i, RecipeQuantity quantity);
+        void onIngredientClicked(Ingredient i);
     }
 }
