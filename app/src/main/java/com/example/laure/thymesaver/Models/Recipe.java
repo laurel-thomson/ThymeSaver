@@ -63,24 +63,4 @@ public class Recipe {
     public void setCategory(String category) {
         this.category = category;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this) {
-            return true;
-        }
-
-        if (!(o instanceof Recipe)) {
-            return false;
-        }
-
-        Recipe r = (Recipe) o;
-
-        return name.equals(r.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return 31 * name.hashCode();
-    }
 }
