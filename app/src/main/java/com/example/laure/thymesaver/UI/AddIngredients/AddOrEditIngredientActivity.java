@@ -39,6 +39,7 @@ public class AddOrEditIngredientActivity extends AppCompatActivity {
         if (ingredientName != null) {
             //get ingredient from pantry
             setIngredientValues(mViewModel.getIngredient(ingredientName));
+            getSupportActionBar().setTitle("Edit Ingredient");
         }
     }
 
