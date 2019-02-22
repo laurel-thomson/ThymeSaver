@@ -10,7 +10,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListLiveData<T> extends LiveData<DataSnapshot> {
+public class
+ListLiveData<T> extends LiveData<DataSnapshot> {
     private List<T> mQueryValuesList = new ArrayList<>();
     private final Class<T> mClassType;
     private final Query mQuery;

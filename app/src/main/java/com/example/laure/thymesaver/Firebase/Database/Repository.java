@@ -138,6 +138,15 @@ public class Repository {
         mIngredientReference.child(i.getName()).setValue(i);
     }
 
+    public Ingredient getIngredient(String ingredientName) {
+        for (Ingredient i : mIngredients) {
+            if (i.getName().equals(ingredientName)) {
+                return i;
+            }
+        }
+        return null;
+    }
+
     public void addMealPlan(MealPlan mealPlan) {
         mMealPlanReference.push().setValue(mealPlan);
     }
@@ -215,6 +224,29 @@ public class Repository {
 
     public void deleteShoppingModification(final String name) {
         mDatabase.getReference("shoppinglistmods").child(name).removeValue();
+    }
+
+    public void deleteShoppingListItem(final Ingredient ingredient, final int quantity) {
+        mDatabase.getReference("shoppinglistmods").child(ingredient.getName()).addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (!dataSnapshot.exists()) {
+                            //create new modification that subtracts away desired quantities
+                            ShoppingListMod mod = new ShoppingListMod(ingredient.getName(), 0 - quantity);
+                            addShoppingModification(mod);
+                        }
+                        else {
+                            deleteShoppingModification(ingredient.getName());
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                }
+        );
     }
 
     @NonNull

@@ -19,7 +19,7 @@ import android.widget.ProgressBar;
 import com.example.laure.thymesaver.Adapters.IngredientAdapters.PantryAdapter;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
-import com.example.laure.thymesaver.UI.AddIngredients.AddNewIngredientActivity;
+import com.example.laure.thymesaver.UI.AddIngredients.AddOrEditIngredientActivity;
 import com.example.laure.thymesaver.ViewModels.PantryViewModel;
 
 import java.util.List;
@@ -80,8 +80,15 @@ public class PantryFragment extends AddButtonFragment implements PantryAdapter.I
     }
 
     @Override
+    public void onIngredientClicked(Ingredient ingredient) {
+        Intent intent = new Intent(getActivity(), AddOrEditIngredientActivity.class);
+        intent.putExtra(AddOrEditIngredientActivity.INGREDIENT_NAME_KEY, ingredient.getName());
+        startActivity(intent);
+    }
+
+    @Override
     void launchAddItemActivity() {
-        Intent intent = new Intent(getActivity(), AddNewIngredientActivity.class);
+        Intent intent = new Intent(getActivity(), AddOrEditIngredientActivity.class);
         startActivity(intent);
     }
 }

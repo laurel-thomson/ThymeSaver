@@ -177,6 +177,14 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.MyViewHold
             mCheckBox.setVisibility(View.GONE);
             mUnitTV.setVisibility(View.GONE);
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Ingredient ingredient = mFilteredIngredients.get(getAdapterPosition());
+                    mListener.onIngredientClicked(ingredient);
+                }
+            });
+
             mDecrementer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -225,5 +233,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.MyViewHold
         void onIngredientQuantityChanged(Ingredient ingredient, int quantity);
 
         void onDeleteClicked(Ingredient ingredient);
+
+        void onIngredientClicked(Ingredient ingredient);
     }
 }

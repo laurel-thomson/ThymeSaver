@@ -36,4 +36,8 @@ public class PantryViewModel extends AndroidViewModel {
         i.setQuantity(quantity);
         mRepository.updateIngredient(i);
     }
+
+    public Ingredient getIngredient(String ingredientName) {
+        return mRepository.getIngredient(ingredientName);
+    }
 }

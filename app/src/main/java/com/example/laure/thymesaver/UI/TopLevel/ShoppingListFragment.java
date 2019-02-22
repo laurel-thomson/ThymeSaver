@@ -91,6 +91,6 @@ public class ShoppingListFragment extends AddButtonFragment implements ShoppingL
 
     @Override
     public void onDeleteClicked(Ingredient i, int quantity) {
-        mViewModel.deleteModifier(i.getName());
+        mViewModel.deleteShoppingListItem(i, quantity);
     }
 }
