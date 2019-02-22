@@ -45,7 +45,7 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 return new MealPlanViewHolder(view);
             case HEADER_TYPE:
                 view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.day_header, parent, false);
+                        .inflate(R.layout.section_header, parent, false);
                 return new SectionHeaderViewHolder(view);
             default:
                 view = LayoutInflater.from(parent.getContext())

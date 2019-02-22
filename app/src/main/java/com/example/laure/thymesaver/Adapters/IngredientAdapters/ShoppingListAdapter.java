@@ -93,7 +93,7 @@ public class ShoppingListAdapter extends  RecyclerView.Adapter<RecyclerView.View
                 return new ShoppingListViewHolder(view);
             default:
                 view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.day_header, parent, false);
+                        .inflate(R.layout.section_header, parent, false);
                 return new SectionHeaderViewHolder(view);
         }
     }
