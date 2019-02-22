@@ -1,5 +1,6 @@
 package com.example.laure.thymesaver.UI.AddIngredients;
 
+import android.annotation.SuppressLint;
 import android.arch.lifecycle.ViewModelProviders;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +24,7 @@ public class AddOrEditIngredientActivity extends AppCompatActivity {
     private AutoCompleteTextView mCategoryET;
     private EditText mNameET;
     private Switch mBulkSwitch;
+    private Ingredient mIngredient;
     public static String INGREDIENT_NAME_KEY = "Ingredient Name Key";
 
     @Override
@@ -37,8 +39,9 @@ public class AddOrEditIngredientActivity extends AppCompatActivity {
 
         //if an ingredient name was passed in, then we need to all the user to edit the current ingredient
         if (ingredientName != null) {
+            mIngredient = mViewModel.getIngredient(ingredientName);
             //get ingredient from pantry
-            setIngredientValues(mViewModel.getIngredient(ingredientName));
+            setIngredientValues();
             getSupportActionBar().setTitle("Edit Ingredient");
         }
     }
@@ -50,6 +53,7 @@ public class AddOrEditIngredientActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void setUpFields() {
         mNameET = findViewById(R.id.ingredient_name_edittext);
         mCategoryET = findViewById(R.id.ingredient_category);
@@ -58,21 +62,33 @@ public class AddOrEditIngredientActivity extends AppCompatActivity {
                 this,
                 R.array.ingredient_categories,
                 android.R.layout.select_dialog_item);
-        mCategoryET.setThreshold(0);
         mCategoryET.setAdapter(categoryAdapter);
         mCategoryET.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
+                //Need to repopulate the adapter because if setText() has been called, the array resources
+                //will have been cleared
+                ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource(
+                        getApplicationContext(),
+                        R.array.ingredient_categories,
+                        android.R.layout.select_dialog_item);
+                mCategoryET.setAdapter(categoryAdapter);
                 mCategoryET.showDropDown();
                 return true;
             }
         });
     }
 
-    private void setIngredientValues(Ingredient ingredient) {
-        mNameET.setText(ingredient.getName());
-        mCategoryET.setText(ingredient.getCategory());
-        mBulkSwitch.setChecked(ingredient.isBulk());
+    private void setIngredientValues() {
+        mNameET.setText(mIngredient.getName());
+        mBulkSwitch.setChecked(mIngredient.isBulk());
+
+        CharSequence[] categories = getResources().getTextArray(R.array.ingredient_categories);
+        for (CharSequence cs : categories) {
+            if (cs.toString().equals(mIngredient.getCategory())) {
+                mCategoryET.setText(cs);
+            }
+        }
     }
 
 
@@ -81,8 +97,15 @@ public class AddOrEditIngredientActivity extends AppCompatActivity {
         String category = mCategoryET.getText().toString();
         boolean isBulk = mBulkSwitch.isChecked();
 
-        Ingredient i = new Ingredient(name, category, isBulk);
-        mViewModel.addIngredient(i);
+        Ingredient ingredient;
+        if (mIngredient == null) ingredient =  new Ingredient(name, category, isBulk);
+        else {
+            ingredient = mIngredient;
+            ingredient.setName(name);
+            ingredient.setCategory(category);
+            ingredient.setBulk(isBulk);
+        }
+        mViewModel.addIngredient(ingredient);
     }
 
     @Override

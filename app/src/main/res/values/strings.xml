@@ -7,7 +7,7 @@
         <item>Dry Goods</item>
         <item>Canned Goods</item>
         <item>Spices</item>
-        <item>Misc.</item>
+        <item>Misc</item>
     </string-array>
 
     <string-array name="ingredient_units">

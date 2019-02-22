@@ -1,5 +1,6 @@
 package com.example.laure.thymesaver.UI.TopLevel;
 
+import android.annotation.SuppressLint;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
@@ -93,6 +94,7 @@ public class CookbookFragment extends AddButtonFragment
                 .show();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     void launchAddItemActivity() {
         final View view = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_name_dialog, null);
@@ -150,11 +152,17 @@ public class CookbookFragment extends AddButtonFragment
                 view.getContext(),
                 R.array.recipe_categories,
                 android.R.layout.select_dialog_item);
-        categoryET.setThreshold(0);
         categoryET.setAdapter(categoryAdapter);
         categoryET.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
+                //Need to reset the array adapter because all elements will have
+                //been cleared out when the default category is set
+                ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource(
+                        view.getContext(),
+                        R.array.recipe_categories,
+                        android.R.layout.select_dialog_item);
+                categoryET.setAdapter(categoryAdapter);
                 categoryET.showDropDown();
                 return true;
             }
