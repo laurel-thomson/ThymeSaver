@@ -1,7 +1,9 @@
 package com.example.laure.thymesaver.Adapters.IngredientAdapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +20,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ShoppingListAdapter extends  RecyclerView.Adapter<ShoppingListAdapter.ShoppingListViewHolder> {
+public class ShoppingListAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHolder> {
     Context mContext;
     HashMap<Ingredient, Integer> mMeasuredIngredients;
     List<Ingredient> mIngredients = new ArrayList<>();
     ShoppingListListener mListener;
+    private static final int INGREDIENT_TYPE = 1;
+    private static final int HEADER_TYPE = 2;
 
     public ShoppingListAdapter(Context context, ShoppingListListener listener ) {
         mContext = context;
@@ -32,28 +36,29 @@ public class ShoppingListAdapter extends  RecyclerView.Adapter<ShoppingListAdapt
     public void setIngredients(HashMap<Ingredient, Integer> measuredIngredients) {
         mMeasuredIngredients = measuredIngredients;
         mIngredients.clear();
-        for (Ingredient i : measuredIngredients.keySet()) {
+
+        //generate category headers
+        CharSequence[] categories = mContext.getResources().getStringArray(R.array.ingredient_categories);
+        Ingredient[] headers = new Ingredient[categories.length];
+        for (int i = 0; i < categories.length; i++) {
+            headers[i] = new Ingredient("", categories[i].toString(), false);
+        }
+
+        for (Ingredient i : headers) {
             mIngredients.add(i);
         }
+
+        for (Ingredient ingredient : measuredIngredients.keySet()) {
+            int position = 0;
+            for (int i = 0; i < headers.length; i++) {
+                if (headers[i].getCategory().equals(ingredient.getCategory())) {
+                    position = mIngredients.indexOf(headers[i]);
+                    break;
+                }
+            }
+            mIngredients.add(position+1, ingredient);
+        }
         notifyDataSetChanged();
-    }
-
-    @Override
-    public void onBindViewHolder(ShoppingListViewHolder holder, final int position) {
-        final Ingredient i = mIngredients.get(position);
-        holder.mNameTV.setText(i.getName());
-
-        if (i.isBulk()) {
-            holder.mDecrementer.setVisibility(View.GONE);
-            holder.mIncrementer.setVisibility(View.GONE);
-            holder.mQuantityTV.setVisibility(View.GONE);
-        }
-        else {
-            holder.mDecrementer.setVisibility(View.VISIBLE);
-            holder.mIncrementer.setVisibility(View.VISIBLE);
-            holder.mQuantityTV.setVisibility(View.VISIBLE);
-            holder.mQuantityTV.setText(Integer.toString(mMeasuredIngredients.get(i)));
-        }
     }
 
     @Override
@@ -63,22 +68,66 @@ public class ShoppingListAdapter extends  RecyclerView.Adapter<ShoppingListAdapt
     }
 
     @Override
-    public ShoppingListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(mContext)
-                .inflate(R.layout.ingredient_list_item, parent, false);
-        return new ShoppingListViewHolder(itemView);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view;
+        switch (viewType) {
+            case INGREDIENT_TYPE:
+                view = LayoutInflater.from(mContext)
+                        .inflate(R.layout.ingredient_list_item, parent, false);
+                return new ShoppingListViewHolder(view);
+            default:
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.day_header, parent, false);
+                return new SectionHeaderViewHolder(view);
+        }
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
+        int itemViewType = getItemViewType(position);
+        if (itemViewType == INGREDIENT_TYPE) {
+            final Ingredient i = mIngredients.get(position);
+            ShoppingListViewHolder holder = (ShoppingListViewHolder) viewHolder;
+
+            holder.mNameTV.setText(i.getName());
+
+            if (i.isBulk()) {
+                holder.mDecrementer.setVisibility(View.GONE);
+                holder.mIncrementer.setVisibility(View.GONE);
+                holder.mQuantityTV.setVisibility(View.GONE);
+            }
+            else {
+                holder.mDecrementer.setVisibility(View.VISIBLE);
+                holder.mIncrementer.setVisibility(View.VISIBLE);
+                holder.mQuantityTV.setVisibility(View.VISIBLE);
+                holder.mQuantityTV.setText(Integer.toString(mMeasuredIngredients.get(i)));
+            }
+        }
+        else {
+            SectionHeaderViewHolder headerViewHolder = (SectionHeaderViewHolder) viewHolder;
+            final String category = mIngredients.get(position).getCategory();
+            headerViewHolder.sectionTitle.setText(category);
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (TextUtils.isEmpty(mIngredients.get(position).getName())) {
+            return HEADER_TYPE;
+        } else {
+            return INGREDIENT_TYPE;
+        }
     }
 
     public class ShoppingListViewHolder extends RecyclerView.ViewHolder {
-        public CheckBox mCheckBox;
-        public TextView mNameTV;
-        public TextView mQuantityTV;
-        public LinearLayout mDecrementer;
-        public LinearLayout mIncrementer;
-        public Button mDeleteButton;
+        CheckBox mCheckBox;
+        TextView mNameTV;
+        TextView mQuantityTV;
+        LinearLayout mDecrementer;
+        LinearLayout mIncrementer;
+        Button mDeleteButton;
 
-
-        public ShoppingListViewHolder(View view) {
+        ShoppingListViewHolder(View view) {
             super(view);
             mCheckBox = view.findViewById(R.id.multiselect_item_checkbox);
             mNameTV = view.findViewById(R.id.multiselect_item_textview);
@@ -131,6 +180,17 @@ public class ShoppingListAdapter extends  RecyclerView.Adapter<ShoppingListAdapt
                     mListener.onDeleteClicked(i, mMeasuredIngredients.get(i));
                 }
             });
+        }
+    }
+
+    class SectionHeaderViewHolder extends RecyclerView.ViewHolder {
+        TextView sectionTitle;
+        Button addButton;
+
+        SectionHeaderViewHolder(View itemView) {
+            super(itemView);
+            sectionTitle = itemView.findViewById(R.id.header_text);
+            addButton = itemView.findViewById(R.id.header_add_button);
         }
     }
 

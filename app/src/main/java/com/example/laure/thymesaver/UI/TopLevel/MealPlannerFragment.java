@@ -17,8 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.example.laure.thymesaver.Adapters.MealPlannerAdapters.DragHelper;
-import com.example.laure.thymesaver.Adapters.MealPlannerAdapters.MealPlannerAdapter;
+import com.example.laure.thymesaver.Adapters.DragHelper;
+import com.example.laure.thymesaver.Adapters.MealPlannerAdapter;
 import com.example.laure.thymesaver.Models.MealPlan;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.AddPlannedMealsActivity;

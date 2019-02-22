@@ -1,4 +1,4 @@
-package com.example.laure.thymesaver.Adapters.MealPlannerAdapters;
+package com.example.laure.thymesaver.Adapters;
 
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+
 import com.example.laure.thymesaver.Models.MealPlan;
 import com.example.laure.thymesaver.R;
 
@@ -214,7 +215,6 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             sectionTitle = itemView.findViewById(R.id.header_text);
             addButton = itemView.findViewById(R.id.header_add_button);
         }
-
     }
 
     public interface MealPlanListener {
