@@ -468,12 +468,17 @@ public class Repository {
                 if (mod.getName().equals(i.getName())) {
                     switch (mod.getType()) {
                         case CHANGE:
-                            int updatedQuantity = shoppingList.get(i) + mod.getQuantity();
-                            if (updatedQuantity == 0) {
-                                shoppingList.remove(i);
+                            if (shoppingList.containsKey(i)) {
+                                int updatedQuantity = shoppingList.get(i) + mod.getQuantity();
+                                if (updatedQuantity == 0) {
+                                    shoppingList.remove(i);
+                                }
+                                else {
+                                    shoppingList.put(i, updatedQuantity);
+                                }
                             }
                             else {
-                                shoppingList.put(i, updatedQuantity);
+                             shoppingList.put(i, mod.getQuantity());
                             }
                             break;
                         case ADD:

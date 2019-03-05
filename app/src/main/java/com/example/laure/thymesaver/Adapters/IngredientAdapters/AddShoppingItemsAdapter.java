@@ -219,6 +219,7 @@ public class AddShoppingItemsAdapter extends RecyclerView.Adapter<RecyclerView.V
     public HashMap<Ingredient, Integer> getMeasuredIngredients() {
         HashMap<Ingredient, Integer> measuredIngredients = new HashMap<>();
         for (Ingredient i : mIngredients) {
+            if (getItemViewType(i) == HEADER_TYPE) continue;
             int quantity = mMeasuredIngredients.get(i);
             if (quantity > 0) {
                 measuredIngredients.put(i, quantity);
