@@ -1,11 +1,11 @@
 package com.example.laure.thymesaver.Models;
 
-public enum BulkIngredientStates {
+public enum BulkIngredientState {
     OUT_OF_STOCK,
     RUNNING_LOW,
     IN_STOCK;
 
-    public static BulkIngredientStates convertIntToEnum(int x) {
+    public static BulkIngredientState convertIntToEnum(int x) {
         switch(x) {
             case 0:
                 return OUT_OF_STOCK;
@@ -16,7 +16,7 @@ public enum BulkIngredientStates {
         }
     }
 
-    public static int convertEnumToInt(BulkIngredientStates state) {
+    public static int convertEnumToInt(BulkIngredientState state) {
         switch (state) {
             case OUT_OF_STOCK:
                 return 0;

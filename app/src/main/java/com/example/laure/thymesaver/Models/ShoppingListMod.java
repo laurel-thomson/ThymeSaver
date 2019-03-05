@@ -6,11 +6,23 @@ public class ShoppingListMod {
     private String name;
     private int quantity;
 
+    //the type of modification: change (for non-bulk ingredients) or add/delete (for bulk ingredients)
+    private ModType type;
+
     public ShoppingListMod() {}
 
-    public ShoppingListMod(String name, int quantity) {
+    public ShoppingListMod(String name, ModType type, int quantity) {
         this.name = name;
+        this.type = type;
         this.quantity = quantity;
+    }
+
+    public ModType getType() {
+        return type;
+    }
+
+    public void setType(ModType type) {
+        this.type = type;
     }
 
     @Exclude

@@ -14,6 +14,7 @@ import android.view.MenuItem;
 
 import com.example.laure.thymesaver.Adapters.IngredientAdapters.AddShoppingItemsAdapter;
 import com.example.laure.thymesaver.Models.Ingredient;
+import com.example.laure.thymesaver.Models.ModType;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.ViewModels.PantryViewModel;
 import com.example.laure.thymesaver.ViewModels.ShoppingViewModel;
@@ -44,7 +45,13 @@ public class AddShoppingListItemsActivity extends AppCompatActivity {
 
     public void saveIngredients() {
         for (Map.Entry<Ingredient, Integer> entry : mAdapter.getMeasuredIngredients().entrySet()) {
-            mShoppingViewModel.addShoppingModification(entry.getKey().getName(), entry.getValue());
+            Ingredient i = entry.getKey();
+            if (i.isBulk()) {
+                mShoppingViewModel.addShoppingModification(i.getName(), ModType.ADD, 0);
+            }
+            else {
+                mShoppingViewModel.addShoppingModification(i.getName(), ModType.CHANGE, entry.getValue());
+            }
         }
     }
 

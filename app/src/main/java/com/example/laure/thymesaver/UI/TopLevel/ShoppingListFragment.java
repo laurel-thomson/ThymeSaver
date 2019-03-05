@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 
 import com.example.laure.thymesaver.Adapters.IngredientAdapters.ShoppingListAdapter;
 import com.example.laure.thymesaver.Models.Ingredient;
+import com.example.laure.thymesaver.Models.ModType;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.AddIngredients.AddShoppingListItemsActivity;
 import com.example.laure.thymesaver.ViewModels.ShoppingViewModel;
@@ -64,7 +65,7 @@ public class ShoppingListFragment extends AddButtonFragment implements ShoppingL
 
     @Override
     public void onIngredientQuantityChanged(Ingredient i, int quantity) {
-        mViewModel.addShoppingModification(i.getName(), quantity);
+        mViewModel.addShoppingModification(i.getName(), ModType.CHANGE, quantity);
     }
 
     @Override
@@ -72,21 +73,6 @@ public class ShoppingListFragment extends AddButtonFragment implements ShoppingL
         final int oldQuantity = i.getQuantity();
         mViewModel.addQuantityToPantry(i, quantity);
         mViewModel.deleteModifier(i.getName());
-        Snackbar snackbar = Snackbar
-                .make(getView(), i.getName() +
-                        " added back to pantry.", Snackbar.LENGTH_LONG)
-                .setAction("UNDO", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        mViewModel.resetPantryQuantity(i, oldQuantity);
-                        mViewModel.addShoppingModification(i.getName(), quantity);
-                        Snackbar newSnackBar = Snackbar
-                                .make(getView(), "Shopping list item restored.", Snackbar.LENGTH_SHORT);
-                        newSnackBar.show();
-                    }
-                });
-
-        snackbar.show();
     }
 
     @Override
