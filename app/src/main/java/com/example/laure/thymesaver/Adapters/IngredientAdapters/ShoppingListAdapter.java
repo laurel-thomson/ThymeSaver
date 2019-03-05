@@ -180,7 +180,7 @@ public class ShoppingListAdapter extends  RecyclerView.Adapter<RecyclerView.View
                     int measuredQuantity = mMeasuredIngredients.get(i);
                     if (measuredQuantity == 1) return;
                     mMeasuredIngredients.put(i, measuredQuantity - 1);
-                    mListener.onIngredientQuantityChanged(i, mMeasuredIngredients.get(i));
+                    mListener.onIngredientQuantityChanged(i, -1);
                     notifyDataSetChanged();
                 }
             });
@@ -192,7 +192,7 @@ public class ShoppingListAdapter extends  RecyclerView.Adapter<RecyclerView.View
                     int measuredQuantity = mMeasuredIngredients.get(i);
                     if (measuredQuantity > 9999) return;
                     mMeasuredIngredients.put(i, measuredQuantity + 1);
-                    mListener.onIngredientQuantityChanged(i, mMeasuredIngredients.get(i));
+                    mListener.onIngredientQuantityChanged(i, 1);
                     notifyDataSetChanged();
                 }
             });

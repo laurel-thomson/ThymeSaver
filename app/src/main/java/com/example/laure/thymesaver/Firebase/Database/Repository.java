@@ -221,8 +221,27 @@ public class Repository {
         mIngredientReference.updateChildren(ingredientData);
     }
 
-    public void addShoppingModification(ShoppingListMod mod) {
-        mDatabase.getReference("shoppinglistmods").child(mod.getName()).setValue(mod);
+    public void addOrUpdateModification(final ShoppingListMod mod) {
+        mDatabase.getReference("shoppinglistmods").child(mod.getName()).addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            ShoppingListMod oldMod = dataSnapshot.getValue(ShoppingListMod.class);
+                            oldMod.setQuantity(oldMod.getQuantity() + mod.getQuantity());
+                            mDatabase.getReference("shoppinglistmods").child(mod.getName()).setValue(oldMod);
+                        }
+                        else {
+                            mDatabase.getReference("shoppinglistmods").child(mod.getName()).setValue(mod);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                }
+        );
     }
 
     public void deleteShoppingModification(final String name) {
@@ -246,7 +265,7 @@ public class Repository {
                             else {
                                 mod = new ShoppingListMod(ingredient.getName(), CHANGE, 0 - quantity);
                             }
-                            addShoppingModification(mod);
+                            addOrUpdateModification(mod);
                         }
                         else {
                             //if we are deleting a shopping list item that has a modification, it

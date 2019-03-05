@@ -43,7 +43,7 @@ public class ShoppingViewModel extends AndroidViewModel {
     }
 
     public void addShoppingModification(String name, ModType type, int modifier) {
-        mRepository.addShoppingModification(new ShoppingListMod(name, type, modifier));
+        mRepository.addOrUpdateModification(new ShoppingListMod(name, type, modifier));
     }
 
     public void deleteShoppingListItem(Ingredient ingredient, int quantity) {
