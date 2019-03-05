@@ -53,4 +53,6 @@ public class ShoppingViewModel extends AndroidViewModel {
     public void deleteModifier(String name) {
         mRepository.deleteShoppingModification(name);
     }
+
+    public void refreshShoppingList() { mRepository.deleteAllModifications(); }
 }

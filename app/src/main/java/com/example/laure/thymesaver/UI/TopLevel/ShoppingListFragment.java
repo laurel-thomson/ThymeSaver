@@ -1,7 +1,9 @@
 package com.example.laure.thymesaver.UI.TopLevel;
 
+import android.app.AlertDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,6 +13,9 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -31,6 +36,7 @@ public class ShoppingListFragment extends AddButtonFragment implements ShoppingL
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState){
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_shopping_list, viewGroup, false);
     }
 
@@ -78,5 +84,32 @@ public class ShoppingListFragment extends AddButtonFragment implements ShoppingL
     @Override
     public void onDeleteClicked(Ingredient i, int quantity) {
         mViewModel.deleteShoppingListItem(i, quantity);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        getActivity().getMenuInflater().inflate(R.menu.menu_shopping_list, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_renew:
+                AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                        .setTitle("Refresh Shopping List?")
+                        .setMessage("Refreshing the shopping list will delete all " +
+                                "manual modifications.")
+                        .setPositiveButton("REFRESH", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                mViewModel.refreshShoppingList();
+                            }
+                        })
+                        .create();
+                dialog.show();
+                return true;
+        }
+        return false;
     }
 }

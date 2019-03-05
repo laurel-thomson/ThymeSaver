@@ -229,6 +229,10 @@ public class Repository {
         mDatabase.getReference("shoppinglistmods").child(name).removeValue();
     }
 
+    public void deleteAllModifications() {
+        mDatabase.getReference("shoppinglistmods").removeValue();
+    }
+
     public void deleteShoppingListItem(final Ingredient ingredient, final int quantity) {
         mDatabase.getReference("shoppinglistmods").child(ingredient.getName()).addListenerForSingleValueEvent(
                 new ValueEventListener() {
