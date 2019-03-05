@@ -226,7 +226,6 @@ public class Repository {
     }
 
     public void deleteShoppingModification(final String name) {
-
         mDatabase.getReference("shoppinglistmods").child(name).removeValue();
     }
 
@@ -446,7 +445,13 @@ public class Repository {
                 if (mod.getName().equals(i.getName())) {
                     switch (mod.getType()) {
                         case CHANGE:
-                            shoppingList.put(i, shoppingList.get(i) + mod.getQuantity());
+                            int updatedQuantity = shoppingList.get(i) + mod.getQuantity();
+                            if (updatedQuantity == 0) {
+                                shoppingList.remove(i);
+                            }
+                            else {
+                                shoppingList.put(i, updatedQuantity);
+                            }
                             break;
                         case ADD:
                             shoppingList.put(i, 0);
