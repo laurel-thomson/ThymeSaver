@@ -43,7 +43,7 @@ public class RecipeQuantity {
             case "Tablespoons":
                 return "T";
             case "Teaspoons":
-                return "tsp";
+                return "t";
             case "Cups":
                 return "c";
             default:

@@ -66,7 +66,7 @@ public class PantryFragment extends AddButtonFragment implements PantryAdapter.I
         new AlertDialog.Builder(getActivity())
                 .setTitle("Delete " + ingredient.getName() + " ?")
                 .setMessage("Are you sure you want to delete this ingredient? This will remove" +
-                        " this ingredient from all recipes.")
+                        " this ingredient from all recipes and the shopping list.")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener()
                 {
                     @Override

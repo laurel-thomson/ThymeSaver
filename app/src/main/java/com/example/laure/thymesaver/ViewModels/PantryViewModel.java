@@ -30,6 +30,8 @@ public class PantryViewModel extends AndroidViewModel {
 
     public void deleteIngredient(Ingredient i) {
         mRepository.deleteIngredient(i);
+        //if we're deleting an ingredient, we don't want it to show up in the shopping list
+        mRepository.deleteShoppingModification(i.getName());
     }
 
     public void updateIngredientPantryQuantity(Ingredient i, int quantity) {
