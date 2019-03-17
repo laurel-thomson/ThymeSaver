@@ -134,6 +134,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void authenticate() {
+        //if the user is already logged in, we don't want to launch the sign in flow
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) return;
+
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build());
