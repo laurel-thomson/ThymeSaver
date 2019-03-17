@@ -11,6 +11,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,8 @@ import android.view.ViewGroup;
 import com.example.laure.thymesaver.R;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -42,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         mActionBar = getSupportActionBar();
         mActionBar.setTitle("Meal Planner");
 
-        authenticate();
+        signIn();
 
         mFAB = findViewById(R.id.main_add_button);
         mFAB.setOnClickListener(new View.OnClickListener() {
@@ -133,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
         mFAB.hide();
     }
 
-    private void authenticate() {
+    private void signIn() {
         //if the user is already logged in, we don't want to launch the sign in flow
         if (FirebaseAuth.getInstance().getCurrentUser() != null) return;
 
@@ -148,6 +152,16 @@ public class MainActivity extends AppCompatActivity {
                         .setAvailableProviders(providers)
                         .build(),
                 RC_SIGN_IN);
+    }
+
+    private void signOut() {
+        AuthUI.getInstance()
+                .signOut(this)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    public void onComplete(@NonNull Task<Void> task) {
+                        //TODO: launch a sign out activity
+                    }
+                });
     }
 
     @Override
@@ -208,6 +222,24 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             return NUMBER_OF_TABS;
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.top_level_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.sign_out:
+                signOut();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }
