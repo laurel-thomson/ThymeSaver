@@ -45,13 +45,14 @@ public class PantryListAdapter extends RecyclerView.Adapter<PantryListAdapter.My
     public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, int position) {
         Pantry pantry = mPantryList.get(position);
         myViewHolder.mName.setText(pantry.getName());
-        myViewHolder.mRadioButton.setChecked(position == mSelectedItem);
-        myViewHolder.mManageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            }
-        });
-
+        if (position == mSelectedItem) {
+            myViewHolder.mRadioButton.setChecked(true);
+            myViewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.colorAccentLight));
+        }
+        else {
+            myViewHolder.mRadioButton.setChecked(false);
+            myViewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.colorBackground));
+        }
     }
 
     @Override
