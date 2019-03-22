@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
                 .signOut(this)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     public void onComplete(@NonNull Task<Void> task) {
-                        //TODO: launch a sign out activity
+                        signIn();
                     }
                 });
     }
@@ -179,7 +179,9 @@ public class MainActivity extends AppCompatActivity {
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back button. Otherwise check
                 // response.getError().getErrorCode() and handle the error.
-                // ...
+                // We don't want to cancel sign in, so we'll just retry if they hit the
+                // back button
+                signIn();
             }
         }
     }

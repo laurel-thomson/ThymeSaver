@@ -12,6 +12,7 @@ import com.example.laure.thymesaver.Models.ModType;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.Models.RecipeQuantity;
 import com.example.laure.thymesaver.Models.ShoppingListMod;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,9 +27,11 @@ import static com.example.laure.thymesaver.Models.ModType.CHANGE;
 
 public class Repository {
     private FirebaseDatabase mDatabase;
+    private DatabaseReference mDatabaseReference;
     private DatabaseReference mRecipeReference;
     private DatabaseReference mIngredientReference;
     private DatabaseReference mMealPlanReference;
+    private DatabaseReference mShoppingListModReference;
     private static Repository mSoleInstance;
     private List<Recipe> mRecipes = new ArrayList<>();
     private List<Ingredient> mIngredients = new ArrayList<>();
@@ -40,6 +43,7 @@ public class Repository {
     private final LiveData<HashMap<Ingredient,Integer>> mShoppingLiveData;
     private LiveData<Recipe> mRecipeLiveData;
     private Recipe mRecipe;
+    private String mPantryID;
 
     public static Repository getInstance() {
         if (mSoleInstance == null) {
@@ -51,9 +55,12 @@ public class Repository {
     private Repository() {
         mDatabase = FirebaseDatabase.getInstance();
         mDatabase.setPersistenceEnabled(true);
-        mRecipeReference = mDatabase.getReference("recipes");
-        mIngredientReference = mDatabase.getReference("ingredients");
-        mMealPlanReference = mDatabase.getReference("mealplan");
+        mPantryID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        mDatabaseReference = mDatabase.getReference("pantries/" + mPantryID );
+        mRecipeReference = mDatabase.getReference("pantries/" + mPantryID + "/recipes");
+        mIngredientReference = mDatabase.getReference("pantries/" + mPantryID + "/ingredients");
+        mMealPlanReference = mDatabase.getReference("pantries/" + mPantryID + "/mealplan");
+        mShoppingListModReference = mDatabase.getReference("pantries/" + mPantryID + "/shoppinglistmods");
         mRecipeListLiveData = Transformations.map(
                 new ListLiveData<Recipe>(mRecipeReference, Recipe.class),
                 new RecipeListDeserializer());
@@ -64,7 +71,7 @@ public class Repository {
                 new ListLiveData<MealPlan>(mMealPlanReference, MealPlan.class),
                 new MealPlanDeserializer());
         mShoppingLiveData = Transformations.map(
-                new ShoppingListLiveData(mDatabase.getReference()),
+                new ShoppingListLiveData(mDatabaseReference),
                 new ShoppingListDeserializer());
 
 
@@ -105,7 +112,7 @@ public class Repository {
     public LiveData<HashMap<Ingredient, RecipeQuantity>> getRecipeIngredients(Recipe r) {
         mRecipe = r;
         return Transformations.map(
-                        new RecipeIngredientsLiveData(mDatabase.getReference(), r),
+                        new RecipeIngredientsLiveData(mDatabaseReference, r),
                         new RecipeIngredientsDeserializer()
                 );
     }
@@ -222,17 +229,17 @@ public class Repository {
     }
 
     public void addOrUpdateModification(final ShoppingListMod mod) {
-        mDatabase.getReference("shoppinglistmods").child(mod.getName()).addListenerForSingleValueEvent(
+        mShoppingListModReference.child(mod.getName()).addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
                             ShoppingListMod oldMod = dataSnapshot.getValue(ShoppingListMod.class);
                             oldMod.setQuantity(oldMod.getQuantity() + mod.getQuantity());
-                            mDatabase.getReference("shoppinglistmods").child(mod.getName()).setValue(oldMod);
+                            mShoppingListModReference.child(mod.getName()).setValue(oldMod);
                         }
                         else {
-                            mDatabase.getReference("shoppinglistmods").child(mod.getName()).setValue(mod);
+                            mShoppingListModReference.child(mod.getName()).setValue(mod);
                         }
                     }
 
@@ -245,15 +252,15 @@ public class Repository {
     }
 
     public void deleteShoppingModification(final String name) {
-        mDatabase.getReference("shoppinglistmods").child(name).removeValue();
+        mShoppingListModReference.child(name).removeValue();
     }
 
     public void deleteAllModifications() {
-        mDatabase.getReference("shoppinglistmods").removeValue();
+        mShoppingListModReference.removeValue();
     }
 
     public void deleteShoppingListItem(final Ingredient ingredient, final int quantity) {
-        mDatabase.getReference("shoppinglistmods").child(ingredient.getName()).addListenerForSingleValueEvent(
+        mShoppingListModReference.child(ingredient.getName()).addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
