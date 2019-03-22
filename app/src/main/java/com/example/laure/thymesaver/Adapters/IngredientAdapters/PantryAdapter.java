@@ -111,15 +111,15 @@ public class PantryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                         .convertEnumToInt(BulkIngredientState.OUT_OF_STOCK)) {
 
                     holder.mQuantityTV.setText("Out of stock");
-                    holder.mQuantityTV.setTextColor(getAccentColor());
+                    holder.mQuantityTV.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
                 } else if (ingredient.getQuantity() == BulkIngredientState
                         .convertEnumToInt(BulkIngredientState.RUNNING_LOW)) {
 
                     holder.mQuantityTV.setText("Running low");
-                    holder.mQuantityTV.setTextColor(getAccentColor());
+                    holder.mQuantityTV.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
                 } else {
                     holder.mQuantityTV.setText("In stock");
-                    holder.mQuantityTV.setTextColor(Color.parseColor("#000000"));
+                    holder.mQuantityTV.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryText));
                 }
             }
 
@@ -128,7 +128,7 @@ public class PantryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 holder.mQuantityTV.setText(Integer.toString(ingredient.getQuantity()));
                 holder.mDecrementer.setVisibility(View.VISIBLE);
                 holder.mIncrementer.setVisibility(View.VISIBLE);
-                holder.mQuantityTV.setTextColor(Color.parseColor("#000000"));
+                holder.mQuantityTV.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryText));
             }
         }
         else {
@@ -138,14 +138,11 @@ public class PantryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    private int getAccentColor() {
+    private int getPrimaryTextColor() {
         TypedValue typedValue = new TypedValue();
-
-        TypedArray a = mContext.obtainStyledAttributes(typedValue.data, new int[] { R.attr.colorAccent });
+        TypedArray a = mContext.obtainStyledAttributes(typedValue.data, new int[] { R.attr.color });
         int color = a.getColor(0, 0);
-
         a.recycle();
-
         return color;
     }
 

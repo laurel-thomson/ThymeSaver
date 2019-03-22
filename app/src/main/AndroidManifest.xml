@@ -16,11 +16,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".UI.RecipeDetail.RecipeDetailActivity" />
+        <activity android:name=".UI.RecipeDetail.RecipeDetailActivity" />
         <activity android:name=".UI.AddIngredients.AddOrEditIngredientActivity" />
         <activity android:name=".UI.AddPlannedMealsActivity" />
-        <activity android:name=".UI.AddIngredients.AddShoppingListItemsActivity"/>
+        <activity android:name=".UI.AddIngredients.AddShoppingListItemsActivity" />
+        <activity android:name=".UI.Settings.PantryManagerActivity"></activity>
     </application>
 
 </manifest>

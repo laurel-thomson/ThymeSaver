@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.laure.thymesaver.R;
+import com.example.laure.thymesaver.UI.Settings.PantryManagerActivity;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -237,6 +238,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.manage_pantries:
+                Intent intent = new Intent(this, PantryManagerActivity.class);
+                startActivity(intent);
+                return true;
             case R.id.sign_out:
                 signOut();
                 return true;
