@@ -22,8 +22,10 @@ public class PantryManagerActivity extends AppCompatActivity {
         List<Pantry> pantries = new ArrayList<Pantry>();
         pantries.add(new Pantry("My Pantry", "1234", true, true));
         pantries.add(new Pantry("Alex Thomson's Pantry", "3334", false, false));
+
         PantryListAdapter adapter = new PantryListAdapter(this);
         adapter.setPantryList(pantries);
+
         RecyclerView mRecyclerView = findViewById(R.id.manage_pantry_rv);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(adapter);
