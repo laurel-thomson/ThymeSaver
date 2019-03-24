@@ -10,9 +10,8 @@ public class Pantry {
 
     public Pantry() {}
 
-    public Pantry(String name, String uId, boolean isMyPantry, boolean isPreferredPantry) {
+    public Pantry(String name, boolean isMyPantry, boolean isPreferredPantry) {
         this.name = name;
-        this.uId = uId;
         this.isMyPantry = isMyPantry;
         this.isPreferredPantry = isPreferredPantry;
     }

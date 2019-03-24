@@ -5,7 +5,6 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Transformations;
 import android.support.annotation.NonNull;
 
-import com.example.laure.thymesaver.Models.BulkIngredientState;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.MealPlan;
 import com.example.laure.thymesaver.Models.ModType;
@@ -34,6 +33,7 @@ public class Repository {
     private DatabaseReference mMealPlanReference;
     private DatabaseReference mShoppingListModReference;
     private DatabaseReference mUserReference;
+    private DatabaseReference mPantriesReference;
     private static Repository mSoleInstance;
     private List<Recipe> mRecipes = new ArrayList<>();
     private List<Ingredient> mIngredients = new ArrayList<>();
@@ -66,6 +66,7 @@ public class Repository {
         mMealPlanReference = mDatabase.getReference("pantries/" + mUserId + "/mealplan");
         mShoppingListModReference = mDatabase.getReference("pantries/" + mUserId + "/shoppinglistmods");
         mUserReference = mDatabase.getReference("users/" + mUserId);
+        mPantriesReference = mUserReference.child("pantries");
         mRecipeListLiveData = Transformations.map(
                 new ListLiveData<Recipe>(mRecipeReference, Recipe.class),
                 new RecipeListDeserializer());
@@ -79,8 +80,14 @@ public class Repository {
                 new ShoppingListLiveData(mDatabaseReference),
                 new ShoppingListDeserializer());
         mPantryListLiveData = Transformations.map(
-                new ListLiveData<Pantry>(mUserReference.child("pantries"), Pantry.class),
+                new ListLiveData<Pantry>(mPantriesReference, Pantry.class),
                 new PantryListDeserializer());
+    }
+
+    public void populateNewUserData() {
+        mPantriesReference.child(mUserId).setValue(new Pantry("My Pantry", true, true));
+
+        //TODO: populate pantry with generic items
     }
 
     public LiveData<HashMap<Ingredient, RecipeQuantity>> getRecipeIngredients(Recipe r) {
@@ -261,10 +268,6 @@ public class Repository {
                     }
                 }
         );
-    }
-
-    public void addOwnPantry() {
-        mUserReference.child("pantries").child(mUserId).setValue(new Pantry("My Pantry",mUserId,true,true));
     }
 
     @NonNull

@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.laure.thymesaver.Firebase.Database.Repository;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.Settings.PantryManagerActivity;
 import com.firebase.ui.auth.AuthUI;
@@ -88,6 +89,9 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (isNewUser(user)) {
+                    Repository.getInstance().populateNewUserData();
+                }
                 onSignIn();
                 // ...
             } else {
@@ -99,6 +103,10 @@ public class MainActivity extends AppCompatActivity {
                 signIn();
             }
         }
+    }
+
+    private boolean isNewUser(FirebaseUser user) {
+        return user.getMetadata().getLastSignInTimestamp() == user.getMetadata().getCreationTimestamp();
     }
 
     private void onSignIn() {
