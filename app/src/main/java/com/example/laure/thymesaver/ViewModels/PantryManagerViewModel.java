@@ -25,4 +25,8 @@ public class PantryManagerViewModel extends AndroidViewModel {
     public LiveData<List<Pantry>> getPantries() {
         return mPantries;
     }
+
+    public void requestJoinPantry(String email) {
+        mRepository.requestJoinPantry(email);
+    }
 }

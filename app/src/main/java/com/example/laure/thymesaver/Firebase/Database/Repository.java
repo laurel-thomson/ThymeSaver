@@ -86,8 +86,34 @@ public class Repository {
 
     public void populateNewUserData() {
         mPantriesReference.child(mUserId).setValue(new Pantry("My Pantry", true, true));
-
+        mUserReference.child("email").setValue(FirebaseAuth.getInstance().getCurrentUser().getEmail());
         //TODO: populate pantry with generic items
+    }
+
+    public void requestJoinPantry(final String requestEmail) {
+        mDatabase.getReference().child("users").addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                                String email = snap.child("email").getValue().toString();
+                                if (email.equals(requestEmail)) {
+                                    mDatabase.getReference().child("users").child(snap.getKey()).child("requests")
+                                            .child(mUserId).setValue(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                                    break;
+                                }
+                            }
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                }
+        );
     }
 
     public LiveData<HashMap<Ingredient, RecipeQuantity>> getRecipeIngredients(Recipe r) {

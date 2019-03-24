@@ -93,7 +93,7 @@ public class PantryManagerActivity extends AppCompatActivity {
                 .setPositiveButton("Send Request", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        //TODO: send request
+                        mViewModel.requestJoinPantry(emailET.getText().toString());
                     }
                 })
                 .create();
