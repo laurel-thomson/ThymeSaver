@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 
 import com.example.laure.thymesaver.Firebase.Database.Repository;
 import com.example.laure.thymesaver.Models.Ingredient;
+import com.example.laure.thymesaver.Models.MealPlan;
 import com.example.laure.thymesaver.Models.Pantry;
 
 import java.util.List;
@@ -18,6 +19,10 @@ public class PantryManagerViewModel extends AndroidViewModel {
     public PantryManagerViewModel(@NonNull Application application) {
         super(application);
         mRepository = Repository.getInstance();
-        //mPantries = mRepository.getPantries();
+        mPantries = mRepository.getPantries();
+    }
+
+    public LiveData<List<Pantry>> getPantries() {
+        return mPantries;
     }
 }

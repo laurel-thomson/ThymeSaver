@@ -9,6 +9,7 @@ import com.example.laure.thymesaver.Models.BulkIngredientState;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.MealPlan;
 import com.example.laure.thymesaver.Models.ModType;
+import com.example.laure.thymesaver.Models.Pantry;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.Models.RecipeQuantity;
 import com.example.laure.thymesaver.Models.ShoppingListMod;
@@ -38,11 +39,13 @@ public class Repository {
     private List<Ingredient> mIngredients = new ArrayList<>();
     private List<MealPlan> mMealPlans = new ArrayList<>();
     private HashMap<Ingredient, Integer> mShoppingList = new HashMap<>();
+    private List<Pantry> mPantries = new ArrayList<>();
     private final LiveData<List<Recipe>> mRecipeListLiveData;
     private final LiveData<List<Ingredient>> mIngredientLiveData;
     private final LiveData<List<MealPlan>> mMealPlanLiveData;
     private final LiveData<HashMap<Ingredient,Integer>> mShoppingLiveData;
     private LiveData<Recipe> mRecipeLiveData;
+    private LiveData<List<Pantry>> mPantryListLiveData;
     private Recipe mRecipe;
     private String mUserId;
 
@@ -75,6 +78,9 @@ public class Repository {
         mShoppingLiveData = Transformations.map(
                 new ShoppingListLiveData(mDatabaseReference),
                 new ShoppingListDeserializer());
+        mPantryListLiveData = Transformations.map(
+                new ListLiveData<Pantry>(mUserReference.child("pantries"), Pantry.class),
+                new PantryListDeserializer());
     }
 
     public LiveData<HashMap<Ingredient, RecipeQuantity>> getRecipeIngredients(Recipe r) {
@@ -257,6 +263,10 @@ public class Repository {
         );
     }
 
+    public void addOwnPantry() {
+        mUserReference.child("pantries").child(mUserId).setValue(new Pantry("My Pantry",mUserId,true,true));
+    }
+
     @NonNull
     public LiveData<List<Recipe>> getAllRecipes() {
         return mRecipeListLiveData;
@@ -275,6 +285,11 @@ public class Repository {
     @NonNull
     public LiveData<List<MealPlan>> getMealPlans() {
         return mMealPlanLiveData;
+    }
+
+    @NonNull
+    public LiveData<List<Pantry>> getPantries() {
+        return mPantryListLiveData;
     }
 
     public LiveData<Recipe> getRecipe(String recipeName) {
@@ -335,6 +350,21 @@ public class Repository {
                 mMealPlans.add(m);
             }
             return mMealPlans;
+        }
+    }
+
+    private class PantryListDeserializer implements Function<DataSnapshot, List<Pantry>> {
+
+        @Override
+        public List<Pantry> apply(DataSnapshot input) {
+            mPantries.clear();
+
+            for(DataSnapshot snap : input.getChildren()) {
+                Pantry pantry = snap.getValue(Pantry.class);
+                pantry.setuId(snap.getKey());
+                mPantries.add(pantry);
+            }
+            return mPantries;
         }
     }
 
