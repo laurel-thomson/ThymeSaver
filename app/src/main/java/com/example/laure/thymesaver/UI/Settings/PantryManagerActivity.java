@@ -3,15 +3,23 @@ package com.example.laure.thymesaver.UI.Settings;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.example.laure.thymesaver.Adapters.PantryListAdapter;
@@ -21,6 +29,8 @@ import com.example.laure.thymesaver.ViewModels.PantryManagerViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PantryManagerActivity extends AppCompatActivity {
     private PantryManagerViewModel mViewModel;
@@ -54,6 +64,14 @@ public class PantryManagerActivity extends AppCompatActivity {
                 DividerItemDecoration.VERTICAL));
 
         setUpActionBar();
+
+        FloatingActionButton fab = findViewById(R.id.pantry_manager_add_button);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                requestJoinPantry();
+            }
+        });
     }
 
     private void setUpActionBar() {
@@ -62,6 +80,60 @@ public class PantryManagerActivity extends AppCompatActivity {
         actionBar.setTitle("Manage Pantries");
         actionBar.setHomeAsUpIndicator(R.drawable.ic_done);
         actionBar.setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void requestJoinPantry() {
+        final View view = LayoutInflater.from(this).inflate(R.layout.join_pantry_dialog, null);
+        final EditText emailET = view.findViewById(R.id.pantry_email_edittext);
+        final TextInputLayout textInputLayout = view.findViewById(R.id.pantry_text_input_layout);
+
+        final AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(view)
+                .setTitle("Request to Join a Pantry")
+                .setPositiveButton("Send Request", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //TODO: send request
+                    }
+                })
+                .create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+
+        emailET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String email = editable.toString();
+                if (email.equals("")) {
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                    return;
+                }
+                if (!isEmailValid(email)) {
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                    textInputLayout.setError("Invalid email address");
+                    return;
+                }
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                textInputLayout.setError(null);
+            }
+        });
+    }
+
+    public static boolean isEmailValid(String email) {
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 
     @Override
