@@ -91,6 +91,7 @@ public class RecipeDetailActivity extends AppCompatActivity{
         ActionBar actionBar = getSupportActionBar();
         actionBar.setElevation(0);
         actionBar.setTitle("Recipe Details");
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_done);
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 

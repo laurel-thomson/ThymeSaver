@@ -38,28 +38,8 @@ public class RecipeIngredientsLiveData extends LiveData<DataSnapshot> {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             if(dataSnapshot != null){
-                setValue(dataSnapshot);
-
-                if (mRecipe == null) return;
-
-                HashMap<String, RecipeQuantity> neededIngredients = new HashMap<>();
-
-                for (DataSnapshot snap : dataSnapshot.child("recipes")
-                        .child(mRecipe.getName())
-                        .child("recipeIngredients")
-                        .getChildren()) {
-                    RecipeQuantity quantity = snap.getValue(RecipeQuantity.class);
-                    String ingName = snap.getKey();
-                    neededIngredients.put(ingName, quantity);
-                }
-
-                for (DataSnapshot snap : dataSnapshot.child("ingredients").getChildren()) {
-                    if (neededIngredients.containsKey(snap.getKey())) {
-                        Ingredient i = snap.getValue(Ingredient.class);
-                        i.setName(snap.getKey());
-                        mRecipeIngredients.put(i, neededIngredients.get(i.getName()));
-                    }
-                }
+                    setValue(dataSnapshot);
+                    mRecipeIngredients = getRecipeIngredients(dataSnapshot, mRecipe);
             }
         }
 
@@ -67,5 +47,30 @@ public class RecipeIngredientsLiveData extends LiveData<DataSnapshot> {
         public void onCancelled(DatabaseError databaseError) {
 
         }
+    }
+
+    public static HashMap<Ingredient, RecipeQuantity> getRecipeIngredients(DataSnapshot dataSnapshot, Recipe recipe) {
+        if (recipe == null) return null;
+
+        HashMap<Ingredient, RecipeQuantity> recipeIngredients = new HashMap<>();
+        HashMap<String, RecipeQuantity> neededIngredients = new HashMap<>();
+
+        for (DataSnapshot snap : dataSnapshot.child("recipes")
+                .child(recipe.getName())
+                .child("recipeIngredients")
+                .getChildren()) {
+            RecipeQuantity quantity = snap.getValue(RecipeQuantity.class);
+            String ingName = snap.getKey();
+            neededIngredients.put(ingName, quantity);
+        }
+
+        for (DataSnapshot snap : dataSnapshot.child("ingredients").getChildren()) {
+            if (neededIngredients.containsKey(snap.getKey())) {
+                Ingredient i = snap.getValue(Ingredient.class);
+                i.setName(snap.getKey());
+                recipeIngredients.put(i, neededIngredients.get(i.getName()));
+            }
+        }
+        return recipeIngredients;
     }
 }

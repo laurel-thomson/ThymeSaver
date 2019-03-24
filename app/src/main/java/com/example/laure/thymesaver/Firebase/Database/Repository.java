@@ -32,6 +32,7 @@ public class Repository {
     private DatabaseReference mIngredientReference;
     private DatabaseReference mMealPlanReference;
     private DatabaseReference mShoppingListModReference;
+    private DatabaseReference mUserReference;
     private static Repository mSoleInstance;
     private List<Recipe> mRecipes = new ArrayList<>();
     private List<Ingredient> mIngredients = new ArrayList<>();
@@ -43,7 +44,7 @@ public class Repository {
     private final LiveData<HashMap<Ingredient,Integer>> mShoppingLiveData;
     private LiveData<Recipe> mRecipeLiveData;
     private Recipe mRecipe;
-    private String mPantryID;
+    private String mUserId;
 
     public static Repository getInstance() {
         if (mSoleInstance == null) {
@@ -55,12 +56,13 @@ public class Repository {
     private Repository() {
         mDatabase = FirebaseDatabase.getInstance();
         mDatabase.setPersistenceEnabled(true);
-        mPantryID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        mDatabaseReference = mDatabase.getReference("pantries/" + mPantryID );
-        mRecipeReference = mDatabase.getReference("pantries/" + mPantryID + "/recipes");
-        mIngredientReference = mDatabase.getReference("pantries/" + mPantryID + "/ingredients");
-        mMealPlanReference = mDatabase.getReference("pantries/" + mPantryID + "/mealplan");
-        mShoppingListModReference = mDatabase.getReference("pantries/" + mPantryID + "/shoppinglistmods");
+        mUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        mDatabaseReference = mDatabase.getReference("pantries/" + mUserId);
+        mRecipeReference = mDatabase.getReference("pantries/" + mUserId + "/recipes");
+        mIngredientReference = mDatabase.getReference("pantries/" + mUserId + "/ingredients");
+        mMealPlanReference = mDatabase.getReference("pantries/" + mUserId + "/mealplan");
+        mShoppingListModReference = mDatabase.getReference("pantries/" + mUserId + "/shoppinglistmods");
+        mUserReference = mDatabase.getReference("users/" + mUserId);
         mRecipeListLiveData = Transformations.map(
                 new ListLiveData<Recipe>(mRecipeReference, Recipe.class),
                 new RecipeListDeserializer());
@@ -73,40 +75,6 @@ public class Repository {
         mShoppingLiveData = Transformations.map(
                 new ShoppingListLiveData(mDatabaseReference),
                 new ShoppingListDeserializer());
-
-
-        //force recipes & ingredients to cache
-        mRecipeReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot snap : dataSnapshot.getChildren()){
-                    Recipe r = snap.getValue(Recipe.class);
-                    r.setName(snap.getKey());
-                    mRecipes.add(r);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        mIngredientReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot snap : dataSnapshot.getChildren()){
-                    Ingredient i = snap.getValue(Ingredient.class);
-                    i.setName(snap.getKey());
-                    mIngredients.add(i);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
     public LiveData<HashMap<Ingredient, RecipeQuantity>> getRecipeIngredients(Recipe r) {
@@ -374,29 +342,7 @@ public class Repository {
 
         @Override
         public HashMap<Ingredient, RecipeQuantity> apply(DataSnapshot dataSnapshot) {
-
-            if (mRecipe == null) return null;
-
-            HashMap<Ingredient, RecipeQuantity> recipeIngredients = new HashMap<>();
-            HashMap<String, RecipeQuantity> neededIngredients = new HashMap<>();
-
-            for (DataSnapshot snap : dataSnapshot.child("recipes")
-                    .child(mRecipe.getName())
-                    .child("recipeIngredients")
-                    .getChildren()) {
-                RecipeQuantity quantity = snap.getValue(RecipeQuantity.class);
-                String ingName = snap.getKey();
-                neededIngredients.put(ingName, quantity);
-            }
-
-            for (DataSnapshot snap : dataSnapshot.child("ingredients").getChildren()) {
-                if (neededIngredients.containsKey(snap.getKey())) {
-                    Ingredient i = snap.getValue(Ingredient.class);
-                    i.setName(snap.getKey());
-                    recipeIngredients.put(i, neededIngredients.get(i.getName()));
-                }
-            }
-            return recipeIngredients;
+            return RecipeIngredientsLiveData.getRecipeIngredients(dataSnapshot, mRecipe);
         }
     }
 
@@ -404,101 +350,8 @@ public class Repository {
 
         @Override
         public HashMap<Ingredient, Integer> apply(DataSnapshot dataSnapshot) {
-            mShoppingList = getShoppingList(dataSnapshot);
+            mShoppingList = ShoppingListLiveData.getShoppingList(dataSnapshot);
             return mShoppingList;
         }
-    }
-
-    public static HashMap<Ingredient, Integer> getShoppingList(DataSnapshot dataSnapshot) {
-        HashMap<Ingredient, Integer> shoppingList = new HashMap<>();
-
-        //get all the needed ingredients & quantities from the meal plans
-        HashMap<String, Integer> neededIngredients = new HashMap<>();
-
-        for (DataSnapshot snap : dataSnapshot.child("mealplan").getChildren()) {
-            MealPlan mealPlan = snap.getValue(MealPlan.class);
-            String recipeName = mealPlan.getRecipeName();
-
-            for (DataSnapshot recipeSnap : dataSnapshot.child("recipes").getChildren()) {
-                if (recipeSnap.getKey().equals(recipeName)) {
-                    Recipe recipe = recipeSnap.getValue(Recipe.class);
-                    for (String ingName : recipe.getRecipeIngredients().keySet()) {
-                        if (!neededIngredients.containsKey(ingName)) {
-                            neededIngredients.put(
-                                    ingName,
-                                    recipe.getRecipeIngredients().get(ingName).getRecipeQuantity());
-                        }
-                        else {
-                            neededIngredients.put(
-                                    ingName,
-                                    neededIngredients.get(ingName)
-                                            + recipe.getRecipeIngredients().get(ingName).getRecipeQuantity()
-                            );
-                        }
-                    }
-                }
-            }
-        }
-
-        //get the shopping list mods
-        List<ShoppingListMod> mods = new ArrayList<>();
-        for (DataSnapshot snap : dataSnapshot.child("shoppinglistmods").getChildren()) {
-            ShoppingListMod mod = snap.getValue(ShoppingListMod.class);
-            mod.setName(snap.getKey());
-            mods.add(mod);
-        }
-
-        //find the matching ingredients in the pantry and subtract away from the
-        //needed ingredients list if there is quantity in the pantry
-        for (DataSnapshot snap : dataSnapshot.child("ingredients").getChildren()) {
-            Ingredient i = snap.getValue(Ingredient.class);
-            i.setName(snap.getKey());
-
-            if (neededIngredients.containsKey(snap.getKey())) {
-                if (i.isBulk()) {
-                    if (i.getQuantity() != BulkIngredientState
-                            .convertEnumToInt(BulkIngredientState.IN_STOCK)) {
-                        shoppingList.put(i, 1);
-                    }
-                }
-                else {
-                    int neededQuantity = neededIngredients.get(i.getName());
-                    int pantryQuantity = i.getQuantity();
-                    if (neededQuantity > pantryQuantity) {
-                        shoppingList.put(i, neededQuantity - pantryQuantity);
-                    }
-                }
-            }
-
-            //look for a matching modification
-            for (ShoppingListMod mod : mods) {
-                if (mod.getName().equals(i.getName())) {
-                    switch (mod.getType()) {
-                        case CHANGE:
-                            if (shoppingList.containsKey(i)) {
-                                int updatedQuantity = shoppingList.get(i) + mod.getQuantity();
-                                if (updatedQuantity == 0) {
-                                    shoppingList.remove(i);
-                                }
-                                else {
-                                    shoppingList.put(i, updatedQuantity);
-                                }
-                            }
-                            else {
-                             shoppingList.put(i, mod.getQuantity());
-                            }
-                            break;
-                        case ADD:
-                            shoppingList.put(i, 0);
-                            break;
-                        case DELETE:
-                            shoppingList.remove(i);
-                            break;
-                    }
-                    break;
-                }
-            }
-        }
-        return shoppingList;
     }
 }
