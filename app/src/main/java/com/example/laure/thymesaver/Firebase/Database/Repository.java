@@ -40,10 +40,10 @@ public class Repository {
     private List<MealPlan> mMealPlans = new ArrayList<>();
     private HashMap<Ingredient, Integer> mShoppingList = new HashMap<>();
     private List<Pantry> mPantries = new ArrayList<>();
-    private final LiveData<List<Recipe>> mRecipeListLiveData;
-    private final LiveData<List<Ingredient>> mIngredientLiveData;
-    private final LiveData<List<MealPlan>> mMealPlanLiveData;
-    private final LiveData<HashMap<Ingredient,Integer>> mShoppingLiveData;
+    private LiveData<List<Recipe>> mRecipeListLiveData = null;
+    private LiveData<List<Ingredient>> mIngredientLiveData = null;
+    private LiveData<List<MealPlan>> mMealPlanLiveData = null;
+    private LiveData<HashMap<Ingredient,Integer>> mShoppingLiveData = null;
     private LiveData<Recipe> mRecipeLiveData;
     private LiveData<List<Pantry>> mPantryListLiveData;
     private Recipe mRecipe;
