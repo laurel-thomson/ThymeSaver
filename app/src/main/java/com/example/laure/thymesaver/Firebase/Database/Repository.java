@@ -9,10 +9,12 @@ import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.MealPlan;
 import com.example.laure.thymesaver.Models.ModType;
 import com.example.laure.thymesaver.Models.Pantry;
+import com.example.laure.thymesaver.Models.PantryRequest;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.Models.RecipeQuantity;
 import com.example.laure.thymesaver.Models.ShoppingListMod;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,12 +40,14 @@ public class Repository {
     private List<Recipe> mRecipes = new ArrayList<>();
     private List<Ingredient> mIngredients = new ArrayList<>();
     private List<MealPlan> mMealPlans = new ArrayList<>();
+    private List<PantryRequest> mPantryRequests = new ArrayList<>();
     private HashMap<Ingredient, Integer> mShoppingList = new HashMap<>();
     private List<Pantry> mPantries = new ArrayList<>();
-    private LiveData<List<Recipe>> mRecipeListLiveData = null;
-    private LiveData<List<Ingredient>> mIngredientLiveData = null;
-    private LiveData<List<MealPlan>> mMealPlanLiveData = null;
-    private LiveData<HashMap<Ingredient,Integer>> mShoppingLiveData = null;
+    private final LiveData<List<Recipe>> mRecipeListLiveData;
+    private final LiveData<List<Ingredient>> mIngredientLiveData;
+    private final LiveData<List<MealPlan>> mMealPlanLiveData;
+    private final LiveData<List<PantryRequest>> mRequestsLiveData;
+    private final LiveData<HashMap<Ingredient,Integer>> mShoppingLiveData;
     private LiveData<Recipe> mRecipeLiveData;
     private LiveData<List<Pantry>> mPantryListLiveData;
     private Recipe mRecipe;
@@ -82,6 +86,9 @@ public class Repository {
         mPantryListLiveData = Transformations.map(
                 new ListLiveData<Pantry>(mPantriesReference, Pantry.class),
                 new PantryListDeserializer());
+        mRequestsLiveData = Transformations.map(
+                new ListLiveData<PantryRequest>(mUserReference.child("requests"), PantryRequest.class),
+                new PantryRequestsDeserializer());
     }
 
     public void populateNewUserData() {
@@ -99,8 +106,10 @@ public class Repository {
                             for (DataSnapshot snap : dataSnapshot.getChildren()) {
                                 String email = snap.child("email").getValue().toString();
                                 if (email.equals(requestEmail)) {
-                                    mDatabase.getReference().child("users").child(snap.getKey()).child("requests")
-                                            .child(mUserId).setValue(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                    PantryRequest request = new PantryRequest(user.getDisplayName(), user.getEmail());
+                                    mDatabase.getReference().child("users").child(snap.getKey()).child("requests").child(mUserId)
+                                            .setValue(request);
                                     break;
                                 }
                             }
@@ -321,6 +330,11 @@ public class Repository {
         return mPantryListLiveData;
     }
 
+    @NonNull
+    public LiveData<List<PantryRequest>> getPantryRequests() {
+        return mRequestsLiveData;
+    }
+
     public LiveData<Recipe> getRecipe(String recipeName) {
         mRecipeLiveData = Transformations.map(
                 new RecipeLiveData(mRecipeReference.child(recipeName)),
@@ -394,6 +408,22 @@ public class Repository {
                 mPantries.add(pantry);
             }
             return mPantries;
+        }
+    }
+
+    private class PantryRequestsDeserializer implements Function<DataSnapshot, List<PantryRequest>> {
+
+        @Override
+        public List<PantryRequest> apply(DataSnapshot input) {
+            mPantryRequests.clear();
+
+            for (DataSnapshot snap : input.getChildren()) {
+                PantryRequest request = snap.getValue(PantryRequest.class);
+                request.setuID(snap.getKey());
+                mPantryRequests.add(request);
+            }
+
+            return mPantryRequests;
         }
     }
 
