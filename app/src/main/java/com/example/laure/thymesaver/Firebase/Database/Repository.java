@@ -97,6 +97,25 @@ public class Repository {
         //TODO: populate pantry with generic items
     }
 
+    public void acceptJoinRequest(PantryRequest request) {
+        mUserReference.child("requests").child(request.getuID()).removeValue();
+
+        //add new user to current user's list of accepted requests
+        mUserReference.child("acceptedRequests").child(request.getuID()).setValue(request);
+
+        //add current user's pantry to requesting users list of pantries
+        mDatabase.getReference().child("users").child(request.getuID()).child("pantries")
+                .child(mUserId).setValue(
+                        new Pantry(
+                                FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
+                                false,
+                                false));
+    }
+
+    public void declineJoinRequest(PantryRequest request) {
+        mUserReference.child("requests").child(request.getuID()).removeValue();
+    }
+
     public void requestJoinPantry(final String requestEmail) {
         mDatabase.getReference().child("users").addListenerForSingleValueEvent(
                 new ValueEventListener() {
@@ -113,7 +132,6 @@ public class Repository {
                                     break;
                                 }
                             }
-
                         }
                     }
 

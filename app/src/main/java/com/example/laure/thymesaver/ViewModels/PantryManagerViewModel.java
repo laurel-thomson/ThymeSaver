@@ -36,4 +36,12 @@ public class PantryManagerViewModel extends AndroidViewModel {
     public void requestJoinPantry(String email) {
         mRepository.requestJoinPantry(email);
     }
+
+    public void acceptJoinRequest(PantryRequest request) {
+        mRepository.acceptJoinRequest(request);
+    }
+
+    public void declineJoinRequest(PantryRequest request) {
+        mRepository.declineJoinRequest(request);
+    }
 }

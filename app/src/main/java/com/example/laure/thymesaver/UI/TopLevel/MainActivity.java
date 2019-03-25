@@ -7,8 +7,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.card.MaterialCardView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -20,6 +22,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.laure.thymesaver.Firebase.Database.Repository;
 import com.example.laure.thymesaver.Models.PantryRequest;
@@ -33,6 +36,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton mFAB;
     private ActionBar mActionBar;
     private PantryManagerViewModel mViewModel;
+    private MaterialCardView mJoinRequestCardView;
+    private List<PantryRequest> mPantryRequests = new ArrayList<PantryRequest>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
         mActionBar = getSupportActionBar();
         mActionBar.setTitle("Meal Planner");
+        mJoinRequestCardView = findViewById(R.id.join_request_card);
 
         signIn();
     }
@@ -217,9 +226,49 @@ public class MainActivity extends AppCompatActivity {
         mViewModel.getPantryRequests().observe(this, new Observer<List<PantryRequest>>() {
             @Override
             public void onChanged(@Nullable List<PantryRequest> pantryRequests) {
-                for (PantryRequest request : pantryRequests) {
-                    //do something
+                if (!pantryRequests.isEmpty()) {
+                    PantryRequest firstRequest = pantryRequests.get(0);
+                    TextView requestTV = findViewById(R.id.request_text);
+                    requestTV.setText("You have a new request to join your pantry!\nFrom user: " +
+                        firstRequest.getUserName());
+                    mJoinRequestCardView.setVisibility(View.VISIBLE);
+                    mPantryRequests = pantryRequests;
+                    setListenersForActionButtons();
                 }
+                else {
+                    mPantryRequests.clear();
+                    mJoinRequestCardView.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    private void setListenersForActionButtons() {
+        TextView acceptButton = findViewById(R.id.accept_join_request);
+        acceptButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mPantryRequests.isEmpty()) return;
+
+                PantryRequest request = mPantryRequests.get(0);
+                mViewModel.acceptJoinRequest(request);
+
+                Snackbar.make(findViewById(R.id.activity_main_coordinator),
+                        "Join request accepted!", Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
+        TextView declineButton = findViewById(R.id.decline_join_request);
+        declineButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mPantryRequests.isEmpty()) return;
+
+                PantryRequest request = mPantryRequests.get(0);
+                mViewModel.declineJoinRequest(request);
+
+                Snackbar.make(findViewById(R.id.activity_main_coordinator),
+                        "Join request declined.", Snackbar.LENGTH_SHORT).show();
             }
         });
     }
