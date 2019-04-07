@@ -43,17 +43,26 @@ public class Repository {
     private List<PantryRequest> mPantryRequests = new ArrayList<>();
     private HashMap<Ingredient, Integer> mShoppingList = new HashMap<>();
     private List<Pantry> mPantries = new ArrayList<>();
-    private final LiveData<List<Recipe>> mRecipeListLiveData;
-    private final LiveData<List<Ingredient>> mIngredientLiveData;
-    private final LiveData<List<MealPlan>> mMealPlanLiveData;
-    private final LiveData<List<PantryRequest>> mRequestsLiveData;
-    private final LiveData<HashMap<Ingredient,Integer>> mShoppingLiveData;
+    private LiveData<List<Recipe>> mRecipeListLiveData;
+    private LiveData<List<Ingredient>> mIngredientLiveData;
+    private LiveData<List<MealPlan>> mMealPlanLiveData;
+    private LiveData<List<PantryRequest>> mRequestsLiveData;
+    private LiveData<HashMap<Ingredient,Integer>> mShoppingLiveData;
     private LiveData<Recipe> mRecipeLiveData;
     private LiveData<List<Pantry>> mPantryListLiveData;
     private Recipe mRecipe;
     private String mUserId;
+    private static String PantryId;
 
     public static Repository getInstance() {
+        if (mSoleInstance == null) {
+            mSoleInstance = new Repository();
+        }
+        return mSoleInstance;
+    }
+
+    public static Repository getInstance(String preferredPantry) {
+        PantryId = preferredPantry;
         if (mSoleInstance == null) {
             mSoleInstance = new Repository();
         }
@@ -64,12 +73,13 @@ public class Repository {
         mDatabase = FirebaseDatabase.getInstance();
         mDatabase.setPersistenceEnabled(true);
         mUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        mDatabaseReference = mDatabase.getReference("pantries/" + mUserId);
-        mRecipeReference = mDatabase.getReference("pantries/" + mUserId + "/recipes");
-        mIngredientReference = mDatabase.getReference("pantries/" + mUserId + "/ingredients");
-        mMealPlanReference = mDatabase.getReference("pantries/" + mUserId + "/mealplan");
-        mShoppingListModReference = mDatabase.getReference("pantries/" + mUserId + "/shoppinglistmods");
-        mUserReference = mDatabase.getReference("users/" + mUserId);
+
+        mDatabaseReference = mDatabase.getReference("pantries/" + PantryId);
+        mRecipeReference = mDatabase.getReference("pantries/" + PantryId + "/recipes");
+        mIngredientReference = mDatabase.getReference("pantries/" + PantryId + "/ingredients");
+        mMealPlanReference = mDatabase.getReference("pantries/" + PantryId + "/mealplan");
+        mShoppingListModReference = mDatabase.getReference("pantries/" + PantryId + "/shoppinglistmods");
+        mUserReference = mDatabase.getReference("users/" + PantryId);
         mPantriesReference = mUserReference.child("pantries");
         mRecipeListLiveData = Transformations.map(
                 new ListLiveData<Recipe>(mRecipeReference, Recipe.class),

@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -42,6 +43,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static android.preference.PreferenceManager.getDefaultSharedPreferences;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 100;
@@ -54,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
     private PantryManagerViewModel mViewModel;
     private MaterialCardView mJoinRequestCardView;
     private List<PantryRequest> mPantryRequests = new ArrayList<PantryRequest>();
+    private Repository mRepository;
+    private SharedPreferences mSharedPreferences;
+    private final String PREFERRED_PANTRY = "PREFFERED_PANTRY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,9 +69,11 @@ public class MainActivity extends AppCompatActivity {
         mActionBar = getSupportActionBar();
         mActionBar.setTitle("Meal Planner");
         mJoinRequestCardView = findViewById(R.id.join_request_card);
+        mSharedPreferences = getDefaultSharedPreferences(this);
 
         signIn();
     }
+
 
     private void signIn() {
         //if the user is already logged in, we don't want to launch the sign in flow
@@ -109,7 +117,10 @@ public class MainActivity extends AppCompatActivity {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (isNewUser(user)) {
-                    Repository.getInstance().populateNewUserData();
+                    onNewUserCreated(user);
+                }
+                else {
+                    setPreferredPantry();
                 }
                 onSignIn();
                 // ...
@@ -124,8 +135,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void onNewUserCreated(FirebaseUser user) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(PREFERRED_PANTRY, user.getUid());
+        editor.commit();
+        mRepository = Repository.getInstance(user.getUid());
+        mRepository.populateNewUserData();
+    }
+
     private boolean isNewUser(FirebaseUser user) {
         return user.getMetadata().getLastSignInTimestamp() == user.getMetadata().getCreationTimestamp();
+    }
+
+    private void setPreferredPantry() {
+        String preferredPantry = mSharedPreferences.getString(PREFERRED_PANTRY, null);
+        mRepository = Repository.getInstance(preferredPantry);
     }
 
     private void onSignIn() {
