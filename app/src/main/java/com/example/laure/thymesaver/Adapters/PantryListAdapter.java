@@ -16,11 +16,13 @@ import java.util.List;
 
 public class PantryListAdapter extends RecyclerView.Adapter<PantryListAdapter.MyViewHolder> {
     private List<Pantry> mPantryList;
+    private PantryListListener mListener;
     private Context mContext;
     private int mSelectedItem = -1;
 
-    public PantryListAdapter(Context context) {
+    public PantryListAdapter(Context context, PantryListListener listener) {
         mContext = context;
+        mListener = listener;
     }
 
     public void setPantryList(List<Pantry> pantryList) {
@@ -76,11 +78,17 @@ public class PantryListAdapter extends RecyclerView.Adapter<PantryListAdapter.My
                 @Override
                 public void onClick(View v) {
                     mSelectedItem = getAdapterPosition();
+                    String pantryId = mPantryList.get(mSelectedItem).getuId();
+                    mListener.onPreferredPantryChanged(pantryId);
                     notifyDataSetChanged();
                 }
             };
             itemView.setOnClickListener(clickListener);
             mRadioButton.setOnClickListener(clickListener);
         }
+    }
+
+    public interface PantryListListener {
+        void onPreferredPantryChanged(String pantryId);
     }
 }

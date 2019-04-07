@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private List<PantryRequest> mPantryRequests = new ArrayList<PantryRequest>();
     private Repository mRepository;
     private SharedPreferences mSharedPreferences;
-    private final String PREFERRED_PANTRY = "PREFFERED_PANTRY";
+    public static final String PREFERRED_PANTRY = "PREFFERED_PANTRY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
     private void signIn() {
         //if the user is already logged in, we don't want to launch the sign in flow
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            setPreferredPantry();
             onSignIn();
             return;
         }
@@ -138,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
     private void onNewUserCreated(FirebaseUser user) {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putString(PREFERRED_PANTRY, user.getUid());
-        editor.commit();
+        editor.apply();
         mRepository = Repository.getInstance(user.getUid());
         mRepository.populateNewUserData();
     }

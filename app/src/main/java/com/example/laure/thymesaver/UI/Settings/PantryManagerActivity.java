@@ -4,8 +4,10 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -25,6 +27,7 @@ import android.widget.ProgressBar;
 import com.example.laure.thymesaver.Adapters.PantryListAdapter;
 import com.example.laure.thymesaver.Models.Pantry;
 import com.example.laure.thymesaver.R;
+import com.example.laure.thymesaver.UI.TopLevel.MainActivity;
 import com.example.laure.thymesaver.ViewModels.PantryManagerViewModel;
 
 import java.util.ArrayList;
@@ -32,19 +35,23 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PantryManagerActivity extends AppCompatActivity {
+import static android.preference.PreferenceManager.getDefaultSharedPreferences;
+
+public class PantryManagerActivity extends AppCompatActivity implements PantryListAdapter.PantryListListener {
     private PantryManagerViewModel mViewModel;
     private PantryListAdapter mAdapter;
     private RecyclerView mRecyclerView;
+    private SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pantry_manager);
         final ProgressBar progressBar = findViewById(R.id.pantry_manager_progress);
+        mSharedPreferences = getDefaultSharedPreferences(this);
 
         mViewModel = ViewModelProviders.of(this).get(PantryManagerViewModel.class);
-        mAdapter = new PantryListAdapter(this);
+        mAdapter = new PantryListAdapter(this, this);
         mRecyclerView = findViewById(R.id.manage_pantry_rv);
         mRecyclerView.setVisibility(View.GONE);
 
@@ -146,4 +153,16 @@ public class PantryManagerActivity extends AppCompatActivity {
         return false;
     }
 
+    @Override
+    public void onPreferredPantryChanged(String pantryId) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(MainActivity.PREFERRED_PANTRY, pantryId);
+        editor.apply();
+        Snackbar snackbar = Snackbar
+                .make(findViewById(
+                        R.id.pantry_manager_layout),
+                        "Preferred pantry updated.",
+                        Snackbar.LENGTH_SHORT);
+        snackbar.show();
+    }
 }
