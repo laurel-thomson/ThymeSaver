@@ -52,17 +52,9 @@ public class Repository {
     private LiveData<List<Pantry>> mPantryListLiveData;
     private Recipe mRecipe;
     private String mUserId;
-    private static String sPantryId;
+    private static String mPantryId;
 
     public static Repository getInstance() {
-        if (mSoleInstance == null) {
-            mSoleInstance = new Repository();
-        }
-        return mSoleInstance;
-    }
-
-    public static Repository getInstance(String preferredPantry) {
-        sPantryId = preferredPantry;
         if (mSoleInstance == null) {
             mSoleInstance = new Repository();
         }
@@ -73,21 +65,28 @@ public class Repository {
         mDatabase = FirebaseDatabase.getInstance();
         mDatabase.setPersistenceEnabled(true);
         mUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        initializeReferences();
     }
 
-    public void changePreferredPantry(String pantryId) {
-        sPantryId = pantryId;
-        initializeReferences();
+    public void initializePantry() {
+        mUserReference.child("preferredPantry").setValue(mUserId);
+        mPantriesReference.child(mUserId).setValue(new Pantry("My Pantry", true, true));
+        mUserReference.child("email").setValue(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+        //TODO: populate pantry with generic items
     }
 
-    private void initializeReferences() {
-        mDatabaseReference = mDatabase.getReference("pantries/" + sPantryId);
-        mRecipeReference = mDatabase.getReference("pantries/" + sPantryId + "/recipes");
-        mIngredientReference = mDatabase.getReference("pantries/" + sPantryId + "/ingredients");
-        mMealPlanReference = mDatabase.getReference("pantries/" + sPantryId + "/mealplan");
-        mShoppingListModReference = mDatabase.getReference("pantries/" + sPantryId + "/shoppinglistmods");
-        mUserReference = mDatabase.getReference("users/" + sPantryId);
+    public void setPreferredPantry(String pantryId) {
+        mPantryId = pantryId;
+        mUserReference.child("preferredPantry").setValue(pantryId);
+        initializeDatabaseReferences();
+    }
+
+    public void initializeDatabaseReferences() {
+        mUserReference = mDatabase.getReference("users/" + mUserId);
+        mDatabaseReference = mDatabase.getReference("pantries/" + mPantryId);
+        mRecipeReference = mDatabase.getReference("pantries/" + mPantryId + "/recipes");
+        mIngredientReference = mDatabase.getReference("pantries/" + mPantryId + "/ingredients");
+        mMealPlanReference = mDatabase.getReference("pantries/" + mPantryId + "/mealplan");
+        mShoppingListModReference = mDatabase.getReference("pantries/" + mPantryId + "/shoppinglistmods");
         mPantriesReference = mUserReference.child("pantries");
         mRecipeListLiveData = Transformations.map(
                 new ListLiveData<Recipe>(mRecipeReference, Recipe.class),
@@ -107,12 +106,6 @@ public class Repository {
         mRequestsLiveData = Transformations.map(
                 new ListLiveData<PantryRequest>(mUserReference.child("requests"), PantryRequest.class),
                 new PantryRequestsDeserializer());
-    }
-
-    public void populateNewUserData() {
-        mPantriesReference.child(mUserId).setValue(new Pantry("My Pantry", true, true));
-        mUserReference.child("email").setValue(FirebaseAuth.getInstance().getCurrentUser().getEmail());
-        //TODO: populate pantry with generic items
     }
 
     public void acceptJoinRequest(PantryRequest request) {

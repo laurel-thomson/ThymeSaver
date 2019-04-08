@@ -41,14 +41,12 @@ public class PantryManagerActivity extends AppCompatActivity implements PantryLi
     private PantryManagerViewModel mViewModel;
     private PantryListAdapter mAdapter;
     private RecyclerView mRecyclerView;
-    private SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pantry_manager);
         final ProgressBar progressBar = findViewById(R.id.pantry_manager_progress);
-        mSharedPreferences = getDefaultSharedPreferences(this);
 
         mViewModel = ViewModelProviders.of(this).get(PantryManagerViewModel.class);
         mAdapter = new PantryListAdapter(this, this);
@@ -155,9 +153,6 @@ public class PantryManagerActivity extends AppCompatActivity implements PantryLi
 
     @Override
     public void onPreferredPantryChanged(String pantryId) {
-        SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putString(MainActivity.PREFERRED_PANTRY, pantryId);
-        editor.apply();
         Snackbar snackbar = Snackbar
                 .make(findViewById(
                         R.id.pantry_manager_layout),

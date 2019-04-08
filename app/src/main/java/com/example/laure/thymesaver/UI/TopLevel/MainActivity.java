@@ -1,10 +1,8 @@
 package com.example.laure.thymesaver.UI.TopLevel;
 
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -35,15 +33,15 @@ import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import org.w3c.dom.Text;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -58,8 +56,6 @@ public class MainActivity extends AppCompatActivity {
     private MaterialCardView mJoinRequestCardView;
     private List<PantryRequest> mPantryRequests = new ArrayList<PantryRequest>();
     private Repository mRepository;
-    private SharedPreferences mSharedPreferences;
-    public static final String PREFERRED_PANTRY = "PREFFERED_PANTRY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +65,6 @@ public class MainActivity extends AppCompatActivity {
         mActionBar = getSupportActionBar();
         mActionBar.setTitle("Meal Planner");
         mJoinRequestCardView = findViewById(R.id.join_request_card);
-        mSharedPreferences = getDefaultSharedPreferences(this);
-
         signIn();
     }
 
@@ -78,8 +72,7 @@ public class MainActivity extends AppCompatActivity {
     private void signIn() {
         //if the user is already logged in, we don't want to launch the sign in flow
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            setPreferredPantry();
-            onSignIn();
+            onSignInSuccess();
             return;
         }
 
@@ -115,15 +108,7 @@ public class MainActivity extends AppCompatActivity {
             IdpResponse response = IdpResponse.fromResultIntent(data);
 
             if (resultCode == RESULT_OK) {
-                // Successfully signed in
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if (isNewUser(user)) {
-                    onNewUserCreated(user);
-                }
-                else {
-                    setPreferredPantry();
-                }
-                onSignIn();
+                onSignInSuccess();
                 // ...
             } else {
                 // Sign in failed. If response is null the user canceled the
@@ -136,25 +121,42 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void onNewUserCreated(FirebaseUser user) {
-        SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putString(PREFERRED_PANTRY, user.getUid());
-        editor.apply();
-        mRepository = Repository.getInstance(user.getUid());
-        mRepository.populateNewUserData();
+    private void onSignInSuccess() {
+        //Had to stick some database stuff in here because I couldn't figure out a nice way to pass initializeActivity as
+        //a callback function when this code was in the repository :(
+        mRepository = Repository.getInstance();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference userReference = database.getReference("users/" + userId);
+
+        userReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String pantryId;
+                if (dataSnapshot.hasChild("preferredPantry")) {
+                    pantryId = dataSnapshot.child("preferredPantry").toString();
+                    mRepository.initializeDatabaseReferences();
+                }
+                else {
+                    mRepository.initializeDatabaseReferences();
+                    //If the preferred pantry doesn't exist, then this is a new user & we need
+                    //to initialize the pantry
+                    mRepository.initializePantry();
+
+                    //the default pantry id is just the user's own pantry (which is the user's id)
+                    pantryId = userId;
+                }
+                initializeActivity();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
-    private boolean isNewUser(FirebaseUser user) {
-        return user.getMetadata().getLastSignInTimestamp() == user.getMetadata().getCreationTimestamp();
-    }
-
-    private void setPreferredPantry() {
-        String preferredPantry = mSharedPreferences.getString(PREFERRED_PANTRY, null);
-        mRepository = Repository.getInstance(preferredPantry);
-    }
-
-    private void onSignIn() {
-
+    private void initializeActivity() {
         mFAB = findViewById(R.id.main_add_button);
         mFAB.setOnClickListener(new View.OnClickListener() {
             @Override
