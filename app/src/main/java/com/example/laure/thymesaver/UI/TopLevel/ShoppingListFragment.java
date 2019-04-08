@@ -32,6 +32,7 @@ public class ShoppingListFragment extends AddButtonFragment implements ShoppingL
     private ShoppingViewModel mViewModel;
     private ShoppingListAdapter mAdapter;
     private RecyclerView mRecyclerView;
+    private ProgressBar mProgressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState){
@@ -42,24 +43,33 @@ public class ShoppingListFragment extends AddButtonFragment implements ShoppingL
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        final ProgressBar progressBar = view.findViewById(R.id.shopping_list_progress);
-
+        mProgressBar = view.findViewById(R.id.shopping_list_progress);
+        mRecyclerView = view.findViewById(R.id.shopping_recycler_view);
         mViewModel = ViewModelProviders.of(this).get(ShoppingViewModel.class);
         mAdapter = new ShoppingListAdapter(getActivity(), this);
+
+        setObserver();
+
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
+                DividerItemDecoration.VERTICAL));
+    }
+
+    private void setObserver() {
         mViewModel.getShoppingList().observe(this, new Observer<HashMap<Ingredient, Integer>>() {
             @Override
             public void onChanged(@Nullable HashMap<Ingredient, Integer> ingredientIntegerHashMap) {
                 mAdapter.setIngredients(ingredientIntegerHashMap);
-                progressBar.setVisibility(view.GONE);
+                mProgressBar.setVisibility(View.GONE);
             }
         });
+    }
 
-        mRecyclerView = view.findViewById(R.id.shopping_recycler_view);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.setAdapter(mAdapter);
-
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
-                DividerItemDecoration.VERTICAL));
+    @Override
+    public void onResume() {
+        super.onResume();
+        setObserver();
     }
 
     @Override

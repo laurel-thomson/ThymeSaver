@@ -32,6 +32,7 @@ public class MealPlannerFragment extends Fragment implements MealPlannerAdapter.
     private RecyclerView mRecyclerView;
     private MealPlannerAdapter mAdapter;
     private MealPlannerViewModel mViewModel;
+    private ProgressBar mProgressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState){
@@ -42,8 +43,7 @@ public class MealPlannerFragment extends Fragment implements MealPlannerAdapter.
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        final ProgressBar progressBar = view.findViewById(R.id.meal_planner_progress);
-
+        mProgressBar = view.findViewById(R.id.meal_planner_progress);
         mViewModel = ViewModelProviders.of(getActivity()).get(MealPlannerViewModel.class);
         mRecyclerView = view.findViewById(R.id.meal_planner_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -57,13 +57,23 @@ public class MealPlannerFragment extends Fragment implements MealPlannerAdapter.
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
                 DividerItemDecoration.VERTICAL));
 
+        setObserver();
+    }
+
+    private void setObserver() {
         mViewModel.getMealPlans().observe(this, new Observer<List<MealPlan>>() {
             @Override
             public void onChanged(@Nullable List<MealPlan> mealPlans) {
                 mAdapter.setMealPlans(mealPlans);
-                progressBar.setVisibility(View.GONE);
+                mProgressBar.setVisibility(View.GONE);
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setObserver();
     }
 
     @Override

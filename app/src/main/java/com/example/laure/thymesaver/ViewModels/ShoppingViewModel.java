@@ -14,16 +14,15 @@ import java.util.HashMap;
 
 public class ShoppingViewModel extends AndroidViewModel {
     private Repository mRepository;
-    private LiveData<HashMap<Ingredient, Integer>> mShoppingList;
 
     public ShoppingViewModel(Application application) {
         super(application);
         mRepository = Repository.getInstance();
-        mShoppingList = mRepository.getShoppingList();
     }
 
     public LiveData<HashMap<Ingredient, Integer>> getShoppingList() {
-        return mShoppingList;
+
+        return mRepository.getShoppingList();
     }
 
     public void addQuantityToPantry(Ingredient ingredient, int quantity) {

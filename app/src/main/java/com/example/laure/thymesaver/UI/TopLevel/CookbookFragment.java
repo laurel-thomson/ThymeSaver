@@ -37,6 +37,7 @@ public class CookbookFragment extends AddButtonFragment
     private CookBookViewModel mViewModel;
     private RecipeAdapter mAdapter;
     private RecyclerView mRecyclerView;
+    private ProgressBar mProgressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState){
@@ -46,26 +47,34 @@ public class CookbookFragment extends AddButtonFragment
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        final ProgressBar progressBar = view.findViewById(R.id.cookbook_progress);
+        mProgressBar = view.findViewById(R.id.cookbook_progress);
 
         mViewModel = ViewModelProviders.of(this).get(CookBookViewModel.class);
         mRecyclerView = view.findViewById(R.id.recipes_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new RecipeAdapter(getActivity(), this);
 
+        setObserver();
+
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
+                DividerItemDecoration.VERTICAL));
+    }
+
+    private void setObserver() {
         mViewModel.getAllRecipes().observe(this, new Observer<List<Recipe>>() {
             @Override
             public void onChanged(@Nullable List<Recipe> recipes) {
-                //update the cached copy of recipes in the adapter
                 mAdapter.setRecipes(recipes);
-                progressBar.setVisibility(View.GONE);
+                mProgressBar.setVisibility(View.GONE);
             }
         });
+    }
 
-        mRecyclerView.setAdapter(mAdapter);
-
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
-                DividerItemDecoration.VERTICAL));
+    @Override
+    public void onResume() {
+        super.onResume();
+        setObserver();
     }
 
     @Override

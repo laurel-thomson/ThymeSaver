@@ -12,16 +12,14 @@ import java.util.List;
 
 public class PantryViewModel extends AndroidViewModel {
     private Repository mRepository;
-    private LiveData<List<Ingredient>> mIngredients;
 
     public PantryViewModel(Application application) {
         super(application);
         mRepository = Repository.getInstance();
-        mIngredients = mRepository.getAllIngredients();
     }
 
     public LiveData<List<Ingredient>> getAllIngredients() {
-        return mIngredients;
+        return mRepository.getAllIngredients();
     }
 
     public void addIngredient(Ingredient i) {

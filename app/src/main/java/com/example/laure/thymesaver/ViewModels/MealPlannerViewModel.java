@@ -12,16 +12,14 @@ import java.util.List;
 
 public class MealPlannerViewModel extends AndroidViewModel {
     private Repository mRepository;
-    private LiveData<List<MealPlan>> mMealPlans;
 
     public MealPlannerViewModel(@NonNull Application application) {
         super(application);
         mRepository = Repository.getInstance();
-        mMealPlans = mRepository.getMealPlans();
     }
 
     public LiveData<List<MealPlan>> getMealPlans() {
-        return mMealPlans;
+        return mRepository.getMealPlans();
     }
 
     public void addMealPlan(MealPlan mealPlan) {

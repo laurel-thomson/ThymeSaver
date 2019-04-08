@@ -28,6 +28,7 @@ public class PantryFragment extends AddButtonFragment implements PantryAdapter.I
     private PantryViewModel mViewModel;
     private PantryAdapter mAdapter;
     private RecyclerView mRecyclerView;
+    private ProgressBar mProgressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState){
@@ -37,24 +38,34 @@ public class PantryFragment extends AddButtonFragment implements PantryAdapter.I
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        final ProgressBar progressBar = view.findViewById(R.id.pantry_progress);
-
+        mProgressBar = view.findViewById(R.id.pantry_progress);
+        mRecyclerView = view.findViewById(R.id.pantry_recycler_view);
         mViewModel = ViewModelProviders.of(this).get(PantryViewModel.class);
         mAdapter = new PantryAdapter(getActivity(),this);
-        mViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
-            @Override
-            public void onChanged(@Nullable List<Ingredient> ingredients) {
-                mAdapter.setIngredients(ingredients);
-                progressBar.setVisibility(View.GONE);
-            }
-        });
 
-        mRecyclerView = view.findViewById(R.id.pantry_recycler_view);
+        setObserver();
+
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
 
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
                 DividerItemDecoration.VERTICAL));
+    }
+
+    private void setObserver() {
+        mViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
+            @Override
+            public void onChanged(@Nullable List<Ingredient> ingredients) {
+                mAdapter.setIngredients(ingredients);
+                mProgressBar.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setObserver();
     }
 
     public void onIngredientQuantityChanged(Ingredient ingredient, int quantity) {

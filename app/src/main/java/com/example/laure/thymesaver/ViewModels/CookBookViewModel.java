@@ -13,16 +13,14 @@ import java.util.List;
 
 public class CookBookViewModel extends AndroidViewModel {
     private Repository mRepository;
-    private LiveData<List<Recipe>> mAllRecipes;
 
     public CookBookViewModel(Application application) {
         super(application);
         mRepository = Repository.getInstance();
-        mAllRecipes = mRepository.getAllRecipes();
     }
 
     public LiveData<List<Recipe>> getAllRecipes() {
-        return mAllRecipes;
+        return mRepository.getAllRecipes();
     }
 
     public void deleteRecipe(Recipe recipe) {
@@ -42,7 +40,7 @@ public class CookBookViewModel extends AndroidViewModel {
     }
 
     public boolean recipeNameExists(String name) {
-        List<Recipe> recipes = mAllRecipes.getValue();
+        List<Recipe> recipes = mRepository.getAllRecipes().getValue();
         for (Recipe r : recipes) {
             if (r.getName().equals(name)) {
                 return true;
