@@ -6,14 +6,12 @@ public class Pantry {
     private String name;
     private String uId;
     private boolean isMyPantry;
-    private boolean isPreferredPantry;
 
     public Pantry() {}
 
-    public Pantry(String name, boolean isMyPantry, boolean isPreferredPantry) {
+    public Pantry(String name, boolean isMyPantry) {
         this.name = name;
         this.isMyPantry = isMyPantry;
-        this.isPreferredPantry = isPreferredPantry;
     }
 
     public String getName() {
@@ -39,13 +37,5 @@ public class Pantry {
 
     public void setMyPantry(boolean myPantry) {
         isMyPantry = myPantry;
-    }
-
-    public boolean isPreferredPantry() {
-        return isPreferredPantry;
-    }
-
-    public void setPreferredPantry(boolean preferredPantry) {
-        isPreferredPantry = preferredPantry;
     }
 }

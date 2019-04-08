@@ -25,10 +25,10 @@ public class PantryListAdapter extends RecyclerView.Adapter<PantryListAdapter.My
         mListener = listener;
     }
 
-    public void setPantryList(List<Pantry> pantryList) {
+    public void setPantryList(List<Pantry> pantryList, String preferredId) {
         mPantryList = pantryList;
         for (int i = 0; i < pantryList.size(); i++) {
-            if (pantryList.get(i).isPreferredPantry()) {
+            if (pantryList.get(i).getuId().equals(preferredId)) {
                 mSelectedItem = i;
                 break;
             }

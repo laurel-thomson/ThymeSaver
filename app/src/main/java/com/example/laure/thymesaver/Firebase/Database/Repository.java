@@ -69,12 +69,12 @@ public class Repository {
 
     public void initializePantry() {
         mUserReference.child("preferredPantry").setValue(mUserId);
-        mPantriesReference.child(mUserId).setValue(new Pantry("My Pantry", true, true));
+        mPantriesReference.child(mUserId).setValue(new Pantry("My Pantry", true));
         mUserReference.child("email").setValue(FirebaseAuth.getInstance().getCurrentUser().getEmail());
         //TODO: populate pantry with generic items
     }
 
-    public void setPreferredPantry(String pantryId) {
+    public void updatePreferredPantry(String pantryId) {
         mPantryId = pantryId;
         mUserReference.child("preferredPantry").setValue(pantryId);
         initializeDatabaseReferences();
@@ -119,7 +119,6 @@ public class Repository {
                 .child(mUserId).setValue(
                         new Pantry(
                                 FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
-                                false,
                                 false));
     }
 
@@ -153,6 +152,8 @@ public class Repository {
                 }
         );
     }
+
+    public String getPreferredPantryId() { return mPantryId; }
 
     public LiveData<HashMap<Ingredient, RecipeQuantity>> getRecipeIngredients(Recipe r) {
         mRecipe = r;

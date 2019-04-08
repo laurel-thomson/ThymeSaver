@@ -56,7 +56,7 @@ public class PantryManagerActivity extends AppCompatActivity implements PantryLi
         mViewModel.getPantries().observe(this, new Observer<List<Pantry>>() {
             @Override
             public void onChanged(@Nullable List<Pantry> pantries) {
-                mAdapter.setPantryList(pantries);
+                mAdapter.setPantryList(pantries, mViewModel.getPreferredPantryId());
                 mRecyclerView.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.GONE);
             }
@@ -153,6 +153,7 @@ public class PantryManagerActivity extends AppCompatActivity implements PantryLi
 
     @Override
     public void onPreferredPantryChanged(String pantryId) {
+        mViewModel.updatePreferredPantry(pantryId);
         Snackbar snackbar = Snackbar
                 .make(findViewById(
                         R.id.pantry_manager_layout),

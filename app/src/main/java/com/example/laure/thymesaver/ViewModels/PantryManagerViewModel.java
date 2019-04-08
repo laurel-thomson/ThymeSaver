@@ -6,8 +6,6 @@ import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
 import com.example.laure.thymesaver.Firebase.Database.Repository;
-import com.example.laure.thymesaver.Models.Ingredient;
-import com.example.laure.thymesaver.Models.MealPlan;
 import com.example.laure.thymesaver.Models.Pantry;
 import com.example.laure.thymesaver.Models.PantryRequest;
 
@@ -43,5 +41,13 @@ public class PantryManagerViewModel extends AndroidViewModel {
 
     public void declineJoinRequest(PantryRequest request) {
         mRepository.declineJoinRequest(request);
+    }
+
+    public void updatePreferredPantry(String pantryId) {
+        mRepository.updatePreferredPantry(pantryId);
+    }
+
+    public String getPreferredPantryId() {
+        return mRepository.getPreferredPantryId();
     }
 }
