@@ -134,17 +134,15 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String pantryId;
                 if (dataSnapshot.hasChild("preferredPantry")) {
-                    pantryId = dataSnapshot.child("preferredPantry").toString();
-                    mRepository.initializeDatabaseReferences();
+                    pantryId = dataSnapshot.child("preferredPantry").getValue().toString();
+                    mRepository.initializeDatabaseReferences(pantryId);
                 }
                 else {
-                    mRepository.initializeDatabaseReferences();
+                    //the default pantry id is just the user's own pantry (which is the user's id)
+                    mRepository.initializeDatabaseReferences(userId);
                     //If the preferred pantry doesn't exist, then this is a new user & we need
                     //to initialize the pantry
                     mRepository.initializePantry();
-
-                    //the default pantry id is just the user's own pantry (which is the user's id)
-                    pantryId = userId;
                 }
                 initializeActivity();
             }

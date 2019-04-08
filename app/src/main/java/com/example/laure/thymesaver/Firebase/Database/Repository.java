@@ -52,7 +52,7 @@ public class Repository {
     private LiveData<List<Pantry>> mPantryListLiveData;
     private Recipe mRecipe;
     private String mUserId;
-    private static String mPantryId;
+    private String mPantryId;
 
     public static Repository getInstance() {
         if (mSoleInstance == null) {
@@ -68,6 +68,7 @@ public class Repository {
     }
 
     public void initializePantry() {
+        mPantryId = mUserId;
         mUserReference.child("preferredPantry").setValue(mUserId);
         mPantriesReference.child(mUserId).setValue(new Pantry("My Pantry", true));
         mUserReference.child("email").setValue(FirebaseAuth.getInstance().getCurrentUser().getEmail());
@@ -77,10 +78,11 @@ public class Repository {
     public void updatePreferredPantry(String pantryId) {
         mPantryId = pantryId;
         mUserReference.child("preferredPantry").setValue(pantryId);
-        initializeDatabaseReferences();
+        initializeDatabaseReferences(pantryId);
     }
 
-    public void initializeDatabaseReferences() {
+    public void initializeDatabaseReferences(String pantryId) {
+        mPantryId = pantryId;
         mUserReference = mDatabase.getReference("users/" + mUserId);
         mDatabaseReference = mDatabase.getReference("pantries/" + mPantryId);
         mRecipeReference = mDatabase.getReference("pantries/" + mPantryId + "/recipes");
