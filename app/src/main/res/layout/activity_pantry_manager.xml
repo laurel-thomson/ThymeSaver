@@ -9,17 +9,20 @@
     tools:context=".UI.Settings.PantryManagerActivity"
     android:background="@color/colorPrimaryLight">
 
+    <ProgressBar
+        android:id="@+id/pantry_manager_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleY="2"
+        android:layout_marginTop="-6dp"
+        android:progressTint="@color/colorAccent"
+        android:indeterminateOnly="true"
+        style="?android:attr/progressBarStyleHorizontal"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/manage_pantry_rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
-    <ProgressBar
-        android:id="@+id/pantry_manager_progress"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible"
-        android:elevation="8dp"/>
 
     <android.support.design.widget.FloatingActionButton
         style="@style/FABStyle"

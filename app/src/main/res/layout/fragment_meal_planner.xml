@@ -10,7 +10,9 @@
         android:id="@+id/meal_planner_progress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:progressBackgroundTint="@color/colorAccent"
+        android:scaleY="2"
+        android:layout_marginTop="-6dp"
+        android:progressTint="@color/colorAccent"
         android:indeterminateOnly="true"
         style="?android:attr/progressBarStyleHorizontal"/>
 
