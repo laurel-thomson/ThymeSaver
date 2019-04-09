@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.laure.thymesaver.Firebase.Database.Repository;
+import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.PantryRequest;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.Settings.PantryManagerActivity;

@@ -67,14 +67,6 @@ public class Repository {
         mUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
-    public void initializePantry() {
-        mPantryId = mUserId;
-        mUserReference.child("preferredPantry").setValue(mUserId);
-        mPantriesReference.child(mUserId).setValue(new Pantry("My Pantry", true));
-        mUserReference.child("email").setValue(FirebaseAuth.getInstance().getCurrentUser().getEmail());
-        //TODO: populate pantry with generic items
-    }
-
     public void updatePreferredPantry(String pantryId) {
         mPantryId = pantryId;
         mUserReference.child("preferredPantry").setValue(pantryId);
@@ -108,6 +100,25 @@ public class Repository {
         mRequestsLiveData = Transformations.map(
                 new ListLiveData<PantryRequest>(mUserReference.child("requests"), PantryRequest.class),
                 new PantryRequestsDeserializer());
+    }
+
+    public void initializePantry() {
+        mUserReference.child("preferredPantry").setValue(mUserId);
+        mPantriesReference.child(mUserId).setValue(new Pantry("My Pantry", true));
+        mUserReference.child("email").setValue(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+
+        //Populate pantry with starter pantry items
+        mDatabase.getReference("starterPantry").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                mIngredientReference.setValue(dataSnapshot.getValue());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void acceptJoinRequest(PantryRequest request) {
