@@ -2,17 +2,23 @@ package com.example.laure.thymesaver.UI.RecipeDetail;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.app.usage.UsageEvents;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.TextInputLayout;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.RecipeQuantity;
@@ -32,6 +38,7 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
     private TextInputLayout mNameLayout;
     private TextInputLayout mQuantityLayout;
     private TextInputLayout mUnitLayout;
+    private LinearLayout mDoneButton;
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -46,6 +53,7 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
         mNameLayout = view.findViewById(R.id.name_text_input_layout);
         mQuantityLayout = view.findViewById(R.id.quantity_text_input_layout);
         mUnitLayout = view.findViewById(R.id.unit_text_input_layout);
+        mDoneButton =  view.findViewById(R.id.add_recipe_ing_button);
 
         mPantryViewModel = ViewModelProviders.of(this).get(PantryViewModel.class);
         mPantryViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
@@ -79,8 +87,19 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
             }
         });
 
-        view.findViewById(R.id.add_recipe_ing_button)
-                .setOnClickListener(new View.OnClickListener() {
+        mUnitET.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    mDoneButton.performClick();
+                    handled = true;
+                }
+                return handled;
+            }
+        });
+
+        mDoneButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
