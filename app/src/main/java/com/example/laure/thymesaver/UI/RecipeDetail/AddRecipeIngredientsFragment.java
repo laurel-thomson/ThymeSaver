@@ -97,11 +97,6 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
                             hasError = true;
                         }
 
-                        if (mUnitET.getText().toString().equals("")) {
-                            mUnitLayout.setError("Quantity unit required.");
-                            hasError = true;
-                        }
-
                         if (hasError) return;
 
                         Ingredient ingredient = getIngredientFromName(mNameET.getText().toString());

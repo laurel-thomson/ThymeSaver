@@ -67,6 +67,7 @@
         <EditText
             android:id="@+id/recipe_quantity"
             android:hint="Recipe Quantity"
+            android:maxLength="6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
@@ -86,6 +87,7 @@
         <AutoCompleteTextView
             android:id="@+id/ingredient_unit"
             android:hint="Unit"
+            android:maxLength="15"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"

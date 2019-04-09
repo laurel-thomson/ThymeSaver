@@ -28,26 +28,4 @@ public class RecipeQuantity {
     public void setUnit(String unit) {
         this.unit = unit;
     }
-
-    @Exclude
-    public String getShortUnitName() {
-        switch (unit) {
-            case "Quantity":
-                return "";
-            case "Grams":
-                return "g";
-            case "Ounces":
-                return "oz";
-            case "Pounds":
-                return "lbs";
-            case "Tablespoons":
-                return "T";
-            case "Teaspoons":
-                return "t";
-            case "Cups":
-                return "c";
-            default:
-                return "";
-        }
-    }
 }
