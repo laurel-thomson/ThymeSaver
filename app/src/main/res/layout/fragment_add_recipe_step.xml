@@ -51,7 +51,7 @@
             android:textCursorDrawable="@drawable/color_cursor"
             app:backgroundTint="@color/colorPrimary"
             android:hint="Step"
-            android:maxLength="30"
+            android:maxLength="100"
             android:singleLine="true"/>
 
     </android.support.design.widget.TextInputLayout>
