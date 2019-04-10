@@ -21,6 +21,9 @@ import com.example.laure.thymesaver.Models.RecipeQuantity;
 import com.example.laure.thymesaver.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
@@ -56,8 +59,14 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecyclerView.
             mIngredients.add(i);
         }
 
+        //sort the ingredients
+        Object[] keys = recipeIngredients.keySet().toArray();
+        Arrays.sort(keys, (o1, o2) -> ((Ingredient) o1).getName().compareTo(((Ingredient) o2).getName()));
+        Collections.reverse(Arrays.asList(keys));
+
         //add all the ingredients in under their headers
-        for (Ingredient ingredient : recipeIngredients.keySet()) {
+        for (Object object : keys) {
+            Ingredient ingredient = (Ingredient) object;
             int position = 0;
             for (int i = 0; i < headers.length; i++) {
                 if (headers[i].getCategory().equals(ingredient.getCategory())) {

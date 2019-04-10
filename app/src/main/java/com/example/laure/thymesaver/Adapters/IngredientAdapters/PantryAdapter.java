@@ -19,6 +19,8 @@ import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -39,6 +41,11 @@ public class PantryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     public void setIngredients(List<Ingredient> ingredients) {
+        //Sort the ingredients
+        Object[] ingArray = ingredients.toArray();
+        Arrays.sort(ingArray, (o1, o2) -> ((Ingredient) o1).getName().compareTo(((Ingredient) o2).getName()));
+        Collections.reverse(Arrays.asList(ingArray));
+
         mIngredients.clear();
 
         //generate category headers
@@ -54,7 +61,8 @@ public class PantryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
 
         //add all the ingredients in under their headers
-        for (Ingredient ingredient : ingredients) {
+        for (Object object : ingArray) {
+            Ingredient ingredient = (Ingredient) object;
             int position = 0;
             for (int i = 0; i < headers.length; i++) {
                 if (headers[i].getCategory().equals(ingredient.getCategory())) {
