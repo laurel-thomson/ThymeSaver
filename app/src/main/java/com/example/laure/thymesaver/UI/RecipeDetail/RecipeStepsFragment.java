@@ -11,12 +11,15 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.laure.thymesaver.Adapters.DragHelper;
+import com.example.laure.thymesaver.Adapters.MealPlannerAdapter;
 import com.example.laure.thymesaver.Adapters.RecipeStepAdapter;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.R;
@@ -58,7 +61,11 @@ public class RecipeStepsFragment extends RecipeDetailFragment
         });
 
         mAdapter = new RecipeStepAdapter(getActivity(), this);
+        DragHelper swipeAndDragHelper = new DragHelper(mAdapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(swipeAndDragHelper);
+        mAdapter.setTouchHelper(touchHelper);
         mRecyclerView.setAdapter(mAdapter);
+        touchHelper.attachToRecyclerView(mRecyclerView);
 
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
                 DividerItemDecoration.VERTICAL));
@@ -111,5 +118,10 @@ public class RecipeStepsFragment extends RecipeDetailFragment
                 });
 
         snackbar.show();
+    }
+
+    @Override
+    public void onStepMoved(List<String> newList) {
+        mViewModel.updateRecipe();
     }
 }

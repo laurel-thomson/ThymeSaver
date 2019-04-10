@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,12 +24,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.MyViewHolder> {
+public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.MyViewHolder>
+            implements DragHelper.ActionCompletionContract{
 
     private List<String> mSteps = new ArrayList<>();
     private SparseBooleanArray mStepCheckStates = new SparseBooleanArray();
     private RecipeStepListener mListener;
     private final LayoutInflater mInflater;
+    private ItemTouchHelper mTouchHelper;
 
     public RecipeStepAdapter(
             Context context,
@@ -41,6 +44,25 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.My
 
         mSteps = steps;
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void onViewMoved(int oldPosition, int newPosition) {
+        String targetStep = mSteps.get(oldPosition);
+        mSteps.remove(oldPosition);
+        mSteps.add(newPosition, targetStep);
+        notifyItemMoved(oldPosition, newPosition);
+    }
+
+
+    @Override
+    public void onMoveComplete(int newPosition) {
+        mListener.onStepMoved(mSteps);
+    }
+
+
+    public void setTouchHelper(ItemTouchHelper touchHelper) {
+        this.mTouchHelper = touchHelper;
     }
 
     @NonNull
