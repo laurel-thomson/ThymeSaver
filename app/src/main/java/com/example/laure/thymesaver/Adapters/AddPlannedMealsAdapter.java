@@ -16,6 +16,8 @@ import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -33,6 +35,11 @@ public class AddPlannedMealsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     public void setTotalRecipes(List<Recipe> recipes) {
+        //Sort the recipes
+        Object[] recipeArray = recipes.toArray();
+        Arrays.sort(recipeArray, (o1, o2) -> ((Recipe) o1).getName().compareTo(((Recipe) o2).getName()));
+        Collections.reverse(Arrays.asList(recipeArray));
+
         mTotalRecipes.clear();
 
         //generate category headers
@@ -48,7 +55,8 @@ public class AddPlannedMealsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
 
         //add all the ingredients in under their headers
-        for (Recipe recipe : recipes) {
+        for (Object object : recipeArray) {
+            Recipe recipe = (Recipe) object;
             int position = 0;
             for (int i = 0; i < headers.length; i++) {
                 if (headers[i].getCategory().equals(recipe.getCategory())) {
