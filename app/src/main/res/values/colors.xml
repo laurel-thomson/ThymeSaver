@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#FF5722</color>
-    <color name="colorPrimaryDark">#E64A19</color>
-    <color name="colorAccent">#00796B</color>
+    <color name="colorPrimaryDark">#616161</color>
+    <color name="colorAccent">#E64A19</color>
     <color name="colorPrimaryLight">#f2f2f2</color>
     <color name="colorTextIcon">#FFFFFF</color>
     <color name="colorPrimaryText">#404040</color>
     <color name="colorSecondaryText">#757575</color>
-    <color name="colorDivider">#00796B</color>
+    <color name="colorDivider">#616161</color>
     <color name="colorBackground">#e6e6e6</color>
 </resources>
