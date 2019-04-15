@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,10 +24,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 
-public class AddShoppingItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class AddShoppingItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
     private Context mContext;
     private HashMap<Ingredient, Integer> mMeasuredIngredients;
     private List<Ingredient> mIngredients = new ArrayList<>();
+    private List<Ingredient> mFilteredIngredients = mIngredients;
     private static final int INGREDIENT_TYPE = 1;
     private static final int HEADER_TYPE = 2;
 
@@ -35,6 +38,7 @@ public class AddShoppingItemsAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     public void setIngredients(HashMap<Ingredient, Integer> measuredIngredients) {
         mMeasuredIngredients = measuredIngredients;
+
         mIngredients.clear();
 
         //generate category headers
@@ -78,6 +82,8 @@ public class AddShoppingItemsAdapter extends RecyclerView.Adapter<RecyclerView.V
                 }
             }
         }
+
+        mFilteredIngredients = mIngredients;
         notifyDataSetChanged();
     }
 
@@ -85,7 +91,7 @@ public class AddShoppingItemsAdapter extends RecyclerView.Adapter<RecyclerView.V
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
         int itemViewType = getItemViewType(position);
         if (itemViewType == INGREDIENT_TYPE) {
-            final Ingredient i = mIngredients.get(position);
+            final Ingredient i = mFilteredIngredients.get(position);
             final AddShoppingItemsViewHolder holder = (AddShoppingItemsViewHolder) viewHolder;
             holder.mNameTV.setText(i.getName());
             holder.mCheckBox.setChecked(mMeasuredIngredients.get(i) > 0);
@@ -100,7 +106,7 @@ public class AddShoppingItemsAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
         else {
             SectionHeaderViewHolder headerViewHolder = (SectionHeaderViewHolder) viewHolder;
-            final String category = mIngredients.get(position).getCategory();
+            final String category = mFilteredIngredients.get(position).getCategory();
             headerViewHolder.sectionTitle.setText(category);
         }
     }
@@ -122,7 +128,7 @@ public class AddShoppingItemsAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     @Override
     public int getItemViewType(int position) {
-        if (TextUtils.isEmpty(mIngredients.get(position).getName())) {
+        if (TextUtils.isEmpty(mFilteredIngredients.get(position).getName())) {
             return HEADER_TYPE;
         } else {
             return INGREDIENT_TYPE;
@@ -139,8 +145,48 @@ public class AddShoppingItemsAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     @Override
     public int getItemCount() {
-        if (mIngredients == null) return 0;
-        return mIngredients.size();
+        if (mFilteredIngredients == null) return 0;
+        return mFilteredIngredients.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    mFilteredIngredients = mIngredients;
+                } else {
+                    List<Ingredient> filteredList = new ArrayList<>();
+                    for (Ingredient ing : mIngredients) {
+
+                        if (ing.getName().toLowerCase().contains(charString.toLowerCase())) {
+                            filteredList.add(ing);
+                        }
+                    }
+
+                    //if we didn't match any ingredients, we want to add what the user is typing
+                    //as an ingredient
+                    //if (filteredList.size() == 0) {
+                       // mUserCreatedIngredient = charString;
+                        //filteredList.add(mUserCreatedIngredient);
+                    //}
+
+                    mFilteredIngredients = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = mFilteredIngredients;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                mFilteredIngredients = (ArrayList<Ingredient>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public class AddShoppingItemsViewHolder extends RecyclerView.ViewHolder {
@@ -165,7 +211,7 @@ public class AddShoppingItemsAdapter extends RecyclerView.Adapter<RecyclerView.V
             mIncrementer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Ingredient i = mIngredients.get(getAdapterPosition());
+                    Ingredient i = mFilteredIngredients.get(getAdapterPosition());
                     int newQuantity = mMeasuredIngredients.get(i) + 1;
                     mMeasuredIngredients.put(i, newQuantity);
                     mQuantityTV.setText(Integer.toString(newQuantity));
@@ -175,7 +221,7 @@ public class AddShoppingItemsAdapter extends RecyclerView.Adapter<RecyclerView.V
             mDecrementer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Ingredient i = mIngredients.get(getAdapterPosition());
+                    Ingredient i = mFilteredIngredients.get(getAdapterPosition());
                     if (mMeasuredIngredients.get(i) == 0) return;
 
                     if (mMeasuredIngredients.get(i) == 1) {
@@ -193,7 +239,7 @@ public class AddShoppingItemsAdapter extends RecyclerView.Adapter<RecyclerView.V
             mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    Ingredient i = mIngredients.get(getAdapterPosition());
+                    Ingredient i = mFilteredIngredients.get(getAdapterPosition());
 
                     if (compoundButton.isChecked()) {
                         if (i.isBulk()) {
@@ -226,7 +272,7 @@ public class AddShoppingItemsAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     public HashMap<Ingredient, Integer> getMeasuredIngredients() {
         HashMap<Ingredient, Integer> measuredIngredients = new HashMap<>();
-        for (Ingredient i : mIngredients) {
+        for (Ingredient i : mFilteredIngredients) {
             if (getItemViewType(i) == HEADER_TYPE) continue;
             int quantity = mMeasuredIngredients.get(i);
             if (quantity > 0) {
