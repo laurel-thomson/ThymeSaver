@@ -100,6 +100,23 @@ public class Repository {
         mRequestsLiveData = Transformations.map(
                 new ListLiveData<PantryRequest>(mUserReference.child("requests"), PantryRequest.class),
                 new PantryRequestsDeserializer());
+
+        //force ingredients to cache
+        mIngredientReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snap : dataSnapshot.getChildren()){
+                    Ingredient i = snap.getValue(Ingredient.class);
+                    i.setName(snap.getKey());
+                    mIngredients.add(i);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void initializePantry() {
@@ -245,6 +262,7 @@ public class Repository {
         HashMap ingredientData = new HashMap();
         for (String ingredientName : recipeIngredients.keySet()) {
             Ingredient matchingIngredient = null;
+
             for (Ingredient i : mIngredients) {
                 if (i.getName().equals(ingredientName)) {
                     matchingIngredient = i;

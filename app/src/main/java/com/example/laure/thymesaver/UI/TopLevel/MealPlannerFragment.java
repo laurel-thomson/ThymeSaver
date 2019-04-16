@@ -91,17 +91,24 @@ public class MealPlannerFragment extends AddButtonFragment implements MealPlanne
     }
 
     @Override
-    public void onMealChecked(MealPlan mealPlan, boolean checked) {
-        String message;
-        if (checked) {
-            message = "Ingredients from " + mealPlan.getRecipeName() + " removed from pantry.";
-        }
-        else {
-            message = "Ingredients from " + mealPlan.getRecipeName() + " added back to pantry.";
-        }
-        mealPlan.setCooked(checked);
-        mViewModel.mealPlanCookChanged(mealPlan);
-        Snackbar.make(getView(), message, Snackbar.LENGTH_SHORT).show();
+    public void onMealChecked(MealPlan mealPlan) {
+        mViewModel.cookMealPlan(mealPlan);
+        Snackbar snackbar = Snackbar
+                .make(getView(), "Ingredients from " + mealPlan.getRecipeName() +
+                        " removed from meal plan.", Snackbar.LENGTH_LONG)
+                .setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mViewModel.undoCookMealPlan(mealPlan);
+                        Snackbar newSnackBar = Snackbar
+                                .make(
+                                    getView(),
+                                    "Ingredients from " + mealPlan.getRecipeName() + " added back to pantry.",
+                                    Snackbar.LENGTH_SHORT);
+                        newSnackBar.show();
+                    }
+                });
+        snackbar.show();
     }
 
     @Override

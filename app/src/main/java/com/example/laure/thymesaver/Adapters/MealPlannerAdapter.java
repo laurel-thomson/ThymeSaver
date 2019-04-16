@@ -86,7 +86,7 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         textView.setPaintFlags(0);
                         textView.setTextColor(Color.BLACK);
                     }
-                    mListener.onMealChecked(mMealPlans.get(holder.getAdapterPosition()), checked);
+                    mListener.onMealChecked(mMealPlans.get(holder.getAdapterPosition()));
                 }
             });
         }
@@ -232,7 +232,7 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         void onMealClicked(MealPlan mealPlan);
 
-        void onMealChecked(MealPlan mealPlan, boolean checked);
+        void onMealChecked(MealPlan mealPlan);
 
         void onMealDeleteClicked(MealPlan mealPlan);
     }
