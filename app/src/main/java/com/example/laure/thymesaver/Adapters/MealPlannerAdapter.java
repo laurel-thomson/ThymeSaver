@@ -66,13 +66,15 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             final TextView textView = ((MealPlanViewHolder) holder).mTextView;
             final CheckBox checkBox = ((MealPlanViewHolder) holder).mCheckBox;
 
-            textView.setText(mMealPlans.get(position).getRecipeName());
-            checkBox.setChecked(mMealPlans.get(position).isCooked());
+            //This is necessary to make sure that when a meal plan is checked off, the meal plan
+            //that takes its place isn't checked off
+            textView.setPaintFlags(0);
+            textView.setTextColor(Color.BLACK);
+            //Kind of a hacky fix to uncheck the checkbox but not trigger a meal plan removal
+            checkBox.setOnCheckedChangeListener(null);
+            checkBox.setChecked(false);
 
-            if (checkBox.isChecked()) {
-                textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                textView.setTextColor(Color.GRAY);
-            }
+            textView.setText(mMealPlans.get(position).getRecipeName());
 
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -81,10 +83,6 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     if (checked) {
                         textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                         textView.setTextColor(Color.GRAY);
-                    }
-                    else {
-                        textView.setPaintFlags(0);
-                        textView.setTextColor(Color.BLACK);
                     }
                     mListener.onMealChecked(mMealPlans.get(holder.getAdapterPosition()));
                 }
