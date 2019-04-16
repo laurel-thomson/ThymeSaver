@@ -54,9 +54,6 @@ public class MealPlannerFragment extends Fragment implements MealPlannerAdapter.
         mRecyclerView.setAdapter(mAdapter);
         touchHelper.attachToRecyclerView(mRecyclerView);
 
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
-                DividerItemDecoration.VERTICAL));
-
         setObserver();
     }
 
