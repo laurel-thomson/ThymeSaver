@@ -50,7 +50,6 @@ public class PantryListAdapter extends RecyclerView.Adapter<PantryListAdapter.My
         if (position == mSelectedItem) {
             myViewHolder.mRadioButton.setChecked(true);
             myViewHolder.itemView.setBackground(mContext.getResources().getDrawable(R.drawable.border));
-            //myViewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.colorAccentLight));
         }
         else {
             myViewHolder.mRadioButton.setChecked(false);

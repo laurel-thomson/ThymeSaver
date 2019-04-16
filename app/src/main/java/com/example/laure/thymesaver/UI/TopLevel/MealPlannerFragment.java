@@ -47,7 +47,7 @@ public class MealPlannerFragment extends Fragment implements MealPlannerAdapter.
         mViewModel = ViewModelProviders.of(getActivity()).get(MealPlannerViewModel.class);
         mRecyclerView = view.findViewById(R.id.meal_planner_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new MealPlannerAdapter(this);
+        mAdapter = new MealPlannerAdapter(getContext(), this);
         DragHelper swipeAndDragHelper = new DragHelper(mAdapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(swipeAndDragHelper);
         mAdapter.setTouchHelper(touchHelper);

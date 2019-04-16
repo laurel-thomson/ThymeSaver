@@ -1,5 +1,6 @@
 package com.example.laure.thymesaver.Adapters;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +18,7 @@ import com.example.laure.thymesaver.Models.MealPlan;
 import com.example.laure.thymesaver.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -30,8 +32,10 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private List<MealPlan> mMealPlans = new ArrayList<>();
     private ItemTouchHelper mTouchHelper;
     private MealPlanListener mListener;
+    private Context mContext;
 
-    public MealPlannerAdapter(MealPlanListener listener) {
+    public MealPlannerAdapter(Context context, MealPlanListener listener) {
+        mContext = context;
         mListener = listener;
     }
 
@@ -98,6 +102,15 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     mListener.onAddButtonClicked(scheduledDay);
                 }
             });
+
+            //Change the color of the header for the current day
+            int day = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+            String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+            if (days[day].equals(scheduledDay))
+            {
+                headerViewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimary));
+                headerViewHolder.sectionTitle.setTextColor(mContext.getResources().getColor(R.color.colorTextIcon));
+            }
         }
 
     }
