@@ -85,7 +85,6 @@ public class ShoppingListFragment extends AddButtonFragment implements ShoppingL
 
     @Override
     public void onIngredientCheckedOff(final Ingredient i, final int quantity) {
-        final int oldQuantity = i.getQuantity();
         mViewModel.addQuantityToPantry(i, quantity);
         mViewModel.deleteModifier(i.getName());
     }

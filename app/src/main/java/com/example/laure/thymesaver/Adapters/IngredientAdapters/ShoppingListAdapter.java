@@ -175,9 +175,6 @@ public class ShoppingListAdapter extends  RecyclerView.Adapter<RecyclerView.View
                     mListener.onIngredientCheckedOff(
                             ing,
                             mMeasuredIngredients.get(ing));
-                    if (compoundButton.isChecked()) {
-                        compoundButton.setChecked(false);
-                    }
                 }
             });
 

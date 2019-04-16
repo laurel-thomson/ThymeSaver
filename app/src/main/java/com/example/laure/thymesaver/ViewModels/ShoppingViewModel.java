@@ -31,7 +31,7 @@ public class ShoppingViewModel extends AndroidViewModel {
             mRepository.updateIngredient(ingredient);
         }
         else {
-            ingredient.setQuantity(ingredient.getQuantity() + 1);
+            ingredient.setQuantity(ingredient.getQuantity() + quantity);
         }
         mRepository.updateIngredient(ingredient);
     }
