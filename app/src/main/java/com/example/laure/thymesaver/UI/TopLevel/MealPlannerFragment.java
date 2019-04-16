@@ -28,7 +28,7 @@ import com.example.laure.thymesaver.ViewModels.MealPlannerViewModel;
 import java.util.List;
 
 
-public class MealPlannerFragment extends Fragment implements MealPlannerAdapter.MealPlanListener {
+public class MealPlannerFragment extends AddButtonFragment implements MealPlannerAdapter.MealPlanListener {
     private RecyclerView mRecyclerView;
     private MealPlannerAdapter mAdapter;
     private MealPlannerViewModel mViewModel;
@@ -105,13 +105,6 @@ public class MealPlannerFragment extends Fragment implements MealPlannerAdapter.
     }
 
     @Override
-    public void onAddButtonClicked(String scheduledDay) {
-        Intent intent = new Intent(getActivity(), AddPlannedMealsActivity.class);
-        intent.putExtra(AddPlannedMealsActivity.SCHEDULED_DAY, scheduledDay);
-        startActivity(intent);
-    }
-
-    @Override
     public void onMealDeleteClicked(final MealPlan mealPlan) {
         mViewModel.removeMealPlan(mealPlan);
         Snackbar snackbar = Snackbar
@@ -128,5 +121,12 @@ public class MealPlannerFragment extends Fragment implements MealPlannerAdapter.
                 });
 
         snackbar.show();
+    }
+
+    @Override
+    void launchAddItemActivity() {
+        Intent intent = new Intent(getActivity(), AddPlannedMealsActivity.class);
+        intent.putExtra(AddPlannedMealsActivity.SCHEDULED_DAY, "Monday");
+        startActivity(intent);
     }
 }

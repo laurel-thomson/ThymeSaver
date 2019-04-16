@@ -225,10 +225,7 @@ public class MainActivity extends AppCompatActivity {
             public void onPageScrollStateChanged(int state) {
                 switch (state) {
                     case ViewPager.SCROLL_STATE_IDLE:
-                        //the Meal Planner tab doesn't have a FAB
-                        if (mViewPager.getCurrentItem() != 0) {
-                            mFAB.show();
-                        }
+                        mFAB.show();
                         break;
                     case ViewPager.SCROLL_STATE_DRAGGING:
                     case ViewPager.SCROLL_STATE_SETTLING:
@@ -240,9 +237,6 @@ public class MainActivity extends AppCompatActivity {
         mAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         mViewPager.setAdapter(mAdapter);
-
-        //The activity starts on the Meal Planner tab, which doesn't have a FAB
-        mFAB.hide();
 
         listenForPantryRequests();
     }

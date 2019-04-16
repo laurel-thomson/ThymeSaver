@@ -248,13 +248,10 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecyclerView.
 
     class SectionHeaderViewHolder extends RecyclerView.ViewHolder {
         TextView sectionTitle;
-        Button addButton;
 
         SectionHeaderViewHolder(View itemView) {
             super(itemView);
             sectionTitle = itemView.findViewById(R.id.header_text);
-            addButton = itemView.findViewById(R.id.header_add_button);
-            addButton.setVisibility(View.GONE);
         }
     }
 

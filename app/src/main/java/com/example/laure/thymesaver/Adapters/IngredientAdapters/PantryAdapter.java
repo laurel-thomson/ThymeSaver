@@ -250,13 +250,10 @@ public class PantryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     class SectionHeaderViewHolder extends RecyclerView.ViewHolder {
         TextView sectionTitle;
-        Button addButton;
 
         SectionHeaderViewHolder(View itemView) {
             super(itemView);
             sectionTitle = itemView.findViewById(R.id.header_text);
-            addButton = itemView.findViewById(R.id.header_add_button);
-            addButton.setVisibility(View.GONE);
         }
     }
 

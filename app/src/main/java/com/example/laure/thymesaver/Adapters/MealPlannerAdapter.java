@@ -96,12 +96,6 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             SectionHeaderViewHolder headerViewHolder = (SectionHeaderViewHolder) holder;
             final String scheduledDay = mMealPlans.get(position).getScheduledDay();
             headerViewHolder.sectionTitle.setText(scheduledDay);
-            headerViewHolder.addButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mListener.onAddButtonClicked(scheduledDay);
-                }
-            });
 
             //Change the color of the header for the current day
             int day = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
@@ -226,12 +220,10 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     class SectionHeaderViewHolder extends RecyclerView.ViewHolder {
         TextView sectionTitle;
-        Button addButton;
 
         SectionHeaderViewHolder(View itemView) {
             super(itemView);
             sectionTitle = itemView.findViewById(R.id.header_text);
-            addButton = itemView.findViewById(R.id.header_add_button);
         }
     }
 
@@ -241,8 +233,6 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         void onMealClicked(MealPlan mealPlan);
 
         void onMealChecked(MealPlan mealPlan, boolean checked);
-
-        void onAddButtonClicked(String scheduledDay);
 
         void onMealDeleteClicked(MealPlan mealPlan);
     }
