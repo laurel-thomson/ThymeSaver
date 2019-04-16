@@ -105,11 +105,16 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
             //Change the color of the header for the current day
             int day = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
-            String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
-            if (days[day].equals(scheduledDay))
+            String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+            if (days[day-1].equals(scheduledDay))
             {
                 headerViewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimary));
                 headerViewHolder.sectionTitle.setTextColor(mContext.getResources().getColor(R.color.colorTextIcon));
+            }
+            else
+            {
+                headerViewHolder.itemView.setBackground(mContext.getResources().getDrawable(R.drawable.border));
+                headerViewHolder.sectionTitle.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
             }
         }
 
