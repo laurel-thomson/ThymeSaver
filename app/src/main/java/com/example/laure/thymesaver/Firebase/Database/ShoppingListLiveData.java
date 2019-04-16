@@ -60,6 +60,9 @@ public class ShoppingListLiveData extends LiveData<DataSnapshot> {
 
         for (DataSnapshot snap : dataSnapshot.child("mealplan").getChildren()) {
             MealPlan mealPlan = snap.getValue(MealPlan.class);
+
+            if (mealPlan.isCooked()) continue;
+
             String recipeName = mealPlan.getRecipeName();
 
             for (DataSnapshot recipeSnap : dataSnapshot.child("recipes").getChildren()) {
