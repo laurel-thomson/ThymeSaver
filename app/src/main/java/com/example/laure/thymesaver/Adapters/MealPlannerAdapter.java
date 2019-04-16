@@ -95,6 +95,13 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             final String scheduledDay = mMealPlans.get(position).getScheduledDay();
             headerViewHolder.sectionTitle.setText(scheduledDay);
 
+            headerViewHolder.addButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onAddButtonClicked(scheduledDay);
+                }
+            });
+
             //Change the color of the header for the current day
             int day = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
             String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
@@ -102,11 +109,14 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             {
                 headerViewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimary));
                 headerViewHolder.sectionTitle.setTextColor(mContext.getResources().getColor(R.color.colorTextIcon));
+                headerViewHolder.addButton.setBackground(mContext.getResources().getDrawable(R.drawable.ic_add_light));
             }
             else
             {
                 headerViewHolder.itemView.setBackground(mContext.getResources().getDrawable(R.drawable.border));
                 headerViewHolder.sectionTitle.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
+                headerViewHolder.addButton.setBackground(mContext.getResources().getDrawable(R.drawable.ic_add));
+
             }
         }
 
@@ -218,10 +228,13 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     class SectionHeaderViewHolder extends RecyclerView.ViewHolder {
         TextView sectionTitle;
+        Button addButton;
 
         SectionHeaderViewHolder(View itemView) {
             super(itemView);
             sectionTitle = itemView.findViewById(R.id.header_text);
+            addButton = itemView.findViewById(R.id.header_add_button);
+            addButton.setVisibility(View.VISIBLE);
         }
     }
 
@@ -231,6 +244,8 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         void onMealClicked(MealPlan mealPlan);
 
         void onMealChecked(MealPlan mealPlan);
+
+        void onAddButtonClicked(String scheduledDay);
 
         void onMealDeleteClicked(MealPlan mealPlan);
     }
