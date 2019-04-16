@@ -126,12 +126,22 @@ public class ShoppingListLiveData extends LiveData<DataSnapshot> {
                                 if (updatedQuantity == 0) {
                                     shoppingList.remove(i);
                                 }
+                                else if (updatedQuantity < 0)
+                                {
+                                    shoppingList.remove(i);
+                                    deleteModification(mod);
+                                }
                                 else {
                                     shoppingList.put(i, updatedQuantity);
                                 }
                             }
                             else {
-                                shoppingList.put(i, mod.getQuantity());
+                                if (mod.getQuantity() > 0) {
+                                    shoppingList.put(i, mod.getQuantity());
+                                }
+                                else {
+                                    deleteModification(mod);
+                                }
                             }
                             break;
                         case ADD:
@@ -146,5 +156,10 @@ public class ShoppingListLiveData extends LiveData<DataSnapshot> {
             }
         }
         return shoppingList;
+    }
+
+    private static void deleteModification(ShoppingListMod mod)
+    {
+        Repository.getInstance().deleteShoppingModification(mod.getName());
     }
 }
