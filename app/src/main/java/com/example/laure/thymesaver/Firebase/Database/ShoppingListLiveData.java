@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.example.laure.thymesaver.Models.ModType.ADD;
+
 public class ShoppingListLiveData extends LiveData<DataSnapshot> {
     private HashMap<Ingredient, Integer> mShoppingList = new HashMap<>();
     private final Query mQuery;
@@ -152,6 +154,24 @@ public class ShoppingListLiveData extends LiveData<DataSnapshot> {
                             break;
                     }
                     break;
+                }
+            }
+
+            //Look for a modification that isn't in the Ingredients list (this would be a
+            //one time "ingredient" that a user adds to the shopping list but doesn't want stored
+            //in the pantry
+            for (ShoppingListMod mod : mods) {
+                if (mod.getType() == ADD) {
+                    boolean match = false;
+                    for (Ingredient ing : shoppingList.keySet()) {
+                        if (ing.getName().equals(mod.getName()))
+                        {
+                            match = true;
+                        }
+                    }
+                    if (!match) {
+                        shoppingList.put(new Ingredient(mod.getName(), "Misc", true), mod.getQuantity());
+                    }
                 }
             }
         }

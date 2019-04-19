@@ -168,10 +168,11 @@ public class AddShoppingItemsAdapter extends RecyclerView.Adapter<RecyclerView.V
 
                     //if we didn't match any ingredients, we want to add what the user is typing
                     //as an ingredient
-                    //if (filteredList.size() == 0) {
-                       // mUserCreatedIngredient = charString;
-                        //filteredList.add(mUserCreatedIngredient);
-                    //}
+                    if (filteredList.size() == 0) {
+                       Ingredient newIngredient = new Ingredient(charString, "Misc", true);
+                       filteredList.add(newIngredient);
+                       mMeasuredIngredients.put(newIngredient, 1);
+                    }
 
                     mFilteredIngredients = filteredList;
                 }

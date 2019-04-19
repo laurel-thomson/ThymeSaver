@@ -48,6 +48,7 @@ public class AddShoppingListItemsActivity extends AppCompatActivity {
     public void saveIngredients() {
         for (Map.Entry<Ingredient, Integer> entry : mAdapter.getMeasuredIngredients().entrySet()) {
             Ingredient i = entry.getKey();
+
             if (i.isBulk()) {
                 mShoppingViewModel.addShoppingModification(i.getName(), ModType.ADD, 0);
             }
