@@ -21,14 +21,16 @@ public class ShoppingViewModel extends AndroidViewModel {
     }
 
     public LiveData<HashMap<Ingredient, Integer>> getShoppingList() {
-
         return mRepository.getShoppingList();
+    }
+
+    public boolean ingredientExists(Ingredient ingredient) {
+         return mRepository.getIngredient(ingredient.getName()) != null;
     }
 
     public void addQuantityToPantry(Ingredient ingredient, int quantity) {
         if (ingredient.isBulk()) {
             ingredient.setQuantity(BulkIngredientState.convertEnumToInt(BulkIngredientState.IN_STOCK));
-            mRepository.updateIngredient(ingredient);
         }
         else {
             ingredient.setQuantity(ingredient.getQuantity() + quantity);

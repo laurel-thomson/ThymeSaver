@@ -84,7 +84,31 @@ public class ShoppingListFragment extends AddButtonFragment implements ShoppingL
     }
 
     @Override
-    public void onIngredientCheckedOff(final Ingredient i, final int quantity) {
+    public void onIngredientCheckedOff(Ingredient i, int quantity) {
+        if (mViewModel.ingredientExists(i)) {
+            addQuantityToPantry(i, quantity);
+        }
+        else {
+            askAddIngredientToPantry(i, quantity);
+        }
+    }
+
+    private void askAddIngredientToPantry(final Ingredient ing, final int quantity) {
+        AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                .setTitle("Add Ingredient to Pantry?")
+                .setMessage("Would you like to store this ingredient in the pantry?")
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        addQuantityToPantry(ing, quantity);
+                    }
+                })
+                .setNegativeButton("NO", null)
+                .create();
+        dialog.show();
+    }
+
+    private void addQuantityToPantry(Ingredient i, int quantity) {
         mViewModel.addQuantityToPantry(i, quantity);
         mViewModel.deleteModifier(i.getName());
     }
