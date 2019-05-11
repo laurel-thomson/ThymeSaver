@@ -54,11 +54,14 @@ public class ShoppingListLiveData extends LiveData<DataSnapshot> {
         }
     }
 
+    //Someday I need to fix this monstrosity...
     public static HashMap<Ingredient, Integer> getShoppingList(DataSnapshot dataSnapshot) {
         HashMap<Ingredient, Integer> shoppingList = new HashMap<>();
 
         //get all the needed ingredients & quantities from the meal plans
         HashMap<String, Integer> neededIngredients = new HashMap<>();
+
+        List<Ingredient> allIngredients = new ArrayList<>();
 
         for (DataSnapshot snap : dataSnapshot.child("mealplan").getChildren()) {
             MealPlan mealPlan = snap.getValue(MealPlan.class);
@@ -101,6 +104,8 @@ public class ShoppingListLiveData extends LiveData<DataSnapshot> {
         for (DataSnapshot snap : dataSnapshot.child("ingredients").getChildren()) {
             Ingredient i = snap.getValue(Ingredient.class);
             i.setName(snap.getKey());
+
+            allIngredients.add(i);
 
             if (neededIngredients.containsKey(snap.getKey())) {
                 if (i.isBulk()) {
@@ -156,25 +161,27 @@ public class ShoppingListLiveData extends LiveData<DataSnapshot> {
                     break;
                 }
             }
+        }
 
-            //Look for a modification that isn't in the Ingredients list (this would be a
-            //one time "ingredient" that a user adds to the shopping list but doesn't want stored
-            //in the pantry
-            for (ShoppingListMod mod : mods) {
-                if (mod.getType() == ADD) {
-                    boolean match = false;
-                    for (Ingredient ing : shoppingList.keySet()) {
-                        if (ing.getName().equals(mod.getName()))
-                        {
-                            match = true;
-                        }
+        //Look for a modification that isn't in the Ingredients list (this would be a
+        //one time "ingredient" that a user adds to the shopping list but doesn't want stored
+        //in the pantry
+        for (ShoppingListMod mod : mods) {
+            if (mod.getType() == ADD) {
+                boolean match = false;
+                for (Ingredient ing : allIngredients) {
+                    if (ing.getName().equals(mod.getName()))
+                    {
+                        match = true;
+                        break;
                     }
-                    if (!match) {
-                        shoppingList.put(new Ingredient(mod.getName(), "Misc", true), mod.getQuantity());
-                    }
+                }
+                if (!match) {
+                    shoppingList.put(new Ingredient(mod.getName(), "Misc", true), mod.getQuantity());
                 }
             }
         }
+
         return shoppingList;
     }
 
