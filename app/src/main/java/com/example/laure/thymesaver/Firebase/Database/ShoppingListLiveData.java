@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static com.example.laure.thymesaver.Models.ModType.ADD;
+import static com.example.laure.thymesaver.Models.ModType.NEW;
 
 public class ShoppingListLiveData extends LiveData<DataSnapshot> {
     private HashMap<Ingredient, Integer> mShoppingList = new HashMap<>();
@@ -167,18 +168,8 @@ public class ShoppingListLiveData extends LiveData<DataSnapshot> {
         //one time "ingredient" that a user adds to the shopping list but doesn't want stored
         //in the pantry
         for (ShoppingListMod mod : mods) {
-            if (mod.getType() == ADD) {
-                boolean match = false;
-                for (Ingredient ing : allIngredients) {
-                    if (ing.getName().equals(mod.getName()))
-                    {
-                        match = true;
-                        break;
-                    }
-                }
-                if (!match) {
-                    shoppingList.put(new Ingredient(mod.getName(), "Misc", true), mod.getQuantity());
-                }
+            if (mod.getType() == NEW) {
+                shoppingList.put(new Ingredient(mod.getName(), "Misc", false), mod.getQuantity());
             }
         }
 

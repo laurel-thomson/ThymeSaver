@@ -36,11 +36,6 @@ public class ShoppingViewModel extends AndroidViewModel {
         mRepository.updateIngredient(ingredient);
     }
 
-    public void resetPantryQuantity(Ingredient ingredient, int oldQuantity) {
-        ingredient.setQuantity(oldQuantity);
-        mRepository.updateIngredient(ingredient);
-    }
-
     public void addShoppingModification(String name, ModType type, int modifier) {
         mRepository.addOrUpdateModification(new ShoppingListMod(name, type, modifier));
     }

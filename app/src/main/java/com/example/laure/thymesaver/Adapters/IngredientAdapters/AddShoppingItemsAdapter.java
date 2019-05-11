@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.laure.thymesaver.Models.Ingredient;
+import com.example.laure.thymesaver.Models.ShoppingListMod;
 import com.example.laure.thymesaver.R;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import java.util.ListIterator;
 
 public class AddShoppingItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
     private Context mContext;
-    private HashMap<Ingredient, Integer> mMeasuredIngredients;
+    private HashMap<Ingredient, Integer> mMeasuredIngredients = new HashMap<>();
     private List<Ingredient> mIngredients = new ArrayList<>();
     private List<Ingredient> mFilteredIngredients = mIngredients;
     private static final int INGREDIENT_TYPE = 1;
@@ -36,8 +37,24 @@ public class AddShoppingItemsAdapter extends RecyclerView.Adapter<RecyclerView.V
         mContext = context;
     }
 
+
+    public HashMap<Ingredient, Integer> getMeasuredIngredients() {
+        HashMap<Ingredient, Integer> measuredIngredients = new HashMap<>();
+        for (Ingredient i : mFilteredIngredients) {
+            if (getItemViewType(i) == HEADER_TYPE) continue;
+            int quantity = mMeasuredIngredients.get(i);
+            if (quantity > 0) {
+                measuredIngredients.put(i, quantity);
+            }
+        }
+        return measuredIngredients;
+    }
+
     public void setIngredients(HashMap<Ingredient, Integer> measuredIngredients) {
-        mMeasuredIngredients = measuredIngredients;
+        mMeasuredIngredients.clear();
+        for (Ingredient i : measuredIngredients.keySet()) {
+            mMeasuredIngredients.put(i, measuredIngredients.get(i));
+        }
 
         mIngredients.clear();
 
@@ -169,7 +186,7 @@ public class AddShoppingItemsAdapter extends RecyclerView.Adapter<RecyclerView.V
                     //if we didn't match any ingredients, we want to add what the user is typing
                     //as an ingredient
                     if (filteredList.size() == 0) {
-                       Ingredient newIngredient = new Ingredient(charString, "Misc", true);
+                       Ingredient newIngredient = new Ingredient(charString, "Misc", false);
                        filteredList.add(newIngredient);
                        mMeasuredIngredients.put(newIngredient, 1);
                     }
@@ -269,18 +286,6 @@ public class AddShoppingItemsAdapter extends RecyclerView.Adapter<RecyclerView.V
                 }
             });
         }
-    }
-
-    public HashMap<Ingredient, Integer> getMeasuredIngredients() {
-        HashMap<Ingredient, Integer> measuredIngredients = new HashMap<>();
-        for (Ingredient i : mFilteredIngredients) {
-            if (getItemViewType(i) == HEADER_TYPE) continue;
-            int quantity = mMeasuredIngredients.get(i);
-            if (quantity > 0) {
-                measuredIngredients.put(i, quantity);
-            }
-        }
-        return measuredIngredients;
     }
 
     class SectionHeaderViewHolder extends RecyclerView.ViewHolder {

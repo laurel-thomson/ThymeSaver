@@ -30,6 +30,9 @@ public class AddShoppingListItemsActivity extends AppCompatActivity {
     private PantryViewModel mPantryViewModel;
     private AddShoppingItemsAdapter mAdapter;
     private SearchView mSearchView;
+    //create a new HashMap that includes all of the ingredients in the pantry
+    //the value is 0 if the ingredient is not in the shopping list, and nonzero otherwise
+    HashMap<Ingredient, Integer> mTotalIngredients = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,14 +51,25 @@ public class AddShoppingListItemsActivity extends AppCompatActivity {
     public void saveIngredients() {
         for (Map.Entry<Ingredient, Integer> entry : mAdapter.getMeasuredIngredients().entrySet()) {
             Ingredient i = entry.getKey();
-
-            if (i.isBulk()) {
+            if (isNewIngredient(i)) {
+                mShoppingViewModel.addShoppingModification(i.getName(), ModType.NEW, entry.getValue());
+            }
+            else if (i.isBulk()) {
                 mShoppingViewModel.addShoppingModification(i.getName(), ModType.ADD, 0);
             }
             else {
                 mShoppingViewModel.addShoppingModification(i.getName(), ModType.CHANGE, entry.getValue());
             }
         }
+    }
+
+    private boolean isNewIngredient(Ingredient newIng) {
+        for (Ingredient i : mTotalIngredients.keySet()) {
+            if (i.getName().equals(newIng.getName())) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void setUpActionBar() {
@@ -84,19 +98,16 @@ public class AddShoppingListItemsActivity extends AppCompatActivity {
             public void onChanged(@Nullable List<Ingredient> ingredients) {
                 if (ingredients == null) return;
 
-                //create a new HashMap that includes all of the ingredients in the pantry
-                //the value is 0 if the ingredient is not in the shopping list, and nonzero otherwise
-                HashMap<Ingredient, Integer> totalMeasuredIngredients = new HashMap<>();
                 HashMap<Ingredient, Integer> shoppingList = mShoppingViewModel.getShoppingList().getValue();
                 for (Ingredient i : ingredients) {
                     if (shoppingList.containsKey(i.getName())) {
-                        totalMeasuredIngredients.put(i, shoppingList.get(i.getName()));
+                        mTotalIngredients.put(i, shoppingList.get(i.getName()));
                     }
                     else {
-                        totalMeasuredIngredients.put(i, 0);
+                        mTotalIngredients.put(i, 0);
                     }
                 }
-                mAdapter.setIngredients(totalMeasuredIngredients);
+                mAdapter.setIngredients(mTotalIngredients);
             }
         });
     }
