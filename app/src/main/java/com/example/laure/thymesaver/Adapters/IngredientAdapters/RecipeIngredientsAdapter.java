@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.RecipeQuantity;
 import com.example.laure.thymesaver.R;
+import com.example.laure.thymesaver.UI.RecipeDetail.AddRecipeIngredientListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,13 +33,13 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecyclerView.
 
     private SparseBooleanArray mStepCheckStates = new SparseBooleanArray();
     private Context mContext;
-    private Listener mListener;
+    private AddRecipeIngredientListener mListener;
     private HashMap<Ingredient, RecipeQuantity> mRecipeQuantities = new HashMap<>();
     private List<Ingredient> mIngredients = new ArrayList<>();
     private static final int INGREDIENT_TYPE = 1;
     private static final int HEADER_TYPE = 2;
 
-    public RecipeIngredientsAdapter(Context context, Listener listener ) {
+    public RecipeIngredientsAdapter(Context context, AddRecipeIngredientListener listener ) {
         mContext = context;
         mListener = listener;
     }
@@ -203,30 +204,8 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecyclerView.
             mIncrementer = view.findViewById(R.id.increment_quantity_layout);
             mDeleteButton = view.findViewById(R.id.ingredient_delete);
 
-            mDecrementer.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (getAdapterPosition() < 0) return;
-                    Ingredient i = mIngredients.get(getAdapterPosition());
-                    RecipeQuantity quantity = mRecipeQuantities.get(i);
-                    if (quantity.getRecipeQuantity() == 0) return;
-                    quantity.setRecipeQuantity(quantity.getRecipeQuantity() - 1);
-                    mListener.onIngredientQuantityChanged(i, mRecipeQuantities.get(i));
-                    notifyDataSetChanged();
-                }
-            });
-
-            mIncrementer.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (getAdapterPosition() < 0) return;
-                    Ingredient i = mIngredients.get(getAdapterPosition());
-                    RecipeQuantity quantity = mRecipeQuantities.get(i);
-                    quantity.setRecipeQuantity(quantity.getRecipeQuantity() + 1);
-                    mListener.onIngredientQuantityChanged(i, mRecipeQuantities.get(i));
-                    notifyDataSetChanged();
-                }
-            });
+            mDecrementer.setVisibility(View.GONE);
+            mIncrementer.setVisibility(View.GONE);
 
             mDeleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -240,7 +219,17 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecyclerView.
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mListener.onIngredientClicked(mIngredients.get(getAdapterPosition()));
+                    mListener.onIngredientClicked(
+                            mIngredients.get(getAdapterPosition()),
+                            mRecipeQuantities.get(mIngredients.get(getAdapterPosition())));
+                }
+            });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    mListener.onIngredientLongClicked(mIngredients.get(getAdapterPosition()));
+                    return true;
                 }
             });
         }
@@ -253,11 +242,5 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecyclerView.
             super(itemView);
             sectionTitle = itemView.findViewById(R.id.header_text);
         }
-    }
-
-    public interface Listener {
-        void onDeleteClicked(Ingredient i, RecipeQuantity quantity);
-        void onIngredientQuantityChanged(Ingredient i, RecipeQuantity quantity);
-        void onIngredientClicked(Ingredient i);
     }
 }

@@ -25,7 +25,7 @@ import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 import java.util.HashMap;
 
 public class RecipeIngredientsFragment extends RecipeDetailFragment
-        implements RecipeIngredientsAdapter.Listener, AddRecipeIngredientListener{
+        implements AddRecipeIngredientListener{
 
     private RecipeDetailViewModel mViewModel;
     private RecipeIngredientsAdapter mAdapter;
@@ -90,12 +90,20 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
     }
 
     @Override
-    public void onIngredientQuantityChanged(Ingredient i, RecipeQuantity quantity) {
-        mViewModel.updateRecipeIngredient(i.getName(), quantity);
+    public void onIngredientClicked(Ingredient i, RecipeQuantity quantity) {
+        Bundle bundle = new Bundle();
+        bundle.putString(UpdateRecipeIngredientFragment.INGREDIENT_NAME, i.getName());
+        bundle.putString(UpdateRecipeIngredientFragment.INGREDIENT_UNIT, quantity.getUnit());
+        bundle.putInt(UpdateRecipeIngredientFragment.INGREDIENT_QUANTITY, quantity.getRecipeQuantity());
+
+        UpdateRecipeIngredientFragment fragment = new UpdateRecipeIngredientFragment();
+        fragment.setArguments(bundle);
+        fragment.setListener(this);
+        fragment.show(getActivity().getSupportFragmentManager(), "TAG");
     }
 
     @Override
-    public void onIngredientClicked(Ingredient i) {
+    public void onIngredientLongClicked(Ingredient i) {
         Intent intent = new Intent(getContext(), AddOrEditIngredientActivity.class);
         intent.putExtra(AddOrEditIngredientActivity.INGREDIENT_NAME_KEY, i.getName());
         startActivity(intent);
@@ -125,5 +133,10 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
     @Override
     public void onIngredientAdded(Ingredient ingredient, RecipeQuantity quantity) {
         mViewModel.updateRecipeIngredient(ingredient.getName(), quantity);
+    }
+
+    @Override
+    public void onIngredientUpdated(Ingredient ing, RecipeQuantity quantity) {
+        mViewModel.updateRecipeIngredient(ing.getName(), quantity);
     }
 }
