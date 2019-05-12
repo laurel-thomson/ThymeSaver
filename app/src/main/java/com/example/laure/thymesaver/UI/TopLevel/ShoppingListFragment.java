@@ -57,6 +57,8 @@ public class ShoppingListFragment extends AddButtonFragment implements ShoppingL
     }
 
     private void setObserver() {
+        if (mViewModel.getShoppingList() == null) return;
+
         mViewModel.getShoppingList().observe(this, new Observer<HashMap<Ingredient, Integer>>() {
             @Override
             public void onChanged(@Nullable HashMap<Ingredient, Integer> ingredientIntegerHashMap) {
@@ -64,12 +66,6 @@ public class ShoppingListFragment extends AddButtonFragment implements ShoppingL
                 mProgressBar.setVisibility(View.GONE);
             }
         });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        setObserver();
     }
 
     @Override

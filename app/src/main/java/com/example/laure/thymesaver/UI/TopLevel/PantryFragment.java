@@ -53,6 +53,8 @@ public class PantryFragment extends AddButtonFragment implements PantryAdapter.I
     }
 
     private void setObserver() {
+        if (mViewModel.getAllIngredients() == null) return;
+
         mViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
             @Override
             public void onChanged(@Nullable List<Ingredient> ingredients) {
@@ -60,12 +62,6 @@ public class PantryFragment extends AddButtonFragment implements PantryAdapter.I
                 mProgressBar.setVisibility(View.GONE);
             }
         });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        setObserver();
     }
 
     public void onIngredientQuantityChanged(Ingredient ingredient, int quantity) {

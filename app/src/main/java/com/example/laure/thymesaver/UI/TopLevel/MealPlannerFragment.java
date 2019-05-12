@@ -58,6 +58,8 @@ public class MealPlannerFragment extends Fragment implements MealPlannerAdapter.
     }
 
     private void setObserver() {
+        if (mViewModel.getMealPlans() == null) return;
+
         mViewModel.getMealPlans().observe(this, new Observer<List<MealPlan>>() {
             @Override
             public void onChanged(@Nullable List<MealPlan> mealPlans) {
@@ -65,12 +67,6 @@ public class MealPlannerFragment extends Fragment implements MealPlannerAdapter.
                 mProgressBar.setVisibility(View.GONE);
             }
         });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        setObserver();
     }
 
     @Override

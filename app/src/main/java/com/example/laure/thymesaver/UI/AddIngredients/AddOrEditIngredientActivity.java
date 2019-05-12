@@ -80,6 +80,8 @@ public class AddOrEditIngredientActivity extends AppCompatActivity {
     }
 
     private void setIngredientValues() {
+        if (mIngredient == null) return;
+
         mNameET.setText(mIngredient.getName());
         mBulkSwitch.setChecked(mIngredient.isBulk());
 

@@ -4,6 +4,7 @@ import android.arch.core.util.Function;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Transformations;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.MealPlan;
@@ -43,13 +44,6 @@ public class Repository {
     private List<PantryRequest> mPantryRequests = new ArrayList<>();
     private HashMap<Ingredient, Integer> mShoppingList = new HashMap<>();
     private List<Pantry> mPantries = new ArrayList<>();
-    private LiveData<List<Recipe>> mRecipeListLiveData;
-    private LiveData<List<Ingredient>> mIngredientLiveData;
-    private LiveData<List<MealPlan>> mMealPlanLiveData;
-    private LiveData<List<PantryRequest>> mRequestsLiveData;
-    private LiveData<HashMap<Ingredient,Integer>> mShoppingLiveData;
-    private LiveData<Recipe> mRecipeLiveData;
-    private LiveData<List<Pantry>> mPantryListLiveData;
     private Recipe mRecipe;
     private String mUserId;
     private String mPantryId;
@@ -82,24 +76,6 @@ public class Repository {
         mMealPlanReference = mDatabase.getReference("pantries/" + mPantryId + "/mealplan");
         mShoppingListModReference = mDatabase.getReference("pantries/" + mPantryId + "/shoppinglistmods");
         mPantriesReference = mUserReference.child("pantries");
-        mRecipeListLiveData = Transformations.map(
-                new ListLiveData<Recipe>(mRecipeReference, Recipe.class),
-                new RecipeListDeserializer());
-        mIngredientLiveData = Transformations.map(
-                new ListLiveData<Ingredient>(mIngredientReference, Ingredient.class),
-                new IngredientDeserializer());
-        mMealPlanLiveData = Transformations.map(
-                new ListLiveData<MealPlan>(mMealPlanReference, MealPlan.class),
-                new MealPlanDeserializer());
-        mShoppingLiveData = Transformations.map(
-                new ShoppingListLiveData(mDatabaseReference),
-                new ShoppingListDeserializer());
-        mPantryListLiveData = Transformations.map(
-                new ListLiveData<Pantry>(mPantriesReference, Pantry.class),
-                new PantryListDeserializer());
-        mRequestsLiveData = Transformations.map(
-                new ListLiveData<PantryRequest>(mUserReference.child("requests"), PantryRequest.class),
-                new PantryRequestsDeserializer());
 
         //force ingredients to cache
         mIngredientReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -118,6 +94,55 @@ public class Repository {
             }
         });
     }
+
+    @NonNull
+    public LiveData<List<Recipe>> getAllRecipes() {
+        return Transformations.map(
+                new ListLiveData<Recipe>(mRecipeReference, Recipe.class),
+                new RecipeListDeserializer());
+    }
+
+    @NonNull
+    public LiveData<List<Ingredient>> getAllIngredients() {
+        return Transformations.map(
+                new ListLiveData<Ingredient>(mIngredientReference, Ingredient.class),
+                new IngredientDeserializer());
+    }
+
+    @NonNull
+    public LiveData<HashMap<Ingredient, Integer>> getShoppingList() {
+        return Transformations.map(
+                new ShoppingListLiveData(mDatabaseReference),
+                new ShoppingListDeserializer());
+    }
+
+    @NonNull
+    public LiveData<List<MealPlan>> getMealPlans() {
+        return Transformations.map(
+                new ListLiveData<MealPlan>(mMealPlanReference, MealPlan.class),
+                new MealPlanDeserializer());
+    }
+
+    @NonNull
+    public LiveData<List<Pantry>> getPantries() {
+        return Transformations.map(
+                new ListLiveData<Pantry>(mPantriesReference, Pantry.class),
+                new PantryListDeserializer());
+    }
+
+    @NonNull
+    public LiveData<List<PantryRequest>> getPantryRequests() {
+        return Transformations.map(
+                new ListLiveData<PantryRequest>(mUserReference.child("requests"), PantryRequest.class),
+                new PantryRequestsDeserializer());
+    }
+
+    public LiveData<Recipe> getRecipe(String recipeName) {
+        return Transformations.map(
+                new RecipeLiveData(mRecipeReference.child(recipeName)),
+                new RecipeDeserializer());
+    }
+
 
     public void initializePantry() {
         mUserReference.child("preferredPantry").setValue(mUserId);
@@ -386,43 +411,6 @@ public class Repository {
                     }
                 }
         );
-    }
-
-    @NonNull
-    public LiveData<List<Recipe>> getAllRecipes() {
-        return mRecipeListLiveData;
-    }
-
-    @NonNull
-    public LiveData<List<Ingredient>> getAllIngredients() {
-        return mIngredientLiveData;
-    }
-
-    @NonNull
-    public LiveData<HashMap<Ingredient, Integer>> getShoppingList() {
-        return mShoppingLiveData;
-    }
-
-    @NonNull
-    public LiveData<List<MealPlan>> getMealPlans() {
-        return mMealPlanLiveData;
-    }
-
-    @NonNull
-    public LiveData<List<Pantry>> getPantries() {
-        return mPantryListLiveData;
-    }
-
-    @NonNull
-    public LiveData<List<PantryRequest>> getPantryRequests() {
-        return mRequestsLiveData;
-    }
-
-    public LiveData<Recipe> getRecipe(String recipeName) {
-        mRecipeLiveData = Transformations.map(
-                new RecipeLiveData(mRecipeReference.child(recipeName)),
-                new RecipeDeserializer());
-        return mRecipeLiveData;
     }
 
     private class RecipeListDeserializer implements Function<DataSnapshot, List<Recipe>> {

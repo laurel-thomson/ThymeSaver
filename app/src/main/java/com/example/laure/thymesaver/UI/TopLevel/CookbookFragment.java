@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -48,12 +49,10 @@ public class CookbookFragment extends AddButtonFragment
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mProgressBar = view.findViewById(R.id.cookbook_progress);
-
-        mViewModel = ViewModelProviders.of(this).get(CookBookViewModel.class);
         mRecyclerView = view.findViewById(R.id.recipes_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new RecipeAdapter(getActivity(), this);
-
+        mViewModel = ViewModelProviders.of(this).get(CookBookViewModel.class);
         setObserver();
 
         mRecyclerView.setAdapter(mAdapter);
@@ -62,6 +61,11 @@ public class CookbookFragment extends AddButtonFragment
     }
 
     private void setObserver() {
+        if (mViewModel.getAllRecipes() == null) return;
+        if (mViewModel.getAllRecipes().hasActiveObservers()) {
+            return;
+        }
+
         mViewModel.getAllRecipes().observe(this, new Observer<List<Recipe>>() {
             @Override
             public void onChanged(@Nullable List<Recipe> recipes) {
@@ -69,12 +73,6 @@ public class CookbookFragment extends AddButtonFragment
                 mProgressBar.setVisibility(View.GONE);
             }
         });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        setObserver();
     }
 
     @Override

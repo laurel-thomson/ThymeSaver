@@ -1,6 +1,8 @@
 package com.example.laure.thymesaver.Firebase.Database;
 
 import android.arch.lifecycle.LiveData;
+import android.util.Log;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,6 +28,8 @@ ListLiveData<T> extends LiveData<DataSnapshot> {
 
     @Override
     protected void onActive() {
+        Log.d("FLOWER","MQuery is null = " + (mQuery == null));
+        Log.d("FLOWER", "Class Type = " + mClassType);
         mQuery.addValueEventListener(mListener);
     }
 
