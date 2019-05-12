@@ -58,7 +58,13 @@ public class MealPlannerFragment extends Fragment implements MealPlannerAdapter.
     }
 
     private void setObserver() {
-        if (mViewModel.getMealPlans() == null) return;
+        if (mViewModel.getMealPlans() == null) {
+            //force the main activity to close and restart
+            Intent intent = new Intent(getContext(), MainActivity.class);
+            getActivity().finish();
+            startActivity(intent);
+            return;
+        }
 
         mViewModel.getMealPlans().observe(this, new Observer<List<MealPlan>>() {
             @Override

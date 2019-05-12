@@ -95,49 +95,50 @@ public class Repository {
         });
     }
 
-    @NonNull
     public LiveData<List<Recipe>> getAllRecipes() {
+        if (mRecipeReference == null) return null;
         return Transformations.map(
                 new ListLiveData<Recipe>(mRecipeReference, Recipe.class),
                 new RecipeListDeserializer());
     }
 
-    @NonNull
     public LiveData<List<Ingredient>> getAllIngredients() {
+        if (mIngredientReference == null) return null;
         return Transformations.map(
                 new ListLiveData<Ingredient>(mIngredientReference, Ingredient.class),
                 new IngredientDeserializer());
     }
 
-    @NonNull
     public LiveData<HashMap<Ingredient, Integer>> getShoppingList() {
+        if (mDatabaseReference == null) return null;
         return Transformations.map(
                 new ShoppingListLiveData(mDatabaseReference),
                 new ShoppingListDeserializer());
     }
 
-    @NonNull
     public LiveData<List<MealPlan>> getMealPlans() {
+        if (mMealPlanReference == null) return null;
         return Transformations.map(
                 new ListLiveData<MealPlan>(mMealPlanReference, MealPlan.class),
                 new MealPlanDeserializer());
     }
 
-    @NonNull
     public LiveData<List<Pantry>> getPantries() {
+        if (mPantriesReference == null) return null;
         return Transformations.map(
                 new ListLiveData<Pantry>(mPantriesReference, Pantry.class),
                 new PantryListDeserializer());
     }
 
-    @NonNull
     public LiveData<List<PantryRequest>> getPantryRequests() {
+        if (mUserReference == null) return null;
         return Transformations.map(
                 new ListLiveData<PantryRequest>(mUserReference.child("requests"), PantryRequest.class),
                 new PantryRequestsDeserializer());
     }
 
     public LiveData<Recipe> getRecipe(String recipeName) {
+        if (mRecipeReference == null) return null;
         return Transformations.map(
                 new RecipeLiveData(mRecipeReference.child(recipeName)),
                 new RecipeDeserializer());

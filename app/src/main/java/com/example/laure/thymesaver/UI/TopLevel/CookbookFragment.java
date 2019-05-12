@@ -61,8 +61,11 @@ public class CookbookFragment extends AddButtonFragment
     }
 
     private void setObserver() {
-        if (mViewModel.getAllRecipes() == null) return;
-        if (mViewModel.getAllRecipes().hasActiveObservers()) {
+        if (mViewModel.getAllRecipes() == null) {
+            //force the main activity to close and restart
+            Intent intent = new Intent(getContext(), MainActivity.class);
+            getActivity().finish();
+            startActivity(intent);
             return;
         }
 

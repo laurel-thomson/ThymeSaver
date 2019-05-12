@@ -28,8 +28,6 @@ ListLiveData<T> extends LiveData<DataSnapshot> {
 
     @Override
     protected void onActive() {
-        Log.d("FLOWER","MQuery is null = " + (mQuery == null));
-        Log.d("FLOWER", "Class Type = " + mClassType);
         mQuery.addValueEventListener(mListener);
     }
 

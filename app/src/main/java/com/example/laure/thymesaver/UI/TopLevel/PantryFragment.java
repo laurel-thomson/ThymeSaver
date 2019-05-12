@@ -53,7 +53,13 @@ public class PantryFragment extends AddButtonFragment implements PantryAdapter.I
     }
 
     private void setObserver() {
-        if (mViewModel.getAllIngredients() == null) return;
+        if (mViewModel.getAllIngredients() == null) {
+            //force the main activity to close and restart
+            Intent intent = new Intent(getContext(), MainActivity.class);
+            getActivity().finish();
+            startActivity(intent);
+            return;
+        }
 
         mViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
             @Override

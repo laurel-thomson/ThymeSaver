@@ -57,7 +57,13 @@ public class ShoppingListFragment extends AddButtonFragment implements ShoppingL
     }
 
     private void setObserver() {
-        if (mViewModel.getShoppingList() == null) return;
+        if (mViewModel.getShoppingList() == null) {
+            //force the main activity to close and restart
+            Intent intent = new Intent(getContext(), MainActivity.class);
+            getActivity().finish();
+            startActivity(intent);
+            return;
+        }
 
         mViewModel.getShoppingList().observe(this, new Observer<HashMap<Ingredient, Integer>>() {
             @Override
