@@ -328,6 +328,28 @@ public class Repository {
         );
     }
 
+    public void updateModToChangeIfExists(String name) {
+        mShoppingListModReference.child(name).addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        //We only want to update the associated mod if it exists
+                        if (dataSnapshot.exists()) {
+                            ShoppingListMod mod = dataSnapshot.getValue(ShoppingListMod.class);
+                            mod.setType(CHANGE);
+                            mod.setQuantity(1);
+                            mShoppingListModReference.child(name).setValue(mod);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                }
+        );
+    }
+
     public void deleteShoppingModification(final String name) {
         mShoppingListModReference.child(name).removeValue();
     }

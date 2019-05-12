@@ -103,6 +103,12 @@ public class AddOrEditIngredientActivity extends AppCompatActivity {
             ingredient = mIngredient;
             ingredient.setName(name);
             ingredient.setCategory(category);
+
+            //if we are switching a bulk ingredient to a non-bulk, the associated shopping mod will
+            //need to be update if it exists to prevent bugs in the shopping list
+            if (ingredient.isBulk() && !isBulk) {
+                mViewModel.updateModToChange(ingredient.getName());
+            }
             ingredient.setBulk(isBulk);
         }
         mViewModel.addIngredient(ingredient);

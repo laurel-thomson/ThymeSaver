@@ -6,7 +6,6 @@ import android.arch.lifecycle.LiveData;
 
 import com.example.laure.thymesaver.Firebase.Database.Repository;
 import com.example.laure.thymesaver.Models.Ingredient;
-import com.example.laure.thymesaver.Models.Recipe;
 
 import java.util.List;
 
@@ -24,6 +23,10 @@ public class PantryViewModel extends AndroidViewModel {
 
     public void addIngredient(Ingredient i) {
         mRepository.addIngredient(i);
+    }
+
+    public void updateModToChange(String name) {
+        mRepository.updateModToChangeIfExists(name);
     }
 
     public void deleteIngredient(Ingredient i) {
