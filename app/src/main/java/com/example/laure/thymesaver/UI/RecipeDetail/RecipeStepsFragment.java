@@ -124,4 +124,22 @@ public class RecipeStepsFragment extends RecipeDetailFragment
     public void onStepMoved(List<String> newList) {
         mViewModel.updateRecipe();
     }
+
+    @Override
+    public void onStepUpdated(String step, int position) {
+        mSteps.set(position, step);
+        mAdapter.notifyDataSetChanged();
+        mViewModel.updateRecipe();
+    }
+
+    @Override
+    public void onStepClicked(int position) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(UpdateStepFragment.STEP_POSITION, position);
+        bundle.putString(UpdateStepFragment.STEP_STRING, mSteps.get(position));
+        UpdateStepFragment fragment = new UpdateStepFragment();
+        fragment.setArguments(bundle);
+        fragment.setListener(this);
+        fragment.show(getActivity().getSupportFragmentManager(), "TAG");
+    }
 }

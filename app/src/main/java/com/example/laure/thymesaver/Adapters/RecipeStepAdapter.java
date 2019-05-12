@@ -138,6 +138,13 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.My
                     mListener.onStepDeleted(getAdapterPosition());
                 }
             });
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onStepClicked(getAdapterPosition());
+                }
+            });
         }
     }
 }

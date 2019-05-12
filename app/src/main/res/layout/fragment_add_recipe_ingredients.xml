@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/colorTextIcon"
             android:textSize="18dp"
-            android:text="Add Recipe Ingredient"/>
+            android:text="Done"/>
 
     </LinearLayout>
 
