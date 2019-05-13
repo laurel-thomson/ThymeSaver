@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -41,6 +42,7 @@ public class PantryManagerActivity extends AppCompatActivity implements PantryLi
     private PantryManagerViewModel mViewModel;
     private PantryListAdapter mAdapter;
     private RecyclerView mRecyclerView;
+    private boolean pantryChanged = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,14 +147,28 @@ public class PantryManagerActivity extends AppCompatActivity implements PantryLi
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                onBackPressed();
+                if (pantryChanged) {
+                    restartApplication();
+                }
+                else {
+                    onBackPressed();
+                }
                 return true;
         }
         return false;
     }
 
+    private void restartApplication() {
+        //restart application
+        Intent i = getBaseContext().getPackageManager()
+                .getLaunchIntentForPackage( getBaseContext().getPackageName() );
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
+    }
+
     @Override
     public void onPreferredPantryChanged(String pantryId) {
+        pantryChanged = true;
         mViewModel.updatePreferredPantry(pantryId);
         Snackbar snackbar = Snackbar
                 .make(findViewById(
