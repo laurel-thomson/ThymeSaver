@@ -69,6 +69,7 @@ public class Repository {
 
     public void initializeDatabaseReferences(String pantryId) {
         mPantryId = pantryId;
+        mUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         mUserReference = mDatabase.getReference("users/" + mUserId);
         mDatabaseReference = mDatabase.getReference("pantries/" + mPantryId);
         mRecipeReference = mDatabase.getReference("pantries/" + mPantryId + "/recipes");
@@ -146,6 +147,8 @@ public class Repository {
 
 
     public void initializePantry() {
+        mUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        initializeDatabaseReferences(mUserId);
         mUserReference.child("preferredPantry").setValue(mUserId);
         mPantriesReference.child(mUserId).setValue(new Pantry("My Pantry", true));
         mUserReference.child("email").setValue(FirebaseAuth.getInstance().getCurrentUser().getEmail());
