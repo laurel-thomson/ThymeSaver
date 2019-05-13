@@ -1,7 +1,10 @@
 package com.example.laure.thymesaver.UI.TopLevel;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -137,11 +140,11 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         else if (requestCode == RC_SIGN_IN_SECONDARY) {
-            //if the user is signing in after being signed in with another account, we want
-            //to just restart the activity to reset everything
-            Intent intent = new Intent(this, MainActivity.class);
-            finish();
-            startActivity(intent);
+            //restart application
+            Intent i = getBaseContext().getPackageManager()
+                    .getLaunchIntentForPackage( getBaseContext().getPackageName() );
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
         }
     }
 
