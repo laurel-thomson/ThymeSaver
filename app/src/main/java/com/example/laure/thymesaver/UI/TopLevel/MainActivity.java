@@ -1,7 +1,10 @@
 package com.example.laure.thymesaver.UI.TopLevel;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -46,7 +49,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int RC_SIGN_IN = 100;
+    private static final int RC_SIGN_IN_INITIAL = 100;
+    private static final int RC_SIGN_IN_SECONDARY = 101;
     private MenuItem mPreviousMenuItem;
     private BottomNavigationView mNavigationView;
     private ViewPager mViewPager;
@@ -66,17 +70,18 @@ public class MainActivity extends AppCompatActivity {
         mActionBar = getSupportActionBar();
         mActionBar.setTitle("Meal Planner");
         mJoinRequestCardView = findViewById(R.id.join_request_card);
-        signIn();
+
+        //if the user is already logged in, we don't want to launch the sign in flow
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            onSignInSuccess();
+        }
+        else {
+            signIn();
+        }
     }
 
 
     private void signIn() {
-        //if the user is already logged in, we don't want to launch the sign in flow
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            onSignInSuccess();
-            return;
-        }
-
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build());
@@ -87,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                         .createSignInIntentBuilder()
                         .setAvailableProviders(providers)
                         .build(),
-                RC_SIGN_IN);
+                RC_SIGN_IN_INITIAL);
     }
 
     private void signOut() {
@@ -95,9 +100,23 @@ public class MainActivity extends AppCompatActivity {
                 .signOut(this)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     public void onComplete(@NonNull Task<Void> task) {
-                        signIn();
+                        onSignOut();
                     }
                 });
+    }
+
+    private void onSignOut() {
+        // Choose authentication providers
+        List<AuthUI.IdpConfig> providers = Arrays.asList(
+                new AuthUI.IdpConfig.EmailBuilder().build());
+
+        // Create and launch sign-in intent
+        startActivityForResult(
+                AuthUI.getInstance()
+                        .createSignInIntentBuilder()
+                        .setAvailableProviders(providers)
+                        .build(),
+                RC_SIGN_IN_SECONDARY);
     }
 
 
@@ -105,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == RC_SIGN_IN) {
+        if (requestCode == RC_SIGN_IN_INITIAL) {
             IdpResponse response = IdpResponse.fromResultIntent(data);
 
             if (resultCode == RESULT_OK) {
@@ -119,6 +138,13 @@ public class MainActivity extends AppCompatActivity {
                 // back button
                 signIn();
             }
+        }
+        else if (requestCode == RC_SIGN_IN_SECONDARY) {
+            //restart application
+            Intent i = getBaseContext().getPackageManager()
+                    .getLaunchIntentForPackage( getBaseContext().getPackageName() );
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
         }
     }
 
@@ -249,6 +275,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void listenForPantryRequests() {
         mViewModel = ViewModelProviders.of(this).get(PantryManagerViewModel.class);
+
+        //if there are observers from a previous sign in, we want to get rid of them
+        mViewModel.getPantryRequests().removeObservers(this);
+
         mViewModel.getPantryRequests().observe(this, new Observer<List<PantryRequest>>() {
             @Override
             public void onChanged(@Nullable List<PantryRequest> pantryRequests) {
@@ -271,6 +301,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setListenersForActionButtons() {
         TextView acceptButton = findViewById(R.id.accept_join_request);
+        TextView declineButton = findViewById(R.id.decline_join_request);
         acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -281,10 +312,13 @@ public class MainActivity extends AppCompatActivity {
 
                 Snackbar.make(findViewById(R.id.activity_main_coordinator),
                         "Join request accepted!", Snackbar.LENGTH_SHORT).show();
+
+                //get rid of listeners
+                acceptButton.setOnClickListener(null);
+                declineButton.setOnClickListener(null);
             }
         });
 
-        TextView declineButton = findViewById(R.id.decline_join_request);
         declineButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -295,6 +329,10 @@ public class MainActivity extends AppCompatActivity {
 
                 Snackbar.make(findViewById(R.id.activity_main_coordinator),
                         "Join request declined.", Snackbar.LENGTH_SHORT).show();
+
+                //get rid of listeners
+                acceptButton.setOnClickListener(null);
+                declineButton.setOnClickListener(null);
             }
         });
     }
