@@ -30,6 +30,7 @@ import com.example.laure.thymesaver.Firebase.Database.Repository;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.PantryRequest;
 import com.example.laure.thymesaver.R;
+import com.example.laure.thymesaver.UI.Callback;
 import com.example.laure.thymesaver.UI.Settings.PantryManagerActivity;
 import com.example.laure.thymesaver.ViewModels.PantryManagerViewModel;
 import com.firebase.ui.auth.AuthUI;
@@ -149,34 +150,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onSignInSuccess() {
-        //Had to stick some database stuff in here because I couldn't figure out a nice way to pass initializeActivity as
-        //a callback function when this code was in the repository :(
         mRepository = Repository.getInstance();
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference userReference = database.getReference("users/" + userId);
-
-        userReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        mRepository.initializePreferredPantry(new Callback() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String pantryId;
-                if (dataSnapshot.hasChild("preferredPantry")) {
-                    pantryId = dataSnapshot.child("preferredPantry").getValue().toString();
-                    mRepository.initializeDatabaseReferences(pantryId);
-                }
-                else {
-                    //the default pantry id is just the user's own pantry (which is the user's id)
-                    mRepository.initializeDatabaseReferences(userId);
-                    //If the preferred pantry doesn't exist, then this is a new user & we need
-                    //to initialize the pantry
-                    mRepository.initializePantry();
-                }
+            public void onSuccess() {
                 initializeActivity();
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
+            public void onError(String err) {
+                Snackbar snackbar = Snackbar
+                        .make(findViewById(
+                                R.id.pantry_manager_layout),
+                                err,
+                                Snackbar.LENGTH_SHORT);
+                snackbar.show();
             }
         });
     }

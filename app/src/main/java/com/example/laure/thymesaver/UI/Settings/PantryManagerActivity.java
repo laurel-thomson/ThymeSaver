@@ -1,11 +1,9 @@
 package com.example.laure.thymesaver.UI.Settings;
 
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -28,15 +26,12 @@ import android.widget.ProgressBar;
 import com.example.laure.thymesaver.Adapters.PantryListAdapter;
 import com.example.laure.thymesaver.Models.Pantry;
 import com.example.laure.thymesaver.R;
-import com.example.laure.thymesaver.UI.TopLevel.MainActivity;
+import com.example.laure.thymesaver.UI.Callback;
 import com.example.laure.thymesaver.ViewModels.PantryManagerViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
 public class PantryManagerActivity extends AppCompatActivity implements PantryListAdapter.PantryListListener {
     private PantryManagerViewModel mViewModel;
@@ -76,7 +71,7 @@ public class PantryManagerActivity extends AppCompatActivity implements PantryLi
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                requestJoinPantry();
+                createJoinPantryPrompt();
             }
         });
     }
@@ -89,7 +84,7 @@ public class PantryManagerActivity extends AppCompatActivity implements PantryLi
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
-    private void requestJoinPantry() {
+    private void createJoinPantryPrompt() {
         final View view = LayoutInflater.from(this).inflate(R.layout.join_pantry_dialog, null);
         final EditText emailET = view.findViewById(R.id.pantry_email_edittext);
         final TextInputLayout textInputLayout = view.findViewById(R.id.pantry_text_input_layout);
@@ -100,7 +95,7 @@ public class PantryManagerActivity extends AppCompatActivity implements PantryLi
                 .setPositiveButton("Send Request", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        mViewModel.requestJoinPantry(emailET.getText().toString());
+                        requestJoinPantry(emailET.getText().toString());
                     }
                 })
                 .create();
@@ -135,6 +130,26 @@ public class PantryManagerActivity extends AppCompatActivity implements PantryLi
             }
         });
     }
+
+    private void requestJoinPantry(String email) {
+        mViewModel.requestJoinPantry(email, new Callback() {
+            @Override
+            public void onSuccess() {
+                Snackbar snackbar = Snackbar
+                        .make(findViewById(
+                                R.id.pantry_manager_layout),
+                                "Pantry join request sent.",
+                                Snackbar.LENGTH_SHORT);
+                snackbar.show();
+            }
+
+            @Override
+            public void onError(String err) {
+                //todo
+            }
+        });
+    }
+
 
     public static boolean isEmailValid(String email) {
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";

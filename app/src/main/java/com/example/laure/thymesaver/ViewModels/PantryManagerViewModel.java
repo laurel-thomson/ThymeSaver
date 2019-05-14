@@ -8,8 +8,11 @@ import android.support.annotation.NonNull;
 import com.example.laure.thymesaver.Firebase.Database.Repository;
 import com.example.laure.thymesaver.Models.Pantry;
 import com.example.laure.thymesaver.Models.PantryRequest;
+import com.example.laure.thymesaver.UI.Callback;
+import com.example.laure.thymesaver.UI.Settings.PantryManagerActivity;
 
 import java.util.List;
+import java.util.function.Function;
 
 public class PantryManagerViewModel extends AndroidViewModel {
     private Repository mRepository;
@@ -31,8 +34,8 @@ public class PantryManagerViewModel extends AndroidViewModel {
         return mPantryRequests;
     }
 
-    public void requestJoinPantry(String email) {
-        mRepository.requestJoinPantry(email);
+    public void requestJoinPantry(String email, Callback callBack) {
+        mRepository.trySendJoinPantryRequest(email, callBack);
     }
 
     public void acceptJoinRequest(PantryRequest request) {

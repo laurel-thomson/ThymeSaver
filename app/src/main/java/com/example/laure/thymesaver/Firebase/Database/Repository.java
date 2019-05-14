@@ -14,6 +14,7 @@ import com.example.laure.thymesaver.Models.PantryRequest;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.Models.RecipeQuantity;
 import com.example.laure.thymesaver.Models.ShoppingListMod;
+import com.example.laure.thymesaver.UI.Callback;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -66,6 +67,34 @@ public class Repository {
         mDatabase = FirebaseDatabase.getInstance();
         mDatabase.setPersistenceEnabled(true);
         mUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    }
+
+    public void initializePreferredPantry(Callback callback) {
+        DatabaseReference userReference = mDatabase.getReference("users/" + mUserId);
+
+        userReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String pantryId;
+                if (dataSnapshot.hasChild("preferredPantry")) {
+                    pantryId = dataSnapshot.child("preferredPantry").getValue().toString();
+                    initializeDatabaseReferences(pantryId);
+                }
+                else {
+                    //the default pantry id is just the user's own pantry (which is the user's id)
+                    initializeDatabaseReferences(mUserId);
+                    //If the preferred pantry doesn't exist, then this is a new user & we need
+                    //to initialize the pantry
+                    initializePantry();
+                }
+                callback.onSuccess();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                callback.onError("There was a problem with the database.");
+            }
+        });
     }
 
     public void updatePreferredPantry(String pantryId) {
@@ -181,6 +210,34 @@ public class Repository {
         });
     }
 
+    public void trySendJoinPantryRequest(String email, Callback callBack) {
+        mDatabase.getReference().child("users").child(email).addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            PantryRequest request = new PantryRequest(user.getDisplayName(), user.getEmail());
+                            mDatabase.getReference()
+                                    .child("users")
+                                    .child(dataSnapshot.getKey())
+                                    .child("requests").child(mUserId)
+                                        .setValue(request);
+                            callBack.onSuccess();
+                        }
+                        else {
+                            callBack.onError("The requested user does not exist.");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        callBack.onError("There was an error processing your request.");
+                    }
+                }
+        );
+    }
+
     public void acceptJoinRequest(PantryRequest request) {
         mUserReference.child("requests").child(request.getuID()).removeValue();
 
@@ -197,33 +254,6 @@ public class Repository {
 
     public void declineJoinRequest(PantryRequest request) {
         mUserReference.child("requests").child(request.getuID()).removeValue();
-    }
-
-    public void requestJoinPantry(final String requestEmail) {
-        mDatabase.getReference().child("users").addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            for (DataSnapshot snap : dataSnapshot.getChildren()) {
-                                String email = snap.child("email").getValue().toString();
-                                if (email.equals(requestEmail)) {
-                                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                                    PantryRequest request = new PantryRequest(user.getDisplayName(), user.getEmail());
-                                    mDatabase.getReference().child("users").child(snap.getKey()).child("requests").child(mUserId)
-                                            .setValue(request);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                }
-        );
     }
 
     public String getPreferredPantryId() { return mPantryId; }
