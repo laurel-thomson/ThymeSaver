@@ -48,7 +48,6 @@ public class CookbookRepository implements ICookbookRepository {
     }
 
     private void deleteAssociatedMealPlans(String recipeName) {
-
         DatabaseReferences.getMealPlanReference().addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override

@@ -9,7 +9,7 @@ import com.example.laure.thymesaver.Firebase.Database.LiveData.ListLiveData;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.MealPlan;
 import com.example.laure.thymesaver.Models.Recipe;
-import com.example.laure.thymesaver.UI.Callbacks.ValueCallback;
+import com.example.laure.thymesaver.UI.Callbacks.HashmapCallback;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -49,7 +49,7 @@ public class MealPlanRepository implements IMealPlanRepository {
     }
 
     @Override
-    public void removeMealPlanIngredientsFromPantry(MealPlan mealPlan, ValueCallback callback) {
+    public void removeMealPlanIngredientsFromPantry(MealPlan mealPlan, HashmapCallback callback) {
         DatabaseReferences.getRecipeReference().equalTo(mealPlan.getRecipeName()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -68,7 +68,7 @@ public class MealPlanRepository implements IMealPlanRepository {
         });
     }
 
-    private void removeRecipeIngredientsFromPantry(Recipe recipe, ValueCallback callback) {
+    private void removeRecipeIngredientsFromPantry(Recipe recipe, HashmapCallback callback) {
         DatabaseReferences.getIngredientReference().addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override

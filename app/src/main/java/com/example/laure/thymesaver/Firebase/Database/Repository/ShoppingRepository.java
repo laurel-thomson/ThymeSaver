@@ -120,7 +120,7 @@ public class ShoppingRepository implements IShoppingRepository {
     @Override
     public LiveData<HashMap<Ingredient, Integer>> getShoppingList() {
         return Transformations.map(
-                new ShoppingListLiveData(DatabaseReferences.getPantriesReference()),
+                new ShoppingListLiveData(DatabaseReferences.getPantryReference()),
                 new ShoppingListDeserializer());
     }
 
