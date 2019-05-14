@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.laure.thymesaver.Firebase.Database.IRepository;
 import com.example.laure.thymesaver.Firebase.Database.Repository;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.PantryRequest;
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private PantryManagerViewModel mViewModel;
     private MaterialCardView mJoinRequestCardView;
     private List<PantryRequest> mPantryRequests = new ArrayList<PantryRequest>();
-    private Repository mRepository;
+    private IRepository mRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

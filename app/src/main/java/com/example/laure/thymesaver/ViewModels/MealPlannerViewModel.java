@@ -5,13 +5,14 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
+import com.example.laure.thymesaver.Firebase.Database.IRepository;
 import com.example.laure.thymesaver.Firebase.Database.Repository;
 import com.example.laure.thymesaver.Models.MealPlan;
 
 import java.util.List;
 
 public class MealPlannerViewModel extends AndroidViewModel {
-    private Repository mRepository;
+    private IRepository mRepository;
 
     public MealPlannerViewModel(@NonNull Application application) {
         super(application);

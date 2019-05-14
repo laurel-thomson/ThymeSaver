@@ -5,6 +5,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
+import com.example.laure.thymesaver.Firebase.Database.IRepository;
 import com.example.laure.thymesaver.Firebase.Database.Repository;
 import com.example.laure.thymesaver.Models.Pantry;
 import com.example.laure.thymesaver.Models.PantryRequest;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.function.Function;
 
 public class PantryManagerViewModel extends AndroidViewModel {
-    private Repository mRepository;
+    private IRepository mRepository;
     private LiveData<List<Pantry>> mPantries;
     private LiveData<List<PantryRequest>> mPantryRequests;
 

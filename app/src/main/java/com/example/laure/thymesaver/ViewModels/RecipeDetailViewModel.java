@@ -4,6 +4,7 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 
+import com.example.laure.thymesaver.Firebase.Database.IRepository;
 import com.example.laure.thymesaver.Firebase.Database.Repository;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.Recipe;
@@ -14,8 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 public class RecipeDetailViewModel extends AndroidViewModel {
-    private Repository mRepository;
-    private String mCurrentRecipeName;
+    private IRepository mRepository;
     private LiveData<Recipe> mCurrentRecipe;
     private LiveData<HashMap<Ingredient, RecipeQuantity>> mRecipeIngredients;
 
@@ -25,7 +25,6 @@ public class RecipeDetailViewModel extends AndroidViewModel {
     }
 
     public void setCurrentRecipe(String currentRecipeName) {
-        mCurrentRecipeName = currentRecipeName;
         mCurrentRecipe = mRepository.getRecipe(currentRecipeName);
     }
 

@@ -4,13 +4,14 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 
+import com.example.laure.thymesaver.Firebase.Database.IRepository;
 import com.example.laure.thymesaver.Firebase.Database.Repository;
 import com.example.laure.thymesaver.Models.Ingredient;
 
 import java.util.List;
 
 public class PantryViewModel extends AndroidViewModel {
-    private Repository mRepository;
+    private IRepository mRepository;
 
     public PantryViewModel(Application application) {
         super(application);

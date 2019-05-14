@@ -4,6 +4,7 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 
+import com.example.laure.thymesaver.Firebase.Database.IRepository;
 import com.example.laure.thymesaver.Models.MealPlan;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.Firebase.Database.Repository;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CookBookViewModel extends AndroidViewModel {
-    private Repository mRepository;
+    private IRepository mRepository;
     LiveData<List<Recipe>> mRecipes;
 
     public CookBookViewModel(Application application) {

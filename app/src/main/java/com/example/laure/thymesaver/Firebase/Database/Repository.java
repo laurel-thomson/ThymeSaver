@@ -4,7 +4,6 @@ import android.arch.core.util.Function;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Transformations;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.MealPlan;
@@ -29,7 +28,7 @@ import java.util.List;
 
 import static com.example.laure.thymesaver.Models.ModType.CHANGE;
 
-public class Repository {
+public class Repository implements IRepository {
     private FirebaseDatabase mDatabase;
     private DatabaseReference mDatabaseReference;
     private DatabaseReference mRecipeReference;
@@ -85,7 +84,7 @@ public class Repository {
                     initializeDatabaseReferences(mUserId);
                     //If the preferred pantry doesn't exist, then this is a new user & we need
                     //to initialize the pantry
-                    initializePantry();
+                    initializeNewPantry();
                 }
                 callback.onSuccess();
             }
@@ -103,7 +102,7 @@ public class Repository {
         initializeDatabaseReferences(pantryId);
     }
 
-    public void initializeDatabaseReferences(String pantryId) {
+    private void initializeDatabaseReferences(String pantryId) {
         mPantryId = pantryId;
         mUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         mUserReference = mDatabase.getReference("users/" + mUserId);
@@ -181,6 +180,14 @@ public class Repository {
         return mRequestsLiveData;
     }
 
+    public LiveData<HashMap<Ingredient, RecipeQuantity>> getRecipeIngredients(Recipe r) {
+        mRecipe = r;
+        return Transformations.map(
+                new RecipeIngredientsLiveData(mDatabaseReference, r),
+                new RecipeIngredientsDeserializer()
+        );
+    }
+
     public LiveData<Recipe> getRecipe(String recipeName) {
         mRecipeLiveData = Transformations.map(
                 new RecipeLiveData(mRecipeReference.child(recipeName)),
@@ -189,7 +196,7 @@ public class Repository {
     }
 
 
-    public void initializePantry() {
+    private void initializeNewPantry() {
         mUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         initializeDatabaseReferences(mUserId);
         mUserReference.child("preferredPantry").setValue(mUserId);
@@ -267,14 +274,6 @@ public class Repository {
     }
 
     public String getPreferredPantryId() { return mPantryId; }
-
-    public LiveData<HashMap<Ingredient, RecipeQuantity>> getRecipeIngredients(Recipe r) {
-        mRecipe = r;
-        return Transformations.map(
-                        new RecipeIngredientsLiveData(mDatabaseReference, r),
-                        new RecipeIngredientsDeserializer()
-                );
-    }
 
     public void addOrUpdateRecipe(Recipe r) {
         mRecipeReference.child(r.getName()).setValue(r);
