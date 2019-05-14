@@ -66,10 +66,10 @@ public class Repository {
     private Repository() {
         mDatabase = FirebaseDatabase.getInstance();
         mDatabase.setPersistenceEnabled(true);
-        mUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
     public void initializePreferredPantry(Callback callback) {
+        mUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference userReference = mDatabase.getReference("users/" + mUserId);
 
         userReference.addListenerForSingleValueEvent(new ValueEventListener() {
