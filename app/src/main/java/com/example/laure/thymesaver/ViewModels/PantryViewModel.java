@@ -4,44 +4,49 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 
-import com.example.laure.thymesaver.Firebase.Database.IRepository;
-import com.example.laure.thymesaver.Firebase.Database.Repository;
+import com.example.laure.thymesaver.Firebase.Database.Repository.IPantryRepository;
+import com.example.laure.thymesaver.Firebase.Database.Repository.IShoppingRepository;
+import com.example.laure.thymesaver.Firebase.Database.Repository.PantryRepository;
+import com.example.laure.thymesaver.Firebase.Database.Repository.ShoppingRepository;
 import com.example.laure.thymesaver.Models.Ingredient;
+import com.example.laure.thymesaver.UI.Callbacks.IngredientCallback;
 
 import java.util.List;
 
 public class PantryViewModel extends AndroidViewModel {
-    private IRepository mRepository;
+    private IPantryRepository mPantryRepository;
+    private IShoppingRepository mShoppingRepository;
 
     public PantryViewModel(Application application) {
         super(application);
-        mRepository = Repository.getInstance();
+        mPantryRepository = PantryRepository.getInstance();
+        mShoppingRepository = ShoppingRepository.getInstance();
     }
 
     public LiveData<List<Ingredient>> getAllIngredients() {
-        return mRepository.getAllIngredients();
+        return mPantryRepository.getAllIngredients();
     }
 
     public void addIngredient(Ingredient i) {
-        mRepository.addIngredient(i);
+        mPantryRepository.addIngredient(i);
     }
 
     public void updateModToChange(String name) {
-        mRepository.updateModToChangeIfExists(name);
+        mShoppingRepository.updateModToChangeIfExists(name);
     }
 
     public void deleteIngredient(Ingredient i) {
-        mRepository.deleteIngredient(i);
+        mPantryRepository.deleteIngredient(i);
         //if we're deleting an ingredient, we don't want it to show up in the shopping list
-        mRepository.deleteShoppingModification(i.getName());
+        mShoppingRepository.deleteShoppingModification(i.getName());
     }
 
     public void updateIngredientPantryQuantity(Ingredient i, int quantity) {
         i.setQuantity(quantity);
-        mRepository.updateIngredient(i);
+        mPantryRepository.updateIngredient(i);
     }
 
-    public Ingredient getIngredient(String ingredientName) {
-        return mRepository.getIngredient(ingredientName);
+    public void getIngredient(String ingredientName, IngredientCallback callback) {
+        mPantryRepository.getIngredient(ingredientName, callback);
     }
 }

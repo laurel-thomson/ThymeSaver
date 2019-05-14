@@ -1,7 +1,8 @@
-package com.example.laure.thymesaver.Firebase.Database;
+package com.example.laure.thymesaver.Firebase.Database.LiveData;
 
 import android.arch.lifecycle.LiveData;
 
+import com.example.laure.thymesaver.Firebase.Database.Repository.ShoppingRepository;
 import com.example.laure.thymesaver.Models.BulkIngredientState;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.MealPlan;
@@ -16,7 +17,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.example.laure.thymesaver.Models.ModType.ADD;
 import static com.example.laure.thymesaver.Models.ModType.NEW;
 
 public class ShoppingListLiveData extends LiveData<DataSnapshot> {
@@ -178,6 +178,6 @@ public class ShoppingListLiveData extends LiveData<DataSnapshot> {
 
     private static void deleteModification(ShoppingListMod mod)
     {
-        Repository.getInstance().deleteShoppingModification(mod.getName());
+        ShoppingRepository.getInstance().deleteShoppingModification(mod.getName());
     }
 }

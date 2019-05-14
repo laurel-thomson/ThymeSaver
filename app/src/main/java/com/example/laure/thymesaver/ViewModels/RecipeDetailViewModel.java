@@ -4,24 +4,22 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 
-import com.example.laure.thymesaver.Firebase.Database.IRepository;
-import com.example.laure.thymesaver.Firebase.Database.Repository;
+import com.example.laure.thymesaver.Firebase.Database.Repository.IRecipeDetailRepository;
+import com.example.laure.thymesaver.Firebase.Database.Repository.RecipeDetailRepository;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.Models.RecipeQuantity;
 
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class RecipeDetailViewModel extends AndroidViewModel {
-    private IRepository mRepository;
+    private IRecipeDetailRepository mRepository;
     private LiveData<Recipe> mCurrentRecipe;
     private LiveData<HashMap<Ingredient, RecipeQuantity>> mRecipeIngredients;
 
     public RecipeDetailViewModel(Application application) {
         super(application);
-        mRepository = Repository.getInstance();
+        mRepository = RecipeDetailRepository.getInstance();
     }
 
     public void setCurrentRecipe(String currentRecipeName) {

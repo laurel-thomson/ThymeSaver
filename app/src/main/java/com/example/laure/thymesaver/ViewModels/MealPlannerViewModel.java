@@ -5,18 +5,20 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
-import com.example.laure.thymesaver.Firebase.Database.IRepository;
-import com.example.laure.thymesaver.Firebase.Database.Repository;
+import com.example.laure.thymesaver.Firebase.Database.Repository.IMealPlanRepository;
+import com.example.laure.thymesaver.Firebase.Database.Repository.MealPlanRepository;
 import com.example.laure.thymesaver.Models.MealPlan;
+import com.example.laure.thymesaver.UI.Callbacks.ValueCallback;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class MealPlannerViewModel extends AndroidViewModel {
-    private IRepository mRepository;
+    private IMealPlanRepository mRepository;
 
     public MealPlannerViewModel(@NonNull Application application) {
         super(application);
-        mRepository = Repository.getInstance();
+        mRepository = MealPlanRepository.getInstance();
     }
 
     public LiveData<List<MealPlan>> getMealPlans() {
@@ -31,14 +33,14 @@ public class MealPlannerViewModel extends AndroidViewModel {
         mRepository.updateMealPlan(mealPlan);
     }
 
-    public void cookMealPlan(MealPlan mealPlan) {
-        mRepository.removeMealPlanIngredientsFromPantry(mealPlan);
+    public void cookMealPlan(MealPlan mealPlan, ValueCallback callback) {
+        mRepository.removeMealPlanIngredientsFromPantry(mealPlan, callback);
         removeMealPlan(mealPlan);
     }
 
-    public void undoCookMealPlan(MealPlan mealPlan) {
+    public void undoCookMealPlan(MealPlan mealPlan, HashMap ingredientQuantities) {
         addMealPlan(mealPlan);
-        mRepository.addMealPlanIngredientsToPantry(mealPlan);
+        mRepository.addMealPlanIngredientsToPantry(ingredientQuantities);
     }
 
     public void removeMealPlan(MealPlan mealPlan) {

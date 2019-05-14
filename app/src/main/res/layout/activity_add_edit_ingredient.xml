@@ -5,6 +5,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
+    <ProgressBar
+        android:id="@+id/add_edit_ingredient_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleY="2"
+        android:layout_marginTop="-6dp"
+        android:progressTint="@color/colorAccent"
+        android:indeterminateOnly="true"
+        style="?android:attr/progressBarStyleHorizontal"/>
+
     <Switch
         android:id="@+id/is_bulk_switch"
         android:layout_width="match_parent"

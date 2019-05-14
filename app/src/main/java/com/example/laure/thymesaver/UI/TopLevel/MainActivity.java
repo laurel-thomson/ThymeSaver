@@ -1,10 +1,7 @@
 package com.example.laure.thymesaver.UI.TopLevel;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -26,12 +23,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.laure.thymesaver.Firebase.Database.IRepository;
-import com.example.laure.thymesaver.Firebase.Database.Repository;
-import com.example.laure.thymesaver.Models.Ingredient;
+import com.example.laure.thymesaver.Firebase.Database.Repository.IPantryManagerRepository;
+import com.example.laure.thymesaver.Firebase.Database.Repository.PantryManagerRepository;
 import com.example.laure.thymesaver.Models.PantryRequest;
 import com.example.laure.thymesaver.R;
-import com.example.laure.thymesaver.UI.Callback;
+import com.example.laure.thymesaver.UI.Callbacks.Callback;
 import com.example.laure.thymesaver.UI.Settings.PantryManagerActivity;
 import com.example.laure.thymesaver.ViewModels.PantryManagerViewModel;
 import com.firebase.ui.auth.AuthUI;
@@ -39,11 +35,6 @@ import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -62,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private PantryManagerViewModel mViewModel;
     private MaterialCardView mJoinRequestCardView;
     private List<PantryRequest> mPantryRequests = new ArrayList<PantryRequest>();
-    private IRepository mRepository;
+    private IPantryManagerRepository mRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onSignInSuccess() {
-        mRepository = Repository.getInstance();
+        mRepository = PantryManagerRepository.getInstance();
         mRepository.initializePreferredPantry(new Callback() {
             @Override
             public void onSuccess() {

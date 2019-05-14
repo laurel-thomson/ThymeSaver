@@ -5,24 +5,22 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
-import com.example.laure.thymesaver.Firebase.Database.IRepository;
-import com.example.laure.thymesaver.Firebase.Database.Repository;
+import com.example.laure.thymesaver.Firebase.Database.Repository.IPantryManagerRepository;
+import com.example.laure.thymesaver.Firebase.Database.Repository.PantryManagerRepository;
 import com.example.laure.thymesaver.Models.Pantry;
 import com.example.laure.thymesaver.Models.PantryRequest;
-import com.example.laure.thymesaver.UI.Callback;
-import com.example.laure.thymesaver.UI.Settings.PantryManagerActivity;
+import com.example.laure.thymesaver.UI.Callbacks.Callback;
 
 import java.util.List;
-import java.util.function.Function;
 
 public class PantryManagerViewModel extends AndroidViewModel {
-    private IRepository mRepository;
+    private IPantryManagerRepository mRepository;
     private LiveData<List<Pantry>> mPantries;
     private LiveData<List<PantryRequest>> mPantryRequests;
 
     public PantryManagerViewModel(@NonNull Application application) {
         super(application);
-        mRepository = Repository.getInstance();
+        mRepository = PantryManagerRepository.getInstance();
         mPantries = mRepository.getPantries();
         mPantryRequests = mRepository.getPantryRequests();
     }

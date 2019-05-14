@@ -1,4 +1,4 @@
-package com.example.laure.thymesaver.UI;
+package com.example.laure.thymesaver.UI.Callbacks;
 
 public interface Callback {
     void onSuccess();

@@ -24,6 +24,7 @@ import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.ModType;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.AddIngredients.AddShoppingListItemsActivity;
+import com.example.laure.thymesaver.UI.Callbacks.IngredientCallback;
 import com.example.laure.thymesaver.ViewModels.ShoppingViewModel;
 
 import java.util.HashMap;
@@ -87,12 +88,17 @@ public class ShoppingListFragment extends AddButtonFragment implements ShoppingL
 
     @Override
     public void onIngredientCheckedOff(Ingredient i, int quantity) {
-        if (mViewModel.ingredientExists(i)) {
-            addQuantityToPantry(i, quantity);
-        }
-        else {
-            askAddIngredientToPantry(i, quantity);
-        }
+        mViewModel.tryFindIngredient(i, new IngredientCallback() {
+            @Override
+            public void onSuccess(Ingredient ingredient) {
+                addQuantityToPantry(i, quantity);
+            }
+
+            @Override
+            public void onError(String error) {
+                askAddIngredientToPantry(i, quantity);
+            }
+        });
     }
 
     private void askAddIngredientToPantry(final Ingredient ing, final int quantity) {

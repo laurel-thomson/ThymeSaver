@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -23,8 +22,10 @@ import com.example.laure.thymesaver.Models.MealPlan;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.AddPlannedMealsActivity;
 import com.example.laure.thymesaver.UI.RecipeDetail.RecipeDetailActivity;
+import com.example.laure.thymesaver.UI.Callbacks.ValueCallback;
 import com.example.laure.thymesaver.ViewModels.MealPlannerViewModel;
 
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -91,23 +92,35 @@ public class MealPlannerFragment extends Fragment implements MealPlannerAdapter.
 
     @Override
     public void onMealChecked(MealPlan mealPlan) {
-        mViewModel.cookMealPlan(mealPlan);
-        Snackbar snackbar = Snackbar
-                .make(getView(), "Ingredients from " + mealPlan.getRecipeName() +
-                        " removed from meal plan.", Snackbar.LENGTH_LONG)
-                .setAction("UNDO", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        mViewModel.undoCookMealPlan(mealPlan);
-                        Snackbar newSnackBar = Snackbar
-                                .make(
-                                    getView(),
-                                    "Ingredients from " + mealPlan.getRecipeName() + " added back to pantry.",
-                                    Snackbar.LENGTH_SHORT);
-                        newSnackBar.show();
-                    }
-                });
-        snackbar.show();
+        mProgressBar.setVisibility(View.VISIBLE);
+
+        mViewModel.cookMealPlan(mealPlan, new ValueCallback() {
+            @Override
+            public void onSuccess(final HashMap oldIngredientQuantities) {
+                mProgressBar.setVisibility(View.GONE);
+                Snackbar snackbar = Snackbar
+                        .make(getView(), "Ingredients from " + mealPlan.getRecipeName() +
+                                " removed from meal plan.", Snackbar.LENGTH_LONG)
+                        .setAction("UNDO", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                mViewModel.undoCookMealPlan(mealPlan, oldIngredientQuantities);
+                                Snackbar newSnackBar = Snackbar
+                                        .make(
+                                                getView(),
+                                                "Ingredients from " + mealPlan.getRecipeName() + " added back to pantry.",
+                                                Snackbar.LENGTH_SHORT);
+                                newSnackBar.show();
+                            }
+                        });
+                snackbar.show();
+            }
+
+            @Override
+            public void onError(String err) {
+
+            }
+        });
     }
 
     @Override

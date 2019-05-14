@@ -4,29 +4,34 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 
-import com.example.laure.thymesaver.Firebase.Database.IRepository;
-import com.example.laure.thymesaver.Firebase.Database.Repository;
+import com.example.laure.thymesaver.Firebase.Database.Repository.IPantryRepository;
+import com.example.laure.thymesaver.Firebase.Database.Repository.IShoppingRepository;
+import com.example.laure.thymesaver.Firebase.Database.Repository.PantryRepository;
+import com.example.laure.thymesaver.Firebase.Database.Repository.ShoppingRepository;
 import com.example.laure.thymesaver.Models.BulkIngredientState;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.ModType;
 import com.example.laure.thymesaver.Models.ShoppingListMod;
+import com.example.laure.thymesaver.UI.Callbacks.IngredientCallback;
 
 import java.util.HashMap;
 
 public class ShoppingViewModel extends AndroidViewModel {
-    private IRepository mRepository;
+    private IShoppingRepository mShoppingRepository;
+    private IPantryRepository mPantryRepository;
 
     public ShoppingViewModel(Application application) {
         super(application);
-        mRepository = Repository.getInstance();
+        mShoppingRepository = ShoppingRepository.getInstance();
+        mPantryRepository = PantryRepository.getInstance();
     }
 
     public LiveData<HashMap<Ingredient, Integer>> getShoppingList() {
-        return mRepository.getShoppingList();
+        return mShoppingRepository.getShoppingList();
     }
 
-    public boolean ingredientExists(Ingredient ingredient) {
-         return mRepository.getIngredient(ingredient.getName()) != null;
+    public void tryFindIngredient(Ingredient ingredient, IngredientCallback callback) {
+         mPantryRepository.getIngredient(ingredient.getName(), callback);
     }
 
     public void addQuantityToPantry(Ingredient ingredient, int quantity) {
@@ -36,20 +41,20 @@ public class ShoppingViewModel extends AndroidViewModel {
         else {
             ingredient.setQuantity(ingredient.getQuantity() + quantity);
         }
-        mRepository.updateIngredient(ingredient);
+        mPantryRepository.updateIngredient(ingredient);
     }
 
     public void addShoppingModification(String name, ModType type, int modifier) {
-        mRepository.addOrUpdateModification(new ShoppingListMod(name, type, modifier));
+        mShoppingRepository.addOrUpdateModification(new ShoppingListMod(name, type, modifier));
     }
 
     public void deleteShoppingListItem(Ingredient ingredient, int quantity) {
-        mRepository.deleteShoppingListItem(ingredient, quantity);
+        mShoppingRepository.deleteShoppingListItem(ingredient, quantity);
     }
 
     public void deleteModifier(String name) {
-        mRepository.deleteShoppingModification(name);
+        mShoppingRepository.deleteShoppingModification(name);
     }
 
-    public void refreshShoppingList() { mRepository.deleteAllModifications(); }
+    public void refreshShoppingList() { mShoppingRepository.deleteAllModifications(); }
 }

@@ -26,7 +26,7 @@ import android.widget.ProgressBar;
 import com.example.laure.thymesaver.Adapters.PantryListAdapter;
 import com.example.laure.thymesaver.Models.Pantry;
 import com.example.laure.thymesaver.R;
-import com.example.laure.thymesaver.UI.Callback;
+import com.example.laure.thymesaver.UI.Callbacks.Callback;
 import com.example.laure.thymesaver.ViewModels.PantryManagerViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 

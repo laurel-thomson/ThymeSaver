@@ -12,10 +12,12 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
+import com.example.laure.thymesaver.UI.Callbacks.IngredientCallback;
 import com.example.laure.thymesaver.ViewModels.PantryViewModel;
 
 public class AddOrEditIngredientActivity extends AppCompatActivity {
@@ -25,6 +27,7 @@ public class AddOrEditIngredientActivity extends AppCompatActivity {
     private EditText mNameET;
     private Switch mBulkSwitch;
     private Ingredient mIngredient;
+    private ProgressBar mProgressBar;
     public static String INGREDIENT_NAME_KEY = "Ingredient Name Key";
 
     @Override
@@ -33,16 +36,29 @@ public class AddOrEditIngredientActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_edit_ingredient);
         setUpActionBar();
         setUpFields();
+
+        mProgressBar = findViewById(R.id.add_edit_ingredient_progress);
         mViewModel = ViewModelProviders.of(this).get(PantryViewModel.class);
 
         String ingredientName = getIntent().getStringExtra(INGREDIENT_NAME_KEY);
 
         //if an ingredient name was passed in, then we need to all the user to edit the current ingredient
         if (ingredientName != null) {
-            mIngredient = mViewModel.getIngredient(ingredientName);
-            //get ingredient from pantry
-            setIngredientValues();
-            getSupportActionBar().setTitle("Edit Ingredient");
+            mViewModel.getIngredient(ingredientName, new IngredientCallback() {
+                @Override
+                public void onSuccess(Ingredient ingredient) {
+                    mIngredient = ingredient;
+                    setIngredientValues();
+                    getSupportActionBar().setTitle("Edit Ingredient");
+                    mProgressBar.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onError(String error) {
+
+                }
+            });
+
         }
     }
 
