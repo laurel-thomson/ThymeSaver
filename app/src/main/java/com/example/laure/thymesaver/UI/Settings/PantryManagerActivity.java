@@ -28,6 +28,7 @@ import com.example.laure.thymesaver.Models.Pantry;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.Callback;
 import com.example.laure.thymesaver.ViewModels.PantryManagerViewModel;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -71,7 +72,7 @@ public class PantryManagerActivity extends AppCompatActivity implements PantryLi
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createJoinPantryPrompt();
+                createJoinPantryPrompt(null);
             }
         });
     }
@@ -84,7 +85,7 @@ public class PantryManagerActivity extends AppCompatActivity implements PantryLi
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
-    private void createJoinPantryPrompt() {
+    private void createJoinPantryPrompt(String error) {
         final View view = LayoutInflater.from(this).inflate(R.layout.join_pantry_dialog, null);
         final EditText emailET = view.findViewById(R.id.pantry_email_edittext);
         final TextInputLayout textInputLayout = view.findViewById(R.id.pantry_text_input_layout);
@@ -101,6 +102,10 @@ public class PantryManagerActivity extends AppCompatActivity implements PantryLi
                 .create();
         dialog.show();
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+
+        if (error != null) {
+            textInputLayout.setError(error);
+        }
 
         emailET.addTextChangedListener(new TextWatcher() {
             @Override
@@ -145,17 +150,24 @@ public class PantryManagerActivity extends AppCompatActivity implements PantryLi
 
             @Override
             public void onError(String err) {
-                //todo
+                createJoinPantryPrompt(err);
             }
         });
     }
 
 
-    public static boolean isEmailValid(String email) {
+    public boolean isEmailValid(String email) {
+        if (isCurrentUser(email)) return false;
+
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
         Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
+    }
+
+    private boolean isCurrentUser(String email) {
+        String currentUser = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        return email.equals(currentUser);
     }
 
     @Override

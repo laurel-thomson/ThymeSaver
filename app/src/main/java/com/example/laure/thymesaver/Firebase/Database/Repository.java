@@ -211,17 +211,27 @@ public class Repository {
     }
 
     public void trySendJoinPantryRequest(String email, Callback callBack) {
-        mDatabase.getReference().child("users").child(email).addListenerForSingleValueEvent(
+        mDatabase.getReference().child("users").orderByChild("email").equalTo(email).limitToFirst(1)
+                .addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
                             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                             PantryRequest request = new PantryRequest(user.getDisplayName(), user.getEmail());
+
+                            String requestedUser = "";
+
+                            for (DataSnapshot child : dataSnapshot.getChildren()) {
+                                //there will only ever be one child (the requested user)
+                                requestedUser = child.getKey();
+                            }
+
                             mDatabase.getReference()
                                     .child("users")
-                                    .child(dataSnapshot.getKey())
-                                    .child("requests").child(mUserId)
+                                    .child(requestedUser)
+                                    .child("requests")
+                                    .child(mUserId)
                                         .setValue(request);
                             callBack.onSuccess();
                         }
