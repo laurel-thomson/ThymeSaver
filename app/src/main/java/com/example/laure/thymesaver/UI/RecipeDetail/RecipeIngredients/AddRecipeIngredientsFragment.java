@@ -1,4 +1,4 @@
-package com.example.laure.thymesaver.UI.RecipeDetail;
+package com.example.laure.thymesaver.UI.RecipeDetail.RecipeIngredients;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -26,10 +26,7 @@ import com.example.laure.thymesaver.ViewModels.PantryViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UpdateRecipeIngredientFragment extends BottomSheetDialogFragment {
-    public static final String INGREDIENT_NAME = "ingredient name" ;
-    public static final String INGREDIENT_UNIT = "ingredient unit";
-    public static final String INGREDIENT_QUANTITY = "ingredient quantity";
+public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
     private PantryViewModel mPantryViewModel;
     private AddRecipeIngredientListener mListener;
     private AutoCompleteTextView mNameET;
@@ -55,14 +52,6 @@ public class UpdateRecipeIngredientFragment extends BottomSheetDialogFragment {
         mQuantityLayout = view.findViewById(R.id.quantity_text_input_layout);
         mUnitLayout = view.findViewById(R.id.unit_text_input_layout);
         mDoneButton =  view.findViewById(R.id.add_recipe_ing_button);
-
-        String ingredientName = getArguments().getString(INGREDIENT_NAME);
-        String ingredientUnit = getArguments().getString(INGREDIENT_UNIT);
-        int ingredientQuantity = getArguments().getInt(INGREDIENT_QUANTITY);
-
-        mNameET.setText(ingredientName);
-        mUnitET.setText(ingredientUnit);
-        mQuantityET.setText(Integer.toString(ingredientQuantity));
 
         mPantryViewModel = ViewModelProviders.of(this).get(PantryViewModel.class);
         mPantryViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
@@ -138,9 +127,14 @@ public class UpdateRecipeIngredientFragment extends BottomSheetDialogFragment {
                         RecipeQuantity quantity = new RecipeQuantity(
                                 mUnitET.getText().toString(),
                                 Integer.parseInt(mQuantityET.getText().toString()));
-                        mListener.onIngredientUpdated(ingredient, quantity);
+                        mListener.onIngredientAdded(ingredient, quantity);
 
-                        dismiss(); //close the bottom fragment after the ingredient has been updated
+                        //clear text fields after ingredient added
+
+                        mNameET.setText("");
+                        mQuantityET.setText("");
+                        mUnitET.setText("");
+                        mNameET.requestFocus();
                     }
                 });
     }

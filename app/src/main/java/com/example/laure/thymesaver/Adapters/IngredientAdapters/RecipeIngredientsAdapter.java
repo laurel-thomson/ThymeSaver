@@ -19,12 +19,11 @@ import android.widget.TextView;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.RecipeQuantity;
 import com.example.laure.thymesaver.R;
-import com.example.laure.thymesaver.UI.RecipeDetail.AddRecipeIngredientListener;
+import com.example.laure.thymesaver.UI.RecipeDetail.RecipeIngredients.AddRecipeIngredientListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;

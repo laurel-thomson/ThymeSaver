@@ -1,4 +1,4 @@
-package com.example.laure.thymesaver.UI.RecipeDetail;
+package com.example.laure.thymesaver.UI.RecipeDetail.RecipeIngredients;
 
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.RecipeQuantity;

@@ -1,4 +1,4 @@
-package com.example.laure.thymesaver.UI.RecipeDetail;
+package com.example.laure.thymesaver.UI.RecipeDetail.RecipeIngredients;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -20,6 +20,7 @@ import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.Models.RecipeQuantity;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.AddIngredients.AddOrEditIngredientActivity;
+import com.example.laure.thymesaver.UI.RecipeDetail.RecipeDetailFragment;
 import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 
 import java.util.HashMap;
@@ -83,7 +84,7 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
     }
 
     @Override
-    void addNewItem() {
+    public void addNewItem() {
         AddRecipeIngredientsFragment fragment = new AddRecipeIngredientsFragment();
         fragment.setListener(this);
         fragment.show(getActivity().getSupportFragmentManager(), "TAG");

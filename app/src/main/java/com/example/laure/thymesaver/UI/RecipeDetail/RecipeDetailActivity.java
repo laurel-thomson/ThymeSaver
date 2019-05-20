@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import com.example.laure.thymesaver.R;
+import com.example.laure.thymesaver.UI.RecipeDetail.RecipeIngredients.RecipeIngredientsFragment;
+import com.example.laure.thymesaver.UI.RecipeDetail.RecipeSteps.RecipeStepsFragment;
 import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 
 public class RecipeDetailActivity extends AppCompatActivity{

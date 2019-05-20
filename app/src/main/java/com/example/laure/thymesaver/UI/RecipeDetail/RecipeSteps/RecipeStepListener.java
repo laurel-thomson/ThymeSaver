@@ -1,4 +1,4 @@
-package com.example.laure.thymesaver.UI.RecipeDetail;
+package com.example.laure.thymesaver.UI.RecipeDetail.RecipeSteps;
 
 import java.util.List;
 

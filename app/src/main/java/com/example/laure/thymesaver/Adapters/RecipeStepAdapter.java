@@ -16,9 +16,8 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
-import com.example.laure.thymesaver.UI.RecipeDetail.RecipeStepListener;
+import com.example.laure.thymesaver.UI.RecipeDetail.RecipeSteps.RecipeStepListener;
 
 import java.util.ArrayList;
 import java.util.List;

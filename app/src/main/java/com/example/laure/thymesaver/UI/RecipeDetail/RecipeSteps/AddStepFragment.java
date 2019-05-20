@@ -1,4 +1,4 @@
-package com.example.laure.thymesaver.UI.RecipeDetail;
+package com.example.laure.thymesaver.UI.RecipeDetail.RecipeSteps;
 
 
 import android.annotation.SuppressLint;
@@ -11,12 +11,9 @@ import android.widget.EditText;
 
 import com.example.laure.thymesaver.R;
 
-public class UpdateStepFragment extends BottomSheetDialogFragment {
-    public static final String STEP_STRING = "STEP_STRING";
-    public static final String STEP_POSITION = "STEP_POSITION";
+public class AddStepFragment extends BottomSheetDialogFragment {
     private EditText mStepEditText;
     private RecipeStepListener mListener;
-
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -24,12 +21,7 @@ public class UpdateStepFragment extends BottomSheetDialogFragment {
         super.setupDialog(dialog, style);
         View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_add_recipe_step, null);
         dialog.setContentView(view);
-
-        String step = getArguments().getString(STEP_STRING);
-        int position = getArguments().getInt(STEP_POSITION);
-
         mStepEditText = view.findViewById(R.id.new_step_edittext);
-        mStepEditText.setText(step);
 
         mStepEditText.requestFocus();
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
@@ -41,9 +33,8 @@ public class UpdateStepFragment extends BottomSheetDialogFragment {
                     String step = mStepEditText.getText().toString();
                     mStepEditText.setText("");
                     if (mListener != null) {
-                        mListener.onStepUpdated(step, position);
+                        mListener.onStepAdded(step);
                     }
-                    dismiss(); //close the bottom fragment
             }
         });
     }
