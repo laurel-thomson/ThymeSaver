@@ -52,4 +52,8 @@ public class PantryManagerViewModel extends AndroidViewModel {
     public String getPreferredPantryId() {
         return mRepository.getPreferredPantryId();
     }
+
+    public void leavePantry(Pantry pantry) {
+        mRepository.leavePantry(pantry);
+    }
 }

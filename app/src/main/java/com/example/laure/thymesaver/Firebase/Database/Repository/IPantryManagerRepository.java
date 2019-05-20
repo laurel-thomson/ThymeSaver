@@ -19,6 +19,8 @@ public interface IPantryManagerRepository {
 
     void declineJoinRequest(PantryRequest request);
 
+    void leavePantry(Pantry pantry);
+
     String getPreferredPantryId();
 
     LiveData<List<Pantry>> getPantries();

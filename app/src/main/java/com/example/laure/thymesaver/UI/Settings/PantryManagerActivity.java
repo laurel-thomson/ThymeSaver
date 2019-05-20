@@ -204,4 +204,21 @@ public class PantryManagerActivity extends AppCompatActivity implements PantryLi
                         Snackbar.LENGTH_SHORT);
         snackbar.show();
     }
+
+    @Override
+    public void onLeavePantryClicked(Pantry pantry) {
+        new AlertDialog.Builder(this)
+                .setTitle("Leave pantry?")
+                .setMessage("Are you sure you want to leave this pantry? This cannot be undone.")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mViewModel.leavePantry(pantry);
+                    }
+
+                })
+                .setNegativeButton("No", null)
+                .show();
+    }
 }

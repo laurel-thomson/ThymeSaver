@@ -154,6 +154,17 @@ public class PantryManagerRepository implements IPantryManagerRepository {
     }
 
     @Override
+    public void leavePantry(Pantry pantry) {
+        DatabaseReferences.getPantriesReference().child(pantry.getuId()).removeValue();
+        FirebaseDatabase.getInstance().getReference("users").child(pantry.getuId()).child("acceptedRequests")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).removeValue();
+        if (pantry.getuId().equals(DatabaseReferences.getPreferredPantry())) {
+            DatabaseReferences.getUserReference().child("preferredPantry").setValue(
+                    FirebaseAuth.getInstance().getCurrentUser().getUid());
+        }
+    }
+
+    @Override
     public String getPreferredPantryId() {
         return DatabaseReferences.getPreferredPantry();
     }
