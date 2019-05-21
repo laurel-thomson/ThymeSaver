@@ -2,14 +2,14 @@ package com.example.laure.thymesaver.Models;
 
 import com.google.firebase.database.Exclude;
 
-public class PantryRequest {
+public class Follower {
     private String userName;
     private String uID;
     private String email;
 
-    public PantryRequest() {}
+    public Follower() {}
 
-    public PantryRequest(String userName, String email) {
+    public Follower(String userName, String email) {
         this.userName = userName;
         this.email = email;
     }
@@ -30,7 +30,6 @@ public class PantryRequest {
         this.userName = userName;
     }
 
-    @Exclude
     public String getuID() {
         return uID;
     }

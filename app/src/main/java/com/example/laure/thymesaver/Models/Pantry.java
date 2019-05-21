@@ -2,10 +2,15 @@ package com.example.laure.thymesaver.Models;
 
 import com.google.firebase.database.Exclude;
 
-public class Pantry {
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Pantry implements Serializable{
     private String name;
     private String uId;
     private boolean isMyPantry;
+    private List<Follower> followers = new ArrayList<>();
 
     public Pantry() {}
 
@@ -37,5 +42,13 @@ public class Pantry {
 
     public void setMyPantry(boolean myPantry) {
         isMyPantry = myPantry;
+    }
+
+    public List<Follower> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(List<Follower> followers) {
+        this.followers = followers;
     }
 }

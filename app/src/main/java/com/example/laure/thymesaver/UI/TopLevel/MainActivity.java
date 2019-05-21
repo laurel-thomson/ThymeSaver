@@ -25,7 +25,7 @@ import android.widget.TextView;
 
 import com.example.laure.thymesaver.Firebase.Database.Repository.IPantryManagerRepository;
 import com.example.laure.thymesaver.Firebase.Database.Repository.PantryManagerRepository;
-import com.example.laure.thymesaver.Models.PantryRequest;
+import com.example.laure.thymesaver.Models.Follower;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.Callbacks.Callback;
 import com.example.laure.thymesaver.UI.Settings.PantryManagerActivity;
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private ActionBar mActionBar;
     private PantryManagerViewModel mViewModel;
     private MaterialCardView mJoinRequestCardView;
-    private List<PantryRequest> mPantryRequests = new ArrayList<PantryRequest>();
+    private List<Follower> mPantryRequests = new ArrayList<Follower>();
     private IPantryManagerRepository mRepository;
 
     @Override
@@ -259,11 +259,11 @@ public class MainActivity extends AppCompatActivity {
         //if there are observers from a previous sign in, we want to get rid of them
         mViewModel.getPantryRequests().removeObservers(this);
 
-        mViewModel.getPantryRequests().observe(this, new Observer<List<PantryRequest>>() {
+        mViewModel.getPantryRequests().observe(this, new Observer<List<Follower>>() {
             @Override
-            public void onChanged(@Nullable List<PantryRequest> pantryRequests) {
+            public void onChanged(@Nullable List<Follower> pantryRequests) {
                 if (!pantryRequests.isEmpty()) {
-                    PantryRequest firstRequest = pantryRequests.get(0);
+                    Follower firstRequest = pantryRequests.get(0);
                     TextView requestTV = findViewById(R.id.request_text);
                     requestTV.setText("You have a new request to join your pantry!\nFrom user: " +
                         firstRequest.getUserName());
@@ -287,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (mPantryRequests.isEmpty()) return;
 
-                PantryRequest request = mPantryRequests.get(0);
+                Follower request = mPantryRequests.get(0);
                 mViewModel.acceptJoinRequest(request);
 
                 Snackbar.make(findViewById(R.id.activity_main_coordinator),
@@ -304,7 +304,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (mPantryRequests.isEmpty()) return;
 
-                PantryRequest request = mPantryRequests.get(0);
+                Follower request = mPantryRequests.get(0);
                 mViewModel.declineJoinRequest(request);
 
                 Snackbar.make(findViewById(R.id.activity_main_coordinator),

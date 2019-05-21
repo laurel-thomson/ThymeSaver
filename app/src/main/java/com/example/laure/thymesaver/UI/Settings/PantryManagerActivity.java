@@ -12,7 +12,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -25,7 +24,7 @@ import android.widget.ProgressBar;
 
 import com.example.laure.thymesaver.Adapters.PantryListAdapter;
 import com.example.laure.thymesaver.Models.Pantry;
-import com.example.laure.thymesaver.Models.PantryRequest;
+import com.example.laure.thymesaver.Models.Follower;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.Callbacks.Callback;
 import com.example.laure.thymesaver.ViewModels.PantryManagerViewModel;
@@ -56,24 +55,7 @@ public class PantryManagerActivity extends AppCompatActivity implements PantryLi
         mViewModel.getPantries().observe(this, new Observer<List<Pantry>>() {
             @Override
             public void onChanged(@Nullable List<Pantry> pantries) {
-                List<PantryListItem> pantryListItems = new ArrayList<>();
-                for (Pantry p : pantries) {
-                    List<Follower> followers = new ArrayList<>();
-                    if (p.isMyPantry()) {
-                        PantryRequest request = new PantryRequest("Laurel", "laurel228@ksu.edu");
-                        request.setuID("123");
-                        Follower follower = new Follower(request);
-                        followers.add(follower);
-
-                        PantryRequest r2 = new PantryRequest("Alex", "alex@ksu.edu");
-                        r2.setuID("1234");
-                        Follower f2 = new Follower(r2);
-                        followers.add(f2);
-                    }
-                    pantryListItems.add(new PantryListItem(p, followers));
-                }
-
-                mAdapter.setPantryList(pantryListItems, mViewModel.getPreferredPantryId());
+                mAdapter.setPantryList(pantries, mViewModel.getPreferredPantryId());
                 mRecyclerView.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.GONE);
             }
@@ -243,6 +225,23 @@ public class PantryManagerActivity extends AppCompatActivity implements PantryLi
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mViewModel.leavePantry(pantry);
+                    }
+
+                })
+                .setNegativeButton("No", null)
+                .show();
+    }
+
+    @Override
+    public void onRemoveFollowerClicked(Follower follower) {
+        new AlertDialog.Builder(this)
+                .setTitle("Remove follower?")
+                .setMessage("Are you sure you want to remove this follower? This cannot be undone.")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mViewModel.removeFollower(follower);
                     }
 
                 })

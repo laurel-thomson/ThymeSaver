@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
 
 import com.example.laure.thymesaver.Firebase.Database.LiveData.ListLiveData;
 import com.example.laure.thymesaver.Models.Pantry;
-import com.example.laure.thymesaver.Models.PantryRequest;
+import com.example.laure.thymesaver.Models.Follower;
 import com.example.laure.thymesaver.UI.Callbacks.Callback;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,7 +22,7 @@ import java.util.List;
 
 public class PantryManagerRepository implements IPantryManagerRepository {
     private static PantryManagerRepository mSoleInstance;
-    private List<PantryRequest> mPantryRequests = new ArrayList<>();
+    private List<Follower> mFollowers = new ArrayList<>();
     private List<Pantry> mPantries = new ArrayList<>();
 
 
@@ -34,6 +34,7 @@ public class PantryManagerRepository implements IPantryManagerRepository {
     }
 
     private PantryManagerRepository() {
+        //todo: figure out if we need to put this back
         //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     }
 
@@ -103,7 +104,7 @@ public class PantryManagerRepository implements IPantryManagerRepository {
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()) {
                                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                                    PantryRequest request = new PantryRequest(user.getDisplayName(), user.getEmail());
+                                    Follower request = new Follower(user.getDisplayName(), user.getEmail());
 
                                     String requestedUser = "";
 
@@ -134,14 +135,29 @@ public class PantryManagerRepository implements IPantryManagerRepository {
     }
 
     @Override
-    public void acceptJoinRequest(PantryRequest request) {
-        DatabaseReferences.getUserReference().child("requests").child(request.getuID()).removeValue();
+    public void acceptJoinRequest(Follower follower) {
+        DatabaseReferences.getUserReference().child("requests").child(follower.getuID()).removeValue();
 
-        //add new user to current user's list of accepted requests
-        DatabaseReferences.getUserReference().child("acceptedRequests").child(request.getuID()).setValue(request);
+        DatabaseReferences.getUserReference().child("pantries")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Pantry pantry = dataSnapshot.getValue(Pantry.class);
+                        pantry.getFollowers().add(follower);
+                        DatabaseReferences.getUserReference().child("pantries")
+                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                .setValue(pantry);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
 
         //add current user's pantry to requesting users list of pantries
-        FirebaseDatabase.getInstance().getReference().child("users").child(request.getuID()).child("pantries")
+        FirebaseDatabase.getInstance().getReference().child("users").child(follower.getuID()).child("pantries")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .setValue(new Pantry(
                         FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
@@ -149,7 +165,7 @@ public class PantryManagerRepository implements IPantryManagerRepository {
     }
 
     @Override
-    public void declineJoinRequest(PantryRequest request) {
+    public void declineJoinRequest(Follower request) {
         DatabaseReferences.getUserReference().child("requests").child(request.getuID()).removeValue();
     }
 
@@ -165,6 +181,42 @@ public class PantryManagerRepository implements IPantryManagerRepository {
     }
 
     @Override
+    public void removeFollower(Follower follower) {
+        DatabaseReferences.getUserReference().child("pantries")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Pantry pantry = dataSnapshot.getValue(Pantry.class);
+
+                        for (Follower f : pantry.getFollowers()) {
+                            if (f.getuID().equals(follower.getuID())) {
+                                pantry.getFollowers().remove(f);
+                                removeMyPantryFromUser(f.getuID());
+                                break;
+                            }
+                        }
+
+                        DatabaseReferences.getUserReference().child("pantries")
+                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                .setValue(pantry);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
+    private void removeMyPantryFromUser(String userID) {
+        FirebaseDatabase.getInstance().getReference("users").child(userID)
+                .child("pantries").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .removeValue();
+        //todo: if they have no more followers, need to make sure their preferred pantry is their own pantry
+    }
+
+    @Override
     public String getPreferredPantryId() {
         return DatabaseReferences.getPreferredPantry();
     }
@@ -177,9 +229,9 @@ public class PantryManagerRepository implements IPantryManagerRepository {
     }
 
     @Override
-    public LiveData<List<PantryRequest>> getPantryRequests() {
+    public LiveData<List<Follower>> getFollowers() {
         return Transformations.map(
-                new ListLiveData<PantryRequest>(DatabaseReferences.getUserReference().child("requests"), PantryRequest.class),
+                new ListLiveData<Follower>(DatabaseReferences.getUserReference().child("requests"), Follower.class),
                 new PantryRequestsDeserializer());
     }
 
@@ -198,19 +250,19 @@ public class PantryManagerRepository implements IPantryManagerRepository {
         }
     }
 
-    private class PantryRequestsDeserializer implements Function<DataSnapshot, List<PantryRequest>> {
+    private class PantryRequestsDeserializer implements Function<DataSnapshot, List<Follower>> {
 
         @Override
-        public List<PantryRequest> apply(DataSnapshot input) {
-            mPantryRequests.clear();
+        public List<Follower> apply(DataSnapshot input) {
+            mFollowers.clear();
 
             for (DataSnapshot snap : input.getChildren()) {
-                PantryRequest request = snap.getValue(PantryRequest.class);
+                Follower request = snap.getValue(Follower.class);
                 request.setuID(snap.getKey());
-                mPantryRequests.add(request);
+                mFollowers.add(request);
             }
 
-            return mPantryRequests;
+            return mFollowers;
         }
     }
 }

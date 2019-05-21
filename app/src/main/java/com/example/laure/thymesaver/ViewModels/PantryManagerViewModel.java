@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
 import com.example.laure.thymesaver.Firebase.Database.Repository.IPantryManagerRepository;
 import com.example.laure.thymesaver.Firebase.Database.Repository.PantryManagerRepository;
 import com.example.laure.thymesaver.Models.Pantry;
-import com.example.laure.thymesaver.Models.PantryRequest;
+import com.example.laure.thymesaver.Models.Follower;
 import com.example.laure.thymesaver.UI.Callbacks.Callback;
 
 import java.util.List;
@@ -16,20 +16,20 @@ import java.util.List;
 public class PantryManagerViewModel extends AndroidViewModel {
     private IPantryManagerRepository mRepository;
     private LiveData<List<Pantry>> mPantries;
-    private LiveData<List<PantryRequest>> mPantryRequests;
+    private LiveData<List<Follower>> mPantryRequests;
 
     public PantryManagerViewModel(@NonNull Application application) {
         super(application);
         mRepository = PantryManagerRepository.getInstance();
         mPantries = mRepository.getPantries();
-        mPantryRequests = mRepository.getPantryRequests();
+        mPantryRequests = mRepository.getFollowers();
     }
 
     public LiveData<List<Pantry>> getPantries() {
         return mPantries;
     }
 
-    public LiveData<List<PantryRequest>> getPantryRequests() {
+    public LiveData<List<Follower>> getPantryRequests() {
         return mPantryRequests;
     }
 
@@ -37,11 +37,11 @@ public class PantryManagerViewModel extends AndroidViewModel {
         mRepository.trySendJoinPantryRequest(email, callBack);
     }
 
-    public void acceptJoinRequest(PantryRequest request) {
+    public void acceptJoinRequest(Follower request) {
         mRepository.acceptJoinRequest(request);
     }
 
-    public void declineJoinRequest(PantryRequest request) {
+    public void declineJoinRequest(Follower request) {
         mRepository.declineJoinRequest(request);
     }
 
@@ -55,5 +55,9 @@ public class PantryManagerViewModel extends AndroidViewModel {
 
     public void leavePantry(Pantry pantry) {
         mRepository.leavePantry(pantry);
+    }
+
+    public void removeFollower(Follower follower) {
+        mRepository.removeFollower(follower);
     }
 }

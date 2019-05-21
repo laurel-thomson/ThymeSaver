@@ -3,7 +3,7 @@ package com.example.laure.thymesaver.Firebase.Database.Repository;
 import android.arch.lifecycle.LiveData;
 
 import com.example.laure.thymesaver.Models.Pantry;
-import com.example.laure.thymesaver.Models.PantryRequest;
+import com.example.laure.thymesaver.Models.Follower;
 import com.example.laure.thymesaver.UI.Callbacks.Callback;
 
 import java.util.List;
@@ -15,15 +15,17 @@ public interface IPantryManagerRepository {
 
     void trySendJoinPantryRequest(String email, Callback callBack);
 
-    void acceptJoinRequest(PantryRequest request);
+    void acceptJoinRequest(Follower request);
 
-    void declineJoinRequest(PantryRequest request);
+    void declineJoinRequest(Follower request);
 
     void leavePantry(Pantry pantry);
+
+    void removeFollower(Follower follower);
 
     String getPreferredPantryId();
 
     LiveData<List<Pantry>> getPantries();
 
-    LiveData<List<PantryRequest>> getPantryRequests();
+    LiveData<List<Follower>> getFollowers();
 }

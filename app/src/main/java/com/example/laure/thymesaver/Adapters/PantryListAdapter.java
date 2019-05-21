@@ -11,16 +11,16 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.example.laure.thymesaver.Models.Follower;
 import com.example.laure.thymesaver.Models.Pantry;
 import com.example.laure.thymesaver.R;
-import com.example.laure.thymesaver.UI.Settings.PantryListItem;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 public class PantryListAdapter extends RecyclerView.Adapter<PantryListAdapter.MyViewHolder> {
-    private List<PantryListItem> mPantryList;
+    private List<Pantry> mPantryList;
     private PantryListListener mListener;
     private Context mContext;
     private int mSelectedItem = -1;
@@ -30,11 +30,11 @@ public class PantryListAdapter extends RecyclerView.Adapter<PantryListAdapter.My
         mListener = listener;
     }
 
-    public void setPantryList(List<PantryListItem> pantryList, String preferredId) {
+    public void setPantryList(List<Pantry> pantryList, String preferredId) {
         mPantryList = pantryList;
-        Collections.sort(mPantryList, new Comparator<PantryListItem>() {
+        Collections.sort(mPantryList, new Comparator<Pantry>() {
             @Override
-            public int compare(PantryListItem p1, PantryListItem p2) {
+            public int compare(Pantry p1, Pantry p2) {
                 if (p1.isMyPantry()) {
                     return -1;
                 }
@@ -62,7 +62,7 @@ public class PantryListAdapter extends RecyclerView.Adapter<PantryListAdapter.My
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder vh, int position) {
-        PantryListItem pantry = mPantryList.get(position);
+        Pantry pantry = mPantryList.get(position);
         vh.mName.setText(pantry.getName());
         if (pantry.isMyPantry()) {
             vh.mManageButton.setText("FOLLOWERS");
@@ -95,8 +95,17 @@ public class PantryListAdapter extends RecyclerView.Adapter<PantryListAdapter.My
         }
         for (int textViewIndex = 1; textViewIndex <= noOfChild; textViewIndex++) {
             LinearLayout linearLayout = (LinearLayout) vh.mChildItemsLayout.getChildAt(textViewIndex);
-            TextView nameTV = (TextView) linearLayout.findViewById(R.id.follower_name);
-            nameTV.setText(pantry.getFollowers().get(textViewIndex-1).getName());
+            TextView nameTV = linearLayout.findViewById(R.id.follower_name);
+            nameTV.setText(pantry.getFollowers().get(textViewIndex-1).getUserName());
+
+            TextView removeTV = linearLayout.findViewById(R.id.remove_follower);
+            final Follower currentFollower = pantry.getFollowers().get(textViewIndex-1);
+            removeTV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onRemoveFollowerClicked(currentFollower);
+                }
+            });
         }
     }
 
@@ -149,14 +158,14 @@ public class PantryListAdapter extends RecyclerView.Adapter<PantryListAdapter.My
             mManageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    PantryListItem pantry = mPantryList.get(getAdapterPosition());
+                    Pantry pantry = mPantryList.get(getAdapterPosition());
                     if (pantry.isMyPantry()) {
                         mChildItemsLayout.setVisibility(View.VISIBLE);
                         mManageButton.setVisibility(View.GONE);
                         mCollapseButton.setVisibility(View.VISIBLE);
                     }
                     else {
-                        mListener.onLeavePantryClicked(pantry.getUnderlyingPantry());
+                        mListener.onLeavePantryClicked(pantry);
                     }
 
                 }
@@ -178,5 +187,7 @@ public class PantryListAdapter extends RecyclerView.Adapter<PantryListAdapter.My
         void onPreferredPantryChanged(String pantryId);
 
         void onLeavePantryClicked(Pantry pantry);
+
+        void onRemoveFollowerClicked(Follower follower);
     }
 }
