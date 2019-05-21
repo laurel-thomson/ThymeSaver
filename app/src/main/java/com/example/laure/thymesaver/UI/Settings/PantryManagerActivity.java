@@ -64,6 +64,11 @@ public class PantryManagerActivity extends AppCompatActivity implements PantryLi
                         request.setuID("123");
                         Follower follower = new Follower(request);
                         followers.add(follower);
+
+                        PantryRequest r2 = new PantryRequest("Alex", "alex@ksu.edu");
+                        r2.setuID("1234");
+                        Follower f2 = new Follower(r2);
+                        followers.add(f2);
                     }
                     pantryListItems.add(new PantryListItem(p, followers));
                 }
@@ -77,8 +82,6 @@ public class PantryManagerActivity extends AppCompatActivity implements PantryLi
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this,
-                DividerItemDecoration.VERTICAL));
 
         setUpActionBar();
 
@@ -197,6 +200,17 @@ public class PantryManagerActivity extends AppCompatActivity implements PantryLi
                 return true;
         }
         return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (pantryChanged) {
+            restartApplication();
+
+        }
+        else {
+            super.onBackPressed();
+        }
     }
 
     private void restartApplication() {

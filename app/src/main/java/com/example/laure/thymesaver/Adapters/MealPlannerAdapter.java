@@ -113,7 +113,7 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             }
             else
             {
-                headerViewHolder.itemView.setBackground(mContext.getResources().getDrawable(R.drawable.border));
+                headerViewHolder.itemView.setBackground(mContext.getResources().getDrawable(R.drawable.bottom_border));
                 headerViewHolder.sectionTitle.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
                 headerViewHolder.addButton.setBackground(mContext.getResources().getDrawable(R.drawable.ic_add));
 
