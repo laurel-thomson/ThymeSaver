@@ -25,11 +25,13 @@ import android.widget.ProgressBar;
 
 import com.example.laure.thymesaver.Adapters.PantryListAdapter;
 import com.example.laure.thymesaver.Models.Pantry;
+import com.example.laure.thymesaver.Models.PantryRequest;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.Callbacks.Callback;
 import com.example.laure.thymesaver.ViewModels.PantryManagerViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -54,7 +56,19 @@ public class PantryManagerActivity extends AppCompatActivity implements PantryLi
         mViewModel.getPantries().observe(this, new Observer<List<Pantry>>() {
             @Override
             public void onChanged(@Nullable List<Pantry> pantries) {
-                mAdapter.setPantryList(pantries, mViewModel.getPreferredPantryId());
+                List<PantryListItem> pantryListItems = new ArrayList<>();
+                for (Pantry p : pantries) {
+                    List<Follower> followers = new ArrayList<>();
+                    if (p.isMyPantry()) {
+                        PantryRequest request = new PantryRequest("Laurel", "laurel228@ksu.edu");
+                        request.setuID("123");
+                        Follower follower = new Follower(request);
+                        followers.add(follower);
+                    }
+                    pantryListItems.add(new PantryListItem(p, followers));
+                }
+
+                mAdapter.setPantryList(pantryListItems, mViewModel.getPreferredPantryId());
                 mRecyclerView.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.GONE);
             }

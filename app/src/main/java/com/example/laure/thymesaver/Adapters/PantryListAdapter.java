@@ -1,25 +1,27 @@
 package com.example.laure.thymesaver.Adapters;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.example.laure.thymesaver.Models.Pantry;
 import com.example.laure.thymesaver.R;
+import com.example.laure.thymesaver.UI.Settings.PantryListItem;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 public class PantryListAdapter extends RecyclerView.Adapter<PantryListAdapter.MyViewHolder> {
-    private List<Pantry> mPantryList;
+    private List<PantryListItem> mPantryList;
     private PantryListListener mListener;
     private Context mContext;
     private int mSelectedItem = -1;
@@ -29,7 +31,7 @@ public class PantryListAdapter extends RecyclerView.Adapter<PantryListAdapter.My
         mListener = listener;
     }
 
-    public void setPantryList(List<Pantry> pantryList, String preferredId) {
+    public void setPantryList(List<PantryListItem> pantryList, String preferredId) {
         mPantryList = pantryList;
         for (int i = 0; i < pantryList.size(); i++) {
             if (pantryList.get(i).getuId().equals(preferredId)) {
@@ -37,9 +39,9 @@ public class PantryListAdapter extends RecyclerView.Adapter<PantryListAdapter.My
                 break;
             }
         }
-        Collections.sort(mPantryList, new Comparator<Pantry>() {
+        Collections.sort(mPantryList, new Comparator<PantryListItem>() {
             @Override
-            public int compare(Pantry p1, Pantry p2) {
+            public int compare(PantryListItem p1, PantryListItem p2) {
                 if (p1.isMyPantry()) {
                     return -1;
                 }
@@ -61,10 +63,10 @@ public class PantryListAdapter extends RecyclerView.Adapter<PantryListAdapter.My
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder vh, int position) {
-        Pantry pantry = mPantryList.get(position);
+        PantryListItem pantry = mPantryList.get(position);
         vh.mName.setText(pantry.getName());
         if (pantry.isMyPantry()) {
-            vh.mManageButton.setText("MANAGE");
+            vh.mManageButton.setText("FOLLOWERS");
         }
         else {
             vh.mManageButton.setText("LEAVE");
@@ -78,6 +80,24 @@ public class PantryListAdapter extends RecyclerView.Adapter<PantryListAdapter.My
             vh.mRadioButton.setChecked(false);
             vh.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.colorBackground));
         }
+
+        int noOfChildTextViews = vh.mChildItemsLayout.getChildCount();
+        for (int index = 0; index < noOfChildTextViews; index++) {
+            TextView currentTextView = (TextView) vh.mChildItemsLayout.getChildAt(index);
+            currentTextView.setVisibility(View.VISIBLE);
+        }
+
+        int noOfChild = pantry.getFollowers().size();
+        if (noOfChild < noOfChildTextViews) {
+            for (int index = noOfChild; index < noOfChildTextViews; index++) {
+                TextView currentTextView = (TextView) vh.mChildItemsLayout.getChildAt(index);
+                currentTextView.setVisibility(View.GONE);
+            }
+        }
+        for (int textViewIndex = 0; textViewIndex < noOfChild; textViewIndex++) {
+            TextView currentTextView = (TextView) vh.mChildItemsLayout.getChildAt(textViewIndex);
+            currentTextView.setText(pantry.getFollowers().get(textViewIndex).getName());
+        }
     }
 
     @Override
@@ -90,13 +110,20 @@ public class PantryListAdapter extends RecyclerView.Adapter<PantryListAdapter.My
         private TextView mName;
         private TextView mManageButton;
         private RadioButton mRadioButton;
+        private LinearLayout mChildItemsLayout;
+        private ImageView mCollapseButton;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             mName = itemView.findViewById(R.id.pantry_name);
             mManageButton = itemView.findViewById(R.id.manage_pantry_button);
             mRadioButton = itemView.findViewById(R.id.pantry_radio);
-            View.OnClickListener clickListener = new View.OnClickListener() {
+            mCollapseButton = itemView.findViewById(R.id.expand_pantry_button);
+            mChildItemsLayout = itemView.findViewById(R.id.ll_child_items);
+            mChildItemsLayout.setVisibility(View.GONE);
+
+
+            mRadioButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mSelectedItem = getAdapterPosition();
@@ -104,20 +131,44 @@ public class PantryListAdapter extends RecyclerView.Adapter<PantryListAdapter.My
                     mListener.onPreferredPantryChanged(pantryId);
                     notifyDataSetChanged();
                 }
-            };
-            itemView.setOnClickListener(clickListener);
-            mRadioButton.setOnClickListener(clickListener);
+            });
+
+            int intMaxNoOfChild = 0;
+            for (int index = 0; index < mPantryList.size(); index++) {
+                int intMaxSizeTemp = mPantryList.get(index).getFollowers().size();
+                if (intMaxSizeTemp > intMaxNoOfChild) intMaxNoOfChild = intMaxSizeTemp;
+            }
+            for (int indexView = 0; indexView < intMaxNoOfChild; indexView++) {
+                TextView textView = new TextView(mContext);
+                textView.setId(indexView);
+                textView.setPadding(0, 20, 0, 20);
+                textView.setGravity(Gravity.CENTER);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                mChildItemsLayout.addView(textView, layoutParams);
+            }
 
             mManageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Pantry pantry = mPantryList.get(getAdapterPosition());
+                    PantryListItem pantry = mPantryList.get(getAdapterPosition());
                     if (pantry.isMyPantry()) {
-                        //todo: on manage pantry clicked
+                        mChildItemsLayout.setVisibility(View.VISIBLE);
+                        mManageButton.setVisibility(View.GONE);
+                        mCollapseButton.setVisibility(View.VISIBLE);
                     }
                     else {
-                        mListener.onLeavePantryClicked(pantry);
+                        mListener.onLeavePantryClicked(pantry.getUnderlyingPantry());
                     }
+
+                }
+            });
+
+            mCollapseButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mChildItemsLayout.setVisibility(View.GONE);
+                    mCollapseButton.setVisibility(View.GONE);
+                    mManageButton.setVisibility(View.VISIBLE);
                 }
             });
         }
