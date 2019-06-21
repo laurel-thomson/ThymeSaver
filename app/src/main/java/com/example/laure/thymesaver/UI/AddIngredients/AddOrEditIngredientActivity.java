@@ -58,7 +58,9 @@ public class AddOrEditIngredientActivity extends AppCompatActivity {
 
                 }
             });
-
+        }
+        else {
+            mProgressBar.setVisibility(View.GONE);
         }
     }
 
