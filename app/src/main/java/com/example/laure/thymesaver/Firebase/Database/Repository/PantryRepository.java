@@ -69,7 +69,7 @@ public class PantryRepository implements IPantryRepository {
 
     @Override
     public void getIngredient(String ingredientName, ValueCallback<Ingredient> callback) {
-        DatabaseReferences.getIngredientReference().equalTo(ingredientName)
+        DatabaseReferences.getIngredientReference().child(ingredientName)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -77,13 +77,9 @@ public class PantryRepository implements IPantryRepository {
                             callback.onError("The ingredient does not exist");
                             return;
                         }
-
-                        //Should only return a single ingredient
-                        for (DataSnapshot snap : dataSnapshot.getChildren()) {
-                            Ingredient ing = snap.getValue(Ingredient.class);
-                            ing.setName(snap.getKey());
-                            callback.onSuccess(ing);
-                        }
+                        Ingredient ing = dataSnapshot.getValue(Ingredient.class);
+                        ing.setName(dataSnapshot.getKey());
+                        callback.onSuccess(ing);
                     }
 
                     @Override

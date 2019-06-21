@@ -23,13 +23,14 @@ import com.example.laure.thymesaver.Adapters.IngredientAdapters.ShoppingListAdap
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.ModType;
 import com.example.laure.thymesaver.R;
-import com.example.laure.thymesaver.UI.AddIngredients.AddShoppingListItemsActivity;
+import com.example.laure.thymesaver.UI.AddIngredients.AddShoppingListItemFragment;
 import com.example.laure.thymesaver.UI.Callbacks.ValueCallback;
 import com.example.laure.thymesaver.ViewModels.ShoppingViewModel;
 
 import java.util.HashMap;
 
-public class ShoppingListFragment extends AddButtonFragment implements ShoppingListAdapter.ShoppingListListener {
+public class ShoppingListFragment extends AddButtonFragment
+        implements ShoppingListAdapter.ShoppingListListener {
     private ShoppingViewModel mViewModel;
     private ShoppingListAdapter mAdapter;
     private RecyclerView mRecyclerView;
@@ -77,8 +78,8 @@ public class ShoppingListFragment extends AddButtonFragment implements ShoppingL
 
     @Override
     void launchAddItemActivity() {
-        Intent intent = new Intent(getActivity(), AddShoppingListItemsActivity.class);
-        startActivity(intent);
+        AddShoppingListItemFragment fragment = new AddShoppingListItemFragment();
+        fragment.show(getActivity().getSupportFragmentManager(), "TAG");
     }
 
     @Override
@@ -111,7 +112,12 @@ public class ShoppingListFragment extends AddButtonFragment implements ShoppingL
                         addQuantityToPantry(ing, quantity);
                     }
                 })
-                .setNegativeButton("NO", null)
+                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        mViewModel.deleteModifier(ing.getName());
+                    }
+                })
                 .create();
         dialog.show();
     }

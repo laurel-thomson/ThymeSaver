@@ -45,12 +45,12 @@ public class UpdateRecipeIngredientFragment extends BottomSheetDialogFragment {
     @Override
     public void setupDialog(Dialog dialog, int style) {
         super.setupDialog(dialog, style);
-        final View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_add_recipe_ingredients, null);
+        final View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_add_ingredients, null);
         dialog.setContentView(view);
 
-        mNameET = view.findViewById(R.id.recipe_ingredient_name);
+        mNameET = view.findViewById(R.id.ingredient_name);
         mUnitET = view.findViewById(R.id.ingredient_unit);
-        mQuantityET = view.findViewById(R.id.recipe_quantity);
+        mQuantityET = view.findViewById(R.id.ingredient_quantity);
         mNameLayout = view.findViewById(R.id.name_text_input_layout);
         mQuantityLayout = view.findViewById(R.id.quantity_text_input_layout);
         mUnitLayout = view.findViewById(R.id.unit_text_input_layout);
