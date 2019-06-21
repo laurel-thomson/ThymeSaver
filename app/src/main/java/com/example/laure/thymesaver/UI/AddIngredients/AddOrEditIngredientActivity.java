@@ -115,6 +115,8 @@ public class AddOrEditIngredientActivity extends AppCompatActivity {
         String category = mCategoryET.getText().toString();
         boolean isBulk = mBulkSwitch.isChecked();
 
+        if (name.equals("") || category.equals("")) return;
+
         Ingredient ingredient;
         if (mIngredient == null) ingredient =  new Ingredient(name, category, isBulk);
         else {
