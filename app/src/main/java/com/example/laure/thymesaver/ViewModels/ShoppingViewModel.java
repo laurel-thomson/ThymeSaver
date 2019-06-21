@@ -12,7 +12,7 @@ import com.example.laure.thymesaver.Models.BulkIngredientState;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.ModType;
 import com.example.laure.thymesaver.Models.ShoppingListMod;
-import com.example.laure.thymesaver.UI.Callbacks.IngredientCallback;
+import com.example.laure.thymesaver.UI.Callbacks.ValueCallback;
 
 import java.util.HashMap;
 
@@ -30,7 +30,11 @@ public class ShoppingViewModel extends AndroidViewModel {
         return mShoppingRepository.getShoppingList();
     }
 
-    public void tryFindIngredient(Ingredient ingredient, IngredientCallback callback) {
+    public void getShoppingList(ValueCallback<HashMap<Ingredient, Integer>> callback) {
+        mShoppingRepository.getShoppingList(callback);
+    }
+
+    public void tryFindIngredient(Ingredient ingredient, ValueCallback<Ingredient> callback) {
          mPantryRepository.getIngredient(ingredient.getName(), callback);
     }
 

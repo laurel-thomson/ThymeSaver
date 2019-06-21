@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
 import com.example.laure.thymesaver.Firebase.Database.Repository.IMealPlanRepository;
 import com.example.laure.thymesaver.Firebase.Database.Repository.MealPlanRepository;
 import com.example.laure.thymesaver.Models.MealPlan;
-import com.example.laure.thymesaver.UI.Callbacks.HashmapCallback;
+import com.example.laure.thymesaver.UI.Callbacks.ValueCallback;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +33,7 @@ public class MealPlannerViewModel extends AndroidViewModel {
         mRepository.updateMealPlan(mealPlan);
     }
 
-    public void cookMealPlan(MealPlan mealPlan, HashmapCallback callback) {
+    public void cookMealPlan(MealPlan mealPlan, ValueCallback<HashMap> callback) {
         mRepository.removeMealPlanIngredientsFromPantry(mealPlan, callback);
         removeMealPlan(mealPlan);
     }

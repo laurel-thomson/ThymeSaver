@@ -17,7 +17,7 @@ import android.widget.Switch;
 
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
-import com.example.laure.thymesaver.UI.Callbacks.IngredientCallback;
+import com.example.laure.thymesaver.UI.Callbacks.ValueCallback;
 import com.example.laure.thymesaver.ViewModels.PantryViewModel;
 
 public class AddOrEditIngredientActivity extends AppCompatActivity {
@@ -44,7 +44,7 @@ public class AddOrEditIngredientActivity extends AppCompatActivity {
 
         //if an ingredient name was passed in, then we need to all the user to edit the current ingredient
         if (ingredientName != null) {
-            mViewModel.getIngredient(ingredientName, new IngredientCallback() {
+            mViewModel.getIngredient(ingredientName, new ValueCallback<Ingredient>() {
                 @Override
                 public void onSuccess(Ingredient ingredient) {
                     mIngredient = ingredient;

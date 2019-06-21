@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
 import com.example.laure.thymesaver.Firebase.Database.LiveData.ListLiveData;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.Recipe;
-import com.example.laure.thymesaver.UI.Callbacks.IngredientCallback;
+import com.example.laure.thymesaver.UI.Callbacks.ValueCallback;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -68,7 +68,7 @@ public class PantryRepository implements IPantryRepository {
     }
 
     @Override
-    public void getIngredient(String ingredientName, IngredientCallback callback) {
+    public void getIngredient(String ingredientName, ValueCallback<Ingredient> callback) {
         DatabaseReferences.getIngredientReference().equalTo(ingredientName)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override

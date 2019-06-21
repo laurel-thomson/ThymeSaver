@@ -3,7 +3,7 @@ package com.example.laure.thymesaver.Firebase.Database.Repository;
 import android.arch.lifecycle.LiveData;
 
 import com.example.laure.thymesaver.Models.Ingredient;
-import com.example.laure.thymesaver.UI.Callbacks.IngredientCallback;
+import com.example.laure.thymesaver.UI.Callbacks.ValueCallback;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public interface IPantryRepository {
 
     void updateIngredient(Ingredient i);
 
-    void getIngredient(String ingredientName, IngredientCallback callback);
+    void getIngredient(String ingredientName, ValueCallback<Ingredient> callback);
 
     LiveData<List<Ingredient>> getAllIngredients();
 }

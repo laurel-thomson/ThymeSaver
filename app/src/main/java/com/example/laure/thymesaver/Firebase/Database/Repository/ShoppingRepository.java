@@ -3,11 +3,13 @@ package com.example.laure.thymesaver.Firebase.Database.Repository;
 import android.arch.core.util.Function;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Transformations;
+import android.support.annotation.NonNull;
 
 import com.example.laure.thymesaver.Firebase.Database.LiveData.ShoppingListLiveData;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.ModType;
 import com.example.laure.thymesaver.Models.ShoppingListMod;
+import com.example.laure.thymesaver.UI.Callbacks.ValueCallback;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -122,6 +124,21 @@ public class ShoppingRepository implements IShoppingRepository {
         return Transformations.map(
                 new ShoppingListLiveData(DatabaseReferences.getPantryReference()),
                 new ShoppingListDeserializer());
+    }
+
+    @Override
+    public void getShoppingList(ValueCallback<HashMap<Ingredient, Integer>> callback) {
+        DatabaseReferences.getPantryReference().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                callback.onSuccess(ShoppingListLiveData.getShoppingList(dataSnapshot));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                callback.onError(databaseError.toString());
+            }
+        });
     }
 
     private class ShoppingListDeserializer implements Function<DataSnapshot, HashMap<Ingredient, Integer>> {

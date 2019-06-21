@@ -21,8 +21,8 @@ import com.example.laure.thymesaver.Adapters.MealPlannerAdapter;
 import com.example.laure.thymesaver.Models.MealPlan;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.AddPlannedMealsActivity;
+import com.example.laure.thymesaver.UI.Callbacks.ValueCallback;
 import com.example.laure.thymesaver.UI.RecipeDetail.RecipeDetailActivity;
-import com.example.laure.thymesaver.UI.Callbacks.HashmapCallback;
 import com.example.laure.thymesaver.ViewModels.MealPlannerViewModel;
 
 import java.util.HashMap;
@@ -94,7 +94,7 @@ public class MealPlannerFragment extends Fragment implements MealPlannerAdapter.
     public void onMealChecked(MealPlan mealPlan) {
         mProgressBar.setVisibility(View.VISIBLE);
 
-        mViewModel.cookMealPlan(mealPlan, new HashmapCallback() {
+        mViewModel.cookMealPlan(mealPlan, new ValueCallback<HashMap>() {
             @Override
             public void onSuccess(final HashMap oldIngredientQuantities) {
                 mProgressBar.setVisibility(View.GONE);

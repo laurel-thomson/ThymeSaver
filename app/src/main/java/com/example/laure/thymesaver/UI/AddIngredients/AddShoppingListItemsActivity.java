@@ -18,6 +18,7 @@ import com.example.laure.thymesaver.Adapters.IngredientAdapters.AddShoppingItems
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.ModType;
 import com.example.laure.thymesaver.R;
+import com.example.laure.thymesaver.UI.Callbacks.ValueCallback;
 import com.example.laure.thymesaver.ViewModels.PantryViewModel;
 import com.example.laure.thymesaver.ViewModels.ShoppingViewModel;
 
@@ -98,16 +99,26 @@ public class AddShoppingListItemsActivity extends AppCompatActivity {
             public void onChanged(@Nullable List<Ingredient> ingredients) {
                 if (ingredients == null) return;
 
-                HashMap<Ingredient, Integer> shoppingList = mShoppingViewModel.getShoppingList().getValue();
-                for (Ingredient i : ingredients) {
-                    if (shoppingList.containsKey(i.getName())) {
-                        mTotalIngredients.put(i, shoppingList.get(i.getName()));
+
+                mShoppingViewModel.getShoppingList(new ValueCallback<HashMap<Ingredient, Integer>>() {
+                    @Override
+                    public void onSuccess(HashMap<Ingredient, Integer> shoppingList) {
+                        for (Ingredient i : ingredients) {
+                            if (shoppingList.containsKey(i.getName())) {
+                                mTotalIngredients.put(i, shoppingList.get(i.getName()));
+                            }
+                            else {
+                                mTotalIngredients.put(i, 0);
+                            }
+                        }
+                        mAdapter.setIngredients(mTotalIngredients);
                     }
-                    else {
-                        mTotalIngredients.put(i, 0);
+
+                    @Override
+                    public void onError(String error) {
+
                     }
-                }
-                mAdapter.setIngredients(mTotalIngredients);
+                });
             }
         });
     }
