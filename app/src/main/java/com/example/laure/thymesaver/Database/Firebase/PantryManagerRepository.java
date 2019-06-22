@@ -1,11 +1,12 @@
-package com.example.laure.thymesaver.Firebase.Database.Repository;
+package com.example.laure.thymesaver.Database.Firebase;
 
 import android.arch.core.util.Function;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Transformations;
 import android.support.annotation.NonNull;
 
-import com.example.laure.thymesaver.Firebase.Database.LiveData.ListLiveData;
+import com.example.laure.thymesaver.Database.Firebase.LiveData.ListLiveData;
+import com.example.laure.thymesaver.Database.IPantryManagerRepository;
 import com.example.laure.thymesaver.Models.Pantry;
 import com.example.laure.thymesaver.Models.Follower;
 import com.example.laure.thymesaver.UI.Callbacks.Callback;

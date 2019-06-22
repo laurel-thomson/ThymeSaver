@@ -4,8 +4,8 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 
-import com.example.laure.thymesaver.Firebase.Database.Repository.IRecipeDetailRepository;
-import com.example.laure.thymesaver.Firebase.Database.Repository.RecipeDetailRepository;
+import com.example.laure.thymesaver.Database.IRecipeDetailRepository;
+import com.example.laure.thymesaver.Database.Firebase.RecipeDetailRepository;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.Models.RecipeQuantity;

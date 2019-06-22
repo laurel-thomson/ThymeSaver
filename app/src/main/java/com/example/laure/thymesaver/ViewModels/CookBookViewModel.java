@@ -4,8 +4,8 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 
-import com.example.laure.thymesaver.Firebase.Database.Repository.CookbookRepository;
-import com.example.laure.thymesaver.Firebase.Database.Repository.ICookbookRepository;
+import com.example.laure.thymesaver.Database.Firebase.CookbookRepository;
+import com.example.laure.thymesaver.Database.ICookbookRepository;
 import com.example.laure.thymesaver.Models.MealPlan;
 import com.example.laure.thymesaver.Models.Recipe;
 

@@ -1,8 +1,8 @@
-package com.example.laure.thymesaver.Firebase.Database.LiveData;
+package com.example.laure.thymesaver.Database.Firebase.LiveData;
 
 import android.arch.lifecycle.LiveData;
 
-import com.example.laure.thymesaver.Firebase.Database.Repository.ShoppingRepository;
+import com.example.laure.thymesaver.Database.Firebase.ShoppingRepository;
 import com.example.laure.thymesaver.Models.BulkIngredientState;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.MealPlan;

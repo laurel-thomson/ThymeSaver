@@ -1,11 +1,12 @@
-package com.example.laure.thymesaver.Firebase.Database.Repository;
+package com.example.laure.thymesaver.Database.Firebase;
 
 import android.arch.core.util.Function;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Transformations;
 import android.support.annotation.NonNull;
 
-import com.example.laure.thymesaver.Firebase.Database.LiveData.ShoppingListLiveData;
+import com.example.laure.thymesaver.Database.Firebase.LiveData.ShoppingListLiveData;
+import com.example.laure.thymesaver.Database.IShoppingRepository;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.ModType;
 import com.example.laure.thymesaver.Models.ShoppingListMod;

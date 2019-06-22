@@ -5,8 +5,8 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
-import com.example.laure.thymesaver.Firebase.Database.Repository.IMealPlanRepository;
-import com.example.laure.thymesaver.Firebase.Database.Repository.MealPlanRepository;
+import com.example.laure.thymesaver.Database.IMealPlanRepository;
+import com.example.laure.thymesaver.Database.Firebase.MealPlanRepository;
 import com.example.laure.thymesaver.Models.MealPlan;
 import com.example.laure.thymesaver.UI.Callbacks.ValueCallback;
 

@@ -23,8 +23,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.laure.thymesaver.Firebase.Database.Repository.IPantryManagerRepository;
-import com.example.laure.thymesaver.Firebase.Database.Repository.PantryManagerRepository;
+import com.example.laure.thymesaver.Database.IPantryManagerRepository;
+import com.example.laure.thymesaver.Database.Firebase.PantryManagerRepository;
 import com.example.laure.thymesaver.Models.Follower;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.Callbacks.Callback;

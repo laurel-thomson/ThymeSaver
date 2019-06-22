@@ -1,4 +1,4 @@
-package com.example.laure.thymesaver.Firebase.Database.Repository;
+package com.example.laure.thymesaver.Database;
 
 import android.arch.lifecycle.LiveData;
 

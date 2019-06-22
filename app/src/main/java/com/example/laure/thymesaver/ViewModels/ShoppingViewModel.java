@@ -4,10 +4,10 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 
-import com.example.laure.thymesaver.Firebase.Database.Repository.IPantryRepository;
-import com.example.laure.thymesaver.Firebase.Database.Repository.IShoppingRepository;
-import com.example.laure.thymesaver.Firebase.Database.Repository.PantryRepository;
-import com.example.laure.thymesaver.Firebase.Database.Repository.ShoppingRepository;
+import com.example.laure.thymesaver.Database.IPantryRepository;
+import com.example.laure.thymesaver.Database.IShoppingRepository;
+import com.example.laure.thymesaver.Database.Firebase.PantryRepository;
+import com.example.laure.thymesaver.Database.Firebase.ShoppingRepository;
 import com.example.laure.thymesaver.Models.BulkIngredientState;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.ModType;

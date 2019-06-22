@@ -5,8 +5,8 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
-import com.example.laure.thymesaver.Firebase.Database.Repository.IPantryManagerRepository;
-import com.example.laure.thymesaver.Firebase.Database.Repository.PantryManagerRepository;
+import com.example.laure.thymesaver.Database.IPantryManagerRepository;
+import com.example.laure.thymesaver.Database.Firebase.PantryManagerRepository;
 import com.example.laure.thymesaver.Models.Pantry;
 import com.example.laure.thymesaver.Models.Follower;
 import com.example.laure.thymesaver.UI.Callbacks.Callback;

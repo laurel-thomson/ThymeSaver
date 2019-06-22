@@ -1,29 +1,19 @@
-package com.example.laure.thymesaver.Firebase.Database.LiveData;
+package com.example.laure.thymesaver.Database.Firebase.LiveData;
 
 import android.arch.lifecycle.LiveData;
-import android.util.Log;
-
+import com.example.laure.thymesaver.Models.Recipe;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class
-ListLiveData<T> extends LiveData<DataSnapshot> {
-    private List<T> mQueryValuesList = new ArrayList<>();
-    private final Class<T> mClassType;
+public class RecipeLiveData extends LiveData<DataSnapshot> {
+    private Recipe mRecipe;
     private final Query mQuery;
     private final MyEventListener mListener = new MyEventListener();
 
-    public ListLiveData(
-            Query q,
-            Class<T> classType) {
+    public RecipeLiveData (Query q) {
         mQuery = q;
-        mClassType = classType;
     }
 
     @Override
@@ -40,12 +30,9 @@ ListLiveData<T> extends LiveData<DataSnapshot> {
 
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
-            if(dataSnapshot != null){
+            if(dataSnapshot != null) {
                 setValue(dataSnapshot);
-                for(DataSnapshot snap : dataSnapshot.getChildren()){
-                    T value = snap.getValue(mClassType);
-                    mQueryValuesList.add(value);
-                }
+                mRecipe = dataSnapshot.getValue(Recipe.class);
             }
         }
 
