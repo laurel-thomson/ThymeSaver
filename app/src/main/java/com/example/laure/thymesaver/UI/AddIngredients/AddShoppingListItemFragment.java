@@ -4,11 +4,13 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.TextInputLayout;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -85,7 +87,10 @@ public class AddShoppingListItemFragment extends BottomSheetDialogFragment {
                             hasError = true;
                         }
 
-                        if (hasError) return;
+                        if (hasError) {
+                            hideKeyboard();
+                            return;
+                        }
 
                         Ingredient ingredient = getIngredientFromName(mNameET.getText().toString());
                         saveIngredient(ingredient);
@@ -125,5 +130,10 @@ public class AddShoppingListItemFragment extends BottomSheetDialogFragment {
                     ModType.CHANGE,
                     quantity);
         }
+    }
+
+    public void hideKeyboard(){
+        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getDialog().getWindow().getCurrentFocus().getWindowToken(), 0);
     }
 }
