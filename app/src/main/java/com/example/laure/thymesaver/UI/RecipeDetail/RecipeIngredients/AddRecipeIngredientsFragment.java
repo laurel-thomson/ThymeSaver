@@ -42,6 +42,9 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
     private TextInputLayout mQuantityLayout;
     private TextInputLayout mUnitLayout;
     private LinearLayout mDoneButton;
+    public static final String INGREDIENT_NAME = "ingredient name" ;
+    public static final String INGREDIENT_UNIT = "ingredient unit";
+    public static final String INGREDIENT_QUANTITY = "ingredient quantity";
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -57,6 +60,10 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
         mQuantityLayout = view.findViewById(R.id.quantity_text_input_layout);
         mUnitLayout = view.findViewById(R.id.unit_text_input_layout);
         mDoneButton =  view.findViewById(R.id.add_recipe_ing_button);
+
+        if (getArguments() != null) {
+            getIngredientArguments();
+        }
 
         mPantryViewModel = ViewModelProviders.of(this).get(PantryViewModel.class);
         mPantryViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
@@ -119,6 +126,17 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
                             hasError = true;
                         }
 
+                        double quantity;
+
+                        try {
+                            quantity = Double.parseDouble(mQuantityET.getText().toString());
+                        }
+                        catch (NumberFormatException e) {
+                            mQuantityLayout.setError("Incorrect number format.");
+                            quantity = -1;
+                            hasError = true;
+                        }
+
                         if (hasError) {
                             hideKeyboard();
                             return;
@@ -132,19 +150,28 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
                                     true);
                             mPantryViewModel.addIngredient(ingredient);
                         }
-                        RecipeQuantity quantity = new RecipeQuantity(
+                        RecipeQuantity recipeQuantity = new RecipeQuantity(
                                 mUnitET.getText().toString(),
-                                Integer.parseInt(mQuantityET.getText().toString()));
-                        mListener.onIngredientAdded(ingredient, quantity);
+                                quantity);
+                        mListener.onIngredientAdded(ingredient, recipeQuantity);
 
                         //clear text fields after ingredient added
-
                         mNameET.setText("");
                         mQuantityET.setText("");
                         mUnitET.setText("");
                         mNameET.requestFocus();
                     }
                 });
+    }
+
+    private void getIngredientArguments() {
+        String ingredientName = getArguments().getString(INGREDIENT_NAME);
+        String ingredientUnit = getArguments().getString(INGREDIENT_UNIT);
+        double ingredientQuantity = getArguments().getDouble(INGREDIENT_QUANTITY);
+
+        mNameET.setText(ingredientName);
+        mUnitET.setText(ingredientUnit);
+        mQuantityET.setText(Double.toString(ingredientQuantity));
     }
 
     @Nullable
@@ -155,7 +182,7 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
         return null;
     }
 
-    public void hideKeyboard(){
+    private void hideKeyboard(){
         InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getDialog().getWindow().getCurrentFocus().getWindowToken(), 0);
     }

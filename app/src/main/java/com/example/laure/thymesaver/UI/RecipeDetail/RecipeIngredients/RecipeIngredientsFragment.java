@@ -93,11 +93,11 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
     @Override
     public void onIngredientClicked(Ingredient i, RecipeQuantity quantity) {
         Bundle bundle = new Bundle();
-        bundle.putString(UpdateRecipeIngredientFragment.INGREDIENT_NAME, i.getName());
-        bundle.putString(UpdateRecipeIngredientFragment.INGREDIENT_UNIT, quantity.getUnit());
-        bundle.putInt(UpdateRecipeIngredientFragment.INGREDIENT_QUANTITY, quantity.getRecipeQuantity());
+        bundle.putString(AddRecipeIngredientsFragment.INGREDIENT_NAME, i.getName());
+        bundle.putString(AddRecipeIngredientsFragment.INGREDIENT_UNIT, quantity.getUnit());
+        bundle.putDouble(AddRecipeIngredientsFragment.INGREDIENT_QUANTITY, quantity.getRecipeQuantity());
 
-        UpdateRecipeIngredientFragment fragment = new UpdateRecipeIngredientFragment();
+        AddRecipeIngredientsFragment fragment = new AddRecipeIngredientsFragment();
         fragment.setArguments(bundle);
         fragment.setListener(this);
         fragment.show(getActivity().getSupportFragmentManager(), "TAG");
@@ -119,7 +119,7 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
                 .setAction("UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        mViewModel.updateRecipeIngredient(
+                        mViewModel.addRecipeIngredient(
                                 i.getName(),
                                 quantity);
                         Snackbar newSnackBar = Snackbar
@@ -133,11 +133,6 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
 
     @Override
     public void onIngredientAdded(Ingredient ingredient, RecipeQuantity quantity) {
-        mViewModel.updateRecipeIngredient(ingredient.getName(), quantity);
-    }
-
-    @Override
-    public void onIngredientUpdated(Ingredient ing, RecipeQuantity quantity) {
-        mViewModel.updateRecipeIngredient(ing.getName(), quantity);
+        mViewModel.addRecipeIngredient(ingredient.getName(), quantity);
     }
 }

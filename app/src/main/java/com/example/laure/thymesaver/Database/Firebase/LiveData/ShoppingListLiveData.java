@@ -78,13 +78,13 @@ public class ShoppingListLiveData extends LiveData<DataSnapshot> {
                         if (!neededIngredients.containsKey(ingName)) {
                             neededIngredients.put(
                                     ingName,
-                                    recipe.getRecipeIngredients().get(ingName).getRecipeQuantity());
+                                    (int) Math.ceil(recipe.getRecipeIngredients().get(ingName).getRecipeQuantity()));
                         }
                         else {
                             neededIngredients.put(
                                     ingName,
                                     neededIngredients.get(ingName)
-                                            + recipe.getRecipeIngredients().get(ingName).getRecipeQuantity()
+                                            + (int) Math.ceil(recipe.getRecipeIngredients().get(ingName).getRecipeQuantity())
                             );
                         }
                     }

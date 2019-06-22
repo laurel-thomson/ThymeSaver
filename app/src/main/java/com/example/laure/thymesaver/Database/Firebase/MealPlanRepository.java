@@ -91,7 +91,7 @@ public class MealPlanRepository implements IMealPlanRepository {
 
                                 Ingredient newIng = new Ingredient(ing.getName(), ing.getCategory(), ing.isBulk());
                                 newIng.setQuantity(Math.max(0, ing.getQuantity() -
-                                        recipe.getRecipeIngredients().get(ing.getName()).getRecipeQuantity()));
+                                        (int) Math.ceil(recipe.getRecipeIngredients().get(ing.getName()).getRecipeQuantity())));
 
                                 newIngredientData.put(newIng.getName(), newIng);
                             }

@@ -115,7 +115,13 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecyclerView.
             Ingredient ingredient = mIngredients.get(position);
             final IngredientViewHolder holder = (IngredientViewHolder) viewHolder;
             holder.mNameTV.setText(ingredient.getName());
-            holder.mQuantityTV.setText(Integer.toString(mRecipeQuantities.get(ingredient).getRecipeQuantity()));
+            double quantity = mRecipeQuantities.get(ingredient).getRecipeQuantity();
+            if (quantity % 1 == 0) {
+                holder.mQuantityTV.setText((int) quantity + "");
+            }
+            else {
+                holder.mQuantityTV.setText(Double.toString(quantity));
+            }
             holder.mUnitTV.setText(mRecipeQuantities.get(ingredient).getUnit());
 
             holder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

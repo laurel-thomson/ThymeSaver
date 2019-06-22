@@ -4,20 +4,20 @@ import com.google.firebase.database.Exclude;
 
 public class RecipeQuantity {
     private String unit;
-    private int recipeQuantity;
+    private double recipeQuantity;
 
     public RecipeQuantity() {}
 
-    public RecipeQuantity(String unit, int recipeQuantity) {
+    public RecipeQuantity(String unit, double recipeQuantity) {
         this.unit = unit;
         this.recipeQuantity = recipeQuantity;
     }
 
-    public int getRecipeQuantity() {
+    public double getRecipeQuantity() {
         return recipeQuantity;
     }
 
-    public void setRecipeQuantity(int recipeQuantity) {
+    public void setRecipeQuantity(double recipeQuantity) {
         this.recipeQuantity = recipeQuantity;
     }
 
