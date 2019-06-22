@@ -21,4 +21,13 @@
         android:paddingBottom="70dp"
         android:clipToPadding="false"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="15sp"
+        android:id="@+id/shopping_list_empty"
+        android:text="Nothing to buy right now!"
+        android:visibility="gone"/>
+
 </FrameLayout>

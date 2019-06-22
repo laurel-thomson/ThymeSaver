@@ -1,5 +1,6 @@
 package com.example.laure.thymesaver.UI.TopLevel;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -17,7 +18,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.laure.thymesaver.Adapters.IngredientAdapters.ShoppingListAdapter;
 import com.example.laure.thymesaver.Models.Ingredient;
@@ -27,14 +30,18 @@ import com.example.laure.thymesaver.UI.AddIngredients.AddShoppingListItemFragmen
 import com.example.laure.thymesaver.UI.Callbacks.ValueCallback;
 import com.example.laure.thymesaver.ViewModels.ShoppingViewModel;
 
+import org.w3c.dom.Text;
+
 import java.util.HashMap;
 
 public class ShoppingListFragment extends AddButtonFragment
         implements ShoppingListAdapter.ShoppingListListener {
+
     private ShoppingViewModel mViewModel;
     private ShoppingListAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
+    private TextView mEmptyMessage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState){
@@ -49,6 +56,7 @@ public class ShoppingListFragment extends AddButtonFragment
         mRecyclerView = view.findViewById(R.id.shopping_recycler_view);
         mViewModel = ViewModelProviders.of(this).get(ShoppingViewModel.class);
         mAdapter = new ShoppingListAdapter(getActivity(), this);
+        mEmptyMessage = view.findViewById(R.id.shopping_list_empty);
 
         setObserver();
 
@@ -69,8 +77,14 @@ public class ShoppingListFragment extends AddButtonFragment
 
         mViewModel.getShoppingList().observe(this, new Observer<HashMap<Ingredient, Integer>>() {
             @Override
-            public void onChanged(@Nullable HashMap<Ingredient, Integer> ingredientIntegerHashMap) {
-                mAdapter.setIngredients(ingredientIntegerHashMap);
+            public void onChanged(@Nullable HashMap<Ingredient, Integer> shoppingList) {
+                if (shoppingList.size() > 0) {
+                    mEmptyMessage.setVisibility(View.GONE);
+                }
+                else {
+                    mEmptyMessage.setVisibility(View.VISIBLE);
+                }
+                mAdapter.setIngredients(shoppingList);
                 mProgressBar.setVisibility(View.GONE);
             }
         });
@@ -123,8 +137,8 @@ public class ShoppingListFragment extends AddButtonFragment
     }
 
     private void addQuantityToPantry(Ingredient i, int quantity) {
-        mViewModel.addQuantityToPantry(i, quantity);
         mViewModel.deleteModifier(i.getName());
+        mViewModel.addQuantityToPantry(i, quantity);
     }
 
     @Override

@@ -22,4 +22,13 @@
         android:paddingBottom="70dp"
         android:clipToPadding="false"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="15sp"
+        android:id="@+id/cookbook_empty"
+        android:text="No recipes yet!"
+        android:visibility="gone"/>
+
 </FrameLayout>

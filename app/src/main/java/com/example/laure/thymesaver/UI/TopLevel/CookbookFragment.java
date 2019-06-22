@@ -24,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.laure.thymesaver.Adapters.RecipeAdapter;
 import com.example.laure.thymesaver.Models.Recipe;
@@ -39,6 +40,8 @@ public class CookbookFragment extends AddButtonFragment
     private RecipeAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
+    private TextView mEmptyMessage;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState){
@@ -53,6 +56,8 @@ public class CookbookFragment extends AddButtonFragment
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new RecipeAdapter(getActivity(), this);
         mViewModel = ViewModelProviders.of(this).get(CookBookViewModel.class);
+        mEmptyMessage = view.findViewById(R.id.cookbook_empty);
+
         setObserver();
 
         mRecyclerView.setAdapter(mAdapter);
@@ -72,6 +77,12 @@ public class CookbookFragment extends AddButtonFragment
         mViewModel.getAllRecipes().observe(this, new Observer<List<Recipe>>() {
             @Override
             public void onChanged(@Nullable List<Recipe> recipes) {
+                if (recipes.size() > 0) {
+                    mEmptyMessage.setVisibility(View.GONE);
+                }
+                else {
+                    mEmptyMessage.setVisibility(View.VISIBLE);
+                }
                 mAdapter.setRecipes(recipes);
                 mProgressBar.setVisibility(View.GONE);
             }

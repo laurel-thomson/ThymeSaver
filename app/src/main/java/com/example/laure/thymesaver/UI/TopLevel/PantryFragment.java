@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.laure.thymesaver.Adapters.IngredientAdapters.PantryAdapter;
 import com.example.laure.thymesaver.Models.Ingredient;
@@ -29,6 +30,8 @@ public class PantryFragment extends AddButtonFragment implements PantryAdapter.I
     private PantryAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
+    private TextView mEmptyMessage;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState){
@@ -42,6 +45,8 @@ public class PantryFragment extends AddButtonFragment implements PantryAdapter.I
         mRecyclerView = view.findViewById(R.id.pantry_recycler_view);
         mViewModel = ViewModelProviders.of(this).get(PantryViewModel.class);
         mAdapter = new PantryAdapter(getActivity(),this);
+        mEmptyMessage = view.findViewById(R.id.pantry_empty);
+
 
         setObserver();
 
@@ -64,6 +69,12 @@ public class PantryFragment extends AddButtonFragment implements PantryAdapter.I
         mViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
             @Override
             public void onChanged(@Nullable List<Ingredient> ingredients) {
+                if (ingredients.size() > 0) {
+                    mEmptyMessage.setVisibility(View.GONE);
+                }
+                else {
+                    mEmptyMessage.setVisibility(View.VISIBLE);
+                }
                 mAdapter.setIngredients(ingredients);
                 mProgressBar.setVisibility(View.GONE);
             }
