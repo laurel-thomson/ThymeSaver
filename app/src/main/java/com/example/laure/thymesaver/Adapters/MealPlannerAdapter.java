@@ -3,6 +3,7 @@ package com.example.laure.thymesaver.Adapters;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
@@ -84,7 +85,15 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                         textView.setTextColor(Color.GRAY);
                     }
-                    mListener.onMealChecked(mMealPlans.get(holder.getAdapterPosition()));
+                    final MealPlan mealPlan = mMealPlans.get(holder.getAdapterPosition());
+
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mListener.onMealChecked(mealPlan);
+                        }
+                    }, 500);
                 }
             });
         }
