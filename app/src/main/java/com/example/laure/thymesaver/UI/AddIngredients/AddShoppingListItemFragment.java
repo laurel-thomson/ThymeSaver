@@ -51,6 +51,8 @@ public class AddShoppingListItemFragment extends BottomSheetDialogFragment {
         mUnitLayout = view.findViewById(R.id.unit_text_input_layout);
         mDoneButton =  view.findViewById(R.id.add_recipe_ing_button);
 
+        mQuantityET.setText("1");
+
         mShoppingViewModel = ViewModelProviders.of(this).get(ShoppingViewModel.class);
         mPantryViewModel = ViewModelProviders.of(this).get(PantryViewModel.class);
         mPantryViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
@@ -97,7 +99,7 @@ public class AddShoppingListItemFragment extends BottomSheetDialogFragment {
 
                         //clear text fields after ingredient added
                         mNameET.setText("");
-                        mQuantityET.setText("");
+                        mQuantityET.setText("1");
                         mNameET.requestFocus();
                     }
                 });

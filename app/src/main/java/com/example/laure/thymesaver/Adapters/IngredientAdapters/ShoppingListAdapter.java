@@ -81,7 +81,6 @@ public class ShoppingListAdapter extends  RecyclerView.Adapter<RecyclerView.View
                 }
             }
         }
-
         notifyDataSetChanged();
     }
 
@@ -172,15 +171,19 @@ public class ShoppingListAdapter extends  RecyclerView.Adapter<RecyclerView.View
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     Ingredient ing = mIngredients.get(getAdapterPosition());
-                    mListener.onIngredientCheckedOff(
-                            ing,
-                            mMeasuredIngredients.get(ing));
-                    if (compoundButton.isChecked()) {
-                        compoundButton.setChecked(false);
-                    }
-                    mIngredients.remove(ing);
-                    mMeasuredIngredients.remove(ing);
-                    notifyDataSetChanged();
+                    int quantity = mMeasuredIngredients.get(ing);
+
+                    view.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mListener.onIngredientCheckedOff(
+                                    ing,
+                                    quantity);
+                            if (compoundButton.isChecked()) {
+                                compoundButton.setChecked(false);
+                            }
+                        }
+                    }, 500);
                 }
             });
 

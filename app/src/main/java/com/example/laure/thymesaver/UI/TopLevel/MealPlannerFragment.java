@@ -118,7 +118,8 @@ public class MealPlannerFragment extends Fragment implements MealPlannerAdapter.
 
             @Override
             public void onError(String err) {
-
+                Snackbar snackbar = Snackbar.make(getView(), "A database error occured.", Snackbar.LENGTH_SHORT);
+                snackbar.show();
             }
         });
     }
