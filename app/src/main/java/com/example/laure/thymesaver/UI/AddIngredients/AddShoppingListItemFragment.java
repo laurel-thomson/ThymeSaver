@@ -8,6 +8,7 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.TextInputLayout;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -52,6 +53,7 @@ public class AddShoppingListItemFragment extends BottomSheetDialogFragment {
         mDoneButton =  view.findViewById(R.id.add_recipe_ing_button);
 
         mQuantityET.setText("1");
+        mQuantityET.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         mShoppingViewModel = ViewModelProviders.of(this).get(ShoppingViewModel.class);
         mPantryViewModel = ViewModelProviders.of(this).get(PantryViewModel.class);
