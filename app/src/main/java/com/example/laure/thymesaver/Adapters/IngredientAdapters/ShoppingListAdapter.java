@@ -218,6 +218,14 @@ public class ShoppingListAdapter extends  RecyclerView.Adapter<RecyclerView.View
                     mListener.onDeleteClicked(i, mMeasuredIngredients.get(i));
                 }
             });
+
+            view.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    mListener.onIngredientLongClicked(mIngredients.get(getAdapterPosition()));
+                    return true;
+                }
+            });
         }
     }
 
@@ -236,5 +244,7 @@ public class ShoppingListAdapter extends  RecyclerView.Adapter<RecyclerView.View
         void onIngredientCheckedOff(Ingredient i, int quantity);
 
         void onDeleteClicked(Ingredient i, int quantity);
+
+        void onIngredientLongClicked(Ingredient i);
     }
 }

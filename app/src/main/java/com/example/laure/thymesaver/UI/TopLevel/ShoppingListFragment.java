@@ -26,6 +26,7 @@ import com.example.laure.thymesaver.Adapters.IngredientAdapters.ShoppingListAdap
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.ModType;
 import com.example.laure.thymesaver.R;
+import com.example.laure.thymesaver.UI.AddIngredients.AddIngredientFragment;
 import com.example.laure.thymesaver.UI.AddIngredients.AddShoppingListItemFragment;
 import com.example.laure.thymesaver.UI.Callbacks.ValueCallback;
 import com.example.laure.thymesaver.ViewModels.ShoppingViewModel;
@@ -144,6 +145,18 @@ public class ShoppingListFragment extends AddButtonFragment
     @Override
     public void onDeleteClicked(Ingredient i, int quantity) {
         mViewModel.deleteShoppingListItem(i, quantity);
+    }
+
+    @Override
+    public void onIngredientLongClicked(Ingredient ing) {
+        Bundle bundle = new Bundle();
+        bundle.putString(AddIngredientFragment.INGREDIENT_NAME, ing.getName());
+        bundle.putString(AddIngredientFragment.INGREDIENT_CATEGORY, ing.getCategory());
+        bundle.putBoolean(AddIngredientFragment.IS_BULK, ing.isBulk());
+
+        AddIngredientFragment fragment = new AddIngredientFragment();
+        fragment.setArguments(bundle);
+        fragment.show(getActivity().getSupportFragmentManager(), "TAG");
     }
 
     @Override
