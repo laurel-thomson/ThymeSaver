@@ -55,8 +55,9 @@ public class CookbookRepository implements ICookbookRepository {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot snap : dataSnapshot.getChildren()) {
                             MealPlan mealPlan = snap.getValue(MealPlan.class);
+                            mealPlan.setFirebaseKey(snap.getKey());
                             if (mealPlan.getRecipeName().equals(recipeName)) {
-                                DatabaseReferences.getMealPlanReference().child(mealPlan.getRecipeName())
+                                DatabaseReferences.getMealPlanReference().child(mealPlan.getFirebaseKey())
                                         .removeValue();
                             }
                         }
