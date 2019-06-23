@@ -1,7 +1,6 @@
 package com.example.laure.thymesaver.UI.RecipeDetail.RecipeIngredients;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -9,12 +8,10 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
@@ -50,7 +47,7 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
     @Override
     public void setupDialog(Dialog dialog, int style) {
         super.setupDialog(dialog, style);
-        final View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_add_ingredients, null);
+        final View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_add_measured_ingredient, null);
         dialog.setContentView(view);
 
         mNameET = view.findViewById(R.id.ingredient_name);

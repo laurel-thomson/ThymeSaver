@@ -20,7 +20,7 @@ import android.widget.TextView;
 import com.example.laure.thymesaver.Adapters.IngredientAdapters.PantryAdapter;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.R;
-import com.example.laure.thymesaver.UI.AddIngredients.AddOrEditIngredientActivity;
+import com.example.laure.thymesaver.UI.AddIngredients.AddIngredientFragment;
 import com.example.laure.thymesaver.ViewModels.PantryViewModel;
 
 import java.util.List;
@@ -47,12 +47,10 @@ public class PantryFragment extends AddButtonFragment implements PantryAdapter.I
         mAdapter = new PantryAdapter(getActivity(),this);
         mEmptyMessage = view.findViewById(R.id.empty_message);
 
-
         setObserver();
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
-
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
                 DividerItemDecoration.VERTICAL));
     }
@@ -104,15 +102,20 @@ public class PantryFragment extends AddButtonFragment implements PantryAdapter.I
     }
 
     @Override
-    public void onIngredientClicked(Ingredient ingredient) {
-        Intent intent = new Intent(getActivity(), AddOrEditIngredientActivity.class);
-        intent.putExtra(AddOrEditIngredientActivity.INGREDIENT_NAME_KEY, ingredient.getName());
-        startActivity(intent);
+    public void onIngredientClicked(Ingredient ing) {
+        Bundle bundle = new Bundle();
+        bundle.putString(AddIngredientFragment.INGREDIENT_NAME, ing.getName());
+        bundle.putString(AddIngredientFragment.INGREDIENT_CATEGORY, ing.getCategory());
+        bundle.putBoolean(AddIngredientFragment.IS_BULK, ing.isBulk());
+
+        AddIngredientFragment fragment = new AddIngredientFragment();
+        fragment.setArguments(bundle);
+        fragment.show(getActivity().getSupportFragmentManager(), "TAG");
     }
 
     @Override
     void launchAddItemActivity() {
-        Intent intent = new Intent(getActivity(), AddOrEditIngredientActivity.class);
-        startActivity(intent);
+        AddIngredientFragment fragment = new AddIngredientFragment();
+        fragment.show(getActivity().getSupportFragmentManager(), "TAG");
     }
 }

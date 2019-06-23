@@ -41,7 +41,7 @@ public class AddShoppingListItemFragment extends BottomSheetDialogFragment {
     @Override
     public void setupDialog(Dialog dialog, int style) {
         super.setupDialog(dialog, style);
-        final View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_add_ingredients, null);
+        final View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_add_measured_ingredient, null);
         dialog.setContentView(view);
 
         mNameET = view.findViewById(R.id.ingredient_name);

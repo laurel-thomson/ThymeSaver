@@ -2,7 +2,6 @@ package com.example.laure.thymesaver.UI.RecipeDetail.RecipeIngredients;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,7 +20,7 @@ import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.Models.RecipeQuantity;
 import com.example.laure.thymesaver.R;
-import com.example.laure.thymesaver.UI.AddIngredients.AddOrEditIngredientActivity;
+import com.example.laure.thymesaver.UI.AddIngredients.AddIngredientFragment;
 import com.example.laure.thymesaver.UI.RecipeDetail.RecipeDetailFragment;
 import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 
@@ -117,10 +116,15 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
     }
 
     @Override
-    public void onIngredientLongClicked(Ingredient i) {
-        Intent intent = new Intent(getContext(), AddOrEditIngredientActivity.class);
-        intent.putExtra(AddOrEditIngredientActivity.INGREDIENT_NAME_KEY, i.getName());
-        startActivity(intent);
+    public void onIngredientLongClicked(Ingredient ing) {
+        Bundle bundle = new Bundle();
+        bundle.putString(AddIngredientFragment.INGREDIENT_NAME, ing.getName());
+        bundle.putString(AddIngredientFragment.INGREDIENT_CATEGORY, ing.getCategory());
+        bundle.putBoolean(AddIngredientFragment.IS_BULK, ing.isBulk());
+
+        AddIngredientFragment fragment = new AddIngredientFragment();
+        fragment.setArguments(bundle);
+        fragment.show(getActivity().getSupportFragmentManager(), "TAG");
     }
 
     @Override

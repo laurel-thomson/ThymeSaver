@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/add_ing_button"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:layout_height="50dp"
+        android:imeOptions="actionDone"
+        android:background="@color/colorAccent">
+
+        <ImageView
+            android:layout_weight="0.3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_done"/>
+
+        <TextView
+            android:layout_weight="0.7"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextIcon"
+            android:textSize="18dp"
+            android:text="Done"/>
+
+    </LinearLayout>
+
+    <Switch
+        android:id="@+id/is_bulk_switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Is bulk ingredient?"
+        android:textSize="18dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="23dp" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/name_text_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="10dp">
+
+        <AutoCompleteTextView
+            android:id="@+id/ingredient_name"
+            android:textCursorDrawable="@drawable/color_cursor"
+            app:backgroundTint="@color/colorPrimary"
+            android:hint="Ingredient Name"
+            android:singleLine="true"
+            android:maxLength="30"
+            android:padding="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionNext" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/category_text_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="10dp">
+
+        <AutoCompleteTextView
+            android:id="@+id/ingredient_category"
+            android:hint="Category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+</LinearLayout>
