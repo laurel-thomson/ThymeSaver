@@ -13,6 +13,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.laure.thymesaver.Adapters.DragHelper;
 import com.example.laure.thymesaver.Adapters.RecipeStepAdapter;
@@ -29,6 +30,7 @@ public class RecipeStepsFragment extends RecipeDetailFragment
     private RecyclerView mRecyclerView;
     private List<String> mSteps;
     private RecipeDetailViewModel mViewModel;
+    private TextView mEmptyMessage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState){
@@ -40,6 +42,7 @@ public class RecipeStepsFragment extends RecipeDetailFragment
         super.onViewCreated(view, savedInstanceState);
 
         mViewModel = ViewModelProviders.of(getActivity()).get(RecipeDetailViewModel.class);
+        mEmptyMessage = view.findViewById(R.id.recipe_steps_empty);
 
         mRecyclerView = view.findViewById(R.id.steps_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -51,6 +54,12 @@ public class RecipeStepsFragment extends RecipeDetailFragment
                     return;
                 }
                 mSteps = recipe.getSteps();
+                if (mSteps.size() > 0) {
+                    mEmptyMessage.setVisibility(View.GONE);
+                }
+                else {
+                    mEmptyMessage.setVisibility(View.VISIBLE);
+                }
                 mAdapter.setSteps(recipe.getSteps());
             }
         });

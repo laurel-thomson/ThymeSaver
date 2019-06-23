@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.laure.thymesaver.Adapters.IngredientAdapters.RecipeIngredientsAdapter;
 import com.example.laure.thymesaver.Models.Ingredient;
@@ -31,6 +32,7 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
     private RecipeDetailViewModel mViewModel;
     private RecipeIngredientsAdapter mAdapter;
     private RecyclerView mRecyclerView;
+    private TextView mEmptyMessage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState){
@@ -43,6 +45,7 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
 
         mAdapter = new RecipeIngredientsAdapter(getActivity(),
                 this);
+        mEmptyMessage = view.findViewById(R.id.recipe_ingredients_empty);
 
         mViewModel = ViewModelProviders.of(getActivity()).get(RecipeDetailViewModel.class);
         mViewModel.getCurrentRecipe().observe(this, new Observer<Recipe>() {
@@ -71,6 +74,12 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
             @Override
             public void onChanged(@Nullable HashMap<Ingredient, RecipeQuantity> ingredients) {
                 if (ingredients == null) return;
+                if (ingredients.size() > 0) {
+                    mEmptyMessage.setVisibility(View.GONE);
+                }
+                else {
+                    mEmptyMessage.setVisibility(View.VISIBLE);
+                }
 
                 mAdapter.setIngredients(ingredients);
             }
