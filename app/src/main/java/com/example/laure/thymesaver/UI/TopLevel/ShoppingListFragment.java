@@ -46,17 +46,17 @@ public class ShoppingListFragment extends AddButtonFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState){
         setHasOptionsMenu(true);
-        return inflater.inflate(R.layout.fragment_shopping_list, viewGroup, false);
+        return inflater.inflate(R.layout.recycler_view_layout, viewGroup, false);
     }
 
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mProgressBar = view.findViewById(R.id.shopping_list_progress);
-        mRecyclerView = view.findViewById(R.id.shopping_recycler_view);
+        mProgressBar = view.findViewById(R.id.recycler_view_progress);
+        mRecyclerView = view.findViewById(R.id.recycler_view);
         mViewModel = ViewModelProviders.of(this).get(ShoppingViewModel.class);
         mAdapter = new ShoppingListAdapter(getActivity(), this);
-        mEmptyMessage = view.findViewById(R.id.shopping_list_empty);
+        mEmptyMessage = view.findViewById(R.id.empty_message);
 
         setObserver();
 

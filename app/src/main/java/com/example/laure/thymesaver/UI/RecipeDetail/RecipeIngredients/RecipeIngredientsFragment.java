@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.laure.thymesaver.Adapters.IngredientAdapters.RecipeIngredientsAdapter;
@@ -33,10 +34,11 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
     private RecipeIngredientsAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private TextView mEmptyMessage;
+    private ProgressBar mProgressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState){
-        return inflater.inflate(R.layout.fragment_recipe_ingredients, viewGroup, false);
+        return inflater.inflate(R.layout.recycler_view_layout, viewGroup, false);
     }
 
     @Override
@@ -45,7 +47,8 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
 
         mAdapter = new RecipeIngredientsAdapter(getActivity(),
                 this);
-        mEmptyMessage = view.findViewById(R.id.recipe_ingredients_empty);
+        mEmptyMessage = view.findViewById(R.id.empty_message);
+        mProgressBar = view.findViewById(R.id.recycler_view_progress);
 
         mViewModel = ViewModelProviders.of(getActivity()).get(RecipeDetailViewModel.class);
         mViewModel.getCurrentRecipe().observe(this, new Observer<Recipe>() {
@@ -56,7 +59,7 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
             }
         });
 
-        mRecyclerView = view.findViewById(R.id.recipe_ingredients_recycler_view);
+        mRecyclerView = view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
 
@@ -82,6 +85,7 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
                 }
 
                 mAdapter.setIngredients(ingredients);
+                mProgressBar.setVisibility(View.GONE);
             }
         });
     }

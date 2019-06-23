@@ -37,16 +37,16 @@ public class MealPlannerFragment extends Fragment implements MealPlannerAdapter.
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState){
-        return inflater.inflate(R.layout.fragment_meal_planner, viewGroup, false);
+        return inflater.inflate(R.layout.recycler_view_layout, viewGroup, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mProgressBar = view.findViewById(R.id.meal_planner_progress);
+        mProgressBar = view.findViewById(R.id.recycler_view_progress);
         mViewModel = ViewModelProviders.of(getActivity()).get(MealPlannerViewModel.class);
-        mRecyclerView = view.findViewById(R.id.meal_planner_recycler_view);
+        mRecyclerView = view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new MealPlannerAdapter(getContext(), this);
         DragHelper swipeAndDragHelper = new DragHelper(mAdapter);

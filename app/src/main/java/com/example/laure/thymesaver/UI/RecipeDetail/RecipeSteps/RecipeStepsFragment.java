@@ -13,6 +13,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.laure.thymesaver.Adapters.DragHelper;
@@ -31,10 +32,11 @@ public class RecipeStepsFragment extends RecipeDetailFragment
     private List<String> mSteps;
     private RecipeDetailViewModel mViewModel;
     private TextView mEmptyMessage;
+    private ProgressBar mProgressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState){
-        return inflater.inflate(R.layout.fragment_recipe_steps, viewGroup, false);
+        return inflater.inflate(R.layout.recycler_view_layout, viewGroup, false);
     }
 
     @Override
@@ -42,9 +44,9 @@ public class RecipeStepsFragment extends RecipeDetailFragment
         super.onViewCreated(view, savedInstanceState);
 
         mViewModel = ViewModelProviders.of(getActivity()).get(RecipeDetailViewModel.class);
-        mEmptyMessage = view.findViewById(R.id.recipe_steps_empty);
-
-        mRecyclerView = view.findViewById(R.id.steps_recycler_view);
+        mEmptyMessage = view.findViewById(R.id.empty_message);
+        mProgressBar = view.findViewById(R.id.recycler_view_progress);
+        mRecyclerView = view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         mViewModel.getCurrentRecipe().observe(this, new Observer<Recipe>() {
@@ -61,6 +63,7 @@ public class RecipeStepsFragment extends RecipeDetailFragment
                     mEmptyMessage.setVisibility(View.VISIBLE);
                 }
                 mAdapter.setSteps(recipe.getSteps());
+                mProgressBar.setVisibility(View.GONE);
             }
         });
 

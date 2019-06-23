@@ -15,7 +15,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -45,18 +44,18 @@ public class CookbookFragment extends AddButtonFragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState){
-        return inflater.inflate(R.layout.fragment_cookbook, viewGroup, false);
+        return inflater.inflate(R.layout.recycler_view_layout, viewGroup, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mProgressBar = view.findViewById(R.id.cookbook_progress);
-        mRecyclerView = view.findViewById(R.id.recipes_recycler_view);
+        mProgressBar = view.findViewById(R.id.recycler_view_progress);
+        mRecyclerView = view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new RecipeAdapter(getActivity(), this);
         mViewModel = ViewModelProviders.of(this).get(CookBookViewModel.class);
-        mEmptyMessage = view.findViewById(R.id.cookbook_empty);
+        mEmptyMessage = view.findViewById(R.id.empty_message);
 
         setObserver();
 

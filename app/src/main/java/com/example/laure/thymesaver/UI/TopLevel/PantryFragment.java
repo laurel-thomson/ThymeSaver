@@ -35,17 +35,17 @@ public class PantryFragment extends AddButtonFragment implements PantryAdapter.I
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState){
-        return inflater.inflate(R.layout.fragment_pantry, viewGroup, false);
+        return inflater.inflate(R.layout.recycler_view_layout, viewGroup, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mProgressBar = view.findViewById(R.id.pantry_progress);
-        mRecyclerView = view.findViewById(R.id.pantry_recycler_view);
+        mProgressBar = view.findViewById(R.id.recycler_view_progress);
+        mRecyclerView = view.findViewById(R.id.recycler_view);
         mViewModel = ViewModelProviders.of(this).get(PantryViewModel.class);
         mAdapter = new PantryAdapter(getActivity(),this);
-        mEmptyMessage = view.findViewById(R.id.pantry_empty);
+        mEmptyMessage = view.findViewById(R.id.empty_message);
 
 
         setObserver();

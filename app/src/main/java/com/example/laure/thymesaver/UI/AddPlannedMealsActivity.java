@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.laure.thymesaver.Adapters.AddPlannedMealsAdapter;
 import com.example.laure.thymesaver.Models.Recipe;
@@ -24,19 +25,21 @@ public class AddPlannedMealsActivity extends AppCompatActivity {
     private CookBookViewModel mCookBookViewModel;
     private String mScheduledDay;
     public static String SCHEDULED_DAY = "Scheduled Day";
+    private TextView mEmptyMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_planned_meals);
-        final ProgressBar progressBar = findViewById(R.id.add_planned_meals_progress);
+        setContentView(R.layout.recycler_view_layout);
+        final ProgressBar progressBar = findViewById(R.id.recycler_view_progress);
+        mEmptyMessage = findViewById(R.id.empty_message);
 
         mScheduledDay = getIntent().getStringExtra(SCHEDULED_DAY);
 
         setUpActionBar();
 
         mCookBookViewModel = ViewModelProviders.of(this).get(CookBookViewModel.class);
-        RecyclerView rv = findViewById(R.id.planned_meals_recycler_view);
+        RecyclerView rv = findViewById(R.id.recycler_view);
         rv.setLayoutManager(new LinearLayoutManager(this));
 
 
@@ -45,7 +48,12 @@ public class AddPlannedMealsActivity extends AppCompatActivity {
         mCookBookViewModel.getAllRecipes().observe(this, new Observer<List<Recipe>>() {
             @Override
             public void onChanged(@Nullable List<Recipe> recipes) {
-                //update the cached copy of recipes in the adapter
+                if (recipes.size() > 0) {
+                    mEmptyMessage.setVisibility(View.GONE);
+                }
+                else {
+                    mEmptyMessage.setVisibility(View.VISIBLE);
+                }
                 mAdapter.setTotalRecipes(recipes);
                 progressBar.setVisibility(View.GONE);
             }
