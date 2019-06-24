@@ -42,8 +42,8 @@ public class RecipeDetailRepository implements IRecipeDetailRepository {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snap) {
-                Recipe recipe = snap.getValue(Recipe.class);
-                HashMap<String, RecipeQuantity> recipeIngredients = recipe.getRecipeIngredients();
+                Recipe subRecipe = snap.getValue(Recipe.class);
+                HashMap<String, RecipeQuantity> recipeIngredients = subRecipe.getRecipeIngredients();
                 for (String ingName : recipeIngredients.keySet()) {
                     RecipeQuantity oldQuantity = recipeIngredients.get(ingName);
                     RecipeQuantity quantity = new RecipeQuantity(
@@ -53,6 +53,11 @@ public class RecipeDetailRepository implements IRecipeDetailRepository {
                 }
                 parentRecipe.getSubRecipes().add(subRecipeName);
                 DatabaseReferences.getRecipeReference().child(parentRecipe.getName()).setValue(parentRecipe);
+
+                if (!subRecipe.isSubRecipe()) {
+                    subRecipe.setSubRecipe(true);
+                    DatabaseReferences.getRecipeReference().child(subRecipeName).child("subRecipe").setValue(true);
+                }
             }
 
             @Override
