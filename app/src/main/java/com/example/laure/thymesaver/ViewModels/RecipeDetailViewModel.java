@@ -44,11 +44,10 @@ public class RecipeDetailViewModel extends AndroidViewModel {
     }
 
     public void addSubRecipes(String[] subRecipes) {
-        Recipe parentRecipe = mCurrentRecipe.getValue();
+        Recipe parent = mCurrentRecipe.getValue();
         for (String s : subRecipes) {
-           parentRecipe.getSubRecipes().add(s);
+            mRepository.addSubRecipe(parent, s);
         }
-        updateRecipe();
     }
 
     public void deleteRecipeIngredient(String ingredientName) {

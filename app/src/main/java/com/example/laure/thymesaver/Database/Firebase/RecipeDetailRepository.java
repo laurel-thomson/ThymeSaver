@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class RecipeDetailRepository implements IRecipeDetailRepository {
     private static RecipeDetailRepository mSoleInstance;
@@ -34,6 +35,14 @@ public class RecipeDetailRepository implements IRecipeDetailRepository {
     @Override
     public void addOrUpdateRecipe(Recipe r) {
         DatabaseReferences.getRecipeReference().child(r.getName()).setValue(r);
+    }
+
+    @Override
+    public void addSubRecipe(Recipe parent, String childName) {
+        DatabaseReferences.getRecipeReference().child(childName).child("subRecipe").setValue(true);
+        List<String> subRecipes = parent.getSubRecipes();
+        subRecipes.add(childName);
+        DatabaseReferences.getRecipeReference().child(parent.getName()).child("subRecipes").setValue(subRecipes);
     }
 
     @Override
