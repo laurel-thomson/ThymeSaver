@@ -3,6 +3,7 @@ package com.example.laure.thymesaver.UI.RecipeDetail.RecipeIngredients;
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -60,7 +61,7 @@ public class RecipeIngredientsFragment extends AddButtonFragment
                 this);
         mEmptyMessage = view.findViewById(R.id.empty_message);
         mProgressBar = view.findViewById(R.id.recycler_view_progress);
-
+        mMenuFAB = getActivity().findViewById(R.id.recipe_detail_add_button);
         mViewModel = ViewModelProviders.of(getActivity()).get(RecipeDetailViewModel.class);
         mViewModel.getCurrentRecipe().observe(this, new Observer<Recipe>() {
             @Override
@@ -73,7 +74,6 @@ public class RecipeIngredientsFragment extends AddButtonFragment
         mRecyclerView = view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
-
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
                 DividerItemDecoration.VERTICAL));
 
@@ -133,7 +133,6 @@ public class RecipeIngredientsFragment extends AddButtonFragment
                 createNewSubRecipe();
             }
         });
-        mMenuFAB = getActivity().findViewById(R.id.recipe_detail_add_button);
         mFab1Layout = getActivity().findViewById(R.id.fab1_layout);
         mFab2Layout = getActivity().findViewById(R.id.fab2_layout);
         mFab3Layout = getActivity().findViewById(R.id.fab3_layout);
@@ -159,14 +158,20 @@ public class RecipeIngredientsFragment extends AddButtonFragment
 
     }
 
+    private void setMenuFABImage(int resource) {
+        mMenuFAB.setImageResource(resource);
+        //This is a workaround to make the image appear after hide has been called by the view pager
+        mMenuFAB.hide();
+        mMenuFAB.show();
+    }
+
     @SuppressLint("RestrictedApi")
     private void showFABMenu(){
         isFABOpen=true;
-        mMenuFAB.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_clear));
+        setMenuFABImage(R.drawable.ic_clear);
         mFab1Layout.setVisibility(View.VISIBLE);
         mFab2Layout.setVisibility(View.VISIBLE);
         mFab3Layout.setVisibility(View.VISIBLE);
-
         mFab1Layout.animate().translationY(-getResources().getDimension(R.dimen.first_fab));
         mFab2Layout.animate().translationY(-getResources().getDimension(R.dimen.second_fab));
         mFab3Layout.animate().translationY(-getResources().getDimension(R.dimen.third_fab));
@@ -175,7 +180,7 @@ public class RecipeIngredientsFragment extends AddButtonFragment
     @SuppressLint("RestrictedApi")
     private void closeFABMenu(){
         isFABOpen=false;
-        mMenuFAB.setImageDrawable(ContextCompat.getDrawable(getContext(), android.R.drawable.ic_input_add));
+        setMenuFABImage(android.R.drawable.ic_input_add);
         mFab1Layout.animate().translationY(0);
         mFab2Layout.animate().translationY(0);
         mFab3Layout.animate().translationY(0).withEndAction(new Runnable() {
