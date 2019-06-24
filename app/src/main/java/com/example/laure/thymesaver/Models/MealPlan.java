@@ -6,7 +6,6 @@ public class MealPlan {
     private String recipeName;
     private String scheduledDay;
     private String firebaseKey;
-    private boolean isCooked;
 
     public MealPlan() {
         //required empty constructor for Firebase
@@ -41,13 +40,5 @@ public class MealPlan {
 
     public void setFirebaseKey(String firebaseKey) {
         this.firebaseKey = firebaseKey;
-    }
-
-    public boolean isCooked() {
-        return isCooked;
-    }
-
-    public void setCooked(boolean cooked) {
-        isCooked = cooked;
     }
 }

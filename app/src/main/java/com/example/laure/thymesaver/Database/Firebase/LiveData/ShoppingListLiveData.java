@@ -55,129 +55,139 @@ public class ShoppingListLiveData extends LiveData<DataSnapshot> {
         }
     }
 
-    //Someday I need to fix this monstrosity...
-    public static HashMap<Ingredient, Integer> getShoppingList(DataSnapshot dataSnapshot) {
-        HashMap<Ingredient, Integer> shoppingList = new HashMap<>();
+    private static Recipe getRecipe(DataSnapshot snap) {
+        Recipe recipe = snap.getValue(Recipe.class);
+        recipe.setName(snap.getKey());
+        return recipe;
+    }
 
-        //get all the needed ingredients & quantities from the meal plans
-        HashMap<String, Integer> neededIngredients = new HashMap<>();
+    private static Ingredient getIngredient(DataSnapshot snap) {
+        Ingredient ing = snap.getValue(Ingredient.class);
+        ing.setName(snap.getKey());
+        return ing;
+    }
 
-        List<Ingredient> allIngredients = new ArrayList<>();
+    private static ShoppingListMod getMod(DataSnapshot snap) {
+        ShoppingListMod mod = snap.getValue(ShoppingListMod.class);
+        mod.setName(snap.getKey());
+        return mod;
+    }
 
-        for (DataSnapshot snap : dataSnapshot.child("mealplan").getChildren()) {
-            MealPlan mealPlan = snap.getValue(MealPlan.class);
-
-            if (mealPlan.isCooked()) continue;
-
-            String recipeName = mealPlan.getRecipeName();
-
-            for (DataSnapshot recipeSnap : dataSnapshot.child("recipes").getChildren()) {
-                if (recipeSnap.getKey().equals(recipeName)) {
-                    Recipe recipe = recipeSnap.getValue(Recipe.class);
-                    for (String ingName : recipe.getRecipeIngredients().keySet()) {
-                        if (!neededIngredients.containsKey(ingName)) {
-                            neededIngredients.put(
-                                    ingName,
-                                    (int) Math.ceil(recipe.getRecipeIngredients().get(ingName).getRecipeQuantity()));
-                        }
-                        else {
-                            neededIngredients.put(
-                                    ingName,
-                                    neededIngredients.get(ingName)
-                                            + (int) Math.ceil(recipe.getRecipeIngredients().get(ingName).getRecipeQuantity())
-                            );
-                        }
-                    }
-                }
+    private static void addIngredientQuantities(HashMap<String, Double> neededIngredients, Recipe recipe) {
+        for (String ingName : recipe.getRecipeIngredients().keySet()) {
+            double quantity = recipe.getRecipeIngredients().get(ingName).getRecipeQuantity();
+            if (neededIngredients.containsKey(ingName)) {
+                double oldQuantity = neededIngredients.get(ingName);
+                neededIngredients.put(ingName, oldQuantity + quantity);
+            }
+            else {
+                neededIngredients.put(ingName, quantity);
             }
         }
+    }
 
-        //get the shopping list mods
-        List<ShoppingListMod> mods = new ArrayList<>();
-        for (DataSnapshot snap : dataSnapshot.child("shoppinglistmods").getChildren()) {
-            ShoppingListMod mod = snap.getValue(ShoppingListMod.class);
-            mod.setName(snap.getKey());
-            mods.add(mod);
-        }
-
-        //find the matching ingredients in the pantry and subtract away from the
-        //needed ingredients list if there is quantity in the pantry
-        for (DataSnapshot snap : dataSnapshot.child("ingredients").getChildren()) {
-            Ingredient i = snap.getValue(Ingredient.class);
-            i.setName(snap.getKey());
-
-            allIngredients.add(i);
-
-            if (neededIngredients.containsKey(snap.getKey())) {
-                if (i.isBulk()) {
-                    if (i.getQuantity() != BulkIngredientState
-                            .convertEnumToInt(BulkIngredientState.IN_STOCK)) {
-                        shoppingList.put(i, 1);
-                    }
-                }
-                else {
-                    int neededQuantity = neededIngredients.get(i.getName());
-                    int pantryQuantity = i.getQuantity();
-                    if (neededQuantity > pantryQuantity) {
-                        shoppingList.put(i, neededQuantity - pantryQuantity);
-                    }
-                }
-            }
-
-            //look for a matching modification
-            for (ShoppingListMod mod : mods) {
-                if (mod.getName().equals(i.getName())) {
-                    switch (mod.getType()) {
-                        case CHANGE:
-                            if (shoppingList.containsKey(i)) {
-                                int updatedQuantity = shoppingList.get(i) + mod.getQuantity();
-                                if (updatedQuantity == 0) {
-                                    shoppingList.remove(i);
-                                }
-                                else if (updatedQuantity < 0)
-                                {
-                                    shoppingList.remove(i);
-                                    deleteModification(mod);
-                                }
-                                else {
-                                    shoppingList.put(i, updatedQuantity);
-                                }
-                            }
-                            else {
-                                if (mod.getQuantity() > 0) {
-                                    shoppingList.put(i, mod.getQuantity());
-                                }
-                                else {
-                                    deleteModification(mod);
-                                }
-                            }
-                            break;
-                        case ADD:
-                            shoppingList.put(i, 0);
-                            break;
-                        case DELETE:
-                            shoppingList.remove(i);
-                            break;
-                    }
-                    break;
-                }
+    private static void removeIngredientFromName(HashMap<Ingredient, Integer> shoppingList, String ingName) {
+        Ingredient matchingIng = null;
+        for (Ingredient ing : shoppingList.keySet()) {
+            if (ing.getName().equals(ingName)) {
+                matchingIng = ing;
+                break;
             }
         }
+        if (matchingIng != null) {
+            shoppingList.remove(matchingIng);
+        }
+    }
 
-        //Look for a modification that isn't in the Ingredients list (this would be a
-        //one time "ingredient" that a user adds to the shopping list but doesn't want stored
-        //in the pantry
-        for (ShoppingListMod mod : mods) {
-            if (mod.getType() == NEW) {
-                shoppingList.put(new Ingredient(mod.getName(), "Misc", false), mod.getQuantity());
+    private static Ingredient getIngredientFromList(HashMap<Ingredient, Integer> shoppingList, String ingName) {
+        for (Ingredient ing : shoppingList.keySet()) {
+            if (ing.getName().equals(ingName)) {
+                return ing;
             }
         }
-
-        return shoppingList;
+        return null;
     }
 
     private static void deleteModification(ShoppingListMod mod)
     {
         ShoppingRepository.getInstance().deleteShoppingModification(mod.getName());
+    }
+
+    public static HashMap<Ingredient, Integer> getShoppingList(DataSnapshot dataSnapshot) {
+        HashMap<Ingredient, Integer> shoppingList = new HashMap<>();
+        HashMap<String, Double> neededIngredients = new HashMap<>();
+
+        //get the needed ingredients from the meal plans
+        for (DataSnapshot snap : dataSnapshot.child("mealplan").getChildren()) {
+            String recipeName = snap.getValue(MealPlan.class).getRecipeName();
+            Recipe recipe = getRecipe(dataSnapshot.child("recipes").child(recipeName));
+
+            //get regular ingredients
+            addIngredientQuantities(neededIngredients, recipe);
+
+            //get subrecipe ingredients
+            for (String subRecipeName : recipe.getSubRecipes()) {
+                Recipe subRecipe = getRecipe(dataSnapshot.child("recipes").child(subRecipeName));
+                addIngredientQuantities(neededIngredients, subRecipe);
+            }
+        }
+
+        //Subtract away from the shopping list what we already have in the pantry
+        for (String ingName : neededIngredients.keySet()) {
+            Ingredient ingredient = getIngredient(dataSnapshot.child("ingredients").child(ingName));
+            if (!ingredient.isBulk()) {
+                int neededQuantity = (int) Math.ceil(neededIngredients.get(ingName));
+                int updatedNeededQuantity = neededQuantity - ingredient.getQuantity();
+                if (updatedNeededQuantity > 0) {
+                    shoppingList.put(ingredient, updatedNeededQuantity);
+                }
+            }
+            else if (ingredient.getQuantity() != BulkIngredientState.convertEnumToInt(BulkIngredientState.IN_STOCK)){
+                shoppingList.put(ingredient, 1);
+            }
+        }
+
+        //Add in the shopping list modifications
+        for (DataSnapshot snap : dataSnapshot.child("shoppinglistmods").getChildren()) {
+            ShoppingListMod mod = getMod(snap);
+            switch (mod.getType()) {
+                case ADD:
+                    Ingredient ing = getIngredient(dataSnapshot.child("ingredients").child(mod.getName()));
+                    shoppingList.put(ing, 0);
+                    break;
+                case DELETE:
+                    removeIngredientFromName(shoppingList, mod.getName());
+                    break;
+                case NEW:
+                    shoppingList.put(new Ingredient(mod.getName(), "Misc", false), mod.getQuantity());
+                    break;
+                case CHANGE:
+                    Ingredient matchingIng = getIngredientFromList(shoppingList, mod.getName());
+                    if (matchingIng != null) {
+                        int updatedQuantity = shoppingList.get(matchingIng) + mod.getQuantity();
+                        if (updatedQuantity == 0) {
+                            shoppingList.remove(matchingIng);
+                        }
+                        else if (updatedQuantity < 0)
+                        {
+                            shoppingList.remove(matchingIng);
+                            deleteModification(mod);
+                        }
+                        else {
+                            shoppingList.put(matchingIng, updatedQuantity);
+                        }
+                    }
+                    else {
+                        if (mod.getQuantity() > 0) {
+                            Ingredient i = getIngredient(dataSnapshot.child("ingredients").child(mod.getName()));
+                            shoppingList.put(i, mod.getQuantity());
+                        }
+                        else {
+                            deleteModification(mod);
+                        }
+                    }
+            }
+        }
+        return shoppingList;
     }
 }
