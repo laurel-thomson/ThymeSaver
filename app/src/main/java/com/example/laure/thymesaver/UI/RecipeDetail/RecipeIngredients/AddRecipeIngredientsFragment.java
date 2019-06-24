@@ -39,9 +39,11 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
     private TextInputLayout mQuantityLayout;
     private TextInputLayout mUnitLayout;
     private LinearLayout mDoneButton;
+    private String mSubRecipe;
     public static final String INGREDIENT_NAME = "ingredient name" ;
     public static final String INGREDIENT_UNIT = "ingredient unit";
     public static final String INGREDIENT_QUANTITY = "ingredient quantity";
+    public static final String INGREDIENT_SUBRECIPE = "ingredient subrecipe";
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -153,6 +155,7 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
                         RecipeQuantity recipeQuantity = new RecipeQuantity(
                                 mUnitET.getText().toString(),
                                 quantity);
+                        recipeQuantity.setSubRecipe(mSubRecipe);
                         mListener.onIngredientAdded(ingredient, recipeQuantity);
 
                         //clear text fields after ingredient added
@@ -168,6 +171,8 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
         String ingredientName = getArguments().getString(INGREDIENT_NAME);
         String ingredientUnit = getArguments().getString(INGREDIENT_UNIT);
         double ingredientQuantity = getArguments().getDouble(INGREDIENT_QUANTITY);
+        String subRecipe = getArguments().getString(INGREDIENT_SUBRECIPE);
+        mSubRecipe = subRecipe;
 
         mNameET.setText(ingredientName);
         mUnitET.setText(ingredientUnit);
