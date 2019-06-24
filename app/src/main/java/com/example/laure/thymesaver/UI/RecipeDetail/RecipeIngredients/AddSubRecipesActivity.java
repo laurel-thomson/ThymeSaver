@@ -42,7 +42,7 @@ public class AddSubRecipesActivity extends AppCompatActivity {
 
         mAdapter = new AddRecipesAdapter(this);
 
-        //TODO: need to only get recipes that don't contain subrecipes
+        //TODO: need to only get recipes that don't contain subrecipes & aren't already contained in this recipe
         mCookBookViewModel.getAllRecipes().observe(this, new Observer<List<Recipe>>() {
             @Override
             public void onChanged(@Nullable List<Recipe> recipes) {

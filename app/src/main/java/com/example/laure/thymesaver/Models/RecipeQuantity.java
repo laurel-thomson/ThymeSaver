@@ -6,6 +6,8 @@ public class RecipeQuantity {
     private String unit;
     private double recipeQuantity;
 
+    private String subRecipe;
+
     public RecipeQuantity() {}
 
     public RecipeQuantity(String unit, double recipeQuantity) {
@@ -27,5 +29,13 @@ public class RecipeQuantity {
 
     public void setUnit(String unit) {
         this.unit = unit;
+    }
+
+    public String getSubRecipe() {
+        return subRecipe;
+    }
+
+    public void setSubRecipe(String subRecipe) {
+        this.subRecipe = subRecipe;
     }
 }

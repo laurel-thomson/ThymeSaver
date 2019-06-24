@@ -14,4 +14,6 @@ public interface IRecipeDetailRepository {
     LiveData<Recipe> getRecipe(String recipeName);
 
     void addOrUpdateRecipe(Recipe r);
+
+    void addSubRecipe(Recipe parentRecipe, String subRecipeName);
 }

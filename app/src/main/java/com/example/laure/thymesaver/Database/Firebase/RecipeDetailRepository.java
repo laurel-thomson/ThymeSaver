@@ -3,6 +3,7 @@ package com.example.laure.thymesaver.Database.Firebase;
 import android.arch.core.util.Function;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Transformations;
+import android.support.annotation.NonNull;
 
 import com.example.laure.thymesaver.Database.Firebase.LiveData.RecipeIngredientsLiveData;
 import com.example.laure.thymesaver.Database.Firebase.LiveData.RecipeLiveData;
@@ -11,6 +12,8 @@ import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.Models.RecipeQuantity;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
@@ -31,6 +34,32 @@ public class RecipeDetailRepository implements IRecipeDetailRepository {
     @Override
     public void addOrUpdateRecipe(Recipe r) {
         DatabaseReferences.getRecipeReference().child(r.getName()).setValue(r);
+    }
+
+    @Override
+    public void addSubRecipe(Recipe parentRecipe, String subRecipeName) {
+        DatabaseReferences.getRecipeReference().child(subRecipeName)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snap) {
+                Recipe recipe = snap.getValue(Recipe.class);
+                HashMap<String, RecipeQuantity> recipeIngredients = recipe.getRecipeIngredients();
+                for (String ingName : recipeIngredients.keySet()) {
+                    RecipeQuantity oldQuantity = recipeIngredients.get(ingName);
+                    RecipeQuantity quantity = new RecipeQuantity(
+                            oldQuantity.getUnit(), oldQuantity.getRecipeQuantity());
+                    quantity.setSubRecipe(subRecipeName);
+                    parentRecipe.getRecipeIngredients().put(ingName, quantity);
+                }
+                parentRecipe.getSubRecipes().add(subRecipeName);
+                DatabaseReferences.getRecipeReference().child(parentRecipe.getName()).setValue(parentRecipe);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override

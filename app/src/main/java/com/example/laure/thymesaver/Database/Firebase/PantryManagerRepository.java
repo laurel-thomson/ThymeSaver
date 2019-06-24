@@ -35,8 +35,7 @@ public class PantryManagerRepository implements IPantryManagerRepository {
     }
 
     private PantryManagerRepository() {
-        //todo: figure out if we need to put this back
-        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     }
 
     @Override
