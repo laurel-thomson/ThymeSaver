@@ -92,7 +92,7 @@ public class ShoppingListFragment extends AddButtonFragment
     }
 
     @Override
-    void launchAddItemActivity() {
+    public void onFABClicked() {
         AddShoppingListItemFragment fragment = new AddShoppingListItemFragment();
         fragment.show(getActivity().getSupportFragmentManager(), "TAG");
     }

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="first_fab">90dp</dimen>
+    <dimen name="second_fab">180dp</dimen>
+    <dimen name="third_fab">270dp</dimen>
+</resources>

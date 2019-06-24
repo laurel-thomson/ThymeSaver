@@ -20,12 +20,12 @@ import com.example.laure.thymesaver.Adapters.DragHelper;
 import com.example.laure.thymesaver.Adapters.RecipeStepAdapter;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.R;
-import com.example.laure.thymesaver.UI.RecipeDetail.RecipeDetailFragment;
+import com.example.laure.thymesaver.UI.TopLevel.AddButtonFragment;
 import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 
 import java.util.List;
 
-public class RecipeStepsFragment extends RecipeDetailFragment
+public class RecipeStepsFragment extends AddButtonFragment
         implements RecipeStepListener {
     private RecipeStepAdapter mAdapter;
     private RecyclerView mRecyclerView;
@@ -91,7 +91,7 @@ public class RecipeStepsFragment extends RecipeDetailFragment
     }
 
     @Override
-    public void addNewItem() {
+    public void onFABClicked() {
         AddStepFragment fragment = new AddStepFragment();
         fragment.setListener(this);
         fragment.show(getActivity().getSupportFragmentManager(), "TAG");

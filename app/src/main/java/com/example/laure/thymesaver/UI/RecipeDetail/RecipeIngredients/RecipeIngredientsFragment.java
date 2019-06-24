@@ -1,10 +1,12 @@
 package com.example.laure.thymesaver.UI.RecipeDetail.RecipeIngredients;
 
+import android.annotation.SuppressLint;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -21,12 +24,12 @@ import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.Models.RecipeQuantity;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.AddIngredients.AddIngredientFragment;
-import com.example.laure.thymesaver.UI.RecipeDetail.RecipeDetailFragment;
+import com.example.laure.thymesaver.UI.TopLevel.AddButtonFragment;
 import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 
 import java.util.HashMap;
 
-public class RecipeIngredientsFragment extends RecipeDetailFragment
+public class RecipeIngredientsFragment extends AddButtonFragment
         implements AddRecipeIngredientListener{
 
     private RecipeDetailViewModel mViewModel;
@@ -34,6 +37,13 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
     private RecyclerView mRecyclerView;
     private TextView mEmptyMessage;
     private ProgressBar mProgressBar;
+    private boolean isFABOpen;
+    private FloatingActionButton mFab1;
+    private FloatingActionButton mFab2;
+    private FloatingActionButton mFab3;
+    private LinearLayout mFab1Layout;
+    private LinearLayout mFab2Layout;
+    private LinearLayout mFab3Layout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState){
@@ -96,11 +106,51 @@ public class RecipeIngredientsFragment extends RecipeDetailFragment
     }
 
     @Override
-    public void addNewItem() {
-        AddRecipeIngredientsFragment fragment = new AddRecipeIngredientsFragment();
-        fragment.setListener(this);
-        fragment.show(getActivity().getSupportFragmentManager(), "TAG");
+    public void onFABClicked() {
+        mFab1 = getActivity().findViewById(R.id.fab1);
+        mFab2 = getActivity().findViewById(R.id.fab2);
+        mFab3 = getActivity().findViewById(R.id.fab3);
+        mFab1Layout = getActivity().findViewById(R.id.fab1_layout);
+        mFab2Layout = getActivity().findViewById(R.id.fab2_layout);
+        mFab3Layout = getActivity().findViewById(R.id.fab3_layout);
+
+        if(!isFABOpen){
+            showFABMenu();
+        }else {
+            closeFABMenu();
+        }
+
+        //AddRecipeIngredientsFragment fragment = new AddRecipeIngredientsFragment();
+        //fragment.setListener(this);
+        //fragment.show(getActivity().getSupportFragmentManager(), "TAG");
     }
+
+        @SuppressLint("RestrictedApi")
+        private void showFABMenu(){
+            isFABOpen=true;
+            mFab1Layout.setVisibility(View.VISIBLE);
+            mFab2Layout.setVisibility(View.VISIBLE);
+            mFab3Layout.setVisibility(View.VISIBLE);
+
+            mFab1Layout.animate().translationY(-getResources().getDimension(R.dimen.first_fab));
+            mFab2Layout.animate().translationY(-getResources().getDimension(R.dimen.second_fab));
+            mFab3Layout.animate().translationY(-getResources().getDimension(R.dimen.third_fab));
+        }
+
+        @SuppressLint("RestrictedApi")
+        private void closeFABMenu(){
+            isFABOpen=false;
+            mFab1Layout.animate().translationY(0);
+            mFab2Layout.animate().translationY(0);
+            mFab3Layout.animate().translationY(0).withEndAction(new Runnable() {
+                @Override
+                public void run() {
+                    mFab1Layout.setVisibility(View.GONE);
+                    mFab2Layout.setVisibility(View.GONE);
+                    mFab3Layout.setVisibility(View.GONE);
+                }
+            });
+        }
 
     @Override
     public void onIngredientClicked(Ingredient i, RecipeQuantity quantity) {

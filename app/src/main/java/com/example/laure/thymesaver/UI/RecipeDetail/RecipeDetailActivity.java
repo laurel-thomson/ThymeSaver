@@ -19,6 +19,7 @@ import android.view.WindowManager;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.RecipeDetail.RecipeIngredients.RecipeIngredientsFragment;
 import com.example.laure.thymesaver.UI.RecipeDetail.RecipeSteps.RecipeStepsFragment;
+import com.example.laure.thymesaver.UI.TopLevel.AddButtonFragment;
 import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 
 public class RecipeDetailActivity extends AppCompatActivity{
@@ -82,9 +83,9 @@ public class RecipeDetailActivity extends AppCompatActivity{
         mFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RecipeDetailFragment currentFragment = (RecipeDetailFragment) mAdapter.getItem(
+                AddButtonFragment currentFragment = (AddButtonFragment) mAdapter.getItem(
                         mViewPager.getCurrentItem());
-                currentFragment.addNewItem();
+                currentFragment.onFABClicked();
             }
         });
     }

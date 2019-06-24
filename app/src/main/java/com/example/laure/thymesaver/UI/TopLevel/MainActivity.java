@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 AddButtonFragment currentFragment = (AddButtonFragment) mAdapter.getItem(
                         mViewPager.getCurrentItem());
-                currentFragment.launchAddItemActivity();
+                currentFragment.onFABClicked();
             }
         });
 

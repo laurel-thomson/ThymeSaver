@@ -114,7 +114,7 @@ public class PantryFragment extends AddButtonFragment implements PantryAdapter.I
     }
 
     @Override
-    void launchAddItemActivity() {
+    public void onFABClicked() {
         AddIngredientFragment fragment = new AddIngredientFragment();
         fragment.show(getActivity().getSupportFragmentManager(), "TAG");
     }

@@ -116,7 +116,7 @@ public class CookbookFragment extends AddButtonFragment
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    void launchAddItemActivity() {
+    public void onFABClicked() {
         final View view = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_name_dialog, null);
         final EditText nameET = view.findViewById(R.id.recipe_name_edittext);
         final AutoCompleteTextView categoryET = view.findViewById(R.id.recipe_category_edittext);
