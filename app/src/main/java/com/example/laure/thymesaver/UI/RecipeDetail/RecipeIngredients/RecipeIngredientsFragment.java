@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,9 +39,10 @@ public class RecipeIngredientsFragment extends AddButtonFragment
     private TextView mEmptyMessage;
     private ProgressBar mProgressBar;
     private boolean isFABOpen;
-    private FloatingActionButton mFab1;
-    private FloatingActionButton mFab2;
-    private FloatingActionButton mFab3;
+    private FloatingActionButton mAddIngredientFAB;
+    private FloatingActionButton mAddSubRecipeFAB;
+    private FloatingActionButton mCreateSubRecipeFAB;
+    private FloatingActionButton mMenuFAB;
     private LinearLayout mFab1Layout;
     private LinearLayout mFab2Layout;
     private LinearLayout mFab3Layout;
@@ -107,9 +109,31 @@ public class RecipeIngredientsFragment extends AddButtonFragment
 
     @Override
     public void onFABClicked() {
-        mFab1 = getActivity().findViewById(R.id.fab1);
-        mFab2 = getActivity().findViewById(R.id.fab2);
-        mFab3 = getActivity().findViewById(R.id.fab3);
+        mAddIngredientFAB = getActivity().findViewById(R.id.add_ingredient_fab);
+        mAddIngredientFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                closeFABMenu();
+                addIngredient();
+            }
+        });
+        mAddSubRecipeFAB = getActivity().findViewById(R.id.add_sub_recipe_fab);
+        mAddSubRecipeFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                closeFABMenu();
+                addSubRecipe();
+            }
+        });
+        mCreateSubRecipeFAB = getActivity().findViewById(R.id.create_sub_recipe_fab);
+        mCreateSubRecipeFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                closeFABMenu();
+                createNewSubRecipe();
+            }
+        });
+        mMenuFAB = getActivity().findViewById(R.id.recipe_detail_add_button);
         mFab1Layout = getActivity().findViewById(R.id.fab1_layout);
         mFab2Layout = getActivity().findViewById(R.id.fab2_layout);
         mFab3Layout = getActivity().findViewById(R.id.fab3_layout);
@@ -119,38 +143,49 @@ public class RecipeIngredientsFragment extends AddButtonFragment
         }else {
             closeFABMenu();
         }
-
-        //AddRecipeIngredientsFragment fragment = new AddRecipeIngredientsFragment();
-        //fragment.setListener(this);
-        //fragment.show(getActivity().getSupportFragmentManager(), "TAG");
     }
 
-        @SuppressLint("RestrictedApi")
-        private void showFABMenu(){
-            isFABOpen=true;
-            mFab1Layout.setVisibility(View.VISIBLE);
-            mFab2Layout.setVisibility(View.VISIBLE);
-            mFab3Layout.setVisibility(View.VISIBLE);
+    private void addIngredient() {
+        AddRecipeIngredientsFragment fragment = new AddRecipeIngredientsFragment();
+        fragment.setListener(this);
+        fragment.show(getActivity().getSupportFragmentManager(), "TAG");
+    }
 
-            mFab1Layout.animate().translationY(-getResources().getDimension(R.dimen.first_fab));
-            mFab2Layout.animate().translationY(-getResources().getDimension(R.dimen.second_fab));
-            mFab3Layout.animate().translationY(-getResources().getDimension(R.dimen.third_fab));
-        }
+    private void addSubRecipe() {
 
-        @SuppressLint("RestrictedApi")
-        private void closeFABMenu(){
-            isFABOpen=false;
-            mFab1Layout.animate().translationY(0);
-            mFab2Layout.animate().translationY(0);
-            mFab3Layout.animate().translationY(0).withEndAction(new Runnable() {
-                @Override
-                public void run() {
-                    mFab1Layout.setVisibility(View.GONE);
-                    mFab2Layout.setVisibility(View.GONE);
-                    mFab3Layout.setVisibility(View.GONE);
-                }
-            });
-        }
+    }
+
+    private void createNewSubRecipe() {
+
+    }
+
+    @SuppressLint("RestrictedApi")
+    private void showFABMenu(){
+        isFABOpen=true;
+        mMenuFAB.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_clear));
+        mFab1Layout.setVisibility(View.VISIBLE);
+        mFab2Layout.setVisibility(View.VISIBLE);
+        mFab3Layout.setVisibility(View.VISIBLE);
+
+        mFab1Layout.animate().translationY(-getResources().getDimension(R.dimen.first_fab));
+        mFab2Layout.animate().translationY(-getResources().getDimension(R.dimen.second_fab));
+        mFab3Layout.animate().translationY(-getResources().getDimension(R.dimen.third_fab));
+    }
+
+    @SuppressLint("RestrictedApi")
+    private void closeFABMenu(){
+        isFABOpen=false;
+        mMenuFAB.setImageDrawable(ContextCompat.getDrawable(getContext(), android.R.drawable.ic_input_add));
+        mFab1Layout.animate().translationY(0);
+        mFab2Layout.animate().translationY(0);
+        mFab3Layout.animate().translationY(0).withEndAction(new Runnable() {
+            @Override
+            public void run() {
+                mFab1Layout.setVisibility(View.GONE);
+                mFab2Layout.setVisibility(View.GONE);
+                mFab3Layout.setVisibility(View.GONE); }
+        });
+    }
 
     @Override
     public void onIngredientClicked(Ingredient i, RecipeQuantity quantity) {
