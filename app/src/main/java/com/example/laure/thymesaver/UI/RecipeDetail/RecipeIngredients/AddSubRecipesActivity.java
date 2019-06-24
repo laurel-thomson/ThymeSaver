@@ -42,6 +42,7 @@ public class AddSubRecipesActivity extends AppCompatActivity {
 
         mAdapter = new AddRecipesAdapter(this);
 
+        //TODO: need to only get recipes that don't contain subrecipes
         mCookBookViewModel.getAllRecipes().observe(this, new Observer<List<Recipe>>() {
             @Override
             public void onChanged(@Nullable List<Recipe> recipes) {
@@ -65,6 +66,7 @@ public class AddSubRecipesActivity extends AppCompatActivity {
         actionBar.setTitle("Add Sub-Recipes");
         actionBar.setHomeAsUpIndicator(R.drawable.ic_done);
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setBackgroundDrawable(getResources().getDrawable(R.color.colorAccent));
     }
 
     @Override

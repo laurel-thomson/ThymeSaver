@@ -82,6 +82,7 @@ public class PantryManagerActivity extends AppCompatActivity implements PantryLi
         actionBar.setTitle("Manage Pantries");
         actionBar.setHomeAsUpIndicator(R.drawable.ic_done);
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setBackgroundDrawable(getResources().getDrawable(R.color.colorAccent));
     }
 
     private void createJoinPantryPrompt(String error) {

@@ -61,6 +61,9 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
         if (getArguments() != null) {
             getIngredientArguments();
         }
+        else {
+            mQuantityET.setText("1");
+        }
 
         mPantryViewModel = ViewModelProviders.of(this).get(PantryViewModel.class);
         mPantryViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
@@ -154,7 +157,7 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
 
                         //clear text fields after ingredient added
                         mNameET.setText("");
-                        mQuantityET.setText("");
+                        mQuantityET.setText("1");
                         mUnitET.setText("");
                         mNameET.requestFocus();
                     }

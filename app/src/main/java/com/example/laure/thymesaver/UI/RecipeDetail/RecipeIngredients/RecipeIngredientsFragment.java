@@ -202,7 +202,7 @@ public class RecipeIngredientsFragment extends AddButtonFragment
         if (requestCode == ADD_SUB_RECIPES_REQUEST) {
             if (resultCode == RESULT_OK) {
                 String[] subRecipes = data.getStringArrayExtra(AddSubRecipesActivity.SUB_RECIPES);
-                //TODO: save the sub recipes with the view model
+                mViewModel.addSubRecipes(subRecipes);
             }
         }
     }

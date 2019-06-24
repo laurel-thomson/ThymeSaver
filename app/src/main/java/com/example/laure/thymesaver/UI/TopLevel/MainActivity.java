@@ -59,9 +59,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        mActionBar = getSupportActionBar();
-        mActionBar.setTitle("Meal Planner");
+        setUpActionBar();
         mJoinRequestCardView = findViewById(R.id.join_request_card);
 
         //if the user is already logged in, we don't want to launch the sign in flow
@@ -71,6 +69,12 @@ public class MainActivity extends AppCompatActivity {
         else {
             signIn();
         }
+    }
+
+    private void setUpActionBar() {
+        mActionBar = getSupportActionBar();
+        mActionBar.setTitle("Meal Planner");
+        mActionBar.setBackgroundDrawable(getResources().getDrawable(R.color.colorAccent));
     }
 
 

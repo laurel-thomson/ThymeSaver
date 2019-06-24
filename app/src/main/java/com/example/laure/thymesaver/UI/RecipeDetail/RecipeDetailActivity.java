@@ -94,6 +94,8 @@ public class RecipeDetailActivity extends AppCompatActivity{
         actionBar.setTitle(recipeName);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_done);
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setBackgroundDrawable(getResources().getDrawable(R.color.colorAccent));
+
     }
 
     @Override
