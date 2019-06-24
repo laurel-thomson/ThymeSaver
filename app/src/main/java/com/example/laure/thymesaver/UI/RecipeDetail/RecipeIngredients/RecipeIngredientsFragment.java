@@ -214,6 +214,7 @@ public class RecipeIngredientsFragment extends AddButtonFragment
         bundle.putString(AddRecipeIngredientsFragment.INGREDIENT_NAME, i.getName());
         bundle.putString(AddRecipeIngredientsFragment.INGREDIENT_UNIT, quantity.getUnit());
         bundle.putDouble(AddRecipeIngredientsFragment.INGREDIENT_QUANTITY, quantity.getRecipeQuantity());
+        bundle.putString(AddRecipeIngredientsFragment.INGREDIENT_SUBRECIPE, quantity.getSubRecipe());
 
         AddRecipeIngredientsFragment fragment = new AddRecipeIngredientsFragment();
         fragment.setArguments(bundle);
@@ -255,7 +256,12 @@ public class RecipeIngredientsFragment extends AddButtonFragment
     }
 
     @Override
-    public void onIngredientAdded(Ingredient ingredient, RecipeQuantity quantity) {
-        mViewModel.addRecipeIngredient(ingredient.getName(), quantity);
+    public void onIngredientAddedOrUpdated(Ingredient ingredient, RecipeQuantity quantity) {
+        if (quantity.getSubRecipe() == null) {
+            mViewModel.addRecipeIngredient(ingredient.getName(), quantity);
+        }
+        else {
+            mViewModel.updateSubRecipeIngredient(quantity.getSubRecipe(), ingredient, quantity);
+        }
     }
 }

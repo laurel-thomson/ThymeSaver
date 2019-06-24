@@ -46,6 +46,15 @@ public class RecipeDetailRepository implements IRecipeDetailRepository {
     }
 
     @Override
+    public void updateSubRecipeIngredient(String subRecipeName, Ingredient ingredient, RecipeQuantity quantity) {
+        DatabaseReferences.getRecipeReference()
+                .child(subRecipeName)
+                .child("recipeIngredients")
+                .child(ingredient.getName())
+                .setValue(quantity);
+    }
+
+    @Override
     public LiveData<HashMap<Ingredient, RecipeQuantity>> getRecipeIngredients(Recipe r) {
         mRecipe = r;
         return Transformations.map(

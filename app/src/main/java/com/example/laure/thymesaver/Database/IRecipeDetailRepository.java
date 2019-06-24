@@ -16,4 +16,6 @@ public interface IRecipeDetailRepository {
     void addOrUpdateRecipe(Recipe r);
 
     void addSubRecipe(Recipe parent, String childName);
+
+    void updateSubRecipeIngredient(String subRecipeName, Ingredient ingredient, RecipeQuantity quantity);
 }

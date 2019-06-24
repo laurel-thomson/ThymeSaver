@@ -15,7 +15,6 @@ import java.util.HashMap;
 public class RecipeDetailViewModel extends AndroidViewModel {
     private IRecipeDetailRepository mRepository;
     private LiveData<Recipe> mCurrentRecipe;
-    private LiveData<HashMap<Ingredient, RecipeQuantity>> mRecipeIngredients;
 
     public RecipeDetailViewModel(Application application) {
         super(application);
@@ -56,5 +55,8 @@ public class RecipeDetailViewModel extends AndroidViewModel {
         mRepository.addOrUpdateRecipe(recipe);
     }
 
+    public void updateSubRecipeIngredient(String subRecipeName, Ingredient ingredient, RecipeQuantity quantity) {
+        mRepository.updateSubRecipeIngredient(subRecipeName, ingredient, quantity);
+    }
 
 }

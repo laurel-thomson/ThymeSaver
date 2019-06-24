@@ -38,8 +38,34 @@ public class CookbookRepository implements ICookbookRepository {
     @Override
     public void deleteRecipe(Recipe r) {
         DatabaseReferences.getRecipeReference().child(r.getName()).removeValue();
-
         deleteAssociatedMealPlans(r.getName());
+        if (r.isSubRecipe()) {
+            removeFromParentRecipes(r.getName());
+        }
+    }
+
+    private void removeFromParentRecipes(String subRecipeName) {
+        DatabaseReferences.getRecipeReference().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                    Recipe recipe = snap.getValue(Recipe.class);
+                    recipe.setName(snap.getKey());
+                    if (recipe.getSubRecipes().contains(subRecipeName)) {
+                        recipe.getSubRecipes().remove(subRecipeName);
+                        DatabaseReferences.getRecipeReference()
+                                .child(recipe.getName())
+                                .child("subRecipes")
+                                .setValue(recipe.getSubRecipes());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void addMealPlans(List<MealPlan> mealPlans) {
