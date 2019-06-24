@@ -20,8 +20,8 @@
         </activity>
         <activity android:name=".UI.RecipeDetail.RecipeDetailActivity" />
         <activity android:name=".UI.AddPlannedMealsActivity" />
-        <activity android:name=".UI.AddIngredients.AddShoppingListItemsActivity" />
-        <activity android:name=".UI.Settings.PantryManagerActivity"></activity>
+        <activity android:name=".UI.Settings.PantryManagerActivity"/>
+        <activity android:name=".UI.RecipeDetail.RecipeIngredients.AddSubRecipesActivity"/>
     </application>
 
 </manifest>

@@ -1,11 +1,13 @@
-package com.example.laure.thymesaver.UI;
+package com.example.laure.thymesaver.UI.RecipeDetail.RecipeIngredients;
 
+import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
@@ -20,11 +22,10 @@ import com.example.laure.thymesaver.ViewModels.CookBookViewModel;
 
 import java.util.List;
 
-public class AddPlannedMealsActivity extends AppCompatActivity {
+public class AddSubRecipesActivity extends AppCompatActivity {
+    public static final String SUB_RECIPES = "Sub recipes";
     private AddRecipesAdapter mAdapter;
     private CookBookViewModel mCookBookViewModel;
-    private String mScheduledDay;
-    public static String SCHEDULED_DAY = "Scheduled Day";
     private TextView mEmptyMessage;
 
     @Override
@@ -33,15 +34,11 @@ public class AddPlannedMealsActivity extends AppCompatActivity {
         setContentView(R.layout.recycler_view_layout);
         final ProgressBar progressBar = findViewById(R.id.recycler_view_progress);
         mEmptyMessage = findViewById(R.id.empty_message);
-
-        mScheduledDay = getIntent().getStringExtra(SCHEDULED_DAY);
-
         setUpActionBar();
 
         mCookBookViewModel = ViewModelProviders.of(this).get(CookBookViewModel.class);
         RecyclerView rv = findViewById(R.id.recycler_view);
         rv.setLayoutManager(new LinearLayoutManager(this));
-
 
         mAdapter = new AddRecipesAdapter(this);
 
@@ -65,7 +62,7 @@ public class AddPlannedMealsActivity extends AppCompatActivity {
 
     private void setUpActionBar() {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Add Scheduled Meals");
+        actionBar.setTitle("Add Sub-Recipes");
         actionBar.setHomeAsUpIndicator(R.drawable.ic_done);
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
@@ -74,20 +71,17 @@ public class AddPlannedMealsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                onBackPressed();
+                addSubRecipes();
                 return true;
         }
         return false;
     }
 
-    @Override
-    public void onBackPressed() {
-        addMealPlans();
-        super.onBackPressed();
-    }
-
-    private void addMealPlans() {
-        List<Recipe> plannedRecipes = mAdapter.getPlannedRecipes();
-        mCookBookViewModel.addRecipesToMealPlan(plannedRecipes, mScheduledDay);
+    private void addSubRecipes() {
+        String[] subRecipes = mAdapter.getRecipesArray();
+        Intent intent = new Intent();
+        intent.putExtra(SUB_RECIPES, subRecipes);
+        setResult(Activity.RESULT_OK, intent);
+        finish();
     }
 }

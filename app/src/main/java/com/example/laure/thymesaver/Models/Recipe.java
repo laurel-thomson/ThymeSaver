@@ -12,9 +12,21 @@ public class Recipe {
     //for Firebase, keys need to be strings
     private HashMap<String, RecipeQuantity> recipeIngredients = new HashMap<>();
 
+    public List<String> getSubRecipes() {
+        return subRecipes;
+    }
+
+    public void setSubRecipes(List<String> subRecipes) {
+        this.subRecipes = subRecipes;
+    }
+
+    private List<String> subRecipes = new ArrayList<>();
+
     private List<String> steps = new ArrayList<>();
 
     private String category;
+
+    private boolean isSubRecipe;
 
     public Recipe() {
         //required empty constructor for Firebase
@@ -55,12 +67,19 @@ public class Recipe {
         steps.add(step);
     }
 
-
     public String getCategory() {
         return category;
     }
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public boolean isSubRecipe() {
+        return isSubRecipe;
+    }
+
+    public void setSubRecipe(boolean subRecipe) {
+        isSubRecipe = subRecipe;
     }
 }

@@ -35,15 +35,13 @@ public class RecipeDetailActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
 
-        setUpActionBar();
-
         //prevents the bottom window dialog from pushing the FAB up
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         mViewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
         String recipeName = getIntent().getStringExtra(CURRENT_RECIPE_NAME);
         mViewModel.setCurrentRecipe(recipeName);
-
+        setUpActionBar(recipeName);
         mViewPager = findViewById(R.id.pager);
 
         //prevents the view pager from recreating the Recipe Steps fragment, which would remove
@@ -90,10 +88,10 @@ public class RecipeDetailActivity extends AppCompatActivity{
         });
     }
 
-    private void setUpActionBar() {
+    private void setUpActionBar(String recipeName) {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setElevation(0);
-        actionBar.setTitle("Recipe Details");
+        actionBar.setTitle(recipeName);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_done);
         actionBar.setDisplayHomeAsUpEnabled(true);
     }

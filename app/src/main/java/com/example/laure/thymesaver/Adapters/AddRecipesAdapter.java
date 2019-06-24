@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 
-public class AddPlannedMealsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class AddRecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<Recipe> mTotalRecipes = new ArrayList<>();
     private List<Recipe> mPlannedRecipes = new ArrayList<>();
     private final LayoutInflater mInflater;
@@ -29,7 +29,7 @@ public class AddPlannedMealsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private static final int RECIPE_TYPE = 1;
     private static final int HEADER_TYPE = 2;
 
-    public AddPlannedMealsAdapter(Context context) {
+    public AddRecipesAdapter(Context context) {
         mContext = context;
         mInflater = LayoutInflater.from(context);
     }
@@ -84,6 +84,14 @@ public class AddPlannedMealsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     public List<Recipe> getPlannedRecipes() {
         return mPlannedRecipes;
+    }
+
+    public String[] getRecipesArray() {
+        String[] arr = new String[mPlannedRecipes.size()];
+        for (int i = 0; i < mPlannedRecipes.size(); i++) {
+            arr[i] = mPlannedRecipes.get(i).getName();
+        }
+        return arr;
     }
 
     @NonNull

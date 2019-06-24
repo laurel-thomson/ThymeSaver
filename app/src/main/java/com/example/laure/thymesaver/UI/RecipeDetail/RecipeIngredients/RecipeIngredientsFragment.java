@@ -3,6 +3,7 @@ package com.example.laure.thymesaver.UI.RecipeDetail.RecipeIngredients;
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -31,9 +32,12 @@ import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 
 import java.util.HashMap;
 
+import static android.app.Activity.RESULT_OK;
+
 public class RecipeIngredientsFragment extends AddButtonFragment
         implements AddRecipeIngredientListener{
 
+    private static final int ADD_SUB_RECIPES_REQUEST = 1000;
     private RecipeDetailViewModel mViewModel;
     private RecipeIngredientsAdapter mAdapter;
     private RecyclerView mRecyclerView;
@@ -151,7 +155,8 @@ public class RecipeIngredientsFragment extends AddButtonFragment
     }
 
     private void addSubRecipe() {
-
+        Intent intent = new Intent(getActivity(), AddSubRecipesActivity.class);
+        startActivityForResult(intent, ADD_SUB_RECIPES_REQUEST);
     }
 
     private void createNewSubRecipe() {
@@ -190,6 +195,16 @@ public class RecipeIngredientsFragment extends AddButtonFragment
                 mFab2Layout.setVisibility(View.GONE);
                 mFab3Layout.setVisibility(View.GONE); }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ADD_SUB_RECIPES_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                String[] subRecipes = data.getStringArrayExtra(AddSubRecipesActivity.SUB_RECIPES);
+                //TODO: save the sub recipes with the view model
+            }
+        }
     }
 
     @Override
