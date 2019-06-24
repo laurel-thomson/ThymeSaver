@@ -31,6 +31,7 @@ import com.example.laure.thymesaver.UI.TopLevel.AddButtonFragment;
 import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 
 import java.util.HashMap;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -71,7 +72,7 @@ public class RecipeIngredientsFragment extends AddButtonFragment
             @Override
             public void onChanged(@Nullable Recipe recipe) {
                 if (recipe == null) return;
-                observeRecipeIngredients();
+                observeRecipeIngredients(recipe.getSubRecipes());
             }
         });
 
@@ -87,7 +88,7 @@ public class RecipeIngredientsFragment extends AddButtonFragment
         }
     }
 
-    private void observeRecipeIngredients() {
+    private void observeRecipeIngredients(List<String> subRecipes) {
         mViewModel.getRecipeIngredients().observe(this, new Observer<HashMap<Ingredient, RecipeQuantity>>() {
             @Override
             public void onChanged(@Nullable HashMap<Ingredient, RecipeQuantity> ingredients) {
@@ -99,7 +100,7 @@ public class RecipeIngredientsFragment extends AddButtonFragment
                     mEmptyMessage.setVisibility(View.VISIBLE);
                 }
 
-                mAdapter.setIngredients(ingredients);
+                mAdapter.setIngredients(ingredients, subRecipes);
                 mProgressBar.setVisibility(View.GONE);
             }
         });

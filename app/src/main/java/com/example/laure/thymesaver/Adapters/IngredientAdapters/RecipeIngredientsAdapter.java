@@ -43,16 +43,20 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecyclerView.
         mListener = listener;
     }
 
-    public void setIngredients(HashMap<Ingredient, RecipeQuantity> recipeIngredients) {
+    public void setIngredients(HashMap<Ingredient, RecipeQuantity> recipeIngredients, List<String> subRecipes) {
         mRecipeQuantities.clear();
         mIngredients.clear();
 
         //generate category headers
         CharSequence[] categories = mContext.getResources().getStringArray(R.array.ingredient_categories);
-        Ingredient[] headers = new Ingredient[categories.length];
-        for (int i = 0; i < categories.length; i++) {
-            headers[i] = new Ingredient("", categories[i].toString(), false);
+        Ingredient[] headers = new Ingredient[categories.length + subRecipes.size()];
+        int pos;
+        for (pos = 0; pos < categories.length; pos++) {
+            headers[pos] = new Ingredient("", categories[pos].toString(), false);
         }
+        for (int i = 0; i < subRecipes.size(); i++, pos++) {
+            headers[pos] = new Ingredient("", subRecipes.get(i), false);
+         }
 
         //add the headers in to the list
         for (Ingredient i : headers) {
@@ -69,7 +73,14 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecyclerView.
             Ingredient ingredient = (Ingredient) object;
             int position = 0;
             for (int i = 0; i < headers.length; i++) {
-                if (headers[i].getCategory().equals(ingredient.getCategory())) {
+                String subRecipe = recipeIngredients.get(ingredient).getSubRecipe();
+                if (subRecipe != null) {
+                    if (headers[i].getCategory().equals(subRecipe)) {
+                        position = mIngredients.indexOf(headers[i]);
+                        break;
+                    }
+                }
+                else if (headers[i].getCategory().equals(ingredient.getCategory())) {
                     position = mIngredients.indexOf(headers[i]);
                     break;
                 }
