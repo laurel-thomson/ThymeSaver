@@ -214,7 +214,6 @@ public class RecipeIngredientsFragment extends AddButtonFragment
         bundle.putString(AddRecipeIngredientsFragment.INGREDIENT_NAME, i.getName());
         bundle.putString(AddRecipeIngredientsFragment.INGREDIENT_UNIT, quantity.getUnit());
         bundle.putDouble(AddRecipeIngredientsFragment.INGREDIENT_QUANTITY, quantity.getRecipeQuantity());
-        bundle.putString(AddRecipeIngredientsFragment.INGREDIENT_SUBRECIPE, quantity.getSubRecipe());
 
         AddRecipeIngredientsFragment fragment = new AddRecipeIngredientsFragment();
         fragment.setArguments(bundle);

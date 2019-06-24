@@ -37,37 +37,6 @@ public class RecipeDetailRepository implements IRecipeDetailRepository {
     }
 
     @Override
-    public void addSubRecipe(Recipe parentRecipe, String subRecipeName) {
-        DatabaseReferences.getRecipeReference().child(subRecipeName)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snap) {
-                Recipe subRecipe = snap.getValue(Recipe.class);
-                HashMap<String, RecipeQuantity> recipeIngredients = subRecipe.getRecipeIngredients();
-                for (String ingName : recipeIngredients.keySet()) {
-                    RecipeQuantity oldQuantity = recipeIngredients.get(ingName);
-                    RecipeQuantity quantity = new RecipeQuantity(
-                            oldQuantity.getUnit(), oldQuantity.getRecipeQuantity());
-                    quantity.setSubRecipe(subRecipeName);
-                    parentRecipe.getRecipeIngredients().put(ingName, quantity);
-                }
-                parentRecipe.getSubRecipes().add(subRecipeName);
-                DatabaseReferences.getRecipeReference().child(parentRecipe.getName()).setValue(parentRecipe);
-
-                if (!subRecipe.isSubRecipe()) {
-                    subRecipe.setSubRecipe(true);
-                    DatabaseReferences.getRecipeReference().child(subRecipeName).child("subRecipe").setValue(true);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    @Override
     public LiveData<HashMap<Ingredient, RecipeQuantity>> getRecipeIngredients(Recipe r) {
         mRecipe = r;
         return Transformations.map(

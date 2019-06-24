@@ -1,6 +1,7 @@
 package com.example.laure.thymesaver.Database.Firebase.LiveData;
 
 import android.arch.lifecycle.LiveData;
+import android.provider.ContactsContract;
 
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.Recipe;
@@ -11,6 +12,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class RecipeIngredientsLiveData extends LiveData<DataSnapshot> {
     private HashMap<Ingredient, RecipeQuantity> mRecipeIngredients = new HashMap<>();
@@ -51,24 +53,28 @@ public class RecipeIngredientsLiveData extends LiveData<DataSnapshot> {
 
     public static HashMap<Ingredient, RecipeQuantity> getRecipeIngredients(DataSnapshot dataSnapshot, Recipe recipe) {
         if (recipe == null) return null;
-
         HashMap<Ingredient, RecipeQuantity> recipeIngredients = new HashMap<>();
-        HashMap<String, RecipeQuantity> neededIngredients = new HashMap<>();
 
-        for (DataSnapshot snap : dataSnapshot.child("recipes")
-                .child(recipe.getName())
-                .child("recipeIngredients")
-                .getChildren()) {
-            RecipeQuantity quantity = snap.getValue(RecipeQuantity.class);
-            String ingName = snap.getKey();
-            neededIngredients.put(ingName, quantity);
+        //add the regular ingredients in
+        for (String ingName : recipe.getRecipeIngredients().keySet()) {
+            DataSnapshot snap = dataSnapshot.child("ingredients").child(ingName);
+            Ingredient ing = snap.getValue(Ingredient.class);
+            ing.setName(snap.getKey());
+            recipeIngredients.put(ing, recipe.getRecipeIngredients().get(ingName));
         }
 
-        for (DataSnapshot snap : dataSnapshot.child("ingredients").getChildren()) {
-            if (neededIngredients.containsKey(snap.getKey())) {
-                Ingredient i = snap.getValue(Ingredient.class);
-                i.setName(snap.getKey());
-                recipeIngredients.put(i, neededIngredients.get(i.getName()));
+        //add the sub recipe ingredients in
+        for (String subRecipeName : recipe.getSubRecipes()) {
+            DataSnapshot snap = dataSnapshot.child("recipes").child(subRecipeName);
+            Recipe subRecipe = snap.getValue(Recipe.class);
+            subRecipe.setName(snap.getKey());
+            for (String ingName : subRecipe.getRecipeIngredients().keySet()) {
+                DataSnapshot snap2 = dataSnapshot.child("ingredients").child(ingName);
+                Ingredient ing = snap2.getValue(Ingredient.class);
+                ing.setName(snap2.getKey());
+                RecipeQuantity quantity = subRecipe.getRecipeIngredients().get(ingName);
+                quantity.setSubRecipe(subRecipeName);
+                recipeIngredients.put(ing, quantity);
             }
         }
         return recipeIngredients;
