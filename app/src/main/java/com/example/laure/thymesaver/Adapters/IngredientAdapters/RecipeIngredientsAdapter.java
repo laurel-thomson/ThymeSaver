@@ -164,10 +164,19 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecyclerView.
             if (isIngredientCategory(sectionTitle)) {
                 headerViewHolder.itemView.setBackground(mContext.getResources().getDrawable(R.drawable.bottom_border));
                 headerViewHolder.sectionTitle.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
+                headerViewHolder.headerButton.setVisibility(View.GONE);
+                headerViewHolder.headerButton.setOnClickListener(null);
             }
             else {
                 headerViewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
                 headerViewHolder.sectionTitle.setTextColor(mContext.getResources().getColor(R.color.colorTextIcon));
+                headerViewHolder.headerButton.setVisibility(View.VISIBLE);
+                headerViewHolder.headerButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mListener.onSubRecipeDeleteClicked(sectionTitle);
+                    }
+                });
             }
         }
     }
@@ -272,10 +281,14 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecyclerView.
 
     class SectionHeaderViewHolder extends RecyclerView.ViewHolder {
         TextView sectionTitle;
+        Button headerButton;
 
         SectionHeaderViewHolder(View itemView) {
             super(itemView);
             sectionTitle = itemView.findViewById(R.id.header_text);
+            headerButton = itemView.findViewById(R.id.header_button);
+            headerButton.setBackgroundResource(R.drawable.ic_clear);
+
         }
     }
 }

@@ -46,6 +46,35 @@ public class RecipeDetailRepository implements IRecipeDetailRepository {
     }
 
     @Override
+    public void removeSubRecipe(Recipe parent, String childName) {
+        List<String> subRecipes = parent.getSubRecipes();
+        subRecipes.remove(childName);
+        DatabaseReferences.getRecipeReference().child(parent.getName()).child("subRecipes").setValue(subRecipes);
+        checkIfIsStillSubRecipe(childName);
+    }
+
+    private void checkIfIsStillSubRecipe(String subRecipe) {
+        DatabaseReferences.getRecipeReference().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                    Recipe recipe = snap.getValue(Recipe.class);
+                    recipe.setName(snap.getKey());
+                    if (recipe.getSubRecipes().contains(subRecipe)) {
+                        return;
+                    }
+                }
+                DatabaseReferences.getRecipeReference().child(subRecipe).child("subRecipe").setValue(false);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    @Override
     public void updateSubRecipeIngredient(String subRecipeName, Ingredient ingredient, RecipeQuantity quantity) {
         DatabaseReferences.getRecipeReference()
                 .child(subRecipeName)

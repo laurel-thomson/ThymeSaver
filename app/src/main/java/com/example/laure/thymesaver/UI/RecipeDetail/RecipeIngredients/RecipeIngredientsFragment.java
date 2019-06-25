@@ -3,6 +3,7 @@ package com.example.laure.thymesaver.UI.RecipeDetail.RecipeIngredients;
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -232,6 +234,23 @@ public class RecipeIngredientsFragment extends AddButtonFragment
         AddIngredientFragment fragment = new AddIngredientFragment();
         fragment.setArguments(bundle);
         fragment.show(getActivity().getSupportFragmentManager(), "TAG");
+    }
+
+    @Override
+    public void onSubRecipeDeleteClicked(String subrecipeName) {
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Remove " + subrecipeName + " from this recipe?")
+                .setMessage("Are you sure you want to remove this subrecipe?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mViewModel.removeSubRecipe(subrecipeName);
+                    }
+
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 
     @Override

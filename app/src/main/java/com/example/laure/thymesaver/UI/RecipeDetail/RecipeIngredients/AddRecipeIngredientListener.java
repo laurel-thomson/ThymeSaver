@@ -8,4 +8,5 @@ public interface AddRecipeIngredientListener {
     void onDeleteClicked(Ingredient i, RecipeQuantity quantity);
     void onIngredientClicked(Ingredient i, RecipeQuantity quantity);
     void onIngredientLongClicked(Ingredient i);
+    void onSubRecipeDeleteClicked(String subrecipeName);
 }
