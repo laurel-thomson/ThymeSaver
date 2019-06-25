@@ -17,12 +17,12 @@ import java.util.List;
 public class RecipeIngredientsLiveData extends LiveData<DataSnapshot> {
     private HashMap<Ingredient, RecipeQuantity> mRecipeIngredients = new HashMap<>();
     private final Query mQuery;
-    private final Recipe mRecipe;
+    private final String mRecipeName;
     private final RecipeIngredientsLiveData.MyEventListener mListener = new RecipeIngredientsLiveData.MyEventListener();
 
-    public RecipeIngredientsLiveData(Query q, Recipe recipe) {
+    public RecipeIngredientsLiveData(Query q, String recipeName) {
         mQuery = q;
-        mRecipe = recipe;
+        mRecipeName = recipeName;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class RecipeIngredientsLiveData extends LiveData<DataSnapshot> {
         public void onDataChange(DataSnapshot dataSnapshot) {
             if(dataSnapshot != null){
                     setValue(dataSnapshot);
-                    mRecipeIngredients = getRecipeIngredients(dataSnapshot, mRecipe);
+                    mRecipeIngredients = getRecipeIngredients(dataSnapshot, mRecipeName);
             }
         }
 
@@ -51,13 +51,15 @@ public class RecipeIngredientsLiveData extends LiveData<DataSnapshot> {
         }
     }
 
-    public static HashMap<Ingredient, RecipeQuantity> getRecipeIngredients(DataSnapshot dataSnapshot, Recipe recipe) {
-        if (recipe == null) return null;
-        HashMap<Ingredient, RecipeQuantity> recipeIngredients = new HashMap<>();
+    public static HashMap<Ingredient, RecipeQuantity> getRecipeIngredients(DataSnapshot dataSnapshot, String recipeName) {
+        DataSnapshot snap = dataSnapshot.child("recipes").child(recipeName);
+        Recipe recipe = snap.getValue(Recipe.class);
+        recipe.setName(snap.getKey());
 
+        HashMap<Ingredient, RecipeQuantity> recipeIngredients = new HashMap<>();
         //add the regular ingredients in
         for (String ingName : recipe.getRecipeIngredients().keySet()) {
-            DataSnapshot snap = dataSnapshot.child("ingredients").child(ingName);
+            snap = dataSnapshot.child("ingredients").child(ingName);
             Ingredient ing = snap.getValue(Ingredient.class);
             ing.setName(snap.getKey());
             recipeIngredients.put(ing, recipe.getRecipeIngredients().get(ingName));
@@ -65,7 +67,7 @@ public class RecipeIngredientsLiveData extends LiveData<DataSnapshot> {
 
         //add the sub recipe ingredients in
         for (String subRecipeName : recipe.getSubRecipes()) {
-            DataSnapshot snap = dataSnapshot.child("recipes").child(subRecipeName);
+            snap = dataSnapshot.child("recipes").child(subRecipeName);
             Recipe subRecipe = snap.getValue(Recipe.class);
             subRecipe.setName(snap.getKey());
             for (String ingName : subRecipe.getRecipeIngredients().keySet()) {

@@ -1,6 +1,7 @@
 package com.example.laure.thymesaver.UI.RecipeDetail.RecipeIngredients;
 
 import android.annotation.SuppressLint;
+import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -72,18 +73,21 @@ public class RecipeIngredientsFragment extends AddButtonFragment
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         mAdapter = new RecipeIngredientsAdapter(getActivity(),
                 this);
         mEmptyMessage = view.findViewById(R.id.empty_message);
         mProgressBar = view.findViewById(R.id.recycler_view_progress);
         mMenuFAB = getActivity().findViewById(R.id.recipe_detail_add_button);
         mViewModel = ViewModelProviders.of(getActivity()).get(RecipeDetailViewModel.class);
-        mViewModel.getCurrentRecipe().observe(this, new Observer<Recipe>() {
+        mViewModel.getCurrentRecipe(new ValueCallback<Recipe>() {
             @Override
-            public void onChanged(@Nullable Recipe recipe) {
-                if (recipe == null) return;
+            public void onSuccess(Recipe recipe) {
                 observeRecipeIngredients(recipe.getSubRecipes());
+            }
+
+            @Override
+            public void onError(String error) {
+
             }
         });
 
@@ -113,8 +117,17 @@ public class RecipeIngredientsFragment extends AddButtonFragment
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (mViewModel.getRecipeIngredients().hasObservers()) {
+            mViewModel.getRecipeIngredients().removeObservers(this);
+            observeRecipeIngredients(mViewModel.getCurrentRecipe().getSubRecipes());
+        }
+    }
+
+    @Override
     public void onFABClicked() {
-        if (mViewModel.getCurrentRecipe().getValue().isSubRecipe()) {
+        if (mViewModel.getCurrentRecipe().isSubRecipe()) {
             addIngredient();
             return;
         }
@@ -162,7 +175,7 @@ public class RecipeIngredientsFragment extends AddButtonFragment
 
     private void addSubRecipe() {
         Intent intent = new Intent(getActivity(), AddSubRecipesActivity.class);
-        intent.putExtra(AddSubRecipesActivity.PARENT_RECIPE, mViewModel.getCurrentRecipe().getValue().getName());
+        intent.putExtra(AddSubRecipesActivity.PARENT_RECIPE, mViewModel.getCurrentRecipe().getName());
         startActivityForResult(intent, ADD_SUB_RECIPES_REQUEST);
     }
 
@@ -332,7 +345,7 @@ public class RecipeIngredientsFragment extends AddButtonFragment
     @Override
     public void onIngredientChecked(String parentRecipe, String ingName, RecipeQuantity quantity) {
         mViewModel.addUpdateRecipeIngredient(
-                parentRecipe != null ? parentRecipe : mViewModel.getCurrentRecipe().getValue().getName(),
+                parentRecipe != null ? parentRecipe : mViewModel.getCurrentRecipe().getName(),
                 ingName,
                 quantity);
     }
@@ -382,7 +395,7 @@ public class RecipeIngredientsFragment extends AddButtonFragment
             recipeName = quantity.getSubRecipe();
         }
         else {
-            recipeName = mViewModel.getCurrentRecipe().getValue().getName();
+            recipeName = mViewModel.getCurrentRecipe().getName();
         }
         mViewModel.deleteRecipeIngredient(recipeName, i.getName());
         Snackbar snackbar = Snackbar
@@ -408,7 +421,7 @@ public class RecipeIngredientsFragment extends AddButtonFragment
     public void onIngredientAddedOrUpdated(Ingredient ingredient, RecipeQuantity quantity) {
         if (quantity.getSubRecipe() == null) {
             mViewModel.addUpdateRecipeIngredient
-                    (mViewModel.getCurrentRecipe().getValue().getName(),ingredient.getName(), quantity);
+                    (mViewModel.getCurrentRecipe().getName(),ingredient.getName(), quantity);
         }
         else {
             mViewModel.addUpdateRecipeIngredient(quantity.getSubRecipe(), ingredient.getName(), quantity);

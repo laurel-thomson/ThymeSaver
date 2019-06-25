@@ -9,12 +9,14 @@ import com.example.laure.thymesaver.Database.Firebase.RecipeDetailRepository;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.Models.RecipeQuantity;
+import com.example.laure.thymesaver.UI.Callbacks.ValueCallback;
 
 import java.util.HashMap;
 
 public class RecipeDetailViewModel extends AndroidViewModel {
     private IRecipeDetailRepository mRepository;
-    private LiveData<Recipe> mCurrentRecipe;
+    private Recipe mCurrentRecipe;
+    private String mCurrentRecipeName;
 
     public RecipeDetailViewModel(Application application) {
         super(application);
@@ -22,19 +24,40 @@ public class RecipeDetailViewModel extends AndroidViewModel {
     }
 
     public void setCurrentRecipe(String currentRecipeName) {
-        mCurrentRecipe = mRepository.getRecipe(currentRecipeName);
+        mCurrentRecipeName = currentRecipeName;
     }
 
-    public LiveData<Recipe> getCurrentRecipe() {
+
+
+    public void getCurrentRecipe(ValueCallback<Recipe> callback) {
+        mRepository.getRecipe(mCurrentRecipeName, new ValueCallback<Recipe>() {
+            @Override
+            public void onSuccess(Recipe value) {
+                mCurrentRecipe = value;
+                callback.onSuccess(value);
+            }
+
+            @Override
+            public void onError(String error) {
+                callback.onError(error);
+            }
+        });
+    }
+
+    public LiveData<Recipe> getLiveRecipe() {
+        return mRepository.getRecipe(mCurrentRecipeName);
+    }
+
+    public Recipe getCurrentRecipe() {
         return mCurrentRecipe;
     }
 
     public void updateRecipe() {
-        mRepository.addOrUpdateRecipe(mCurrentRecipe.getValue());
+        mRepository.addOrUpdateRecipe(mCurrentRecipe);
     }
 
     public LiveData<HashMap<Ingredient, RecipeQuantity>> getRecipeIngredients() {
-        return mRepository.getRecipeIngredients(mCurrentRecipe.getValue());
+        return mRepository.getRecipeIngredients(mCurrentRecipeName);
     }
 
     public void addUpdateRecipeIngredient(String recipeName, String ingredientName, RecipeQuantity quantity) {
@@ -42,14 +65,14 @@ public class RecipeDetailViewModel extends AndroidViewModel {
     }
 
     public void addSubRecipes(String[] subRecipes) {
-        Recipe parent = mCurrentRecipe.getValue();
+        Recipe parent = mCurrentRecipe;
         for (String s : subRecipes) {
             mRepository.addSubRecipe(parent, s);
         }
     }
 
     public void addSubRecipe(String subRecipe) {
-        mRepository.addSubRecipe(mCurrentRecipe.getValue(), subRecipe);
+        mRepository.addSubRecipe(mCurrentRecipe, subRecipe);
     }
 
     public void deleteRecipeIngredient(String recipeName, String ingredientName) {
@@ -57,12 +80,12 @@ public class RecipeDetailViewModel extends AndroidViewModel {
     }
 
     public void removeSubRecipe(String subRecipeName) {
-        mRepository.removeSubRecipe(mCurrentRecipe.getValue(), subRecipeName);
+        mRepository.removeSubRecipe(mCurrentRecipe, subRecipeName);
     }
 
     public void clearAllChecks() {
-        mRepository.clearAllChecks(mCurrentRecipe.getValue().getName());
-        for (String subRecipe : mCurrentRecipe.getValue().getSubRecipes()) {
+        mRepository.clearAllChecks(mCurrentRecipe.getName());
+        for (String subRecipe : mCurrentRecipe.getSubRecipes()) {
             mRepository.clearAllChecks(subRecipe);
         }
     }

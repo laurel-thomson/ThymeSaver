@@ -50,7 +50,7 @@ public class RecipeStepsFragment extends AddButtonFragment
         mRecyclerView = view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        mViewModel.getCurrentRecipe().observe(this, new Observer<Recipe>() {
+        mViewModel.getLiveRecipe().observe(this, new Observer<Recipe>() {
             @Override
             public void onChanged(@Nullable Recipe recipe) {
                 if (recipe == null) {

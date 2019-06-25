@@ -13,6 +13,7 @@ import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.Models.RecipeQuantity;
 import com.example.laure.thymesaver.Models.Step;
+import com.example.laure.thymesaver.UI.Callbacks.ValueCallback;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -22,7 +23,7 @@ import java.util.List;
 
 public class RecipeDetailRepository implements IRecipeDetailRepository {
     private static RecipeDetailRepository mSoleInstance;
-    private Recipe mRecipe;
+    private String mRecipeName;
 
     public static RecipeDetailRepository getInstance() {
         if (mSoleInstance == null) {
@@ -122,10 +123,10 @@ public class RecipeDetailRepository implements IRecipeDetailRepository {
     }
 
     @Override
-    public LiveData<HashMap<Ingredient, RecipeQuantity>> getRecipeIngredients(Recipe r) {
-        mRecipe = r;
+    public LiveData<HashMap<Ingredient, RecipeQuantity>> getRecipeIngredients(String recipeName) {
+        mRecipeName = recipeName;
         return Transformations.map(
-                new RecipeIngredientsLiveData(DatabaseReferences.getPantryReference(), r),
+                new RecipeIngredientsLiveData(DatabaseReferences.getPantryReference(), recipeName),
                 new RecipeIngredientsDeserializer()
         );
     }
@@ -137,10 +138,29 @@ public class RecipeDetailRepository implements IRecipeDetailRepository {
                 new RecipeDeserializer());
     }
 
+    @Override
+    public void getRecipe(String recipeName, ValueCallback<Recipe> callback) {
+        DatabaseReferences.getRecipeReference().child(recipeName).addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Recipe recipe = dataSnapshot.getValue(Recipe.class);
+                        recipe.setName(dataSnapshot.getKey());
+                        callback.onSuccess(recipe);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        callback.onError(databaseError.toString());
+                    }
+                }
+        );
+    }
+
     private class RecipeIngredientsDeserializer implements Function<DataSnapshot, HashMap<Ingredient, RecipeQuantity>> {
         @Override
         public HashMap<Ingredient, RecipeQuantity> apply(DataSnapshot dataSnapshot) {
-            return RecipeIngredientsLiveData.getRecipeIngredients(dataSnapshot, mRecipe);
+            return RecipeIngredientsLiveData.getRecipeIngredients(dataSnapshot, mRecipeName);
         }
     }
 
