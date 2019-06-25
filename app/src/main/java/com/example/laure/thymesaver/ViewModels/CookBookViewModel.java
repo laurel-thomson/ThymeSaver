@@ -8,13 +8,15 @@ import com.example.laure.thymesaver.Database.Firebase.CookbookRepository;
 import com.example.laure.thymesaver.Database.ICookbookRepository;
 import com.example.laure.thymesaver.Models.MealPlan;
 import com.example.laure.thymesaver.Models.Recipe;
+import com.example.laure.thymesaver.UI.Callbacks.Callback;
+import com.example.laure.thymesaver.UI.Callbacks.ValueCallback;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CookBookViewModel extends AndroidViewModel {
     private ICookbookRepository mRepository;
-    private LiveData<List<Recipe>> mRecipes;
+    public LiveData<List<Recipe>> recipes;
 
     public CookBookViewModel(Application application) {
         super(application);
@@ -22,8 +24,12 @@ public class CookBookViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Recipe>> getAllRecipes() {
-        mRecipes = mRepository.getAllRecipes();
-        return mRecipes;
+        recipes = mRepository.getAllRecipes();
+        return recipes;
+    }
+
+    public void getAllRecipes(ValueCallback<List<Recipe>> callback) {
+        mRepository.getAllRecipes(callback);
     }
 
     public LiveData<List<Recipe>> getAvailableSubRecipes(String parentRecipeName) {
@@ -47,7 +53,7 @@ public class CookBookViewModel extends AndroidViewModel {
     }
 
     public boolean recipeNameExists(String name) {
-        List<Recipe> recipes = mRecipes.getValue();
+        List<Recipe> recipes = this.recipes.getValue();
         if (recipes == null) return false;
         for (Recipe r : recipes) {
             if (r.getName().equals(name)) {

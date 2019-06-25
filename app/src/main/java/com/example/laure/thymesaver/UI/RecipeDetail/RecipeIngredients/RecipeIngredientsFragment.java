@@ -1,8 +1,10 @@
 package com.example.laure.thymesaver.UI.RecipeDetail.RecipeIngredients;
 
 import android.annotation.SuppressLint;
+import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -11,14 +13,21 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -29,7 +38,11 @@ import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.Models.RecipeQuantity;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.AddIngredients.AddIngredientFragment;
+import com.example.laure.thymesaver.UI.Callbacks.ValueCallback;
+import com.example.laure.thymesaver.UI.RecipeDetail.RecipeDetailActivity;
 import com.example.laure.thymesaver.UI.TopLevel.AddButtonFragment;
+import com.example.laure.thymesaver.UI.TopLevel.CookbookFragment;
+import com.example.laure.thymesaver.ViewModels.CookBookViewModel;
 import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 
 import java.util.HashMap;
@@ -116,6 +129,11 @@ public class RecipeIngredientsFragment extends AddButtonFragment
 
     @Override
     public void onFABClicked() {
+        if (mViewModel.getCurrentRecipe().getValue().isSubRecipe()) {
+            addIngredient();
+            return;
+        }
+
         mAddIngredientFAB = getActivity().findViewById(R.id.add_ingredient_fab);
         mAddIngredientFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,7 +182,108 @@ public class RecipeIngredientsFragment extends AddButtonFragment
     }
 
     private void createNewSubRecipe() {
-        //todo
+        CookBookViewModel cookBookViewModel = ViewModelProviders.of(this).get(CookBookViewModel.class);
+        mProgressBar.setVisibility(View.VISIBLE);
+        cookBookViewModel.getAllRecipes(new ValueCallback<List<Recipe>>() {
+            @Override
+            public void onSuccess(List<Recipe> recipes) {
+                promptForRecipeName(getContext(), cookBookViewModel, recipes);
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
+    }
+
+    private void promptForRecipeName(Context context, CookBookViewModel cookBookViewModel, List<Recipe> recipes) {
+        final View view = LayoutInflater.from(context).inflate(R.layout.recipe_name_dialog, null);
+        final EditText nameET = view.findViewById(R.id.recipe_name_edittext);
+        final AutoCompleteTextView categoryET = view.findViewById(R.id.recipe_category_edittext);
+        final TextInputLayout textInputLayout = view.findViewById(R.id.text_input_layout);
+
+        final AlertDialog dialog = new AlertDialog.Builder(context)
+                .setView(view)
+                .setTitle("Create New Recipe")
+                .setPositiveButton("Create", null)
+                .create();
+        dialog.show();
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Recipe recipe = new Recipe(nameET.getText().toString(), categoryET.getText().toString());
+                mProgressBar.setVisibility(View.GONE);
+                cookBookViewModel.addRecipe(recipe);
+                mViewModel.addSubRecipe(recipe.getName());
+                Intent intent = new Intent(getActivity(), RecipeDetailActivity.class);
+                intent.putExtra(RecipeDetailActivity.CURRENT_RECIPE_NAME, recipe.getName());
+                startActivity(intent);
+                dialog.dismiss();
+            }
+        });
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+
+        nameET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String name = editable.toString();
+                if (name.equals("")) {
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                    return;
+                }
+                if (recipeNameExists(name, recipes)) {
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                    textInputLayout.setError("A recipe of that name already exists.");
+                    return;
+                }
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                textInputLayout.setError(null);
+            }
+        });
+
+        //set up category autocomplete textview
+        ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource(
+                view.getContext(),
+                R.array.recipe_categories,
+                android.R.layout.select_dialog_item);
+        categoryET.setAdapter(categoryAdapter);
+        categoryET.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                //Need to reset the array adapter because all elements will have
+                //been cleared out when the default category is set
+                ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource(
+                        view.getContext(),
+                        R.array.recipe_categories,
+                        android.R.layout.select_dialog_item);
+                categoryET.setAdapter(categoryAdapter);
+                categoryET.showDropDown();
+                return true;
+            }
+        });
+        categoryET.setText(context.getResources().getTextArray(R.array.recipe_categories)[0]);
+    }
+
+    private boolean recipeNameExists(String name, List<Recipe> recipes) {
+        if (recipes == null) return false;
+        for (Recipe r : recipes) {
+            if (r.getName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void setMenuFABImage(int resource) {

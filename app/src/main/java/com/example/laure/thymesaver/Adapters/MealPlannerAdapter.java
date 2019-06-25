@@ -116,7 +116,7 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
             if (days[day-1].equals(scheduledDay))
             {
-                headerViewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
+                headerViewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.colorSecondaryText));
                 headerViewHolder.sectionTitle.setTextColor(mContext.getResources().getColor(R.color.colorTextIcon));
                 headerViewHolder.addButton.setBackground(mContext.getResources().getDrawable(R.drawable.ic_add_light));
             }

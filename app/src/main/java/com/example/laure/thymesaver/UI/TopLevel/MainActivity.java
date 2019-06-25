@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
     private void setUpActionBar() {
         mActionBar = getSupportActionBar();
         mActionBar.setTitle("Meal Planner");
-        mActionBar.setBackgroundDrawable(getResources().getDrawable(R.color.colorAccent));
+        mActionBar.setBackgroundDrawable(getResources().getDrawable(R.color.colorPrimary));
     }
 
 

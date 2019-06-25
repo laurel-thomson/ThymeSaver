@@ -3,6 +3,7 @@ package com.example.laure.thymesaver.UI.TopLevel;
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,6 +29,8 @@ import android.widget.TextView;
 import com.example.laure.thymesaver.Adapters.RecipeAdapter;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.R;
+import com.example.laure.thymesaver.UI.Callbacks.Callback;
+import com.example.laure.thymesaver.UI.Callbacks.ValueCallback;
 import com.example.laure.thymesaver.UI.RecipeDetail.RecipeDetailActivity;
 import com.example.laure.thymesaver.ViewModels.CookBookViewModel;
 
@@ -114,29 +117,27 @@ public class CookbookFragment extends AddButtonFragment
                 .show();
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    @Override
-    public void onFABClicked() {
-        final View view = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_name_dialog, null);
+    private void promptForRecipeName(Context context, CookBookViewModel viewModel, ValueCallback<Recipe> callback) {
+        final View view = LayoutInflater.from(context).inflate(R.layout.recipe_name_dialog, null);
         final EditText nameET = view.findViewById(R.id.recipe_name_edittext);
         final AutoCompleteTextView categoryET = view.findViewById(R.id.recipe_category_edittext);
         final TextInputLayout textInputLayout = view.findViewById(R.id.text_input_layout);
 
-        final AlertDialog dialog = new AlertDialog.Builder(getActivity())
+        final AlertDialog dialog = new AlertDialog.Builder(context)
                 .setView(view)
                 .setTitle("Create New Recipe")
-                .setPositiveButton("Create", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Recipe recipe = new Recipe(nameET.getText().toString(), categoryET.getText().toString());
-                        mViewModel.addRecipe(recipe);
-                        Intent intent = new Intent(getActivity(), RecipeDetailActivity.class);
-                        intent.putExtra(RecipeDetailActivity.CURRENT_RECIPE_NAME, nameET.getText().toString());
-                        startActivity(intent);
-                    }
-                })
+                .setPositiveButton("Create", null)
                 .create();
         dialog.show();
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Recipe recipe = new Recipe(nameET.getText().toString(), categoryET.getText().toString());
+                callback.onSuccess(recipe);
+                dialog.dismiss();
+            }
+        });
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
 
         nameET.addTextChangedListener(new TextWatcher() {
@@ -157,7 +158,7 @@ public class CookbookFragment extends AddButtonFragment
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
                     return;
                 }
-                if (mViewModel.recipeNameExists(name)) {
+                if (viewModel.recipeNameExists(name)) {
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
                     textInputLayout.setError("A recipe of that name already exists.");
                     return;
@@ -187,6 +188,25 @@ public class CookbookFragment extends AddButtonFragment
                 return true;
             }
         });
-        categoryET.setText(getResources().getTextArray(R.array.recipe_categories)[0]);
+        categoryET.setText(context.getResources().getTextArray(R.array.recipe_categories)[0]);
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public void onFABClicked() {
+        promptForRecipeName(getActivity(), mViewModel, new ValueCallback<Recipe>() {
+            @Override
+            public void onSuccess(Recipe recipe) {
+                mViewModel.addRecipe(recipe);
+                Intent intent = new Intent(getActivity(), RecipeDetailActivity.class);
+                intent.putExtra(RecipeDetailActivity.CURRENT_RECIPE_NAME, recipe.getName());
+                startActivity(intent);
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
     }
 }

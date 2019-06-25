@@ -168,7 +168,7 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecyclerView.
                 headerViewHolder.headerButton.setOnClickListener(null);
             }
             else {
-                headerViewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
+                headerViewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.colorSecondaryText));
                 headerViewHolder.sectionTitle.setTextColor(mContext.getResources().getColor(R.color.colorTextIcon));
                 headerViewHolder.headerButton.setVisibility(View.VISIBLE);
                 headerViewHolder.headerButton.setOnClickListener(new View.OnClickListener() {

@@ -10,6 +10,8 @@ import com.example.laure.thymesaver.Database.Firebase.LiveData.SubRecipeListLive
 import com.example.laure.thymesaver.Database.ICookbookRepository;
 import com.example.laure.thymesaver.Models.MealPlan;
 import com.example.laure.thymesaver.Models.Recipe;
+import com.example.laure.thymesaver.UI.Callbacks.Callback;
+import com.example.laure.thymesaver.UI.Callbacks.ValueCallback;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
@@ -105,6 +107,28 @@ public class CookbookRepository implements ICookbookRepository {
         return Transformations.map(
                 new ListLiveData<Recipe>(DatabaseReferences.getRecipeReference(), Recipe.class),
                 new RecipeListDeserializer());
+    }
+
+    @Override
+    public void getAllRecipes(ValueCallback<List<Recipe>> callback) {
+        DatabaseReferences.getRecipeReference().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                mRecipes.clear();
+
+                for(DataSnapshot snap : dataSnapshot.getChildren()){
+                    Recipe r = snap.getValue(Recipe.class);
+                    r.setName(snap.getKey());
+                    mRecipes.add(r);
+                }
+                callback.onSuccess(mRecipes);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                callback.onError(databaseError.toString());
+            }
+        });
     }
 
     @Override
