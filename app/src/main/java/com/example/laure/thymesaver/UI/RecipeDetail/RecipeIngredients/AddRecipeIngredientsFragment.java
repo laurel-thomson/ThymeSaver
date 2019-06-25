@@ -177,7 +177,12 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
 
         mNameET.setText(ingredientName);
         mUnitET.setText(ingredientUnit);
-        mQuantityET.setText(Double.toString(ingredientQuantity));
+        if (ingredientQuantity % 1 == 0) {
+            mQuantityET.setText((int) ingredientQuantity + "");
+        }
+        else {
+            mQuantityET.setText(Double.toString(ingredientQuantity));
+        }
         mNameET.setSelection(mNameET.getText().length());
         mUnitET.setSelection(mUnitET.getText().length());
         mQuantityET.setSelection(mQuantityET.getText().length());
