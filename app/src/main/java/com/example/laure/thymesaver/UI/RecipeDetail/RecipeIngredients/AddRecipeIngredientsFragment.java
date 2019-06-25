@@ -65,6 +65,7 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
         }
         else {
             mQuantityET.setText("1");
+            mQuantityET.setSelection(mQuantityET.getText().length());
         }
 
         mPantryViewModel = ViewModelProviders.of(this).get(PantryViewModel.class);
@@ -161,6 +162,7 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
                         //clear text fields after ingredient added
                         mNameET.setText("");
                         mQuantityET.setText("1");
+                        mQuantityET.setSelection(mQuantityET.getText().length());
                         mUnitET.setText("");
                         mNameET.requestFocus();
                     }
@@ -176,6 +178,9 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
         mNameET.setText(ingredientName);
         mUnitET.setText(ingredientUnit);
         mQuantityET.setText(Double.toString(ingredientQuantity));
+        mNameET.setSelection(mNameET.getText().length());
+        mUnitET.setSelection(mUnitET.getText().length());
+        mQuantityET.setSelection(mQuantityET.getText().length());
     }
 
     @Nullable

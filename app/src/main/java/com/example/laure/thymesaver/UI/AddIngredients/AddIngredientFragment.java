@@ -135,5 +135,7 @@ public class AddIngredientFragment extends BottomSheetDialogFragment {
         mNameET.setText(ingredientName);
         mCategoryET.setText(ingredientCategory);
         mBulkSwitch.setChecked(isBulk);
+        mNameET.setSelection(mNameET.getText().length());
+        mCategoryET.setSelection(mCategoryET.getText().length());
     }
 }
