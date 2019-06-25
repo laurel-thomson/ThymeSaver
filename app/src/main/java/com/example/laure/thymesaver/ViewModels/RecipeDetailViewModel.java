@@ -37,9 +37,8 @@ public class RecipeDetailViewModel extends AndroidViewModel {
         return mRepository.getRecipeIngredients(mCurrentRecipe.getValue());
     }
 
-    public void addRecipeIngredient(String ingredientName, RecipeQuantity quantity) {
-        mCurrentRecipe.getValue().getRecipeIngredients().put(ingredientName, quantity);
-        updateRecipe();
+    public void addRecipeIngredient(String recipeName, String ingredientName, RecipeQuantity quantity) {
+        mRepository.addUpdateRecipeIngredient(recipeName, ingredientName, quantity);
     }
 
     public void addSubRecipes(String[] subRecipes) {
@@ -49,14 +48,12 @@ public class RecipeDetailViewModel extends AndroidViewModel {
         }
     }
 
-    public void deleteRecipeIngredient(String ingredientName) {
-        Recipe recipe = mCurrentRecipe.getValue();
-        recipe.getRecipeIngredients().remove(ingredientName);
-        mRepository.addOrUpdateRecipe(recipe);
+    public void deleteRecipeIngredient(String recipeName, String ingredientName) {
+        mRepository.deleteRecipeIngredient(recipeName, ingredientName);
     }
 
-    public void updateSubRecipeIngredient(String subRecipeName, Ingredient ingredient, RecipeQuantity quantity) {
-        mRepository.updateSubRecipeIngredient(subRecipeName, ingredient, quantity);
+    public void updateSubRecipeIngredient(String subRecipeName, String ingredientName, RecipeQuantity quantity) {
+        mRepository.addUpdateRecipeIngredient(subRecipeName, ingredientName, quantity);
     }
 
     public void removeSubRecipe(String subRecipeName) {

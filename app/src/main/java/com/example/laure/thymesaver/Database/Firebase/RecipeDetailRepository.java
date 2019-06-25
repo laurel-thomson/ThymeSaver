@@ -75,12 +75,21 @@ public class RecipeDetailRepository implements IRecipeDetailRepository {
     }
 
     @Override
-    public void updateSubRecipeIngredient(String subRecipeName, Ingredient ingredient, RecipeQuantity quantity) {
+    public void addUpdateRecipeIngredient(String recipeName, String ingredientName, RecipeQuantity quantity) {
         DatabaseReferences.getRecipeReference()
-                .child(subRecipeName)
+                .child(recipeName)
                 .child("recipeIngredients")
-                .child(ingredient.getName())
+                .child(ingredientName)
                 .setValue(quantity);
+    }
+
+    @Override
+    public void deleteRecipeIngredient(String recipeName, String ingredientName) {
+        DatabaseReferences.getRecipeReference()
+                .child(recipeName)
+                .child("recipeIngredients")
+                .child(ingredientName)
+                .removeValue();
     }
 
     @Override

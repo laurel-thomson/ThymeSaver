@@ -19,5 +19,7 @@ public interface IRecipeDetailRepository {
 
     void removeSubRecipe(Recipe parent, String childName);
 
-    void updateSubRecipeIngredient(String subRecipeName, Ingredient ingredient, RecipeQuantity quantity);
+    void addUpdateRecipeIngredient(String recipeName, String ingredientName, RecipeQuantity quantity);
+
+    void deleteRecipeIngredient(String recipeName, String ingredientName);
 }

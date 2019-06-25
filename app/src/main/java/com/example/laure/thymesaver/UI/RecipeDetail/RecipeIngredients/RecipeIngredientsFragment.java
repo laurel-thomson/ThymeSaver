@@ -255,7 +255,14 @@ public class RecipeIngredientsFragment extends AddButtonFragment
 
     @Override
     public void onDeleteClicked(final Ingredient i, final RecipeQuantity quantity) {
-        mViewModel.deleteRecipeIngredient(i.getName());
+        String recipeName;
+        if (quantity.getSubRecipe() != null) {
+            recipeName = quantity.getSubRecipe();
+        }
+        else {
+            recipeName = mViewModel.getCurrentRecipe().getValue().getName();
+        }
+        mViewModel.deleteRecipeIngredient(recipeName, i.getName());
         Snackbar snackbar = Snackbar
                 .make(getView(), i.getName() +
                         " removed from recipe.", Snackbar.LENGTH_LONG)
@@ -263,6 +270,7 @@ public class RecipeIngredientsFragment extends AddButtonFragment
                     @Override
                     public void onClick(View view) {
                         mViewModel.addRecipeIngredient(
+                                recipeName,
                                 i.getName(),
                                 quantity);
                         Snackbar newSnackBar = Snackbar
@@ -277,10 +285,11 @@ public class RecipeIngredientsFragment extends AddButtonFragment
     @Override
     public void onIngredientAddedOrUpdated(Ingredient ingredient, RecipeQuantity quantity) {
         if (quantity.getSubRecipe() == null) {
-            mViewModel.addRecipeIngredient(ingredient.getName(), quantity);
+            mViewModel.addRecipeIngredient
+                    (mViewModel.getCurrentRecipe().getValue().getName(),ingredient.getName(), quantity);
         }
         else {
-            mViewModel.updateSubRecipeIngredient(quantity.getSubRecipe(), ingredient, quantity);
+            mViewModel.updateSubRecipeIngredient(quantity.getSubRecipe(), ingredient.getName(), quantity);
         }
     }
 }
