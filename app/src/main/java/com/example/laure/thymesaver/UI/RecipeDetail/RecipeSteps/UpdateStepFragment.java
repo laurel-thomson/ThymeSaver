@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 
+import com.example.laure.thymesaver.Models.Step;
 import com.example.laure.thymesaver.R;
 
 public class UpdateStepFragment extends BottomSheetDialogFragment {
@@ -38,7 +39,7 @@ public class UpdateStepFragment extends BottomSheetDialogFragment {
                 .setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    String step = mStepEditText.getText().toString();
+                    Step step =new Step(mStepEditText.getText().toString());
                     mStepEditText.setText("");
                     if (mListener != null) {
                         mListener.onStepUpdated(step, position);

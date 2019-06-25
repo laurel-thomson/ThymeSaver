@@ -12,17 +12,9 @@ public class Recipe {
     //for Firebase, keys need to be strings
     private HashMap<String, RecipeQuantity> recipeIngredients = new HashMap<>();
 
-    public List<String> getSubRecipes() {
-        return subRecipes;
-    }
-
-    public void setSubRecipes(List<String> subRecipes) {
-        this.subRecipes = subRecipes;
-    }
-
     private List<String> subRecipes = new ArrayList<>();
 
-    private List<String> steps = new ArrayList<>();
+    private List<Step> steps = new ArrayList<>();
 
     private String category;
 
@@ -33,7 +25,6 @@ public class Recipe {
     }
 
     public Recipe(String name, String category) {
-
         this.name = name;
         this.category = category;
     }
@@ -55,15 +46,15 @@ public class Recipe {
         recipeIngredients.put(ingredientName, quantity);
     }
 
-    public List<String> getSteps() {
+    public List<Step> getSteps() {
         return steps;
     }
 
-    public void setSteps(List<String> steps) {
+    public void setSteps(List<Step> steps) {
         this.steps = steps;
     }
 
-    public void addStep(String step) {
+    public void addStep(Step step) {
         steps.add(step);
     }
 
@@ -81,5 +72,13 @@ public class Recipe {
 
     public void setSubRecipe(boolean subRecipe) {
         isSubRecipe = subRecipe;
+    }
+
+    public List<String> getSubRecipes() {
+        return subRecipes;
+    }
+
+    public void setSubRecipes(List<String> subRecipes) {
+        this.subRecipes = subRecipes;
     }
 }

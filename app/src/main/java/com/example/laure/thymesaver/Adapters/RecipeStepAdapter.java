@@ -16,6 +16,7 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.laure.thymesaver.Models.Step;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.RecipeDetail.RecipeSteps.RecipeStepListener;
 
@@ -26,8 +27,7 @@ import java.util.List;
 public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.MyViewHolder>
             implements DragHelper.ActionCompletionContract{
 
-    private List<String> mSteps = new ArrayList<>();
-    private SparseBooleanArray mStepCheckStates = new SparseBooleanArray();
+    private List<Step> mSteps = new ArrayList<>();
     private RecipeStepListener mListener;
     private final LayoutInflater mInflater;
     private ItemTouchHelper mTouchHelper;
@@ -39,7 +39,7 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.My
         mListener = listener;
     }
 
-    public void setSteps(List<String> steps){
+    public void setSteps(List<Step> steps){
 
         mSteps = steps;
         notifyDataSetChanged();
@@ -47,7 +47,7 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.My
 
     @Override
     public void onViewMoved(int oldPosition, int newPosition) {
-        String targetStep = mSteps.get(oldPosition);
+        Step targetStep = mSteps.get(oldPosition);
         mSteps.remove(oldPosition);
         mSteps.add(newPosition, targetStep);
         notifyItemMoved(oldPosition, newPosition);
@@ -56,7 +56,7 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.My
 
     @Override
     public void onMoveComplete(int newPosition) {
-        mListener.onStepMoved(mSteps);
+        mListener.onStepMoved();
     }
 
 
@@ -74,27 +74,8 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.My
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.mTextView.setText(mSteps.get(position));
-        if (!mStepCheckStates.get(position, false)) {
-            holder.mCheckBox.setChecked(false);}
-        else {
-            holder.mCheckBox.setChecked(true);
-        }
-    }
-
-    public boolean[] getCheckStates() {
-        boolean[] arr = new boolean[mSteps.size()];
-        for (int i = 0; i < mSteps.size(); i++) {
-            arr[i] = mStepCheckStates.get(i);
-        }
-        return arr;
-    }
-
-    public void restoreCheckStates(boolean[] arr) {
-        for (int i = 0; i < arr.length; i++) {
-            mStepCheckStates.put(i, arr[i]);
-        }
-        notifyDataSetChanged();
+        holder.mTextView.setText(mSteps.get(position).getName());
+        holder.mCheckBox.setChecked(mSteps.get(position).isChecked());
     }
 
     @Override
@@ -127,7 +108,9 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.My
                         mTextView.setPaintFlags(0);
                         mTextView.setTextColor(Color.BLACK);
                     }
-                    mStepCheckStates.put(getAdapterPosition(), checked);
+                    Step step = mSteps.get(getAdapterPosition());
+                    step.setChecked(checked);
+                    mListener.onStepUpdated(step, getAdapterPosition());
                 }
             });
 

@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.example.laure.thymesaver.Adapters.DragHelper;
 import com.example.laure.thymesaver.Adapters.RecipeStepAdapter;
 import com.example.laure.thymesaver.Models.Recipe;
+import com.example.laure.thymesaver.Models.Step;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.TopLevel.AddButtonFragment;
 import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
@@ -29,7 +30,7 @@ public class RecipeStepsFragment extends AddButtonFragment
         implements RecipeStepListener {
     private RecipeStepAdapter mAdapter;
     private RecyclerView mRecyclerView;
-    private List<String> mSteps;
+    private List<Step> mSteps;
     private RecipeDetailViewModel mViewModel;
     private TextView mEmptyMessage;
     private ProgressBar mProgressBar;
@@ -76,18 +77,6 @@ public class RecipeStepsFragment extends AddButtonFragment
 
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
                 DividerItemDecoration.VERTICAL));
-
-
-        if (savedInstanceState != null) {
-            boolean[] arr = (boolean[]) savedInstanceState.get("check_states");
-            mAdapter.restoreCheckStates(arr);
-        }
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putBooleanArray("check_states", mAdapter.getCheckStates());
-        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -98,7 +87,7 @@ public class RecipeStepsFragment extends AddButtonFragment
     }
 
     @Override
-    public void onStepAdded(String step) {
+    public void onStepAdded(Step step) {
         mSteps.add(step);
         mAdapter.notifyDataSetChanged();
         mViewModel.updateRecipe();
@@ -106,7 +95,7 @@ public class RecipeStepsFragment extends AddButtonFragment
 
     @Override
     public void onStepDeleted(final int position) {
-        final String step = mSteps.get(position);
+        final Step step = mSteps.get(position);
         mSteps.remove(position);
         mAdapter.notifyDataSetChanged();
         mViewModel.updateRecipe();
@@ -128,14 +117,13 @@ public class RecipeStepsFragment extends AddButtonFragment
     }
 
     @Override
-    public void onStepMoved(List<String> newList) {
+    public void onStepMoved() {
         mViewModel.updateRecipe();
     }
 
     @Override
-    public void onStepUpdated(String step, int position) {
+    public void onStepUpdated(Step step, int position) {
         mSteps.set(position, step);
-        mAdapter.notifyDataSetChanged();
         mViewModel.updateRecipe();
     }
 
@@ -143,7 +131,7 @@ public class RecipeStepsFragment extends AddButtonFragment
     public void onStepClicked(int position) {
         Bundle bundle = new Bundle();
         bundle.putInt(UpdateStepFragment.STEP_POSITION, position);
-        bundle.putString(UpdateStepFragment.STEP_STRING, mSteps.get(position));
+        bundle.putString(UpdateStepFragment.STEP_STRING, mSteps.get(position).getName());
         UpdateStepFragment fragment = new UpdateStepFragment();
         fragment.setArguments(bundle);
         fragment.setListener(this);

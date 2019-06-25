@@ -29,8 +29,6 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
-    private SparseBooleanArray mStepCheckStates = new SparseBooleanArray();
     private Context mContext;
     private AddRecipeIngredientListener mListener;
     private HashMap<Ingredient, RecipeQuantity> mRecipeQuantities = new HashMap<>();
@@ -90,11 +88,11 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecyclerView.
             mRecipeQuantities.put(ingredient, recipeIngredients.get(ingredient));
         }
 
-        //remove any headers that don't have ingredients under them
+        //remove any ingredient headers that don't have ingredients under them
         ListIterator<Ingredient> iterator = mIngredients.listIterator();
         while (iterator.hasNext()) {
             Ingredient ingredient = iterator.next();
-            if (getItemViewType(ingredient) == HEADER_TYPE) {
+            if (getItemViewType(ingredient) == HEADER_TYPE  && isIngredientCategory(ingredient.getCategory())) {
                 int nextIndex = iterator.nextIndex();
                 if (nextIndex >= mIngredients.size() || getItemViewType(nextIndex) == HEADER_TYPE) {
                     iterator.remove();
@@ -147,14 +145,12 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecyclerView.
                         holder.mNameTV.setPaintFlags(0);
                         holder.mNameTV.setTextColor(Color.BLACK);
                     }
-                    mStepCheckStates.put(position, checked);
+                    RecipeQuantity quantity = mRecipeQuantities.get(ingredient);
+                    quantity.setChecked(checked);
+                    mListener.onIngredientChecked(quantity.getSubRecipe(), ingredient.getName(), quantity);
                 }
             });
-            if (!mStepCheckStates.get(position, false)) {
-                holder.mCheckBox.setChecked(false);
-            } else {
-                holder.mCheckBox.setChecked(true);
-            }
+            holder.mCheckBox.setChecked(mRecipeQuantities.get(ingredient).isChecked());
         }
         else {
             SectionHeaderViewHolder headerViewHolder = (SectionHeaderViewHolder) viewHolder;
@@ -166,6 +162,7 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecyclerView.
                 headerViewHolder.sectionTitle.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
                 headerViewHolder.headerButton.setVisibility(View.GONE);
                 headerViewHolder.headerButton.setOnClickListener(null);
+                headerViewHolder.itemView.setOnClickListener(null);
             }
             else {
                 headerViewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.colorSecondaryText));
@@ -175,6 +172,12 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecyclerView.
                     @Override
                     public void onClick(View view) {
                         mListener.onSubRecipeDeleteClicked(sectionTitle);
+                    }
+                });
+                headerViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mListener.onSubRecipeClicked(sectionTitle);
                     }
                 });
             }
@@ -212,22 +215,6 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecyclerView.
             return INGREDIENT_TYPE;
         }
     }
-
-    public boolean[] getCheckStates() {
-        boolean[] arr = new boolean[mIngredients.size()];
-        for (int i = 0; i < mIngredients.size(); i++) {
-            arr[i] = mStepCheckStates.get(i);
-        }
-        return arr;
-    }
-
-    public void restoreCheckStates(boolean[] arr) {
-        for (int i = 0; i < arr.length; i++) {
-            mStepCheckStates.put(i, arr[i]);
-        }
-        notifyDataSetChanged();
-    }
-
 
     public class IngredientViewHolder extends RecyclerView.ViewHolder {
         CheckBox mCheckBox;

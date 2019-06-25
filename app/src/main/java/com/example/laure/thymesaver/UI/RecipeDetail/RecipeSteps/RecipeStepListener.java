@@ -1,11 +1,13 @@
 package com.example.laure.thymesaver.UI.RecipeDetail.RecipeSteps;
 
+import com.example.laure.thymesaver.Models.Step;
+
 import java.util.List;
 
 public interface RecipeStepListener {
-    void onStepAdded(String step);
+    void onStepAdded(Step step);
     void onStepDeleted(int position);
-    void onStepMoved(List<String> newList);
-    void onStepUpdated(String step, int position);
+    void onStepMoved();
+    void onStepUpdated(Step step, int position);
     void onStepClicked(int position);
 }

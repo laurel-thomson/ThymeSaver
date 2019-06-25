@@ -1,20 +1,17 @@
 package com.example.laure.thymesaver.UI.RecipeDetail.RecipeIngredients;
 
 import android.annotation.SuppressLint;
-import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -41,7 +38,6 @@ import com.example.laure.thymesaver.UI.AddIngredients.AddIngredientFragment;
 import com.example.laure.thymesaver.UI.Callbacks.ValueCallback;
 import com.example.laure.thymesaver.UI.RecipeDetail.RecipeDetailActivity;
 import com.example.laure.thymesaver.UI.TopLevel.AddButtonFragment;
-import com.example.laure.thymesaver.UI.TopLevel.CookbookFragment;
 import com.example.laure.thymesaver.ViewModels.CookBookViewModel;
 import com.example.laure.thymesaver.ViewModels.RecipeDetailViewModel;
 
@@ -96,11 +92,6 @@ public class RecipeIngredientsFragment extends AddButtonFragment
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
                 DividerItemDecoration.VERTICAL));
-
-        if (savedInstanceState != null) {
-            boolean[] arr = (boolean[]) savedInstanceState.get("check_states");
-            mAdapter.restoreCheckStates(arr);
-        }
     }
 
     private void observeRecipeIngredients(List<String> subRecipes) {
@@ -119,12 +110,6 @@ public class RecipeIngredientsFragment extends AddButtonFragment
                 mProgressBar.setVisibility(View.GONE);
             }
         });
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putBooleanArray("check_states", mAdapter.getCheckStates());
-        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -345,6 +330,14 @@ public class RecipeIngredientsFragment extends AddButtonFragment
     }
 
     @Override
+    public void onIngredientChecked(String parentRecipe, String ingName, RecipeQuantity quantity) {
+        mViewModel.addUpdateRecipeIngredient(
+                parentRecipe != null ? parentRecipe : mViewModel.getCurrentRecipe().getValue().getName(),
+                ingName,
+                quantity);
+    }
+
+    @Override
     public void onIngredientLongClicked(Ingredient ing) {
         Bundle bundle = new Bundle();
         bundle.putString(AddIngredientFragment.INGREDIENT_NAME, ing.getName());
@@ -374,6 +367,15 @@ public class RecipeIngredientsFragment extends AddButtonFragment
     }
 
     @Override
+    public void onSubRecipeClicked(String subRecipeName) {
+        Intent intent = new Intent(getActivity(), RecipeDetailActivity.class);
+        intent.putExtra(
+                RecipeDetailActivity.CURRENT_RECIPE_NAME,
+                subRecipeName);
+        startActivity(intent);
+    }
+
+    @Override
     public void onDeleteClicked(final Ingredient i, final RecipeQuantity quantity) {
         String recipeName;
         if (quantity.getSubRecipe() != null) {
@@ -389,7 +391,7 @@ public class RecipeIngredientsFragment extends AddButtonFragment
                 .setAction("UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        mViewModel.addRecipeIngredient(
+                        mViewModel.addUpdateRecipeIngredient(
                                 recipeName,
                                 i.getName(),
                                 quantity);
@@ -405,11 +407,11 @@ public class RecipeIngredientsFragment extends AddButtonFragment
     @Override
     public void onIngredientAddedOrUpdated(Ingredient ingredient, RecipeQuantity quantity) {
         if (quantity.getSubRecipe() == null) {
-            mViewModel.addRecipeIngredient
+            mViewModel.addUpdateRecipeIngredient
                     (mViewModel.getCurrentRecipe().getValue().getName(),ingredient.getName(), quantity);
         }
         else {
-            mViewModel.updateSubRecipeIngredient(quantity.getSubRecipe(), ingredient.getName(), quantity);
+            mViewModel.addUpdateRecipeIngredient(quantity.getSubRecipe(), ingredient.getName(), quantity);
         }
     }
 }

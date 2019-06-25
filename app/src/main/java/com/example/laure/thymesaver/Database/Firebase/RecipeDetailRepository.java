@@ -3,6 +3,7 @@ package com.example.laure.thymesaver.Database.Firebase;
 import android.arch.core.util.Function;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Transformations;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 
 import com.example.laure.thymesaver.Database.Firebase.LiveData.RecipeIngredientsLiveData;
@@ -11,6 +12,7 @@ import com.example.laure.thymesaver.Database.IRecipeDetailRepository;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.Models.RecipeQuantity;
+import com.example.laure.thymesaver.Models.Step;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -90,6 +92,33 @@ public class RecipeDetailRepository implements IRecipeDetailRepository {
                 .child("recipeIngredients")
                 .child(ingredientName)
                 .removeValue();
+    }
+
+    @Override
+    public void clearAllChecks(String recipeName) {
+        DatabaseReferences.getRecipeReference().child(recipeName).addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Recipe recipe = dataSnapshot.getValue(Recipe.class);
+                        recipe.setName(dataSnapshot.getKey());
+                        for (String ingName : recipe.getRecipeIngredients().keySet()) {
+                            RecipeQuantity quantity = recipe.getRecipeIngredients().get(ingName);
+                            quantity.setChecked(false);
+                        }
+                        for (Step step : recipe.getSteps()) {
+                            step.setChecked(false);
+                        }
+
+                        DatabaseReferences.getRecipeReference().child(recipeName).setValue(recipe);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                }
+        );
     }
 
     @Override

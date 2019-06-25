@@ -5,8 +5,8 @@ import com.google.firebase.database.Exclude;
 public class RecipeQuantity {
     private String unit;
     private double recipeQuantity;
-
     private String subRecipe;
+    private boolean isChecked;
 
     public RecipeQuantity() {}
 
@@ -37,5 +37,13 @@ public class RecipeQuantity {
 
     public void setSubRecipe(String subRecipe) {
         this.subRecipe = subRecipe;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
     }
 }

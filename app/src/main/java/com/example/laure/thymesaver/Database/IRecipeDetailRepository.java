@@ -22,4 +22,6 @@ public interface IRecipeDetailRepository {
     void addUpdateRecipeIngredient(String recipeName, String ingredientName, RecipeQuantity quantity);
 
     void deleteRecipeIngredient(String recipeName, String ingredientName);
+
+    void clearAllChecks(String recipeName);
 }

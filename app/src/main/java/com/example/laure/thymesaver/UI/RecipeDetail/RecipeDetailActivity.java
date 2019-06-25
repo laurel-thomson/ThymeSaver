@@ -11,6 +11,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,13 +101,27 @@ public class RecipeDetailActivity extends AppCompatActivity{
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_recipe_detail, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_renew:
+                clearAllChecks();
+                return true;
             case android.R.id.home:
                 onBackPressed();
                 return true;
         }
         return false;
+    }
+
+    private void clearAllChecks() {
+        //todo : prompt user if sure
+        mViewModel.clearAllChecks();
     }
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {
