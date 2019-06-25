@@ -172,6 +172,7 @@ public class ShoppingListAdapter extends  RecyclerView.Adapter<RecyclerView.View
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     Ingredient ing = mIngredients.get(getAdapterPosition());
                     int quantity = mMeasuredIngredients.get(ing);
+                    CompoundButton.OnCheckedChangeListener listener = this;
 
                     view.postDelayed(new Runnable() {
                         @Override
@@ -179,9 +180,14 @@ public class ShoppingListAdapter extends  RecyclerView.Adapter<RecyclerView.View
                             mListener.onIngredientCheckedOff(
                                     ing,
                                     quantity);
+                            //Have to uncheck the compound button or the ingredient below the
+                            //one checked off will get checked.  And we need to stop listening
+                            //first so that this listener doesn't trigger a second time
+                            compoundButton.setOnCheckedChangeListener(null);
                             if (compoundButton.isChecked()) {
                                 compoundButton.setChecked(false);
                             }
+                            compoundButton.setOnCheckedChangeListener(listener);
                         }
                     }, 500);
                 }
