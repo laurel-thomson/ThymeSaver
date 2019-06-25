@@ -219,11 +219,10 @@ public class ShoppingListAdapter extends  RecyclerView.Adapter<RecyclerView.View
                 }
             });
 
-            view.setOnLongClickListener(new View.OnLongClickListener() {
+            view.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public boolean onLongClick(View view) {
-                    mListener.onIngredientLongClicked(mIngredients.get(getAdapterPosition()));
-                    return true;
+                public void onClick(View view) {
+                    mListener.onIngredientClicked(mIngredients.get(getAdapterPosition()));
                 }
             });
         }
@@ -245,6 +244,6 @@ public class ShoppingListAdapter extends  RecyclerView.Adapter<RecyclerView.View
 
         void onDeleteClicked(Ingredient i, int quantity);
 
-        void onIngredientLongClicked(Ingredient i);
+        void onIngredientClicked(Ingredient i);
     }
 }

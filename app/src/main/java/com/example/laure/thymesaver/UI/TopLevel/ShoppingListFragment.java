@@ -148,7 +148,7 @@ public class ShoppingListFragment extends AddButtonFragment
     }
 
     @Override
-    public void onIngredientLongClicked(Ingredient ing) {
+    public void onIngredientClicked(Ingredient ing) {
         Bundle bundle = new Bundle();
         bundle.putString(AddIngredientFragment.INGREDIENT_NAME, ing.getName());
         bundle.putString(AddIngredientFragment.INGREDIENT_CATEGORY, ing.getCategory());
