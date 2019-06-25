@@ -20,7 +20,7 @@
         android:textStyle="bold" />
 
     <Button
-        android:id="@+id/header_add_button"
+        android:id="@+id/header_button"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:visibility="gone"

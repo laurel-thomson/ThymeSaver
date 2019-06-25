@@ -37,6 +37,7 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecyclerView.
     private List<Ingredient> mIngredients = new ArrayList<>();
     private static final int INGREDIENT_TYPE = 1;
     private static final int HEADER_TYPE = 2;
+    private CharSequence[] mIngredientCategories;
 
     public RecipeIngredientsAdapter(Context context, AddRecipeIngredientListener listener ) {
         mContext = context;
@@ -48,11 +49,11 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecyclerView.
         mIngredients.clear();
 
         //generate category headers
-        CharSequence[] categories = mContext.getResources().getStringArray(R.array.ingredient_categories);
-        Ingredient[] headers = new Ingredient[categories.length + subRecipes.size()];
+        mIngredientCategories = mContext.getResources().getStringArray(R.array.ingredient_categories);
+        Ingredient[] headers = new Ingredient[mIngredientCategories.length + subRecipes.size()];
         int pos;
-        for (pos = 0; pos < categories.length; pos++) {
-            headers[pos] = new Ingredient("", categories[pos].toString(), false);
+        for (pos = 0; pos < mIngredientCategories.length; pos++) {
+            headers[pos] = new Ingredient("", mIngredientCategories[pos].toString(), false);
         }
         for (int i = 0; i < subRecipes.size(); i++, pos++) {
             headers[pos] = new Ingredient("", subRecipes.get(i), false);
@@ -157,9 +158,27 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecyclerView.
         }
         else {
             SectionHeaderViewHolder headerViewHolder = (SectionHeaderViewHolder) viewHolder;
-            final String category = mIngredients.get(position).getCategory();
-            headerViewHolder.sectionTitle.setText(category);
+            final String sectionTitle = mIngredients.get(position).getCategory();
+            headerViewHolder.sectionTitle.setText(sectionTitle);
+
+            if (isIngredientCategory(sectionTitle)) {
+                headerViewHolder.itemView.setBackground(mContext.getResources().getDrawable(R.drawable.bottom_border));
+                headerViewHolder.sectionTitle.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
+            }
+            else {
+                headerViewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
+                headerViewHolder.sectionTitle.setTextColor(mContext.getResources().getColor(R.color.colorTextIcon));
+            }
         }
+    }
+
+    private boolean isIngredientCategory(String headerTitle) {
+        for (int i = 0; i < mIngredientCategories.length; i++) {
+            if (mIngredientCategories[i].equals(headerTitle)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
