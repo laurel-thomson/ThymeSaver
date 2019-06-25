@@ -14,5 +14,7 @@ public interface ICookbookRepository {
 
     LiveData<List<Recipe>> getAllRecipes();
 
+    LiveData<List<Recipe>> getAvailableSubRecipes(String parentRecipeName);
+
     void addMealPlans(List<MealPlan> mealPlans);
 }

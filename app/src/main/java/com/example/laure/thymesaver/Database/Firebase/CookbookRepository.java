@@ -6,11 +6,13 @@ import android.arch.lifecycle.Transformations;
 import android.support.annotation.NonNull;
 
 import com.example.laure.thymesaver.Database.Firebase.LiveData.ListLiveData;
+import com.example.laure.thymesaver.Database.Firebase.LiveData.SubRecipeListLiveData;
 import com.example.laure.thymesaver.Database.ICookbookRepository;
 import com.example.laure.thymesaver.Models.MealPlan;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ import java.util.List;
 public class CookbookRepository implements ICookbookRepository {
     private List<Recipe> mRecipes = new ArrayList<>();
     private static CookbookRepository mSoleInstance;
+    private String mParentRecipe;
 
     public static CookbookRepository getInstance() {
         if (mSoleInstance == null) {
@@ -104,6 +107,14 @@ public class CookbookRepository implements ICookbookRepository {
                 new RecipeListDeserializer());
     }
 
+    @Override
+    public LiveData<List<Recipe>> getAvailableSubRecipes(String parentRecipeName) {
+        mParentRecipe = parentRecipeName;
+        return Transformations.map(
+                new SubRecipeListLiveData(DatabaseReferences.getRecipeReference(), parentRecipeName),
+                new SubRecipeListDeserializer());
+    }
+
     private class RecipeListDeserializer implements Function<DataSnapshot, List<Recipe>> {
         @Override
         public List<Recipe> apply(DataSnapshot dataSnapshot) {
@@ -115,6 +126,13 @@ public class CookbookRepository implements ICookbookRepository {
                 mRecipes.add(r);
             }
             return mRecipes;
+        }
+    }
+
+    private class SubRecipeListDeserializer implements Function<DataSnapshot, List<Recipe>> {
+        @Override
+        public List<Recipe> apply(DataSnapshot input) {
+            return SubRecipeListLiveData.getAvailableSubRecipes(input, mParentRecipe);
         }
     }
 }

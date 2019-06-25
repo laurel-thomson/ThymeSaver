@@ -26,6 +26,10 @@ public class CookBookViewModel extends AndroidViewModel {
         return mRecipes;
     }
 
+    public LiveData<List<Recipe>> getAvailableSubRecipes(String parentRecipeName) {
+        return mRepository.getAvailableSubRecipes(parentRecipeName);
+    }
+
     public void deleteRecipe(Recipe recipe) {
         mRepository.deleteRecipe(recipe);
     }

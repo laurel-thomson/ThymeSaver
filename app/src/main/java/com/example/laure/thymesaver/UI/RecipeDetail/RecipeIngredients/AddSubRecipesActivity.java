@@ -24,6 +24,8 @@ import java.util.List;
 
 public class AddSubRecipesActivity extends AppCompatActivity {
     public static final String SUB_RECIPES = "Sub recipes";
+    public static final String PARENT_RECIPE = "Parent recipe";
+    private String mParentRecipeName;
     private AddRecipesAdapter mAdapter;
     private CookBookViewModel mCookBookViewModel;
     private TextView mEmptyMessage;
@@ -35,6 +37,7 @@ public class AddSubRecipesActivity extends AppCompatActivity {
         final ProgressBar progressBar = findViewById(R.id.recycler_view_progress);
         mEmptyMessage = findViewById(R.id.empty_message);
         setUpActionBar();
+        mParentRecipeName = getIntent().getStringExtra(PARENT_RECIPE);
 
         mCookBookViewModel = ViewModelProviders.of(this).get(CookBookViewModel.class);
         RecyclerView rv = findViewById(R.id.recycler_view);
@@ -42,8 +45,7 @@ public class AddSubRecipesActivity extends AppCompatActivity {
 
         mAdapter = new AddRecipesAdapter(this);
 
-        //TODO: need to only get recipes that don't contain subrecipes & aren't already contained in this recipe
-        mCookBookViewModel.getAllRecipes().observe(this, new Observer<List<Recipe>>() {
+        mCookBookViewModel.getAvailableSubRecipes(mParentRecipeName).observe(this, new Observer<List<Recipe>>() {
             @Override
             public void onChanged(@Nullable List<Recipe> recipes) {
                 if (recipes.size() > 0) {
@@ -52,6 +54,7 @@ public class AddSubRecipesActivity extends AppCompatActivity {
                 else {
                     mEmptyMessage.setVisibility(View.VISIBLE);
                 }
+
                 mAdapter.setTotalRecipes(recipes);
                 progressBar.setVisibility(View.GONE);
             }

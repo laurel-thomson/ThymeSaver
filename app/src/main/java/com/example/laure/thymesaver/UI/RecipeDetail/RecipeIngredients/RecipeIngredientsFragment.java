@@ -159,11 +159,12 @@ public class RecipeIngredientsFragment extends AddButtonFragment
 
     private void addSubRecipe() {
         Intent intent = new Intent(getActivity(), AddSubRecipesActivity.class);
+        intent.putExtra(AddSubRecipesActivity.PARENT_RECIPE, mViewModel.getCurrentRecipe().getValue().getName());
         startActivityForResult(intent, ADD_SUB_RECIPES_REQUEST);
     }
 
     private void createNewSubRecipe() {
-
+        //todo
     }
 
     private void setMenuFABImage(int resource) {
