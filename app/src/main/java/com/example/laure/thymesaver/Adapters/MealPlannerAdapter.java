@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Handler;
+import android.support.design.button.MaterialButton;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
@@ -118,14 +119,11 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             {
                 headerViewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.colorSecondaryText));
                 headerViewHolder.sectionTitle.setTextColor(mContext.getResources().getColor(R.color.colorTextIcon));
-                headerViewHolder.addButton.setBackground(mContext.getResources().getDrawable(R.drawable.ic_add_light));
             }
             else
             {
                 headerViewHolder.itemView.setBackground(mContext.getResources().getDrawable(R.drawable.bottom_border));
                 headerViewHolder.sectionTitle.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
-                headerViewHolder.addButton.setBackground(mContext.getResources().getDrawable(R.drawable.ic_add));
-
             }
         }
 

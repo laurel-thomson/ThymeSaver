@@ -17,17 +17,22 @@
         android:textAllCaps="true"
         android:textColor="@color/colorPrimaryDark"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:textStyle="bold" />
 
     <Button
         android:id="@+id/header_button"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginRight="10dp"
-        android:background="@drawable/ic_add"/>
+        android:gravity="center"
+        android:text="ADD"
+        android:drawableLeft="@drawable/ic_add_light" />
     
 </android.support.constraint.ConstraintLayout>
