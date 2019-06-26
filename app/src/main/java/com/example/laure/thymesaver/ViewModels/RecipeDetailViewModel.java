@@ -9,9 +9,11 @@ import com.example.laure.thymesaver.Database.Firebase.RecipeDetailRepository;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.Models.RecipeQuantity;
+import com.example.laure.thymesaver.Models.Step;
 import com.example.laure.thymesaver.UI.Callbacks.ValueCallback;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class RecipeDetailViewModel extends AndroidViewModel {
     private IRecipeDetailRepository mRepository;
@@ -26,8 +28,6 @@ public class RecipeDetailViewModel extends AndroidViewModel {
     public void setCurrentRecipe(String currentRecipeName) {
         mCurrentRecipeName = currentRecipeName;
     }
-
-
 
     public void getCurrentRecipe(ValueCallback<Recipe> callback) {
         mRepository.getRecipe(mCurrentRecipeName, new ValueCallback<Recipe>() {
@@ -81,6 +81,28 @@ public class RecipeDetailViewModel extends AndroidViewModel {
 
     public void removeSubRecipe(String subRecipeName) {
         mRepository.removeSubRecipe(mCurrentRecipe, subRecipeName);
+    }
+
+    public void addStep(Step step) {
+        mCurrentRecipe.getSteps().add(step);
+        mRepository.updateRecipeSteps(mCurrentRecipe.getName(), mCurrentRecipe.getSteps());
+    }
+
+    public void updateStep(int position, Step step) {
+        mCurrentRecipe.getSteps().set(position, step);
+        mRepository.updateRecipeSteps(mCurrentRecipe.getName(), mCurrentRecipe.getSteps());
+    }
+
+    public void updateSteps(List<Step> steps) {
+        mCurrentRecipe.setSteps(steps);
+        mRepository.updateRecipeSteps(mCurrentRecipe.getName(), mCurrentRecipe.getSteps());
+    }
+
+    public Step deleteStep(int position) {
+        Step step = mCurrentRecipe.getSteps().get(position);
+        mCurrentRecipe.getSteps().remove(step);
+        mRepository.updateRecipeSteps(mCurrentRecipe.getName(), mCurrentRecipe.getSteps());
+        return step;
     }
 
     public void clearAllChecks() {

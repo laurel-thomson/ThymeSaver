@@ -5,9 +5,11 @@ import android.arch.lifecycle.LiveData;
 import com.example.laure.thymesaver.Models.Ingredient;
 import com.example.laure.thymesaver.Models.Recipe;
 import com.example.laure.thymesaver.Models.RecipeQuantity;
+import com.example.laure.thymesaver.Models.Step;
 import com.example.laure.thymesaver.UI.Callbacks.ValueCallback;
 
 import java.util.HashMap;
+import java.util.List;
 
 public interface IRecipeDetailRepository {
     LiveData<HashMap<Ingredient, RecipeQuantity>> getRecipeIngredients(String recipeName);
@@ -17,6 +19,8 @@ public interface IRecipeDetailRepository {
     void getRecipe(String recipeName, ValueCallback<Recipe> callback);
 
     void addOrUpdateRecipe(Recipe r);
+
+    void updateRecipeSteps(String recipeName, List<Step> steps);
 
     void addSubRecipe(Recipe parent, String childName);
 

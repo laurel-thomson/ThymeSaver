@@ -56,7 +56,7 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.My
 
     @Override
     public void onMoveComplete(int newPosition) {
-        mListener.onStepMoved();
+        mListener.onStepMoved(mSteps);
     }
 
 

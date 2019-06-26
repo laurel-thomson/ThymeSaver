@@ -30,7 +30,6 @@ public class RecipeStepsFragment extends AddButtonFragment
         implements RecipeStepListener {
     private RecipeStepAdapter mAdapter;
     private RecyclerView mRecyclerView;
-    private List<Step> mSteps;
     private RecipeDetailViewModel mViewModel;
     private TextView mEmptyMessage;
     private ProgressBar mProgressBar;
@@ -56,8 +55,7 @@ public class RecipeStepsFragment extends AddButtonFragment
                 if (recipe == null) {
                     return;
                 }
-                mSteps = recipe.getSteps();
-                if (mSteps.size() > 0) {
+                if (recipe.getSteps().size() > 0) {
                     mEmptyMessage.setVisibility(View.GONE);
                 }
                 else {
@@ -88,25 +86,18 @@ public class RecipeStepsFragment extends AddButtonFragment
 
     @Override
     public void onStepAdded(Step step) {
-        mSteps.add(step);
-        mAdapter.notifyDataSetChanged();
-        mViewModel.updateRecipe();
+        mViewModel.addStep(step);
     }
 
     @Override
     public void onStepDeleted(final int position) {
-        final Step step = mSteps.get(position);
-        mSteps.remove(position);
-        mAdapter.notifyDataSetChanged();
-        mViewModel.updateRecipe();
+        final Step step = mViewModel.deleteStep(position);
         Snackbar snackbar = Snackbar
                 .make(getView(), "Step removed from recipe.", Snackbar.LENGTH_LONG)
                 .setAction("UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        mSteps.add(position, step);
-                        mAdapter.notifyDataSetChanged();
-                        mViewModel.updateRecipe();
+                        mViewModel.updateStep(position, step);
                         Snackbar newSnackBar = Snackbar
                                 .make(getView(), "Recipe step restored.", Snackbar.LENGTH_SHORT);
                         newSnackBar.show();
@@ -117,21 +108,22 @@ public class RecipeStepsFragment extends AddButtonFragment
     }
 
     @Override
-    public void onStepMoved() {
-        mViewModel.updateRecipe();
+    public void onStepMoved(List<Step> newSteps) {
+        mViewModel.updateSteps(newSteps);
     }
 
     @Override
     public void onStepUpdated(Step step, int position) {
-        mSteps.set(position, step);
-        mViewModel.updateRecipe();
+        mViewModel.updateStep(position, step);
     }
 
     @Override
     public void onStepClicked(int position) {
         Bundle bundle = new Bundle();
         bundle.putInt(UpdateStepFragment.STEP_POSITION, position);
-        bundle.putString(UpdateStepFragment.STEP_STRING, mSteps.get(position).getName());
+        bundle.putString(
+                UpdateStepFragment.STEP_STRING,
+                mViewModel.getCurrentRecipe().getSteps().get(position).getName());
         UpdateStepFragment fragment = new UpdateStepFragment();
         fragment.setArguments(bundle);
         fragment.setListener(this);

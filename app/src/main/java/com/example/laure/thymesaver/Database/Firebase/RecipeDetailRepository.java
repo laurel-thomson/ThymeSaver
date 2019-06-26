@@ -41,6 +41,11 @@ public class RecipeDetailRepository implements IRecipeDetailRepository {
     }
 
     @Override
+    public void updateRecipeSteps(String recipeName, List<Step> steps) {
+        DatabaseReferences.getRecipeReference().child(recipeName).child("steps").setValue(steps);
+    }
+
+    @Override
     public void addSubRecipe(Recipe parent, String childName) {
         DatabaseReferences.getRecipeReference().child(childName).child("subRecipe").setValue(true);
         List<String> subRecipes = parent.getSubRecipes();
