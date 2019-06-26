@@ -274,7 +274,10 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecyclerView.
             super(itemView);
             sectionTitle = itemView.findViewById(R.id.header_text);
             headerButton = itemView.findViewById(R.id.header_button);
-            headerButton.setBackgroundResource(R.drawable.ic_clear);
+            headerButton.setCompoundDrawables(
+                    mContext.getResources().getDrawable(R.drawable.ic_clear),
+                    null, null, null);
+            headerButton.setText("REMOVE");
 
         }
     }
