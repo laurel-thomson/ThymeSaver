@@ -38,11 +38,6 @@ public class PantryRepository implements IPantryRepository {
 
     @Override
     public void deleteIngredient(Ingredient i) {
-        DatabaseReferences.getIngredientReference().child(i.getName()).removeValue();
-        removeIngredientFromRecipes(i);
-    }
-
-    private void removeIngredientFromRecipes(Ingredient i) {
         DatabaseReferences.getRecipeReference().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -54,6 +49,8 @@ public class PantryRepository implements IPantryRepository {
                         CookbookRepository.getInstance().addOrUpdateRecipe(recipe);
                     }
                 }
+                DatabaseReferences.getIngredientReference().child(i.getName()).removeValue();
+
             }
 
             @Override
