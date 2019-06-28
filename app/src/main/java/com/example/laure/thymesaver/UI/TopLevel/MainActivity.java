@@ -81,7 +81,8 @@ public class MainActivity extends AppCompatActivity {
     private void signIn() {
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.EmailBuilder().build());
+                new AuthUI.IdpConfig.EmailBuilder().build(),
+                new AuthUI.IdpConfig.AnonymousBuilder().build());
 
         // Create and launch sign-in intent
         startActivityForResult(
@@ -105,7 +106,8 @@ public class MainActivity extends AppCompatActivity {
     private void onSignOut() {
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.EmailBuilder().build());
+                new AuthUI.IdpConfig.EmailBuilder().build(),
+                new AuthUI.IdpConfig.AnonymousBuilder().build());
 
         // Create and launch sign-in intent
         startActivityForResult(
@@ -166,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeActivity() {
+        invalidateOptionsMenu();
         mFAB = findViewById(R.id.main_add_button);
         mFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -254,7 +257,17 @@ public class MainActivity extends AppCompatActivity {
         //The activity starts on the Meal Planner tab, which doesn't have a FAB
         mFAB.hide();
 
-        listenForPantryRequests();
+        if (isUserAnonymous()) {
+            listenForPantryRequests();
+        }
+    }
+
+    private boolean isUserAnonymous() {
+        if (FirebaseAuth.getInstance().getCurrentUser() == null
+                || FirebaseAuth.getInstance().getCurrentUser().getEmail() == null) {
+            return false;
+        }
+        return FirebaseAuth.getInstance().getCurrentUser().getEmail().equals("");
     }
 
     private void listenForPantryRequests() {
@@ -365,7 +378,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.top_level_menu, menu);
+        if (isUserAnonymous()) {
+            inflater.inflate(R.menu.top_level_menu_anon, menu);
+        }
+        else {
+            inflater.inflate(R.menu.top_level_menu, menu);
+        }
         return true;
     }
 
@@ -378,6 +396,9 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.sign_out:
                 signOut();
+                return true;
+            case R.id.sign_in:
+                signIn();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
