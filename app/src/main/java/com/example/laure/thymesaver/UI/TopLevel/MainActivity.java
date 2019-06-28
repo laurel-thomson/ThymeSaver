@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
             onSignInSuccess();
         }
         else {
-            signIn();
+            signIn(true);
         }
     }
 
@@ -78,19 +78,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void signIn() {
+    private void signIn(boolean isInitial) {
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
                 new AuthUI.IdpConfig.AnonymousBuilder().build());
+
+        int signInType = isInitial ? RC_SIGN_IN_INITIAL : RC_SIGN_IN_SECONDARY;
 
         // Create and launch sign-in intent
         startActivityForResult(
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
                         .setAvailableProviders(providers)
+                        .enableAnonymousUsersAutoUpgrade()
                         .build(),
-                RC_SIGN_IN_INITIAL);
+                signInType);
     }
 
     private void signOut() {
@@ -98,26 +101,10 @@ public class MainActivity extends AppCompatActivity {
                 .signOut(this)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     public void onComplete(@NonNull Task<Void> task) {
-                        onSignOut();
+                        signIn(false);
                     }
                 });
     }
-
-    private void onSignOut() {
-        // Choose authentication providers
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.EmailBuilder().build(),
-                new AuthUI.IdpConfig.AnonymousBuilder().build());
-
-        // Create and launch sign-in intent
-        startActivityForResult(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setAvailableProviders(providers)
-                        .build(),
-                RC_SIGN_IN_SECONDARY);
-    }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -135,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                 // response.getError().getErrorCode() and handle the error.
                 // We don't want to cancel sign in, so we'll just retry if they hit the
                 // back button
-                signIn();
+                signIn(true);
             }
         }
         else if (requestCode == RC_SIGN_IN_SECONDARY) {
@@ -398,7 +385,7 @@ public class MainActivity extends AppCompatActivity {
                 signOut();
                 return true;
             case R.id.sign_in:
-                signIn();
+                signIn(true);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
