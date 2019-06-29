@@ -90,9 +90,8 @@
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundColor" value="e3e3e3" />
-                                      <entry key="backgroundImage" value="C:\Users\laure\AndroidStudioProjects\ThymeSaver\app\src\main\res\drawable\ic_apple_light.xml" />
-                                      <entry key="foregroundAssetType" value="TEXT" />
-                                      <entry key="foregroundImage" value="C:\Users\laure\AndroidStudioProjects\ThymeSaver\app\src\main\res\drawable\ic_apple_light.xml" />
+                                      <entry key="backgroundImage" value="C:\Users\laure\Downloads\background_transparent.png" />
+                                      <entry key="foregroundImage" value="C:\Users\laure\Downloads\apple_transparent.png" />
                                       <entry key="legacyIconShape" value="NONE" />
                                       <entry key="webIconShape" value="NONE" />
                                     </map>
@@ -133,8 +132,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_person" />
-                            <entry key="sourceFile" value="C:\Users\laure\Downloads\baseline-person-24px.svg" />
+                            <entry key="outputName" value="ic_email" />
+                            <entry key="sourceFile" value="C:\Users\laure\Downloads\baseline-mail_outline-24px.svg" />
                           </map>
                         </option>
                       </PersistentState>

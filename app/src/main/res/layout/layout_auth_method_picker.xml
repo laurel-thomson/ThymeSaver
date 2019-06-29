@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp">
+
+    <ImageView
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/intro_image"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/email_signin_button"
+        style="@style/Widget.AppCompat.Button.Colored"
+        app:backgroundTint="@color/colorPrimary"
+        android:textColor="@color/colorTextIcon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity= "center"
+        android:text="Sign up/in with email"
+        android:drawableLeft="@drawable/ic_email"
+        app:layout_constraintBottom_toTopOf="@id/guest_signin_button"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/guest_signin_button"
+        style="@style/Widget.AppCompat.Button.Colored"
+        app:backgroundTint="@color/colorPrimaryLight"
+        android:textColor="@color/colorAccent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity= "center"
+        android:text="Continue as guest"
+        android:drawableLeft="@drawable/ic_person"
+        android:layout_marginBottom="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</android.support.constraint.ConstraintLayout>

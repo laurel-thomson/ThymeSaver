@@ -21,9 +21,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:textStyle="bold" />
 
-    <Button
+    <android.support.v7.widget.AppCompatButton
         android:id="@+id/header_button"
         style="@style/Widget.AppCompat.Button.Colored"
+        app:backgroundTint="@color/colorPrimary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"

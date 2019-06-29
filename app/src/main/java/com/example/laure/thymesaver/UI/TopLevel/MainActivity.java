@@ -30,6 +30,7 @@ import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.Callbacks.Callback;
 import com.example.laure.thymesaver.UI.Settings.PantryManagerActivity;
 import com.example.laure.thymesaver.ViewModels.PantryManagerViewModel;
+import com.firebase.ui.auth.AuthMethodPickerLayout;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -79,7 +80,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void signIn(boolean isInitial) {
-        // Choose authentication providers
+        AuthMethodPickerLayout customLayout = new AuthMethodPickerLayout
+                .Builder(R.layout.layout_auth_method_picker)
+                .setEmailButtonId(R.id.email_signin_button)
+                .setAnonymousButtonId(R.id.guest_signin_button)
+                .build();
+
+
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
                 new AuthUI.IdpConfig.AnonymousBuilder().build());
@@ -92,6 +99,8 @@ public class MainActivity extends AppCompatActivity {
                         .createSignInIntentBuilder()
                         .setAvailableProviders(providers)
                         .enableAnonymousUsersAutoUpgrade()
+                        .setTheme(R.style.AuthTheme)
+                        .setAuthMethodPickerLayout(customLayout)
                         .build(),
                 signInType);
     }
