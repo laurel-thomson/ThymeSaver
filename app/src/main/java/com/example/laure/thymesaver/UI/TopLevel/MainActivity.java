@@ -252,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean isUserAnonymous() {
         if (FirebaseAuth.getInstance().getCurrentUser() == null
                 || FirebaseAuth.getInstance().getCurrentUser().getEmail() == null) {
-            return false;
+            return true;
         }
         return FirebaseAuth.getInstance().getCurrentUser().getEmail().equals("");
     }
@@ -385,7 +385,7 @@ public class MainActivity extends AppCompatActivity {
                 signOut();
                 return true;
             case R.id.sign_in:
-                signIn(true);
+                signOut();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
