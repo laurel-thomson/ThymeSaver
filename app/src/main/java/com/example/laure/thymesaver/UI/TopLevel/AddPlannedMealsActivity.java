@@ -1,4 +1,4 @@
-package com.example.laure.thymesaver.UI;
+package com.example.laure.thymesaver.UI.TopLevel;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;

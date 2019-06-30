@@ -20,7 +20,6 @@ import com.example.laure.thymesaver.Adapters.DragHelper;
 import com.example.laure.thymesaver.Adapters.MealPlannerAdapter;
 import com.example.laure.thymesaver.Models.MealPlan;
 import com.example.laure.thymesaver.R;
-import com.example.laure.thymesaver.UI.AddPlannedMealsActivity;
 import com.example.laure.thymesaver.UI.Callbacks.ValueCallback;
 import com.example.laure.thymesaver.UI.RecipeDetail.RecipeDetailActivity;
 import com.example.laure.thymesaver.ViewModels.MealPlannerViewModel;

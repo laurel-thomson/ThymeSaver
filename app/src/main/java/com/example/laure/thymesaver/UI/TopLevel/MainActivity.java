@@ -28,6 +28,7 @@ import com.example.laure.thymesaver.Database.Firebase.PantryManagerRepository;
 import com.example.laure.thymesaver.Models.Follower;
 import com.example.laure.thymesaver.R;
 import com.example.laure.thymesaver.UI.Callbacks.Callback;
+import com.example.laure.thymesaver.UI.LauncherActivity;
 import com.example.laure.thymesaver.UI.Settings.PantryManagerActivity;
 import com.example.laure.thymesaver.ViewModels.PantryManagerViewModel;
 import com.firebase.ui.auth.AuthMethodPickerLayout;
@@ -42,9 +43,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
-    private static final int RC_SIGN_IN_INITIAL = 100;
-    private static final int RC_SIGN_IN_SECONDARY = 101;
     private MenuItem mPreviousMenuItem;
     private BottomNavigationView mNavigationView;
     private ViewPager mViewPager;
@@ -58,109 +56,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setUpActionBar();
         mJoinRequestCardView = findViewById(R.id.join_request_card);
-
-        //if the user is already logged in, we don't want to launch the sign in flow
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            onSignInSuccess();
-        }
-        else {
-            signIn(true);
-        }
+        initializeActivity();
     }
 
     private void setUpActionBar() {
         mActionBar = getSupportActionBar();
         mActionBar.setTitle("Meal Planner");
         mActionBar.setBackgroundDrawable(getResources().getDrawable(R.color.colorPrimary));
-    }
-
-
-    private void signIn(boolean isInitial) {
-        AuthMethodPickerLayout customLayout = new AuthMethodPickerLayout
-                .Builder(R.layout.layout_auth_method_picker)
-                .setEmailButtonId(R.id.email_signin_button)
-                .setAnonymousButtonId(R.id.guest_signin_button)
-                .build();
-
-
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.EmailBuilder().build(),
-                new AuthUI.IdpConfig.AnonymousBuilder().build());
-
-        int signInType = isInitial ? RC_SIGN_IN_INITIAL : RC_SIGN_IN_SECONDARY;
-
-        // Create and launch sign-in intent
-        startActivityForResult(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setAvailableProviders(providers)
-                        .enableAnonymousUsersAutoUpgrade()
-                        .setTheme(R.style.AuthTheme)
-                        .setAuthMethodPickerLayout(customLayout)
-                        .build(),
-                signInType);
-    }
-
-    private void signOut() {
-        AuthUI.getInstance()
-                .signOut(this)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    public void onComplete(@NonNull Task<Void> task) {
-                        signIn(false);
-                    }
-                });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == RC_SIGN_IN_INITIAL) {
-            IdpResponse response = IdpResponse.fromResultIntent(data);
-
-            if (resultCode == RESULT_OK) {
-                onSignInSuccess();
-                // ...
-            } else {
-                // Sign in failed. If response is null the user canceled the
-                // sign-in flow using the back button. Otherwise check
-                // response.getError().getErrorCode() and handle the error.
-                // We don't want to cancel sign in, so we'll just retry if they hit the
-                // back button
-                signIn(true);
-            }
-        }
-        else if (requestCode == RC_SIGN_IN_SECONDARY) {
-            //restart application
-            Intent i = getBaseContext().getPackageManager()
-                    .getLaunchIntentForPackage( getBaseContext().getPackageName() );
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(i);
-        }
-    }
-
-    private void onSignInSuccess() {
-        mRepository = PantryManagerRepository.getInstance();
-        mRepository.initializePreferredPantry(new Callback() {
-            @Override
-            public void onSuccess() {
-                initializeActivity();
-            }
-
-            @Override
-            public void onError(String err) {
-                Snackbar snackbar = Snackbar
-                        .make(findViewById(
-                                R.id.pantry_manager_layout),
-                                err,
-                                Snackbar.LENGTH_SHORT);
-                snackbar.show();
-            }
-        });
     }
 
     private void initializeActivity() {
@@ -399,5 +306,16 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void signOut() {
+        AuthUI.getInstance()
+                .signOut(this)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Intent intent = new Intent(MainActivity.this, LauncherActivity.class);
+                        startActivity(intent);
+                    }
+                });
     }
 }
