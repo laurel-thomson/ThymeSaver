@@ -24,6 +24,36 @@
     <string name="name">Name</string>
     <string name="nothing_to_see_here_yet">Nothing to see here yet!</string>
     <string name="add">ADD</string>
+    <string name="ingredient_name_required">Ingredient name required.</string>
+    <string name="ingredient_category_required">Ingredient category required.</string>
+    <string name="recipe_quantity_required">Recipe quantity required.</string>
+    <string name="incorrect_number_format">Incorrect number format.</string>
+    <string name="add_sub_recipes">Add Sub-Recipes</string>
+    <string name="create_new_recipe">Create New Recipe</string>
+    <string name="create">Create</string>
+    <string name="recipe_exists_error">A recipe of that name already exists.</string>
+    <string name="sure_remove_subrecipe">Are you sure you want to remove this subrecipe?</string>
+    <string name="recipe_ingredient_restored">Recipe ingredient restored.</string>
+    <string name="undo">UNDO</string>
+    <string name="step_removed">Step removed from recipe.</string>
+    <string name="step_restored">Recipe step restored.</string>
+    <string name="manage_pantries">Manage Pantries</string>
+    <string name="request_join_pantry">Request to Join a Pantry</string>
+    <string name="invalid_email">Invalid email address</string>
+    <string name="join_request_sent">Pantry join request sent.</string>
+    <string name="preferred_pantry_updated">Preferred pantry updated.</string>
+    <string name="leave_pantry">Leave pantry?</string>
+    <string name="remove_follower">Remove follower?</string>
+    <string name="add_scheduled_meals">Add Scheduled Meals</string>
+    <string name="join_request_accepted">Join request accepted!</string>
+    <string name="join_request_declined">Join request declined.</string>
+    <string name="meal_planner">Meal Planner</string>
+    <string name="cookbook">Cookbook</string>
+    <string name="pantry">Pantry</string>
+    <string name="shopping_list">Shopping List</string>
+    <string name="database_error">A database error occurred.</string>
+    <string name="add_ingredient_pantry">Add Ingredient to Pantry?</string>
+    <string name="refresh_shopping_list">Refresh Shopping List?</string>
 
     <string-array name="ingredient_categories">
         <item>Produce</item>

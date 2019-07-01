@@ -80,7 +80,7 @@ public class PantryManagerActivity extends AppCompatActivity implements PantryLi
     private void setUpActionBar() {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setElevation(0);
-        actionBar.setTitle("Manage Pantries");
+        actionBar.setTitle(R.string.manage_pantries);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_done);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setBackgroundDrawable(getResources().getDrawable(R.color.colorPrimary));
@@ -93,7 +93,7 @@ public class PantryManagerActivity extends AppCompatActivity implements PantryLi
 
         final AlertDialog dialog = new AlertDialog.Builder(this)
                 .setView(view)
-                .setTitle("Request to Join a Pantry")
+                .setTitle(R.string.request_join_pantry)
                 .setPositiveButton("Send Request", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -128,7 +128,7 @@ public class PantryManagerActivity extends AppCompatActivity implements PantryLi
                 }
                 if (!isEmailValid(email)) {
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-                    textInputLayout.setError("Invalid email address");
+                    textInputLayout.setError(getString(R.string.invalid_email));
                     return;
                 }
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
@@ -144,7 +144,7 @@ public class PantryManagerActivity extends AppCompatActivity implements PantryLi
                 Snackbar snackbar = Snackbar
                         .make(findViewById(
                                 R.id.pantry_manager_layout),
-                                "Pantry join request sent.",
+                                R.string.join_request_sent,
                                 Snackbar.LENGTH_SHORT);
                 snackbar.show();
             }
@@ -212,7 +212,7 @@ public class PantryManagerActivity extends AppCompatActivity implements PantryLi
         Snackbar snackbar = Snackbar
                 .make(findViewById(
                         R.id.pantry_manager_layout),
-                        "Preferred pantry updated.",
+                        R.string.preferred_pantry_updated,
                         Snackbar.LENGTH_SHORT);
         snackbar.show();
     }
@@ -220,7 +220,7 @@ public class PantryManagerActivity extends AppCompatActivity implements PantryLi
     @Override
     public void onLeavePantryClicked(Pantry pantry) {
         new AlertDialog.Builder(this)
-                .setTitle("Leave pantry?")
+                .setTitle(R.string.leave_pantry)
                 .setMessage("Are you sure you want to leave this pantry? This cannot be undone.")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener()
                 {
@@ -237,7 +237,7 @@ public class PantryManagerActivity extends AppCompatActivity implements PantryLi
     @Override
     public void onRemoveFollowerClicked(Follower follower) {
         new AlertDialog.Builder(this)
-                .setTitle("Remove follower?")
+                .setTitle(R.string.remove_follower)
                 .setMessage("Are you sure you want to remove this follower? This cannot be undone.")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener()
                 {

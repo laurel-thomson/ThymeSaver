@@ -203,8 +203,8 @@ public class RecipeIngredientsFragment extends AddButtonFragment
 
         final AlertDialog dialog = new AlertDialog.Builder(context)
                 .setView(view)
-                .setTitle("Create New Recipe")
-                .setPositiveButton("Create", null)
+                .setTitle(R.string.create_new_recipe)
+                .setPositiveButton("CREATE", null)
                 .create();
         dialog.show();
 
@@ -243,7 +243,7 @@ public class RecipeIngredientsFragment extends AddButtonFragment
                 }
                 if (recipeNameExists(name, recipes)) {
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-                    textInputLayout.setError("A recipe of that name already exists.");
+                    textInputLayout.setError(getString(R.string.recipe_exists_error));
                     return;
                 }
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
@@ -366,7 +366,7 @@ public class RecipeIngredientsFragment extends AddButtonFragment
     public void onSubRecipeDeleteClicked(String subrecipeName) {
         new AlertDialog.Builder(getActivity())
                 .setTitle("Remove " + subrecipeName + " from this recipe?")
-                .setMessage("Are you sure you want to remove this subrecipe?")
+                .setMessage(R.string.sure_remove_subrecipe)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener()
                 {
                     @Override
@@ -401,7 +401,7 @@ public class RecipeIngredientsFragment extends AddButtonFragment
         Snackbar snackbar = Snackbar
                 .make(getView(), i.getName() +
                         " removed from recipe.", Snackbar.LENGTH_LONG)
-                .setAction("UNDO", new View.OnClickListener() {
+                .setAction(R.string.undo, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         mViewModel.addUpdateRecipeIngredient(
@@ -409,7 +409,7 @@ public class RecipeIngredientsFragment extends AddButtonFragment
                                 i.getName(),
                                 quantity);
                         Snackbar newSnackBar = Snackbar
-                                .make(getView(), "Recipe ingredient restored.", Snackbar.LENGTH_SHORT);
+                                .make(getView(), R.string.recipe_ingredient_restored, Snackbar.LENGTH_SHORT);
                         newSnackBar.show();
                     }
                 });

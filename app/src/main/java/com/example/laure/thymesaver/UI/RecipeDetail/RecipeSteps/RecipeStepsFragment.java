@@ -93,13 +93,13 @@ public class RecipeStepsFragment extends AddButtonFragment
     public void onStepDeleted(final int position) {
         final Step step = mViewModel.deleteStep(position);
         Snackbar snackbar = Snackbar
-                .make(getView(), "Step removed from recipe.", Snackbar.LENGTH_LONG)
-                .setAction("UNDO", new View.OnClickListener() {
+                .make(getView(), R.string.step_removed, Snackbar.LENGTH_LONG)
+                .setAction(R.string.undo, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         mViewModel.updateStep(position, step);
                         Snackbar newSnackBar = Snackbar
-                                .make(getView(), "Recipe step restored.", Snackbar.LENGTH_SHORT);
+                                .make(getView(), R.string.step_restored, Snackbar.LENGTH_SHORT);
                         newSnackBar.show();
                     }
                 });

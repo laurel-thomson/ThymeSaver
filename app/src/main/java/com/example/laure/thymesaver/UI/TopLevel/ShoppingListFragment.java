@@ -119,7 +119,7 @@ public class ShoppingListFragment extends AddButtonFragment
 
     private void askAddIngredientToPantry(final Ingredient ing, final int quantity) {
         AlertDialog dialog = new AlertDialog.Builder(getActivity())
-                .setTitle("Add Ingredient to Pantry?")
+                .setTitle(R.string.add_ingredient_pantry)
                 .setMessage("Would you like to store this ingredient in the pantry?")
                 .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
@@ -170,7 +170,7 @@ public class ShoppingListFragment extends AddButtonFragment
         switch (item.getItemId()) {
             case R.id.action_renew:
                 AlertDialog dialog = new AlertDialog.Builder(getActivity())
-                        .setTitle("Refresh Shopping List?")
+                        .setTitle(R.string.refresh_shopping_list)
                         .setMessage("Refreshing the shopping list will delete all " +
                                 "manual modifications.")
                         .setPositiveButton("REFRESH", new DialogInterface.OnClickListener() {

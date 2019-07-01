@@ -123,16 +123,16 @@ public class MainActivity extends AppCompatActivity {
                 mPreviousMenuItem = mNavigationView.getMenu().getItem(position);
                 switch (position) {
                     case 0:
-                        mActionBar.setTitle("Meal Planner");
+                        mActionBar.setTitle(R.string.meal_planner);
                         break;
                     case 1:
-                        mActionBar.setTitle("Cookbook");
+                        mActionBar.setTitle(R.string.cookbook);
                         break;
                     case 2:
-                        mActionBar.setTitle("Pantry");
+                        mActionBar.setTitle(R.string.pantry);
                         break;
                     case 3:
-                        mActionBar.setTitle("Shopping List");
+                        mActionBar.setTitle(R.string.shopping_list);
                         break;
                 }
             }
@@ -211,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
                 mViewModel.acceptJoinRequest(request);
 
                 Snackbar.make(findViewById(R.id.activity_main_coordinator),
-                        "Join request accepted!", Snackbar.LENGTH_SHORT).show();
+                        R.string.join_request_accepted, Snackbar.LENGTH_SHORT).show();
 
                 //get rid of listeners
                 acceptButton.setOnClickListener(null);
@@ -228,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
                 mViewModel.declineJoinRequest(request);
 
                 Snackbar.make(findViewById(R.id.activity_main_coordinator),
-                        "Join request declined.", Snackbar.LENGTH_SHORT).show();
+                        R.string.join_request_declined, Snackbar.LENGTH_SHORT).show();
 
                 //get rid of listeners
                 acceptButton.setOnClickListener(null);

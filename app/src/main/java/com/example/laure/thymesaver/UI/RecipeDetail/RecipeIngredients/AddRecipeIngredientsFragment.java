@@ -120,12 +120,12 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
 
                         //check for incomplete fields
                         if (mNameET.getText().toString().equals("")) {
-                            mNameLayout.setError("Ingredient name required.");
+                            mNameLayout.setError(getString(R.string.ingredient_name_required));
                             hasError = true;
                         }
 
                         if (mQuantityET.getText().toString().equals("")) {
-                            mQuantityLayout.setError("Recipe quantity required.");
+                            mQuantityLayout.setError(getString(R.string.recipe_quantity_required));
                             hasError = true;
                         }
 
@@ -135,7 +135,7 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
                             quantity = Double.parseDouble(mQuantityET.getText().toString());
                         }
                         catch (NumberFormatException e) {
-                            mQuantityLayout.setError("Incorrect number format.");
+                            mQuantityLayout.setError(getString(R.string.incorrect_number_format));
                             quantity = -1;
                             hasError = true;
                         }

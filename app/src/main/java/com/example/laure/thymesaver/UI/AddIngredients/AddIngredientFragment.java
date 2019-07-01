@@ -58,12 +58,12 @@ public class AddIngredientFragment extends BottomSheetDialogFragment {
 
                         //check for incomplete fields
                         if (name.equals("")) {
-                            mNameLayout.setError("Ingredient name required.");
+                            mNameLayout.setError(getString(R.string.ingredient_name_required));
                             hasError = true;
                         }
 
                         if (category.equals("")) {
-                            mCategoryLayout.setError("Ingredient category required.");
+                            mCategoryLayout.setError(getString(R.string.ingredient_category_required));
                             hasError = true;
                         }
 

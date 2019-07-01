@@ -66,7 +66,7 @@ public class AddSubRecipesActivity extends AppCompatActivity {
 
     private void setUpActionBar() {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Add Sub-Recipes");
+        actionBar.setTitle(R.string.add_sub_recipes);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_done);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setBackgroundDrawable(getResources().getDrawable(R.color.colorPrimary));

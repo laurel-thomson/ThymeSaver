@@ -66,7 +66,7 @@ public class AddPlannedMealsActivity extends AppCompatActivity {
 
     private void setUpActionBar() {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Add Scheduled Meals");
+        actionBar.setTitle(R.string.add_scheduled_meals);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_done);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setBackgroundDrawable(getResources().getDrawable(R.color.colorPrimary));

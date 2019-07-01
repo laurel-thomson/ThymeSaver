@@ -117,7 +117,7 @@ public class MealPlannerFragment extends Fragment implements MealPlannerAdapter.
 
             @Override
             public void onError(String err) {
-                Snackbar snackbar = Snackbar.make(getView(), "A database error occured.", Snackbar.LENGTH_SHORT);
+                Snackbar snackbar = Snackbar.make(getView(), R.string.database_error, Snackbar.LENGTH_SHORT);
                 snackbar.show();
             }
         });
@@ -129,7 +129,7 @@ public class MealPlannerFragment extends Fragment implements MealPlannerAdapter.
         Snackbar snackbar = Snackbar
                 .make(getView(), mealPlan.getRecipeName() +
                         " removed from meal plan.", Snackbar.LENGTH_LONG)
-                .setAction("UNDO", new View.OnClickListener() {
+                .setAction(R.string.undo, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         mViewModel.addMealPlan(mealPlan);
