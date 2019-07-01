@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
         //The activity starts on the Meal Planner tab, which doesn't have a FAB
         mFAB.hide();
 
-        if (isUserAnonymous()) {
+        if (!isUserAnonymous()) {
             listenForPantryRequests();
         }
     }
