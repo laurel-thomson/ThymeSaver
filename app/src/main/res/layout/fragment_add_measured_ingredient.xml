@@ -27,8 +27,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="@color/colorTextIcon"
-            android:textSize="18dp"
-            android:text="Done"/>
+            android:textSize="18sp"
+            android:text="@string/done"/>
 
     </LinearLayout>
 
@@ -46,7 +46,7 @@
             android:id="@+id/ingredient_name"
             android:textCursorDrawable="@drawable/color_cursor"
             app:backgroundTint="@color/colorPrimary"
-            android:hint="Ingredient Name"
+            android:hint="@string/ingredient_name"
             android:singleLine="true"
             android:maxLength="30"
             android:padding="15dp"
@@ -67,7 +67,7 @@
 
         <EditText
             android:id="@+id/ingredient_quantity"
-            android:hint="Quantity"
+            android:hint="@string/quantity"
             android:maxLength="6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -87,7 +87,7 @@
 
         <AutoCompleteTextView
             android:id="@+id/ingredient_unit"
-            android:hint="Unit"
+            android:hint="@string/unit"
             android:maxLength="15"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

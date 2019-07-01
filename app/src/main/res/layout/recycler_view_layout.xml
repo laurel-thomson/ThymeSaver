@@ -28,7 +28,7 @@
         android:layout_gravity="center"
         android:textSize="15sp"
         android:id="@+id/empty_message"
-        android:text="Nothing to see here yet!"
+        android:text="@string/nothing_to_see_here_yet"
         android:visibility="gone"/>
 
 </FrameLayout>

@@ -35,7 +35,7 @@
         android:id="@+id/fab3_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
         android:layout_gravity="end|bottom"
         android:visibility="gone"
@@ -45,9 +45,9 @@
             style="@style/TextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Create new sub-recipe"
+            android:text="@string/create_new_sub_recipe"
             android:layout_gravity="center"
-            android:layout_marginRight="20dp"/>
+            android:layout_marginEnd="20dp"/>
 
         <android.support.design.widget.FloatingActionButton
             style="@style/FABStyle"
@@ -62,7 +62,7 @@
         android:id="@+id/fab2_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
         android:layout_gravity="end|bottom"
         android:visibility="gone"
@@ -72,9 +72,9 @@
             style="@style/TextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add sub-recipe"
+            android:text="@string/add_sub_recipe"
             android:layout_gravity="center"
-            android:layout_marginRight="20dp"/>
+            android:layout_marginEnd="20dp"/>
 
         <android.support.design.widget.FloatingActionButton
             style="@style/FABStyle"
@@ -90,7 +90,7 @@
         android:id="@+id/fab1_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
         android:layout_gravity="end|bottom"
         android:visibility="gone"
@@ -100,9 +100,9 @@
             style="@style/TextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add ingredient"
+            android:text="@string/add_ingredient"
             android:layout_gravity="center"
-            android:layout_marginRight="20dp"/>
+            android:layout_marginEnd="20dp"/>
 
         <android.support.design.widget.FloatingActionButton
             style="@style/FABStyle"
@@ -119,7 +119,7 @@
             android:id="@+id/recipe_detail_add_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginBottom="20dp"
             android:layout_gravity="end|bottom"
             app:srcCompat="@android:drawable/ic_input_add" />

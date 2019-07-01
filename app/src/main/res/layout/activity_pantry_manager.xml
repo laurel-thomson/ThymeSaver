@@ -28,11 +28,10 @@
         style="@style/FABStyle"
         android:id="@+id/pantry_manager_add_button"
         android:layout_gravity="end|bottom"
-        android:layout_marginRight="20dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:elevation="8dp"
         app:srcCompat="@android:drawable/ic_input_add" />
 
 </FrameLayout>

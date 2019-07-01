@@ -1,5 +1,29 @@
 <resources>
     <string name="app_name">ThymeSaver</string>
+    <string name="accept">ACCEPT</string>
+    <string name="decline">DECLINE</string>
+    <string name="create_new_sub_recipe">Create new sub-recipe</string>
+    <string name="add_sub_recipe">Add sub-recipe</string>
+    <string name="add_ingredient">Add ingredient</string>
+    <string name="remove">REMOVE</string>
+    <string name="add_person">Add Person</string>
+    <string name="done">Done</string>
+    <string name="is_bulk_ingredient">Is bulk ingredient?</string>
+    <string name="ingredient_name">Ingredient Name</string>
+    <string name="category">Category</string>
+    <string name="quantity">Quantity</string>
+    <string name="unit">Unit</string>
+    <string name="step">Step</string>
+    <string name="decrement">Decrement</string>
+    <string name="increment">Increment</string>
+    <string name="email_address">Email Address</string>
+    <string name="sign_up_in_with_email">Sign up/in with email</string>
+    <string name="continue_as_guest">Continue as guest</string>
+    <string name="leave">LEAVE</string>
+    <string name="expand_pantry">Expand Pantry</string>
+    <string name="name">Name</string>
+    <string name="nothing_to_see_here_yet">Nothing to see here yet!</string>
+    <string name="add">ADD</string>
 
     <string-array name="ingredient_categories">
         <item>Produce</item>

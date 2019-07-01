@@ -23,8 +23,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity= "center"
-        android:text="Sign up/in with email"
-        android:drawableLeft="@drawable/ic_email"
+        android:text="@string/sign_up_in_with_email"
+        android:drawableStart="@drawable/ic_email"
         app:layout_constraintBottom_toTopOf="@id/guest_signin_button"/>
 
     <android.support.v7.widget.AppCompatButton
@@ -35,8 +35,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity= "center"
-        android:text="Continue as guest"
-        android:drawableLeft="@drawable/ic_person"
+        android:text="@string/continue_as_guest"
+        android:drawableStart="@drawable/ic_person"
         android:layout_marginBottom="40dp"
         app:layout_constraintBottom_toBottomOf="parent"/>
 

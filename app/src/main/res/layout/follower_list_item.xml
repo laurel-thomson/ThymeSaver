@@ -10,7 +10,8 @@
         android:layout_weight="0.1"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/ic_person"/>
+        android:src="@drawable/ic_person"
+        android:contentDescription="@string/add_person" />
 
     <TextView
         android:id="@+id/follower_name"
@@ -23,13 +24,13 @@
 
     <TextView
         android:id="@+id/remove_follower"
-        android:text="REMOVE"
+        android:text="@string/remove"
         android:layout_width="0dp"
         android:layout_weight="0.2"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
+        android:layout_gravity="end"
         android:padding="10dp"
-        android:textSize="14dp"
+        android:textSize="14sp"
         android:textStyle="bold"
         android:textColor="@color/colorPrimaryDark"/>
 

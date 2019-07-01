@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:textCursorDrawable="@drawable/color_cursor"
             app:backgroundTint="@color/colorPrimary"
-            android:hint="Email Address"
+            android:hint="@string/email_address"
             android:maxLength="30"
             android:singleLine="true"/>
 

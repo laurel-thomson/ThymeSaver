@@ -19,15 +19,16 @@
             android:layout_weight="0.3"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_done"/>
+            android:src="@drawable/ic_done"
+            android:contentDescription="@string/done" />
 
         <TextView
             android:layout_weight="0.7"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="@color/colorTextIcon"
-            android:textSize="18dp"
-            android:text="Done"/>
+            android:textSize="18sp"
+            android:text="@string/done"/>
 
     </LinearLayout>
 
@@ -50,7 +51,7 @@
             android:layout_height="wrap_content"
             android:textCursorDrawable="@drawable/color_cursor"
             app:backgroundTint="@color/colorPrimary"
-            android:hint="Step"
+            android:hint="@string/step"
             android:maxLength="100"
             android:singleLine="true"/>
 
