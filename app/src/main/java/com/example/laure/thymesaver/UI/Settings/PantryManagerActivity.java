@@ -43,6 +43,7 @@ public class PantryManagerActivity extends AppCompatActivity implements PantryLi
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pantry_manager);
         final ProgressBar progressBar = findViewById(R.id.pantry_manager_progress);
