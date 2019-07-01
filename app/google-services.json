@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:157439382276:android:13c49a9b7cee1a35",
         "android_client_info": {
-          "package_name": "com.example.laure.thymesaver"
+          "package_name": "thomson.laurel.beth.thymesaver"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "157439382276-mcpu4d3uptvuki5c0or9gvv5rjamv8r3.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.laure.thymesaver",
+            "package_name": "thomson.laurel.beth.thymesaver",
             "certificate_hash": "8f1b417ccf828218edfda2e9ec425ac9fc7705e5"
           }
         },

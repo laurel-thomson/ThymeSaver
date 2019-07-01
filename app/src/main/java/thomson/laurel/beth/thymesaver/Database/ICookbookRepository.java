@@ -1,0 +1,23 @@
+package thomson.laurel.beth.thymesaver.Database;
+
+import android.arch.lifecycle.LiveData;
+
+import thomson.laurel.beth.thymesaver.Models.MealPlan;
+import thomson.laurel.beth.thymesaver.Models.Recipe;
+import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
+
+import java.util.List;
+
+public interface ICookbookRepository {
+    void addOrUpdateRecipe(Recipe r);
+
+    void deleteRecipe(Recipe r);
+
+    LiveData<List<Recipe>> getAllRecipes();
+
+    void getAllRecipes(ValueCallback<List<Recipe>> callback);
+
+    LiveData<List<Recipe>> getAvailableSubRecipes(String parentRecipeName);
+
+    void addMealPlans(List<MealPlan> mealPlans);
+}
