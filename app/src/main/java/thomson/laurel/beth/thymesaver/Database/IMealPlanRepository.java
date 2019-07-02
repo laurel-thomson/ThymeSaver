@@ -15,7 +15,7 @@ public interface IMealPlanRepository {
 
     void deleteMealPlan(MealPlan mealPlan);
 
-    void removeMealPlanIngredientsFromPantry(MealPlan mealPlan, ValueCallback<HashMap> callback);
+    void cookMealPlan(MealPlan mealPlan, ValueCallback<HashMap> callback);
 
     void addMealPlanIngredientsToPantry(HashMap ingredientQuantities);
 

@@ -34,7 +34,7 @@ public class MealPlannerViewModel extends AndroidViewModel {
     }
 
     public void cookMealPlan(MealPlan mealPlan, ValueCallback<HashMap> callback) {
-        mRepository.removeMealPlanIngredientsFromPantry(mealPlan, callback);
+        mRepository.cookMealPlan(mealPlan, callback);
         removeMealPlan(mealPlan);
     }
 

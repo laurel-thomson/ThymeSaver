@@ -13,12 +13,12 @@
         android:versionCode="100"
         android:versionName="1.0.0"
         android:theme="@style/AppTheme.Launcher">
-        <activity android:name="thomson.laurel.beth.thymesaver.UI.TopLevel.MainActivity"/>
-        <activity android:name="thomson.laurel.beth.thymesaver.UI.RecipeDetail.RecipeDetailActivity" />
-        <activity android:name="thomson.laurel.beth.thymesaver.UI.TopLevel.AddPlannedMealsActivity" />
-        <activity android:name="thomson.laurel.beth.thymesaver.UI.Settings.PantryManagerActivity" />
-        <activity android:name="thomson.laurel.beth.thymesaver.UI.RecipeDetail.RecipeIngredients.AddSubRecipesActivity" />
-        <activity android:name="thomson.laurel.beth.thymesaver.UI.LauncherActivity">
+        <activity android:name=".UI.TopLevel.MainActivity"/>
+        <activity android:name=".UI.RecipeDetail.RecipeDetailActivity" />
+        <activity android:name=".UI.TopLevel.AddPlannedMealsActivity" />
+        <activity android:name=".UI.Settings.PantryManagerActivity" />
+        <activity android:name=".UI.RecipeDetail.RecipeIngredients.AddSubRecipesActivity" />
+        <activity android:name=".UI.LauncherActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -10,6 +10,8 @@ import thomson.laurel.beth.thymesaver.Database.IMealPlanRepository;
 import thomson.laurel.beth.thymesaver.Models.Ingredient;
 import thomson.laurel.beth.thymesaver.Models.MealPlan;
 import thomson.laurel.beth.thymesaver.Models.Recipe;
+import thomson.laurel.beth.thymesaver.Models.RecipeQuantity;
+import thomson.laurel.beth.thymesaver.Models.Step;
 import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -50,16 +52,21 @@ public class MealPlanRepository implements IMealPlanRepository {
     }
 
     @Override
-    public void removeMealPlanIngredientsFromPantry(MealPlan mealPlan, ValueCallback<HashMap> callback) {
-        DatabaseReferences.getRecipeReference().equalTo(mealPlan.getRecipeName()).addListenerForSingleValueEvent(new ValueEventListener() {
+    public void cookMealPlan(MealPlan mealPlan, ValueCallback<HashMap> callback) {
+        DatabaseReferences.getRecipeReference().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //There should only be one matching recipe
-                for (DataSnapshot snap : dataSnapshot.getChildren()) {
-                    Recipe recipe = snap.getValue(Recipe.class);
-                    recipe.setName(snap.getKey());
-                    removeRecipeIngredientsFromPantry(recipe, callback);
+            public void onDataChange(@NonNull DataSnapshot snap) {
+                List<Recipe> recipes = new ArrayList<>();
+                Recipe recipe = snap.child(mealPlan.getRecipeName()).getValue(Recipe.class);
+                recipe.setName(snap.child(mealPlan.getRecipeName()).getKey());
+                recipes.add(recipe);
+
+                for (String recipeName : recipe.getSubRecipes()) {
+                    Recipe r = snap.child(recipeName).getValue(Recipe.class);
+                    r.setName(snap.child(recipeName).getKey());
+                    recipes.add(r);
                 }
+                cookRecipes(recipes, callback);
             }
 
             @Override
@@ -69,7 +76,25 @@ public class MealPlanRepository implements IMealPlanRepository {
         });
     }
 
-    private void removeRecipeIngredientsFromPantry(Recipe recipe, ValueCallback<HashMap> callback) {
+    private void cookRecipes(List<Recipe> recipes, ValueCallback<HashMap> callback) {
+        clearChecks(recipes);
+        removeRecipeIngredientsFromPantry(recipes, callback);
+    }
+
+    private void clearChecks(List<Recipe> recipes) {
+        for (Recipe recipe : recipes) {
+            for (String ingName : recipe.getRecipeIngredients().keySet()) {
+                RecipeQuantity quantity = recipe.getRecipeIngredients().get(ingName);
+                quantity.setChecked(false);
+            }
+            for (Step step : recipe.getSteps()) {
+                step.setChecked(false);
+            }
+            DatabaseReferences.getRecipeReference().child(recipe.getName()).setValue(recipe);
+        }
+    }
+
+    private void removeRecipeIngredientsFromPantry(List<Recipe> recipes, ValueCallback<HashMap> callback) {
         DatabaseReferences.getIngredientReference().addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
@@ -77,27 +102,35 @@ public class MealPlanRepository implements IMealPlanRepository {
                         HashMap newIngredientData = new HashMap();
                         HashMap oldIngredientData = new HashMap();
 
-                        for (DataSnapshot snap : dataSnapshot.getChildren()) {
-                            if (recipe.getRecipeIngredients().containsKey(snap.getKey())) {
+                        for (Recipe recipe : recipes) {
+                            for (String ingName : recipe.getRecipeIngredients().keySet()) {
+                                DataSnapshot snap = dataSnapshot.child(ingName);
                                 Ingredient ing = snap.getValue(Ingredient.class);
                                 ing.setName(snap.getKey());
 
                                 if (ing.isBulk()) continue; //we only update non bulk quantities
 
-                                oldIngredientData.put(ing.getName(), ing);
+                                if (newIngredientData.containsKey(ingName)) {
+                                    Ingredient newIng = (Ingredient) newIngredientData.get(ingName);
+                                    newIng.setQuantity(Math.max(0, ing.getQuantity() -
+                                            (int) Math.ceil(recipe.getRecipeIngredients().get(ing.getName()).getRecipeQuantity())));
+                                }
+                                else {
+                                    //make a copy of the old ingredient (need to make a copy so that we
+                                    //can send back the original in the callback (used for undoing)
+                                    oldIngredientData.put(ing.getName(), ing);
 
-                                //make a copy of the old ingredient (need to make a copy so that we
-                                //can send back the original in the callback (used for undoing)
+                                    Ingredient newIng = new Ingredient(ing.getName(), ing.getCategory(), ing.isBulk());
+                                    newIng.setQuantity(Math.max(0, ing.getQuantity() -
+                                            (int) Math.ceil(recipe.getRecipeIngredients().get(ing.getName()).getRecipeQuantity())));
 
-                                Ingredient newIng = new Ingredient(ing.getName(), ing.getCategory(), ing.isBulk());
-                                newIng.setQuantity(Math.max(0, ing.getQuantity() -
-                                        (int) Math.ceil(recipe.getRecipeIngredients().get(ing.getName()).getRecipeQuantity())));
-
-                                newIngredientData.put(newIng.getName(), newIng);
+                                    newIngredientData.put(newIng.getName(), newIng);
+                                }
                             }
+
+                            DatabaseReferences.getIngredientReference().updateChildren(newIngredientData);
+                            callback.onSuccess(oldIngredientData);
                         }
-                        DatabaseReferences.getIngredientReference().updateChildren(newIngredientData);
-                        callback.onSuccess(oldIngredientData);
                     }
 
                     @Override
