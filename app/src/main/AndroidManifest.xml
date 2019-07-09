@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:versionCode="100"
-        android:versionName="1.0.0"
+        android:versionName="1.0.1"
         android:theme="@style/AppTheme.Launcher">
         <activity android:name=".UI.TopLevel.MainActivity"/>
         <activity android:name=".UI.RecipeDetail.RecipeDetailActivity" />
