@@ -1,3 +1,5 @@
 # ThymeSaver
 
-This is a recipe, meal planning, pantry, and shopping list management app for Android.  It allows the user to schedule meals and automatically calculates a shopping list based on the needed ingredients and the contents of the user's pantry.  
+This is a recipe, meal planning, pantry, and shopping list management app for Android.  It allows users to store their recipes, keep track of their pantry contents, schedule their meals for the week, and create a shopping list.  The shopping list automatically populates based on the ingredients in the recipes that have been scheduled for the week and the contents of the pantry.
+
+Download the app from the Google Play Store for free! https://play.google.com/store/apps/details?id=thomson.laurel.beth.thymesaver
