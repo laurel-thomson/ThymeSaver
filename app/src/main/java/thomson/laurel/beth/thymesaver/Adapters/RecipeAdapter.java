@@ -7,8 +7,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.TextView;
 import thomson.laurel.beth.thymesaver.Models.Recipe;
 import thomson.laurel.beth.thymesaver.R;
@@ -42,7 +40,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         switch (viewType) {
             case RECIPE_TYPE:
                 view = LayoutInflater.from(mContext)
-                        .inflate(R.layout.checklist_item, parent, false);
+                        .inflate(R.layout.recipe_list_item, parent, false);
                 return new RecipeViewHolder(view);
             default:
                 view = LayoutInflater.from(parent.getContext())
@@ -139,27 +137,15 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public class RecipeViewHolder extends RecyclerView.ViewHolder {
 
         private TextView mTextView;
-        private Button mDeleteButton;
-        private CheckBox mCheckBox;
 
         public RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
-            mTextView = itemView.findViewById(R.id.checklist_textview);
-            mDeleteButton = itemView.findViewById(R.id.checklist_delete);
-            mCheckBox = itemView.findViewById(R.id.checklist_checkbox);
-            mCheckBox.setVisibility(View.GONE);
+            mTextView = itemView.findViewById(R.id.recipe_name);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     mListener.onRecipeSelected(mRecipes.get(getAdapterPosition()));
-                }
-            });
-
-            mDeleteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mListener.onDeleteClicked(mRecipes.get(getAdapterPosition()));
                 }
             });
         }

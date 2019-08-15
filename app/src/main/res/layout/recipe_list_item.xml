@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:background="@color/colorTextIcon">
+
+    <ImageView
+        android:id="@+id/recipe_image"
+        android:layout_width="0dp"
+        android:layout_weight="0.35"
+        android:layout_height="100dp"
+        android:src="@drawable/ic_shopping_cart"/>
+
+    <TextView
+        android:id="@+id/recipe_name"
+        android:layout_width="0dp"
+        android:layout_weight="0.65"
+        android:layout_height="wrap_content"
+        style="@style/TextViewStyle"
+        android:layout_gravity="center_vertical"/>
+
+</LinearLayout>
