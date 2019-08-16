@@ -10,8 +10,10 @@
         android:id="@+id/recipe_image"
         android:layout_width="0dp"
         android:layout_weight="0.35"
-        android:layout_height="100dp"
-        android:src="@drawable/ic_shopping_cart"/>
+        android:layout_height="80dp"
+        android:scaleType="centerCrop"
+        android:layout_gravity="left"
+        android:layout_marginLeft="-15dp"/>
 
     <TextView
         android:id="@+id/recipe_name"
@@ -19,6 +21,6 @@
         android:layout_weight="0.65"
         android:layout_height="wrap_content"
         style="@style/TextViewStyle"
-        android:layout_gravity="center_vertical"/>
+        android:layout_gravity="center" />
 
 </LinearLayout>

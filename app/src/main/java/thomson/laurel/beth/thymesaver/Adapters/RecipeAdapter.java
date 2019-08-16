@@ -4,10 +4,25 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import thomson.laurel.beth.thymesaver.Models.Recipe;
 import thomson.laurel.beth.thymesaver.R;
 
@@ -18,12 +33,14 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private static final String TAG = "RECIPE_ADAPTER";
     private List<Recipe> mRecipes = new ArrayList<>();
     private final LayoutInflater mInflater;
     private RecipeListener mListener;
     private Context mContext;
     private static final int RECIPE_TYPE = 1;
     private static final int HEADER_TYPE = 2;
+    private RequestQueue mRequestQueue;
 
     public RecipeAdapter(
             Context context,
@@ -31,6 +48,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         mInflater = LayoutInflater.from(context);
         mListener = listener;
         mContext = context;
+        mRequestQueue = Volley.newRequestQueue(mContext);
     }
 
     @NonNull
@@ -103,6 +121,31 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (itemViewType == RECIPE_TYPE) {
             RecipeViewHolder holder = (RecipeViewHolder) viewHolder;
             holder.mTextView.setText(mRecipes.get(position).getName());
+
+            String url = "https://api.unsplash.com/photos/random/?client_id=9c70e0edbba0b1946a5f28a7808f10e633132cb886ec5061d50563f8b6691a98&query="
+                    + mRecipes.get(position).getName();
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                JSONObject jsonArray = (JSONObject) response.get("urls");
+                                String imageURL = (String) jsonArray.get("small");
+                                Picasso.with(mContext).load(imageURL).into(holder.mImageView);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            error.printStackTrace();
+                        }
+                    });
+            mRequestQueue.add(jsonObjectRequest);
         }
         else {
             SectionHeaderViewHolder headerViewHolder = (SectionHeaderViewHolder) viewHolder;
@@ -137,10 +180,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public class RecipeViewHolder extends RecyclerView.ViewHolder {
 
         private TextView mTextView;
+        private ImageView mImageView;
 
         public RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
             mTextView = itemView.findViewById(R.id.recipe_name);
+            mImageView = itemView.findViewById(R.id.recipe_image);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
