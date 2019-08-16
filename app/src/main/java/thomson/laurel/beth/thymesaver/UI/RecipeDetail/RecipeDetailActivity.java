@@ -3,6 +3,7 @@ package thomson.laurel.beth.thymesaver.UI.RecipeDetail;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import thomson.laurel.beth.thymesaver.R;
 import thomson.laurel.beth.thymesaver.UI.RecipeDetail.RecipeIngredients.RecipeIngredientsFragment;
@@ -97,7 +99,15 @@ public class RecipeDetailActivity extends AppCompatActivity{
         actionBar.setHomeAsUpIndicator(R.drawable.ic_done);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setBackgroundDrawable(getResources().getDrawable(R.color.colorPrimary));
-
+        ImageView recipeImage = findViewById(R.id.recipe_header_image);
+        AppBarLayout appBarLayout = findViewById(R.id.app_bar_layout);
+        appBarLayout.addOnOffsetChangedListener( new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                float percentage = 1 - ((float)Math.abs(verticalOffset)/appBarLayout.getTotalScrollRange());
+                recipeImage.setAlpha(percentage);
+            }
+        });
     }
 
     @Override
@@ -165,7 +175,6 @@ public class RecipeDetailActivity extends AppCompatActivity{
 
         @Override
         public CharSequence getPageTitle(int position) {
-
             return mFragmentTitles[position];
         }
     }
