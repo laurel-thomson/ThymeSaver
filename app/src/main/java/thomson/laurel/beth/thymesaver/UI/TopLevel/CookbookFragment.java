@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
@@ -23,8 +24,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import thomson.laurel.beth.thymesaver.Adapters.RecipeAdapter;
 import thomson.laurel.beth.thymesaver.Models.Recipe;
@@ -42,6 +45,12 @@ public class CookbookFragment extends AddButtonFragment
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
     private TextView mEmptyMessage;
+    private FloatingActionButton mImportRecipeFAB;
+    private FloatingActionButton mCreateRecipeFAB;
+    private FloatingActionButton mMenuFAB;
+    private LinearLayout mFABLayout1;
+    private LinearLayout mFABLayout2;
+    private boolean isFABOpen;
 
 
     @Override
@@ -58,6 +67,11 @@ public class CookbookFragment extends AddButtonFragment
         mAdapter = new RecipeAdapter(getActivity(), this);
         mViewModel = ViewModelProviders.of(this).get(CookBookViewModel.class);
         mEmptyMessage = view.findViewById(R.id.empty_message);
+        mImportRecipeFAB = getActivity().findViewById(R.id.import_recipe_fab);
+        mCreateRecipeFAB = getActivity().findViewById(R.id.create_recipe_fab);
+        mMenuFAB = getActivity().findViewById(R.id.main_add_button);
+        mFABLayout1 = getActivity().findViewById(R.id.fab1_layout);
+        mFABLayout2 = getActivity().findViewById(R.id.fab2_layout);
 
         setObserver();
 
@@ -193,6 +207,30 @@ public class CookbookFragment extends AddButtonFragment
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onFABClicked() {
+        mImportRecipeFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                closeFABMenu();
+                importRecipe();
+            }
+        });
+
+        mCreateRecipeFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                closeFABMenu();
+                createRecipe();
+            }
+        });
+
+        if(!isFABOpen){
+            showFABMenu();
+        }else {
+            closeFABMenu();
+        }
+    }
+
+    private void createRecipe() {
         promptForRecipeName(getActivity(), mViewModel, new ValueCallback<Recipe>() {
             @Override
             public void onSuccess(Recipe recipe) {
@@ -207,5 +245,47 @@ public class CookbookFragment extends AddButtonFragment
 
             }
         });
+    }
+
+    private void importRecipe() {
+        Context context = getActivity();
+        CharSequence text = "Import recipe";
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
+
+    }
+
+    @SuppressLint("RestrictedApi")
+    private void showFABMenu(){
+        isFABOpen=true;
+        setMenuFABImage(R.drawable.ic_clear);
+        mFABLayout1.setVisibility(View.VISIBLE);
+        mFABLayout2.setVisibility(View.VISIBLE);
+        mFABLayout1.animate().translationY(-getResources().getDimension(R.dimen.first_fab));
+        mFABLayout2.animate().translationY(-getResources().getDimension(R.dimen.second_fab));
+    }
+
+    @SuppressLint("RestrictedApi")
+    private void closeFABMenu(){
+        isFABOpen=false;
+        setMenuFABImage(android.R.drawable.ic_input_add);
+        mFABLayout1.animate().translationY(0);
+        mFABLayout2.animate().translationY(0).withEndAction(new Runnable() {
+            @Override
+            public void run() {
+                mFABLayout1.setVisibility(View.GONE);
+                mFABLayout2.setVisibility(View.GONE);
+
+            }
+        });
+    }
+
+    private void setMenuFABImage(int resource) {
+        mMenuFAB.setImageResource(resource);
+        //This is a workaround to make the image appear after hide has been called by the view pager
+        mMenuFAB.hide();
+        mMenuFAB.show();
     }
 }
