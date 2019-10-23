@@ -34,6 +34,7 @@ import thomson.laurel.beth.thymesaver.Models.Recipe;
 import thomson.laurel.beth.thymesaver.R;
 import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
 import thomson.laurel.beth.thymesaver.UI.RecipeDetail.RecipeDetailActivity;
+import thomson.laurel.beth.thymesaver.UI.RecipeImport.ImportActivity;
 import thomson.laurel.beth.thymesaver.ViewModels.CookBookViewModel;
 
 import java.util.List;
@@ -248,13 +249,8 @@ public class CookbookFragment extends AddButtonFragment
     }
 
     private void importRecipe() {
-        Context context = getActivity();
-        CharSequence text = "Import recipe";
-        int duration = Toast.LENGTH_SHORT;
-
-        Toast toast = Toast.makeText(context, text, duration);
-        toast.show();
-
+        Intent intent = new Intent(getActivity(), ImportActivity.class);
+        startActivity(intent);
     }
 
     @SuppressLint("RestrictedApi")
