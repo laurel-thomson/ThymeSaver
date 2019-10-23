@@ -121,31 +121,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (itemViewType == RECIPE_TYPE) {
             RecipeViewHolder holder = (RecipeViewHolder) viewHolder;
             holder.mTextView.setText(mRecipes.get(position).getName());
-
-            String url = "https://api.unsplash.com/photos/random/?client_id=9c70e0edbba0b1946a5f28a7808f10e633132cb886ec5061d50563f8b6691a98&query="
-                    + mRecipes.get(position).getName();
-
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                    (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                JSONObject jsonArray = (JSONObject) response.get("urls");
-                                String imageURL = (String) jsonArray.get("small");
-                                Picasso.with(mContext).load(imageURL).into(holder.mImageView);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }, new Response.ErrorListener() {
-
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            error.printStackTrace();
-                        }
-                    });
-            mRequestQueue.add(jsonObjectRequest);
         }
         else {
             SectionHeaderViewHolder headerViewHolder = (SectionHeaderViewHolder) viewHolder;
@@ -190,7 +165,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mListener.onRecipeSelected(mRecipes.get(getAdapterPosition()));
+                    View commonRecipeImage = itemView.findViewById(R.id.recipe_image);
+                    mListener.onRecipeSelected(mRecipes.get(getAdapterPosition()), commonRecipeImage);
                 }
             });
         }
@@ -206,7 +182,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     public interface RecipeListener {
-        void onRecipeSelected(Recipe recipe);
+        void onRecipeSelected(Recipe recipe, View recipeImage);
 
         void onDeleteClicked(Recipe recipe);
     }

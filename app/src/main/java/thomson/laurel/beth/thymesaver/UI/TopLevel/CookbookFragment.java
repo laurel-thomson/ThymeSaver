@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -106,12 +107,14 @@ public class CookbookFragment extends AddButtonFragment
     }
 
     @Override
-    public void onRecipeSelected(Recipe recipe) {
+    public void onRecipeSelected(Recipe recipe, View recipeImage) {
         Intent intent = new Intent(getActivity(), RecipeDetailActivity.class);
         intent.putExtra(
                 RecipeDetailActivity.CURRENT_RECIPE_NAME,
                 recipe.getName());
-        startActivity(intent);
+        ActivityOptionsCompat options = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(getActivity(), (View)recipeImage, "recipe_image");
+        startActivity(intent, options.toBundle());
     }
 
     @Override
