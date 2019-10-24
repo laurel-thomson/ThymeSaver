@@ -13,6 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Launcher"
+        android:usesCleartextTraffic="true"
         android:versionCode="100"
         android:versionName="1.0.1">
         <activity android:name=".UI.RecipeImport.ImportActivity"></activity>

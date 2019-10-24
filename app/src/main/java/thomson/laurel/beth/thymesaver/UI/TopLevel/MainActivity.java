@@ -27,6 +27,8 @@ import thomson.laurel.beth.thymesaver.Database.IPantryManagerRepository;
 import thomson.laurel.beth.thymesaver.Models.Follower;
 import thomson.laurel.beth.thymesaver.R;
 import thomson.laurel.beth.thymesaver.UI.LauncherActivity;
+import thomson.laurel.beth.thymesaver.UI.RecipeImport.ImportActivity;
+import thomson.laurel.beth.thymesaver.UI.RecipeImport.ImportClient;
 import thomson.laurel.beth.thymesaver.UI.Settings.PantryManagerActivity;
 import thomson.laurel.beth.thymesaver.ViewModels.PantryManagerViewModel;
 import com.firebase.ui.auth.AuthUI;
@@ -57,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
         setUpActionBar();
         mJoinRequestCardView = findViewById(R.id.join_request_card);
         initializeActivity();
+
+        new ImportClient().importRecipe();
     }
 
     private void setUpActionBar() {
