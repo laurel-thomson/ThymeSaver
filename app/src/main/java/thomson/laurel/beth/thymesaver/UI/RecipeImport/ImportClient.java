@@ -1,6 +1,7 @@
 package thomson.laurel.beth.thymesaver.UI.RecipeImport;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -14,7 +15,7 @@ public class ImportClient {
 
     public void importRecipe() {
 
-        new getWebpageTask().execute("http://en.wikipedia.org");
+        new getWebpageTask().execute("https://minimalistbaker.com/1-pot-chickpea-tomato-peanut-stew-west-african-inspired/");
     }
 
     private class getWebpageTask extends AsyncTask<String, Void, Document> {
@@ -32,8 +33,12 @@ public class ImportClient {
 
         @Override
         protected void onPostExecute(Document doc) {
-            Elements newsHeadlines = doc.select("#mp-itn b a");
-            for (Element headline : newsHeadlines) {
+            Elements recipeIngredients = doc.select(".wprm-recipe-ingredient");
+            for (Element ri : recipeIngredients) {
+                String quantity = ri.select(".wprm-recipe-ingredient-amount").text();
+                String unit = ri.select(".wprm-recipe-ingredient-unit").text();
+                String ingredient = ri.select(".wprm-recipe-ingredient-name").text();
+                Log.i("mytag", "quantity: " + quantity + " unit: " + unit + " ingredient: " + ingredient);
             }
         }
     }
