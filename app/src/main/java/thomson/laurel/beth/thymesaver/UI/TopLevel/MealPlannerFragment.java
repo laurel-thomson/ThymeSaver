@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -81,12 +82,15 @@ public class MealPlannerFragment extends Fragment implements MealPlannerAdapter.
     }
 
     @Override
-    public void onMealClicked(MealPlan mealPlan) {
+    public void onMealClicked(MealPlan mealPlan, View recipeImage) {
+        mProgressBar.setVisibility(View.VISIBLE);
         Intent intent = new Intent(getActivity(), RecipeDetailActivity.class);
         intent.putExtra(
                 RecipeDetailActivity.CURRENT_RECIPE_NAME,
                 mealPlan.getRecipeName());
-        startActivity(intent);
+        ActivityOptionsCompat options = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(getActivity(), (View)recipeImage, "recipe_image");
+        startActivity(intent, options.toBundle());
     }
 
     @Override

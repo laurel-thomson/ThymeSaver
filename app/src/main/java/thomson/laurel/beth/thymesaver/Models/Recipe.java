@@ -20,6 +20,8 @@ public class Recipe {
 
     private boolean isSubRecipe;
 
+    private String imageURL;
+
     public Recipe() {
         //required empty constructor for Firebase
     }
@@ -80,5 +82,13 @@ public class Recipe {
 
     public void setSubRecipes(List<String> subRecipes) {
         this.subRecipes = subRecipes;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 }

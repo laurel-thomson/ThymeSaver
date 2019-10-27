@@ -13,7 +13,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import thomson.laurel.beth.thymesaver.Models.MealPlan;
 import thomson.laurel.beth.thymesaver.R;
@@ -44,17 +47,13 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
         switch (viewType) {
-            case USER_TYPE:
-                view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.checklist_item, parent, false);
-                return new MealPlanViewHolder(view);
             case HEADER_TYPE:
                 view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.section_header, parent, false);
                 return new SectionHeaderViewHolder(view);
             default:
                 view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.checklist_item, parent, false);
+                        .inflate(R.layout.mealplan_item, parent, false);
                 return new MealPlanViewHolder(view);
         }
     }
@@ -64,7 +63,9 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         int itemViewType = getItemViewType(position);
         if (itemViewType == USER_TYPE) {
 
+            final MealPlan mealPlan = mMealPlans.get(position);
             final TextView textView = ((MealPlanViewHolder) holder).mTextView;
+            final ImageView imageView = ((MealPlanViewHolder) holder).mImageView;
             final CheckBox checkBox = ((MealPlanViewHolder) holder).mCheckBox;
 
             //This is necessary to make sure that when a meal plan is checked off, the meal plan
@@ -75,7 +76,11 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             checkBox.setOnCheckedChangeListener(null);
             checkBox.setChecked(false);
 
-            textView.setText(mMealPlans.get(position).getRecipeName());
+            textView.setText(mealPlan.getRecipeName());
+
+            if (mealPlan.getImageURL() != null) {
+                Picasso.with(mContext).load(mealPlan.getImageURL()).fit().centerCrop().into(imageView);
+            }
 
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -85,7 +90,6 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                         textView.setTextColor(Color.GRAY);
                     }
-                    final MealPlan mealPlan = mMealPlans.get(holder.getAdapterPosition());
 
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
@@ -207,19 +211,21 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public class MealPlanViewHolder extends RecyclerView.ViewHolder {
         CheckBox mCheckBox;
         TextView mTextView;
-        Button mDeleteButton;
+        TextView mDeleteButton;
+        ImageView mImageView;
 
         MealPlanViewHolder(View itemView) {
             super(itemView);
 
-            mCheckBox = itemView.findViewById(R.id.checklist_checkbox);
-            mTextView = itemView.findViewById(R.id.checklist_textview);
-            mDeleteButton = itemView.findViewById(R.id.checklist_delete);
+            mCheckBox = itemView.findViewById(R.id.mealplan_checkbox);
+            mTextView = itemView.findViewById(R.id.mealplan_name);
+            mDeleteButton = itemView.findViewById(R.id.mealplan_delete);
+            mImageView = itemView.findViewById(R.id.mealplan_image);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mListener.onMealClicked(mMealPlans.get(getAdapterPosition()));
+                    mListener.onMealClicked(mMealPlans.get(getAdapterPosition()), mImageView);
                 }
             });
 
@@ -247,7 +253,7 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public interface MealPlanListener {
         void onMealScheduleChanged(MealPlan mealPlan);
 
-        void onMealClicked(MealPlan mealPlan);
+        void onMealClicked(MealPlan mealPlan, View recipeImage);
 
         void onMealChecked(MealPlan mealPlan);
 

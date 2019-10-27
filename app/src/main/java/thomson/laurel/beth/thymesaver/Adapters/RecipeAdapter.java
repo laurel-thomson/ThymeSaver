@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.squareup.picasso.Picasso;
+
 import thomson.laurel.beth.thymesaver.Models.Recipe;
 import thomson.laurel.beth.thymesaver.R;
 
@@ -106,7 +108,11 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         int itemViewType = getItemViewType(position);
         if (itemViewType == RECIPE_TYPE) {
             RecipeViewHolder holder = (RecipeViewHolder) viewHolder;
-            holder.mTextView.setText(mRecipes.get(position).getName());
+            Recipe recipe = mRecipes.get(position);
+            holder.mTextView.setText(recipe.getName());
+            if (recipe.getImageURL() != null) {
+                Picasso.with(mContext).load(recipe.getImageURL()).fit().centerCrop().into(holder.mImageView);
+            }
         }
         else {
             SectionHeaderViewHolder headerViewHolder = (SectionHeaderViewHolder) viewHolder;

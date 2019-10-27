@@ -5,6 +5,7 @@ import com.google.firebase.database.Exclude;
 public class MealPlan {
     private String recipeName;
     private String scheduledDay;
+    private String imageURL;
     private String firebaseKey;
 
     public MealPlan() {
@@ -12,9 +13,14 @@ public class MealPlan {
     }
 
     public MealPlan(String recipeName, String scheduledDay) {
-
         this.recipeName = recipeName;
         this.scheduledDay = scheduledDay;
+    }
+
+    public MealPlan(String recipeName, String scheduledDay, String imageURL) {
+        this.recipeName = recipeName;
+        this.scheduledDay = scheduledDay;
+        this.imageURL = imageURL;
     }
 
     public String getRecipeName() {
@@ -40,5 +46,13 @@ public class MealPlan {
 
     public void setFirebaseKey(String firebaseKey) {
         this.firebaseKey = firebaseKey;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 }

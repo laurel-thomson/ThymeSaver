@@ -25,7 +25,6 @@
                     android:id="@+id/recipe_header_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/lemon"
                     android:transitionName="recipe_image"/>
 
                 <android.support.v7.widget.Toolbar

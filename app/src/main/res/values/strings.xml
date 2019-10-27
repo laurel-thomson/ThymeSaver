@@ -58,6 +58,8 @@
     <string name="create_recipe">Create recipe</string>
     <string name="recipe_url">Recipe URL</string>
     <string name="search">Search</string>
+    <string name="delete">DELETE</string>
+    <string name="get_cooking">GET COOKING</string>
 
     <string-array name="ingredient_categories">
         <item>Produce</item>

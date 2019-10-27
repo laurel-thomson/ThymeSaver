@@ -19,7 +19,12 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
+
+import thomson.laurel.beth.thymesaver.Models.Recipe;
 import thomson.laurel.beth.thymesaver.R;
+import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
 import thomson.laurel.beth.thymesaver.UI.RecipeDetail.RecipeIngredients.RecipeIngredientsFragment;
 import thomson.laurel.beth.thymesaver.UI.RecipeDetail.RecipeSteps.RecipeStepsFragment;
 import thomson.laurel.beth.thymesaver.UI.TopLevel.AddButtonFragment;
@@ -35,6 +40,7 @@ public class RecipeDetailActivity extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        supportPostponeEnterTransition();
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
@@ -45,6 +51,21 @@ public class RecipeDetailActivity extends AppCompatActivity{
         mViewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
         String recipeName = getIntent().getStringExtra(CURRENT_RECIPE_NAME);
         mViewModel.setCurrentRecipe(recipeName);
+        mViewModel.getCurrentRecipe(new ValueCallback<Recipe>() {
+            @Override
+            public void onSuccess(Recipe recipe) {
+                if (recipe.getImageURL() != null) {
+                    setRecipeImage(recipe.getImageURL());
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
+
+
         setUpActionBar(recipeName);
         mViewPager = findViewById(R.id.pager);
 
@@ -90,6 +111,22 @@ public class RecipeDetailActivity extends AppCompatActivity{
                 currentFragment.onFABClicked();
             }
         });
+    }
+
+    private void setRecipeImage(String imageURL) {
+        ImageView headerImage = findViewById(R.id.recipe_header_image);
+        Picasso.with(this).load(imageURL).fit().centerCrop().into(headerImage,
+                new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        supportStartPostponedEnterTransition();
+                    }
+
+                    @Override
+                    public void onError() {
+
+                    }
+                });
     }
 
     private void setUpActionBar(String recipeName) {

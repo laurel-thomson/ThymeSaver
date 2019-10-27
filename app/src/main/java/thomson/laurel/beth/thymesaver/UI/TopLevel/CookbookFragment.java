@@ -78,8 +78,6 @@ public class CookbookFragment extends AddButtonFragment
         setObserver();
 
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
-                DividerItemDecoration.VERTICAL));
     }
 
     private void setObserver() {
@@ -108,6 +106,7 @@ public class CookbookFragment extends AddButtonFragment
 
     @Override
     public void onRecipeSelected(Recipe recipe, View recipeImage) {
+        mProgressBar.setVisibility(View.VISIBLE);
         Intent intent = new Intent(getActivity(), RecipeDetailActivity.class);
         intent.putExtra(
                 RecipeDetailActivity.CURRENT_RECIPE_NAME,

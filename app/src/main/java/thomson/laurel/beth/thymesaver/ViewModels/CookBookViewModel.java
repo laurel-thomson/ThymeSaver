@@ -42,7 +42,7 @@ public class CookBookViewModel extends AndroidViewModel {
     public void addRecipesToMealPlan(List<Recipe> recipes, String scheduledDay) {
         List<MealPlan> mealPlans = new ArrayList<>();
         for (Recipe r : recipes) {
-            mealPlans.add(new MealPlan(r.getName(), scheduledDay));
+            mealPlans.add(new MealPlan(r.getName(), scheduledDay, r.getImageURL()));
         }
         mRepository.addMealPlans(mealPlans);
     }
