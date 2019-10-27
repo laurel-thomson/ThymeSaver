@@ -60,6 +60,7 @@ public class ImportActivity extends AppCompatActivity {
         mCookBookViewModel.addRecipe(recipe);
         Intent intent = new Intent(this, RecipeDetailActivity.class);
         intent.putExtra(RecipeDetailActivity.CURRENT_RECIPE_NAME, recipe.getName());
+        finish();
         startActivity(intent);
     }
 
