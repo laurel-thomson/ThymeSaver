@@ -11,6 +11,7 @@ import java.io.IOException;
 
 import thomson.laurel.beth.thymesaver.Models.Recipe;
 import thomson.laurel.beth.thymesaver.Models.RecipeQuantity;
+import thomson.laurel.beth.thymesaver.Models.Step;
 import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
 
 public class ImportClient {
@@ -56,6 +57,15 @@ public class ImportClient {
                 String ingredient = cleanIngredientName(ri.select(".wprm-recipe-ingredient-name").text());
                 RecipeQuantity rq = new RecipeQuantity(unit, quantity);
                 recipe.addOrUpdateIngredient(ingredient, rq);
+            }
+
+            Elements instructions = doc.select("ol.wprm-recipe-instructions");
+            for (Element instruction : instructions) {
+                Elements steps = instruction.select(".wprm-recipe-instruction-text p");
+                for (Element step : steps) {
+                    String stepText = step.text();
+                    recipe.addStep(new Step(stepText));
+                }
             }
             mRecipeCallback.onSuccess(recipe);
         }

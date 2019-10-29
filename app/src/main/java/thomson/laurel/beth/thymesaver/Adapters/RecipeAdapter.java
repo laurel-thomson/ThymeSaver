@@ -161,6 +161,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     mListener.onRecipeSelected(mRecipes.get(getAdapterPosition()), commonRecipeImage);
                 }
             });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    return false;
+                }
+            });
         }
     }
 
