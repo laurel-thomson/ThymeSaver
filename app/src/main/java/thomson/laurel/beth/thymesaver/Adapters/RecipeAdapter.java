@@ -109,7 +109,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (itemViewType == RECIPE_TYPE) {
             RecipeViewHolder holder = (RecipeViewHolder) viewHolder;
             Recipe recipe = mRecipes.get(position);
-            holder.mTextView.setText(recipe.getName());
+            holder.mNameTV.setText(recipe.getName());
             if (recipe.getImageURL() != null) {
                 Picasso.with(mContext).load(recipe.getImageURL()).fit().centerCrop().into(holder.mImageView);
             }
@@ -146,19 +146,28 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public class RecipeViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView mTextView;
+        private TextView mNameTV;
         private ImageView mImageView;
+        private TextView mDelete;
 
         public RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
-            mTextView = itemView.findViewById(R.id.recipe_name);
+            mNameTV = itemView.findViewById(R.id.recipe_name);
             mImageView = itemView.findViewById(R.id.recipe_image);
+            mDelete = itemView.findViewById(R.id.recipe_delete);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     View commonRecipeImage = itemView.findViewById(R.id.recipe_image);
                     mListener.onRecipeSelected(mRecipes.get(getAdapterPosition()), commonRecipeImage);
+                }
+            });
+
+            mDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onDeleteClicked(mRecipes.get(getAdapterPosition()));
                 }
             });
 
