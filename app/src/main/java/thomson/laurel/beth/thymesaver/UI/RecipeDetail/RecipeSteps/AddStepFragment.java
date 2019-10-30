@@ -25,7 +25,6 @@ public class AddStepFragment extends BottomSheetDialogFragment {
         mStepEditText = view.findViewById(R.id.new_step_edittext);
 
         mStepEditText.requestFocus();
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
         view.findViewById(R.id.add_step_button)
                 .setOnClickListener(new View.OnClickListener() {

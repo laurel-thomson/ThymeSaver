@@ -14,6 +14,7 @@ import android.widget.EditText;
 import thomson.laurel.beth.thymesaver.Models.Ingredient;
 import thomson.laurel.beth.thymesaver.Models.Recipe;
 import thomson.laurel.beth.thymesaver.R;
+import thomson.laurel.beth.thymesaver.UI.Callbacks.Callback;
 import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
 import thomson.laurel.beth.thymesaver.UI.RecipeDetail.RecipeDetailActivity;
 import thomson.laurel.beth.thymesaver.ViewModels.CookBookViewModel;
@@ -57,11 +58,20 @@ public class ImportActivity extends AppCompatActivity {
 
     private void onRecipeImported(Recipe recipe) {
         addRecipeIngredients(recipe);
-        mCookBookViewModel.addRecipe(recipe);
-        Intent intent = new Intent(this, RecipeDetailActivity.class);
-        intent.putExtra(RecipeDetailActivity.CURRENT_RECIPE_NAME, recipe.getName());
-        finish();
-        startActivity(intent);
+        mCookBookViewModel.addRecipe(recipe, new Callback() {
+            @Override
+            public void onSuccess() {
+                Intent intent = new Intent(getApplicationContext(), RecipeDetailActivity.class);
+                intent.putExtra(RecipeDetailActivity.CURRENT_RECIPE_NAME, recipe.getName());
+                finish();
+                startActivity(intent);
+            }
+
+            @Override
+            public void onError(String err) {
+                //TODO: show error - unable to import recipe
+            }
+        });
     }
 
     private void addRecipeIngredients(Recipe recipe) {

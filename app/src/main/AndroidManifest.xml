@@ -18,7 +18,7 @@
         android:versionName="1.0.1">
         <activity android:name=".UI.RecipeImport.ImportActivity"></activity>
         <activity android:name=".UI.TopLevel.MainActivity" />
-        <activity android:name=".UI.RecipeDetail.RecipeDetailActivity" />
+        <activity android:name=".UI.RecipeDetail.RecipeDetailActivity"/>
         <activity android:name=".UI.TopLevel.AddPlannedMealsActivity" />
         <activity android:name=".UI.Settings.PantryManagerActivity" />
         <activity android:name=".UI.RecipeDetail.RecipeIngredients.AddSubRecipesActivity" />

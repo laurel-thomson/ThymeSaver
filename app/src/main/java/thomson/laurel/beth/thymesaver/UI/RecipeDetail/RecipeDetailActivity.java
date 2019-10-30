@@ -45,8 +45,6 @@ public class RecipeDetailActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
 
-        //prevents the bottom window dialog from pushing the FAB up
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         mViewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
         String recipeName = getIntent().getStringExtra(CURRENT_RECIPE_NAME);

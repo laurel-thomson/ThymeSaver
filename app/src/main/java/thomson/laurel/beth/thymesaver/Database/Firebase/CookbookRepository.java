@@ -4,15 +4,18 @@ import android.arch.core.util.Function;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Transformations;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import thomson.laurel.beth.thymesaver.Database.Firebase.LiveData.ListLiveData;
 import thomson.laurel.beth.thymesaver.Database.Firebase.LiveData.SubRecipeListLiveData;
 import thomson.laurel.beth.thymesaver.Database.ICookbookRepository;
 import thomson.laurel.beth.thymesaver.Models.MealPlan;
 import thomson.laurel.beth.thymesaver.Models.Recipe;
+import thomson.laurel.beth.thymesaver.UI.Callbacks.Callback;
 import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -37,6 +40,18 @@ public class CookbookRepository implements ICookbookRepository {
     public void addOrUpdateRecipe(Recipe r) {
         DatabaseReferences.getRecipeReference().child(r.getName()).setValue(r);
     }
+
+    @Override
+    public void addRecipe(Recipe r, Callback callback) {
+        DatabaseReferences.getRecipeReference().child(r.getName()).setValue(r,
+                new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                            callback.onSuccess();
+                    }
+                });
+    }
+
 
     @Override
     public void deleteRecipe(Recipe r) {

@@ -7,7 +7,7 @@
     <string name="add_ingredient">Add ingredient</string>
     <string name="remove">REMOVE</string>
     <string name="add_person">Add Person</string>
-    <string name="done">Done</string>
+    <string name="done">DONE</string>
     <string name="is_bulk_ingredient">Is bulk ingredient?</string>
     <string name="ingredient_name">Ingredient Name</string>
     <string name="category">Category</string>
