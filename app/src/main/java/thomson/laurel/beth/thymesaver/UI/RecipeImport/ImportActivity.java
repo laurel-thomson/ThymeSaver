@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import thomson.laurel.beth.thymesaver.Models.Ingredient;
 import thomson.laurel.beth.thymesaver.Models.Recipe;
@@ -26,6 +27,7 @@ public class ImportActivity extends AppCompatActivity {
     private PantryViewModel mPantryViewModel;
     private Button mSearchButton;
     private EditText mURLEditText;
+    private ProgressBar mProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,7 @@ public class ImportActivity extends AppCompatActivity {
         setContentView(R.layout.activity_import);
         setUpActionBar();
 
+        mProgress = findViewById(R.id.import_progress);
         mCookBookViewModel = ViewModelProviders.of(this).get(CookBookViewModel.class);
         mPantryViewModel = ViewModelProviders.of(this).get(PantryViewModel.class);
         mURLEditText= findViewById(R.id.url_edittext);
@@ -41,6 +44,7 @@ public class ImportActivity extends AppCompatActivity {
         mSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mProgress.setVisibility(View.VISIBLE);
                 new ImportClient().importRecipe(mURLEditText.getText().toString(), new ValueCallback<Recipe>() {
                     @Override
                     public void onSuccess(Recipe recipe) {
@@ -61,8 +65,8 @@ public class ImportActivity extends AppCompatActivity {
         mCookBookViewModel.addRecipe(recipe, new Callback() {
             @Override
             public void onSuccess() {
-                Intent intent = new Intent(getApplicationContext(), RecipeDetailActivity.class);
-                intent.putExtra(RecipeDetailActivity.CURRENT_RECIPE_NAME, recipe.getName());
+                Intent intent = new Intent(getApplicationContext(), FixIngredients.class);
+                intent.putExtra(FixIngredients.RECIPE, recipe.getName());
                 finish();
                 startActivity(intent);
             }
