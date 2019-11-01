@@ -1,14 +1,13 @@
 package thomson.laurel.beth.thymesaver.Adapters.IngredientAdapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -16,6 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import me.xdrop.fuzzywuzzy.FuzzySearch;
+import me.xdrop.fuzzywuzzy.model.ExtractedResult;
 import thomson.laurel.beth.thymesaver.Models.Ingredient;
 import thomson.laurel.beth.thymesaver.Models.Recipe;
 import thomson.laurel.beth.thymesaver.Models.RecipeQuantity;
@@ -23,33 +24,23 @@ import thomson.laurel.beth.thymesaver.R;
 
 public class FixIngredientsAdapter extends RecyclerView.Adapter<FixIngredientsAdapter.MyViewHolder>{
     private List<Ingredient> mIngredients;
-    private List<Ingredient> mRecipeIngredients = new ArrayList<>();
+    private HashMap<String, Ingredient> mIngredientStrings = new HashMap<>();
+    private List<String> mRecipeIngredients = new ArrayList<>();
     private HashMap<String, RecipeQuantity> mRecipeQuantities;
     private Context mContext;
     private MyListener mListener;
 
     public void setRecipe(Recipe recipe) {
         mRecipeQuantities = recipe.getRecipeIngredients();
-        if (mIngredients != null) {
-            populateRecipeIngredients();
+        for (String name : recipe.getRecipeIngredients().keySet()) {
+            mRecipeIngredients.add(name);
         }
     }
 
     public void setIngredients(List<Ingredient> ing) {
         mIngredients = ing;
-        if (mRecipeQuantities != null) {
-            populateRecipeIngredients();
-        }
-    }
-
-    private void populateRecipeIngredients() {
-        for (String name : mRecipeQuantities.keySet()) {
-            for (Ingredient ing : mIngredients) {
-                if (ing.getName().equals(name)) {
-                    mRecipeIngredients.add(ing);
-                    break;
-                }
-            }
+        for (Ingredient i : ing) {
+            mIngredientStrings.put(i.getName(),i);
         }
         notifyDataSetChanged();
     }
@@ -69,21 +60,31 @@ public class FixIngredientsAdapter extends RecyclerView.Adapter<FixIngredientsAd
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
-        Ingredient ing = mRecipeIngredients.get(i);
-        RecipeQuantity quantity = mRecipeQuantities.get(ing.getName());
-        myViewHolder.mNameTV.setText(ing.getName());
+        String ingName = mRecipeIngredients.get(i);
+        RecipeQuantity quantity = mRecipeQuantities.get(ingName);
+        myViewHolder.mNameTV.setText(ingName);
         myViewHolder.mQuantityET.setText(Double.toString(quantity.getRecipeQuantity()));
         myViewHolder.mUnitET.setText(quantity.getUnit());
-        myViewHolder.mNameET.setText(ing.getName());
-        myViewHolder.mCategoryET.setText(ing.getCategory());
-        myViewHolder.mIsBulkSwitch.setChecked(ing.isBulk());
 
+        setSuggestedName(myViewHolder, ingName);
+
+    }
+
+    private void setSuggestedName(MyViewHolder viewHolder, String ingName) {
+        ExtractedResult result = FuzzySearch.extractOne(ingName, mIngredientStrings.keySet());
+        if (result.getScore() >= 70) {
+            viewHolder.mNameET.setText(result.getString());
+            viewHolder.mNameET.setTextColor(Color.RED);
+        }
+        else {
+            viewHolder.mNameET.setText(ingName);
+        }
     }
 
 
     @Override
     public int getItemCount() {
-        if (mRecipeIngredients == null) return 0;
+        if (mIngredients == null) return 0;
 
         return mRecipeIngredients.size();
     }

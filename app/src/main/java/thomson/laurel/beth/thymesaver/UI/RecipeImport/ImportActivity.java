@@ -61,6 +61,12 @@ public class ImportActivity extends AppCompatActivity {
     }
 
     private void onRecipeImported(Recipe recipe) {
+        ImportedRecipe.getInstance().setRecipe(recipe);
+        Intent intent = new Intent(getApplicationContext(), FixIngredients.class);
+        finish();
+        startActivity(intent);
+        
+        /*
         addRecipeIngredients(recipe);
         mCookBookViewModel.addRecipe(recipe, new Callback() {
             @Override
@@ -76,6 +82,8 @@ public class ImportActivity extends AppCompatActivity {
                 //TODO: show error - unable to import recipe
             }
         });
+
+         */
     }
 
     private void addRecipeIngredients(Recipe recipe) {
