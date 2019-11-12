@@ -65,31 +65,6 @@ public class ImportActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), FixIngredients.class);
         finish();
         startActivity(intent);
-        
-        /*
-        addRecipeIngredients(recipe);
-        mCookBookViewModel.addRecipe(recipe, new Callback() {
-            @Override
-            public void onSuccess() {
-                Intent intent = new Intent(getApplicationContext(), FixIngredients.class);
-                intent.putExtra(FixIngredients.RECIPE, recipe.getName());
-                finish();
-                startActivity(intent);
-            }
-
-            @Override
-            public void onError(String err) {
-                //TODO: show error - unable to import recipe
-            }
-        });
-
-         */
-    }
-
-    private void addRecipeIngredients(Recipe recipe) {
-        for (String ingredientName : recipe.getRecipeIngredients().keySet()) {
-            mPantryViewModel.addIngredient(new Ingredient(ingredientName, "Misc", true));
-        }
     }
 
     private void onImportFail(String error) {

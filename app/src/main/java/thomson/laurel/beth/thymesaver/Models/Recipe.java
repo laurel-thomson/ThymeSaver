@@ -48,6 +48,10 @@ public class Recipe {
         recipeIngredients.put(ingredientName, quantity);
     }
 
+    public void setRecipeIngredients(HashMap<String, RecipeQuantity> recipeIngredients) {
+        this.recipeIngredients = recipeIngredients;
+    }
+
     public List<Step> getSteps() {
         return steps;
     }
