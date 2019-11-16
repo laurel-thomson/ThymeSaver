@@ -1,63 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="10dp"
+    android:layout_marginHorizontal="20dp"
+    android:padding="20dp"
+    android:background="@color/colorTextIcon"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
         android:id="@+id/name_textview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorAccent"
         app:layout_constraintTop_toTopOf="parent"/>
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/quantity_layout"
-        app:layout_constraintTop_toBottomOf="@id/name_textview"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:errorEnabled="true">
-
-        <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/quantity_edittext"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:textCursorDrawable="@drawable/color_cursor"
-            app:backgroundTint="@color/colorPrimary"
-            android:hint="@string/quantity"
-            android:maxLength="30"
-            android:singleLine="true"/>
-
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/unit_layout"
-        app:layout_constraintTop_toBottomOf="@id/name_textview"
-        app:layout_constraintLeft_toRightOf="@id/quantity_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:errorEnabled="true">
-
-        <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/unit_edittext"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textCursorDrawable="@drawable/color_cursor"
-            app:backgroundTint="@color/colorPrimary"
-            android:hint="@string/unit"
-            android:maxLength="30"
-            android:singleLine="true"/>
-
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
         android:id="@+id/name_layout"
-        app:layout_constraintTop_toBottomOf="@id/quantity_layout"
+        app:layout_constraintTop_toBottomOf="@id/name_textview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         app:errorEnabled="true">
 
@@ -67,15 +32,74 @@
             android:layout_height="wrap_content"
             android:textCursorDrawable="@drawable/color_cursor"
             app:backgroundTint="@color/colorPrimary"
+            android:textSize="12sp"
+            android:textStyle="bold"
             android:hint="@string/name"
             android:maxLength="30"
             android:singleLine="true"/>
 
     </android.support.design.widget.TextInputLayout>
 
+    <LinearLayout
+        android:id="@+id/unit_quanity_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/name_layout">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/quantity_layout"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="7dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:errorEnabled="true">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/quantity_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:textCursorDrawable="@drawable/color_cursor"
+                app:backgroundTint="@color/colorPrimary"
+                android:hint="@string/quantity"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:maxLength="30"
+                android:singleLine="true"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/unit_layout"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_marginStart="7dp"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:errorEnabled="true">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/unit_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textCursorDrawable="@drawable/color_cursor"
+                app:backgroundTint="@color/colorPrimary"
+                android:hint="@string/unit"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:maxLength="30"
+                android:singleLine="true"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+    </LinearLayout>
+
+
     <android.support.design.widget.TextInputLayout
         android:id="@+id/category_layout"
-        app:layout_constraintTop_toBottomOf="@id/name_layout"
+        app:layout_constraintTop_toBottomOf="@id/unit_quanity_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -87,6 +111,9 @@
             android:layout_height="wrap_content"
             android:textCursorDrawable="@drawable/color_cursor"
             app:backgroundTint="@color/colorPrimary"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColorHint="@color/colorAccent"
             android:hint="@string/category"
             android:maxLength="30"
             android:singleLine="true"/>
@@ -98,6 +125,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/category_layout"
+        android:textAllCaps="true"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorAccent"
         android:text="@string/is_bulk_ingredient" />
 
 </android.support.constraint.ConstraintLayout>

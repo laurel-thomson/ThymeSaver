@@ -53,6 +53,8 @@
             android:layout_height="wrap_content"
             android:textCursorDrawable="@drawable/color_cursor"
             app:backgroundTint="@color/colorPrimary"
+            android:textSize="12sp"
+            android:textStyle="bold"
             android:hint="@string/step" />
 
     </android.support.design.widget.TextInputLayout>

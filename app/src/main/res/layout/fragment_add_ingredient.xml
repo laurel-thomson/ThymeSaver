@@ -39,9 +39,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/is_bulk_ingredient"
-        android:textSize="18dp"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorAccent"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="10dp"
         android:layout_marginEnd="20dp"
         android:layout_marginStart="23dp" />
 
@@ -60,6 +61,8 @@
             android:textCursorDrawable="@drawable/color_cursor"
             app:backgroundTint="@color/colorPrimary"
             android:hint="@string/ingredient_name"
+            android:textSize="12sp"
+            android:textStyle="bold"
             android:singleLine="true"
             android:maxLength="30"
             android:padding="15dp"
@@ -81,6 +84,8 @@
         <AutoCompleteTextView
             android:id="@+id/ingredient_category"
             android:hint="@string/category"
+            android:textSize="12sp"
+            android:textStyle="bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="15dp"/>

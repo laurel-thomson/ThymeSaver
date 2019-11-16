@@ -4,13 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryLight"
     tools:context=".UI.RecipeImport.FixIngredients">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/fix_ingredients_recycler_view"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:paddingBottom="70dp"/>
 
     <Button
         android:id="@+id/button_done"

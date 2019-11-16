@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryLight"
     tools:context=".UI.RecipeImport.ImportActivity">
 
     <android.support.design.widget.TextInputLayout
@@ -28,6 +29,8 @@
             android:layout_height="wrap_content"
             android:textCursorDrawable="@drawable/color_cursor"
             app:backgroundTint="@color/colorPrimary"
+            android:textSize="13sp"
+            android:textStyle="bold"
             android:hint="@string/recipe_url"
             android:singleLine="true"/>
 
@@ -38,14 +41,15 @@
         style="@style/Widget.AppCompat.Button.Colored"
         app:backgroundTint="@color/colorPrimary"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         app:layout_constraintTop_toBottomOf="@id/text_input_layout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_marginRight="15dp"
         android:layout_marginLeft="15dp"
         android:gravity="center"
+        android:textSize="13sp"
         android:text="@string/search" />
 
     <ProgressBar
