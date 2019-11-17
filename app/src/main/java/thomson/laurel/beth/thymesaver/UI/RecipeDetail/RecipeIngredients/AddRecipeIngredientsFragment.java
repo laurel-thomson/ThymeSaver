@@ -33,7 +33,7 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
     private AddRecipeIngredientListener mListener;
     private AutoCompleteTextView mNameET;
     private EditText mQuantityET;
-    private AutoCompleteTextView mUnitET;
+    private EditText mUnitET;
     private List<Ingredient> mTotalIngredients;
     private TextInputLayout mNameLayout;
     private TextInputLayout mQuantityLayout;
@@ -86,19 +86,6 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
             }
         });
 
-        ArrayAdapter<CharSequence> unitAdapter = ArrayAdapter.createFromResource(
-                view.getContext(),
-                R.array.ingredient_units,
-                android.R.layout.select_dialog_item);
-        mUnitET.setThreshold(1);
-        mUnitET.setAdapter(unitAdapter);
-        mUnitET.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                mUnitET.showDropDown();
-                return true;
-            }
-        });
 
         mUnitET.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override

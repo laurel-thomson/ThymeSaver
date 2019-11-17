@@ -61,7 +61,7 @@ public class ImportClient {
 
             Elements instructions = doc.select("ol.wprm-recipe-instructions");
             for (Element instruction : instructions) {
-                Elements steps = instruction.select(".wprm-recipe-instruction-text p");
+                Elements steps = instruction.select(".wprm-recipe-instruction-text");
                 for (Element step : steps) {
                     String stepText = step.text();
                     recipe.addStep(new Step(stepText));
