@@ -55,6 +55,10 @@ public class FixIngredientsAdapter extends RecyclerView.Adapter<FixIngredientsAd
                 ing.setBulk(ri.isBulk);
                 fixedIngredients.add(ing);
             }
+            else {
+                Ingredient ing = mTotalIngredientStrings.get(ri.fixedName);
+                fixedIngredients.add(ing);
+            }
         }
         return fixedIngredients;
     }
@@ -144,8 +148,14 @@ public class FixIngredientsAdapter extends RecyclerView.Adapter<FixIngredientsAd
         myViewHolder.mQuantityET.addTextChangedListener(new TextChangedListener<EditText>(myViewHolder.mQuantityET) {
             @Override
             public void onTextChanged(EditText target, Editable s) {
-                Double newQuantity = Double.parseDouble(myViewHolder.mQuantityET.getText().toString());
-                recipeIngredient.quantity = newQuantity;
+                try {
+                    Double newQuantity = Double.parseDouble(myViewHolder.mQuantityET.getText().toString());
+                    recipeIngredient.quantity = newQuantity;
+
+                }
+                catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
