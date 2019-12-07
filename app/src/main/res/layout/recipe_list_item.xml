@@ -9,14 +9,15 @@
     <ImageView
         android:id="@+id/recipe_image"
         android:layout_width="0dp"
-        android:layout_weight="0.35"
         android:layout_height="80dp"
+        android:layout_gravity="center_vertical"
         android:layout_marginStart="10dp"
+        android:layout_weight="0.35"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:scaleType="centerCrop"
-        android:layout_gravity="center_vertical"
-        android:transitionName="recipe_image"/>
+        android:scaleType="center"
+        android:src="@mipmap/ic_launcher_foreground"
+        android:transitionName="recipe_image" />
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="0dp"

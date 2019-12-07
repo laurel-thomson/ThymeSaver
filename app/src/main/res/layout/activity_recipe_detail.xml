@@ -25,7 +25,10 @@
                     android:id="@+id/recipe_header_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:transitionName="recipe_image"/>
+                    android:background="@color/colorTextIcon"
+                    android:scaleType="fitCenter"
+                    android:src="@mipmap/ic_launcher_foreground"
+                    android:transitionName="recipe_image" />
 
                 <android.support.v7.widget.Toolbar
                     android:layout_width="match_parent"

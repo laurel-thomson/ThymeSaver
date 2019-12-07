@@ -1,6 +1,9 @@
 package thomson.laurel.beth.thymesaver.UI.RecipeDetail;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
@@ -54,6 +57,8 @@ public class RecipeDetailActivity extends AppCompatActivity{
             public void onSuccess(Recipe recipe) {
                 if (recipe.getImageURL() != null) {
                     setRecipeImage(recipe.getImageURL());
+                } else {
+                    supportStartPostponedEnterTransition();
                 }
             }
 
@@ -113,18 +118,30 @@ public class RecipeDetailActivity extends AppCompatActivity{
 
     private void setRecipeImage(String imageURL) {
         ImageView headerImage = findViewById(R.id.recipe_header_image);
-        Picasso.with(this).load(imageURL).fit().centerCrop().into(headerImage,
-                new Callback() {
-                    @Override
-                    public void onSuccess() {
-                        supportStartPostponedEnterTransition();
-                    }
+        if (isNetworkAvailable()) {
+            Picasso.with(this).load(imageURL).fit().centerCrop().into(headerImage,
+                    new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            supportStartPostponedEnterTransition();
+                        }
 
-                    @Override
-                    public void onError() {
+                        @Override
+                        public void onError() {
 
-                    }
-                });
+                        }
+                    });
+        }
+        else {
+            supportStartPostponedEnterTransition();
+        }
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     private void setUpActionBar(String recipeName) {
