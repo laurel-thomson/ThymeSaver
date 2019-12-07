@@ -64,7 +64,6 @@ public class AddShoppingListItemFragment extends BottomSheetDialogFragment {
                 FrameLayout bottomSheet = (FrameLayout) d.findViewById(android.support.design.R.id.design_bottom_sheet);
                 BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
                 behavior.setPeekHeight(1250);
-                behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
 

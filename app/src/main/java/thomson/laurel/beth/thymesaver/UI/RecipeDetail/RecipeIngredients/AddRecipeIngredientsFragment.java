@@ -5,7 +5,10 @@ import android.app.Dialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.TextInputLayout;
 import android.view.KeyEvent;
@@ -17,12 +20,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import thomson.laurel.beth.thymesaver.Models.Ingredient;
 import thomson.laurel.beth.thymesaver.Models.RecipeQuantity;
 import thomson.laurel.beth.thymesaver.R;
+import thomson.laurel.beth.thymesaver.UI.AddIngredients.KeyboardUtil;
 import thomson.laurel.beth.thymesaver.ViewModels.PantryViewModel;
 
 import java.util.ArrayList;
@@ -51,6 +56,18 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
         super.setupDialog(dialog, style);
         final View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_add_measured_ingredient, null);
         dialog.setContentView(view);
+
+        new KeyboardUtil(getActivity(), view);
+
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                BottomSheetDialog d = (BottomSheetDialog) dialog;
+                FrameLayout bottomSheet = (FrameLayout) d.findViewById(android.support.design.R.id.design_bottom_sheet);
+                BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
+                behavior.setPeekHeight(1420);
+            }
+        });
 
         mNameET = view.findViewById(R.id.ingredient_name);
         mUnitET = view.findViewById(R.id.ingredient_unit);
