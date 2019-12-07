@@ -30,6 +30,7 @@ public class PantryManagerRepository implements IPantryManagerRepository {
     public static PantryManagerRepository getInstance() {
         if (mSoleInstance == null) {
             mSoleInstance = new PantryManagerRepository();
+
         }
         return mSoleInstance;
     }

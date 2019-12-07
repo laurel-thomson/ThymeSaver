@@ -52,7 +52,7 @@ public class AddIngredientFragment extends BottomSheetDialogFragment {
                     public void onClick(View view) {
 
                         boolean hasError = false;
-                        String name = mNameET.getText().toString();
+                        String name = mNameET.getText().toString().toLowerCase();
                         String category = mCategoryET.getText().toString();
                         Boolean isBulk = mBulkSwitch.isChecked();
 

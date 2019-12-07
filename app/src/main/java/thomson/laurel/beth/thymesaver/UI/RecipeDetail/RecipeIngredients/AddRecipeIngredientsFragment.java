@@ -72,17 +72,6 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
         mPantryViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
             @Override
             public void onChanged(@Nullable List<Ingredient> ingredients) {
-                mTotalIngredients = ingredients;
-                List<String> names = new ArrayList<>();
-                for (Ingredient i : ingredients) {
-                    names.add(i.getName());
-                }
-                ArrayAdapter<String> nameAdapter = new ArrayAdapter<>(
-                        view.getContext(),
-                        android.R.layout.select_dialog_item,
-                        names);
-                mNameET.setThreshold(1);
-                mNameET.setAdapter(nameAdapter);
             }
         });
 
@@ -132,10 +121,11 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
                             return;
                         }
 
-                        Ingredient ingredient = getIngredientFromName(mNameET.getText().toString());
+                        String ingName = mNameET.getText().toString().toLowerCase();
+                        Ingredient ingredient = getIngredientFromName(ingName);
                         if (ingredient == null) {
                             ingredient = new Ingredient(
-                                    mNameET.getText().toString(),
+                                    ingName,
                                     "Misc",
                                     true);
                             mPantryViewModel.addIngredient(ingredient);

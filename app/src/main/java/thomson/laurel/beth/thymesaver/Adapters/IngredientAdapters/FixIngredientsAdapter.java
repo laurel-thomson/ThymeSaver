@@ -48,9 +48,9 @@ public class FixIngredientsAdapter extends RecyclerView.Adapter<FixIngredientsAd
     public List<Ingredient> getFixedIngredients() {
         List<Ingredient> fixedIngredients = new ArrayList<>();
         for (RecipeIngredient ri : mRecipeIngredients) {
-            if (!mTotalIngredientStrings.containsKey(ri.fixedName)) {
+            if (!mTotalIngredientStrings.containsKey(ri.fixedName.toLowerCase())) {
                 Ingredient ing = new Ingredient();
-                ing.setName(ri.fixedName);
+                ing.setName(ri.fixedName.toLowerCase());
                 ing.setCategory(ri.category);
                 ing.setBulk(ri.isBulk);
                 fixedIngredients.add(ing);
@@ -124,7 +124,7 @@ public class FixIngredientsAdapter extends RecyclerView.Adapter<FixIngredientsAd
         myViewHolder.mNameET.addTextChangedListener(new TextChangedListener<EditText>(myViewHolder.mNameET) {
             @Override
             public void onTextChanged(EditText target, Editable s) {
-                String newName = myViewHolder.mNameET.getText().toString();
+                String newName = myViewHolder.mNameET.getText().toString().toLowerCase();
                 recipeIngredient.fixedName = newName;
             }
         });

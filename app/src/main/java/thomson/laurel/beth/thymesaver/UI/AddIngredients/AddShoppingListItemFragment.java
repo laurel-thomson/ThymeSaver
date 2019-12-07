@@ -31,7 +31,7 @@ public class AddShoppingListItemFragment extends BottomSheetDialogFragment {
     private ShoppingViewModel mShoppingViewModel;
     private AutoCompleteTextView mNameET;
     private EditText mQuantityET;
-    private List<Ingredient> mTotalIngredients;
+    private List<Ingredient> mTotalIngredients = new ArrayList<>();
     private TextInputLayout mNameLayout;
     private TextInputLayout mQuantityLayout;
     private TextInputLayout mUnitLayout;
@@ -96,7 +96,7 @@ public class AddShoppingListItemFragment extends BottomSheetDialogFragment {
                             return;
                         }
 
-                        Ingredient ingredient = getIngredientFromName(mNameET.getText().toString());
+                        Ingredient ingredient = getIngredientFromName(mNameET.getText().toString().toLowerCase());
                         saveIngredient(ingredient);
 
                         //clear text fields after ingredient added
@@ -120,7 +120,7 @@ public class AddShoppingListItemFragment extends BottomSheetDialogFragment {
         if (ingredient == null) {
             quantity = Integer.parseInt(mQuantityET.getText().toString());
             mShoppingViewModel.addShoppingModification(
-                    mNameET.getText().toString(),
+                    mNameET.getText().toString().toLowerCase(),
                     ModType.NEW,
                     quantity);
         }

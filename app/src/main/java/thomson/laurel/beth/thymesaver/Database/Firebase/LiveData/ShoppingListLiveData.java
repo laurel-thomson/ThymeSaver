@@ -155,7 +155,7 @@ public class ShoppingListLiveData extends LiveData<DataSnapshot> {
                     removeIngredientFromName(shoppingList, mod.getName());
                     break;
                 case NEW:
-                    shoppingList.put(new Ingredient(mod.getName(), "Misc", false), mod.getQuantity());
+                    shoppingList.put(new Ingredient(mod.getName().toLowerCase(), "Misc", false), mod.getQuantity());
                     break;
                 case CHANGE:
                     Ingredient matchingIng = getIngredientFromList(shoppingList, mod.getName());
