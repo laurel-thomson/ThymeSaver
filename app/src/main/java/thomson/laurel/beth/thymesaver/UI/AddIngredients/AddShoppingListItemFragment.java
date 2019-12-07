@@ -19,6 +19,7 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -56,6 +57,7 @@ public class AddShoppingListItemFragment extends BottomSheetDialogFragment {
         final View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_add_measured_ingredient, null);
         dialog.setContentView(view);
         new KeyboardUtil(getActivity(), view);
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
@@ -64,6 +66,7 @@ public class AddShoppingListItemFragment extends BottomSheetDialogFragment {
                 FrameLayout bottomSheet = (FrameLayout) d.findViewById(android.support.design.R.id.design_bottom_sheet);
                 BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
                 behavior.setPeekHeight(1250);
+                mNameET.requestFocus();
             }
         });
 
@@ -117,7 +120,6 @@ public class AddShoppingListItemFragment extends BottomSheetDialogFragment {
                         }
 
                         if (hasError) {
-                            hideKeyboard();
                             return;
                         }
 

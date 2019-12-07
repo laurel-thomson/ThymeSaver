@@ -12,6 +12,7 @@ import android.support.design.widget.TextInputLayout;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -44,6 +45,7 @@ public class AddIngredientFragment extends BottomSheetDialogFragment {
         dialog.setContentView(view);
 
         new KeyboardUtil(getActivity(), view);
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
@@ -52,6 +54,7 @@ public class AddIngredientFragment extends BottomSheetDialogFragment {
                 FrameLayout bottomSheet = (FrameLayout) d.findViewById(android.support.design.R.id.design_bottom_sheet);
                 BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
                 behavior.setPeekHeight(1420);
+                mNameET.requestFocus();
             }
         });
 

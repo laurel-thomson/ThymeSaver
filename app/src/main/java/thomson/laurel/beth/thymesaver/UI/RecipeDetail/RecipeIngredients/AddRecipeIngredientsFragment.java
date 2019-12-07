@@ -15,6 +15,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
@@ -58,6 +59,7 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
         dialog.setContentView(view);
 
         new KeyboardUtil(getActivity(), view);
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
@@ -66,6 +68,7 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
                 FrameLayout bottomSheet = (FrameLayout) d.findViewById(android.support.design.R.id.design_bottom_sheet);
                 BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
                 behavior.setPeekHeight(1420);
+                mNameET.requestFocus();
             }
         });
 
