@@ -124,8 +124,9 @@ public class FixIngredientsAdapter extends RecyclerView.Adapter<FixIngredientsAd
         myViewHolder.mNameET.addTextChangedListener(new TextChangedListener<EditText>(myViewHolder.mNameET) {
             @Override
             public void onTextChanged(EditText target, Editable s) {
-                String newName = myViewHolder.mNameET.getText().toString().toLowerCase();
-                recipeIngredient.fixedName = newName;
+                String newName = s.toString().toLowerCase();
+                RecipeIngredient ri = mRecipeIngredients.get(myViewHolder.getAdapterPosition());
+                ri.fixedName = newName;
             }
         });
 
@@ -133,7 +134,8 @@ public class FixIngredientsAdapter extends RecyclerView.Adapter<FixIngredientsAd
             @Override
             public void onTextChanged(EditText target, Editable s) {
                 String newUnit = myViewHolder.mUnitET.getText().toString();
-                recipeIngredient.unit = newUnit;
+                RecipeIngredient ri = mRecipeIngredients.get(myViewHolder.getAdapterPosition());
+                ri.unit = newUnit;
             }
         });
 
@@ -141,7 +143,8 @@ public class FixIngredientsAdapter extends RecyclerView.Adapter<FixIngredientsAd
             @Override
             public void onTextChanged(EditText target, Editable s) {
                 String newCategory = myViewHolder.mCategoryET.getText().toString();
-                recipeIngredient.category = newCategory;
+                RecipeIngredient ri = mRecipeIngredients.get(myViewHolder.getAdapterPosition());
+                ri.category = newCategory;
             }
         });
 
@@ -150,7 +153,8 @@ public class FixIngredientsAdapter extends RecyclerView.Adapter<FixIngredientsAd
             public void onTextChanged(EditText target, Editable s) {
                 try {
                     Double newQuantity = Double.parseDouble(myViewHolder.mQuantityET.getText().toString());
-                    recipeIngredient.quantity = newQuantity;
+                    RecipeIngredient ri = mRecipeIngredients.get(myViewHolder.getAdapterPosition());
+                    ri.quantity = newQuantity;
 
                 }
                 catch (NumberFormatException e) {
@@ -162,7 +166,8 @@ public class FixIngredientsAdapter extends RecyclerView.Adapter<FixIngredientsAd
         myViewHolder.mIsBulkSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                recipeIngredient.isBulk = b;
+                RecipeIngredient ri = mRecipeIngredients.get(myViewHolder.getAdapterPosition());
+                ri.isBulk = b;
             }
         });
 
