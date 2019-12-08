@@ -8,7 +8,9 @@ import android.support.annotation.NonNull;
 import thomson.laurel.beth.thymesaver.Database.Firebase.LiveData.ListLiveData;
 import thomson.laurel.beth.thymesaver.Database.IPantryRepository;
 import thomson.laurel.beth.thymesaver.Models.Ingredient;
+import thomson.laurel.beth.thymesaver.Models.ModType;
 import thomson.laurel.beth.thymesaver.Models.Recipe;
+import thomson.laurel.beth.thymesaver.Models.ShoppingListMod;
 import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,6 +36,25 @@ public class PantryRepository implements IPantryRepository {
     @Override
     public void addIngredient(Ingredient i) {
         DatabaseReferences.getIngredientReference().child(i.getName()).setValue(i);
+        DatabaseReferences.getShoppingListModReference().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                    ShoppingListMod mod = snap.getValue(ShoppingListMod.class);
+                    mod.setName(snap.getKey());
+                    if (mod.getName().equals(i.getName()) && mod.getType() == ModType.NEW) {
+                        mod.setType(ModType.ADD);
+                        DatabaseReferences.getShoppingListModReference().child(mod.getName()).setValue(mod);
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -51,6 +72,24 @@ public class PantryRepository implements IPantryRepository {
                 }
                 DatabaseReferences.getIngredientReference().child(i.getName()).removeValue();
 
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        DatabaseReferences.getShoppingListModReference().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                    ShoppingListMod mod = snap.getValue(ShoppingListMod.class);
+                    mod.setName(snap.getKey());
+                    if (mod.getName().equals(i.getName())) {
+                        DatabaseReferences.getShoppingListModReference().child(mod.getName()).removeValue();
+                        break;
+                    }
+                }
             }
 
             @Override
