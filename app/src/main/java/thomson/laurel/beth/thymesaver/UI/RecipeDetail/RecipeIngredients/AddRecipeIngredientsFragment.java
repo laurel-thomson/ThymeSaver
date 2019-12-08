@@ -92,6 +92,17 @@ public class AddRecipeIngredientsFragment extends BottomSheetDialogFragment {
         mPantryViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
             @Override
             public void onChanged(@Nullable List<Ingredient> ingredients) {
+                mTotalIngredients = ingredients;
+                List<String> names = new ArrayList<>();
+                for (Ingredient i : ingredients) {
+                    names.add(i.getName());
+                }
+                ArrayAdapter<String> nameAdapter = new ArrayAdapter<>(
+                        view.getContext(),
+                        android.R.layout.select_dialog_item,
+                        names);
+                mNameET.setThreshold(0);
+                mNameET.setAdapter(nameAdapter);
             }
         });
 
