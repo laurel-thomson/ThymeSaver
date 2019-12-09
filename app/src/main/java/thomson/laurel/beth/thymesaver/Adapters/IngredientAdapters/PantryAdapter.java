@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -23,12 +25,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 
-public class PantryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class PantryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
 
     private Context mContext;
     private List<Ingredient> mIngredients = new ArrayList<>();
+    private List<Ingredient> mFilteredIngredients = mIngredients;
     private IngredientListener mListener;
-    private Ingredient mUserCreatedIngredient;
     private static final int INGREDIENT_TYPE = 1;
     private static final int HEADER_TYPE = 2;
 
@@ -83,6 +85,7 @@ public class PantryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 }
             }
         }
+        mFilteredIngredients = mIngredients;
         notifyDataSetChanged();
     }
 
@@ -105,7 +108,7 @@ public class PantryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
         int itemViewType = getItemViewType(position);
         if (itemViewType == INGREDIENT_TYPE) {
-            final Ingredient ingredient = mIngredients.get(position);
+            final Ingredient ingredient = mFilteredIngredients.get(position);
             IngredientViewHolder holder = (IngredientViewHolder) viewHolder;
             holder.mNameTV.setText(ingredient.getName());
 
@@ -140,22 +143,14 @@ public class PantryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
         else {
             SectionHeaderViewHolder headerViewHolder = (SectionHeaderViewHolder) viewHolder;
-            final String category = mIngredients.get(position).getCategory();
+            final String category = mFilteredIngredients.get(position).getCategory();
             headerViewHolder.sectionTitle.setText(category);
         }
     }
 
-    private int getPrimaryTextColor() {
-        TypedValue typedValue = new TypedValue();
-        TypedArray a = mContext.obtainStyledAttributes(typedValue.data, new int[] { R.attr.color });
-        int color = a.getColor(0, 0);
-        a.recycle();
-        return color;
-    }
-
     @Override
     public int getItemViewType(int position) {
-        if (TextUtils.isEmpty(mIngredients.get(position).getName())) {
+        if (TextUtils.isEmpty(mFilteredIngredients.get(position).getName())) {
             return HEADER_TYPE;
         } else {
             return INGREDIENT_TYPE;
@@ -173,7 +168,42 @@ public class PantryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public int getItemCount() {
         if (mIngredients == null) return 0;
-        return mIngredients.size();
+        return mFilteredIngredients.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    mFilteredIngredients = mIngredients;
+                } else {
+                    List<Ingredient> filteredList = new ArrayList<>();
+                    for (Ingredient row : mIngredients) {
+
+                        // name match condition. this might differ depending on your requirement
+                        // here we are looking for name or phone number match
+                        if (row.getName().toLowerCase().contains(charString.toLowerCase())) {
+                            filteredList.add(row);
+                        }
+                    }
+
+                    mFilteredIngredients = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = mFilteredIngredients;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                mFilteredIngredients = (ArrayList<Ingredient>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     class IngredientViewHolder extends RecyclerView.ViewHolder {
@@ -198,7 +228,7 @@ public class PantryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Ingredient ingredient = mIngredients.get(getAdapterPosition());
+                    Ingredient ingredient = mFilteredIngredients.get(getAdapterPosition());
                     mListener.onIngredientClicked(ingredient);
                 }
             });
@@ -207,7 +237,7 @@ public class PantryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 @Override
                 public void onClick(View view) {
                     if (getAdapterPosition() < 0) return;
-                    Ingredient i = mIngredients.get(getAdapterPosition());
+                    Ingredient i = mFilteredIngredients.get(getAdapterPosition());
                     if (i.getQuantity() == 0) return;
                     i.setQuantity(i.getQuantity() - 1);
                     mListener.onIngredientQuantityChanged(i, i.getQuantity());
@@ -219,7 +249,7 @@ public class PantryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 @Override
                 public void onClick(View view) {
                     if (getAdapterPosition() < 0) return;
-                    Ingredient i = mIngredients.get(getAdapterPosition());
+                    Ingredient i = mFilteredIngredients.get(getAdapterPosition());
                     if (i.getQuantity() > 100) return;
                     i.setQuantity(i.getQuantity() + 1);
                     mListener.onIngredientQuantityChanged(i, i.getQuantity());
@@ -230,14 +260,14 @@ public class PantryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             mDeleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mListener.onDeleteClicked(mIngredients.get(getAdapterPosition()));
+                    mListener.onDeleteClicked(mFilteredIngredients.get(getAdapterPosition()));
                 }
             });
 
             mQuantityTV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Ingredient ingredient = mIngredients.get(getAdapterPosition());
+                    Ingredient ingredient = mFilteredIngredients.get(getAdapterPosition());
                     if (!ingredient.isBulk()) return;
 
                     int newQuantity = BulkIngredientState.getNextStateAsInt(ingredient.getQuantity());
