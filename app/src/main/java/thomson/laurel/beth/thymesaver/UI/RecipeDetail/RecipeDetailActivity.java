@@ -2,9 +2,13 @@ package thomson.laurel.beth.thymesaver.UI.RecipeDetail;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -25,6 +29,8 @@ import android.widget.ImageView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import thomson.laurel.beth.thymesaver.Database.Firebase.StorageRepository;
+import thomson.laurel.beth.thymesaver.Database.IStorageRepository;
 import thomson.laurel.beth.thymesaver.Models.Recipe;
 import thomson.laurel.beth.thymesaver.R;
 import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
@@ -36,10 +42,12 @@ import thomson.laurel.beth.thymesaver.ViewModels.RecipeDetailViewModel;
 public class RecipeDetailActivity extends AppCompatActivity{
 
     public static String CURRENT_RECIPE_NAME = "Current Recipe Name";
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
     private ViewPager mViewPager;
     private RecipeDetailViewModel mViewModel;
     private FloatingActionButton mFAB;
     private ViewPagerAdapter mAdapter;
+    private IStorageRepository mStorageRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +56,7 @@ public class RecipeDetailActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
 
-
+        mStorageRepository = StorageRepository.getInstance();
         mViewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
         String recipeName = getIntent().getStringExtra(CURRENT_RECIPE_NAME);
         mViewModel.setCurrentRecipe(recipeName);
@@ -134,6 +142,23 @@ public class RecipeDetailActivity extends AppCompatActivity{
         }
         else {
             supportStartPostponedEnterTransition();
+        }
+        //dispatchTakePictureIntent();
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE) {
+            if (resultCode == RESULT_OK) {
+                Bitmap photo = (Bitmap) intent.getExtras().get("data");
+                mStorageRepository.uploadImage(photo, "test");
+            }
         }
     }
 
