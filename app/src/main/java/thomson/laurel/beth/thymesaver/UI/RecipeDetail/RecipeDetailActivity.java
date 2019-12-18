@@ -48,6 +48,7 @@ public class RecipeDetailActivity extends AppCompatActivity{
     private FloatingActionButton mFAB;
     private ViewPagerAdapter mAdapter;
     private IStorageRepository mStorageRepository;
+    private String mRecipeName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +59,8 @@ public class RecipeDetailActivity extends AppCompatActivity{
 
         mStorageRepository = StorageRepository.getInstance();
         mViewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
-        String recipeName = getIntent().getStringExtra(CURRENT_RECIPE_NAME);
-        mViewModel.setCurrentRecipe(recipeName);
+        mRecipeName= getIntent().getStringExtra(CURRENT_RECIPE_NAME);
+        mViewModel.setCurrentRecipe(mRecipeName);
         mViewModel.getCurrentRecipe(new ValueCallback<Recipe>() {
             @Override
             public void onSuccess(Recipe recipe) {
@@ -77,7 +78,7 @@ public class RecipeDetailActivity extends AppCompatActivity{
         });
 
 
-        setUpActionBar(recipeName);
+        setUpActionBar(mRecipeName);
         mViewPager = findViewById(R.id.pager);
 
         //prevents the view pager from recreating the Recipe Steps fragment, which would remove
@@ -114,14 +115,13 @@ public class RecipeDetailActivity extends AppCompatActivity{
         tabLayout.setupWithViewPager(mViewPager);
 
         mFAB = findViewById(R.id.recipe_detail_add_button);
-        mFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AddButtonFragment currentFragment = (AddButtonFragment) mAdapter.getItem(
-                        mViewPager.getCurrentItem());
-                currentFragment.onFABClicked();
-            }
+        mFAB.setOnClickListener(view -> {
+            AddButtonFragment currentFragment = (AddButtonFragment) mAdapter.getItem(
+                    mViewPager.getCurrentItem());
+            currentFragment.onFABClicked();
         });
+
+        findViewById(R.id.camera_button).setOnClickListener(view -> dispatchTakePictureIntent());
     }
 
     private void setRecipeImage(String imageURL) {
@@ -143,7 +143,6 @@ public class RecipeDetailActivity extends AppCompatActivity{
         else {
             supportStartPostponedEnterTransition();
         }
-        //dispatchTakePictureIntent();
     }
 
     private void dispatchTakePictureIntent() {
@@ -157,7 +156,20 @@ public class RecipeDetailActivity extends AppCompatActivity{
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
             if (resultCode == RESULT_OK) {
                 Bitmap photo = (Bitmap) intent.getExtras().get("data");
-                mStorageRepository.uploadImage(photo, "test");
+                mStorageRepository.uploadImage(photo, mRecipeName, new ValueCallback<String>() {
+                    @Override
+                    public void onSuccess(String downloadURL) {
+                        Recipe recipe = mViewModel.getCurrentRecipe();
+                        recipe.setImageURL(downloadURL);
+                        mViewModel.updateRecipe();
+                        setRecipeImage(downloadURL);
+                    }
+
+                    @Override
+                    public void onError(String error) {
+
+                    }
+                });
             }
         }
     }
