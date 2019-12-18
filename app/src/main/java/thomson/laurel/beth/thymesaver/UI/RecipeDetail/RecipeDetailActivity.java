@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -49,6 +50,7 @@ public class RecipeDetailActivity extends AppCompatActivity{
     private ViewPagerAdapter mAdapter;
     private IStorageRepository mStorageRepository;
     private String mRecipeName;
+    private ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +133,9 @@ public class RecipeDetailActivity extends AppCompatActivity{
                     new Callback() {
                         @Override
                         public void onSuccess() {
+                            if (mProgressBar != null) {
+                                mProgressBar.setVisibility(View.INVISIBLE);
+                            }
                             supportStartPostponedEnterTransition();
                         }
 
@@ -142,6 +147,9 @@ public class RecipeDetailActivity extends AppCompatActivity{
         }
         else {
             supportStartPostponedEnterTransition();
+            if (mProgressBar != null) {
+                mProgressBar.setVisibility(View.INVISIBLE);
+            }
         }
     }
 
@@ -155,6 +163,8 @@ public class RecipeDetailActivity extends AppCompatActivity{
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
             if (resultCode == RESULT_OK) {
+                mProgressBar = findViewById(R.id.recycler_view_progress);
+                mProgressBar.setVisibility(View.VISIBLE);
                 Bitmap photo = (Bitmap) intent.getExtras().get("data");
                 mStorageRepository.uploadImage(photo, mRecipeName, new ValueCallback<String>() {
                     @Override
