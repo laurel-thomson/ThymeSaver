@@ -53,7 +53,7 @@ public class AddIngredientFragment extends BottomSheetDialogFragment {
                 BottomSheetDialog d = (BottomSheetDialog) dialog;
                 FrameLayout bottomSheet = (FrameLayout) d.findViewById(android.support.design.R.id.design_bottom_sheet);
                 BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
-                behavior.setPeekHeight(1420);
+                behavior.setPeekHeight(1500);
                 mNameET.requestFocus();
             }
         });

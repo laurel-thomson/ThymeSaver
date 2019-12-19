@@ -1,15 +1,10 @@
 package thomson.laurel.beth.thymesaver.UI.AddIngredients;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Rect;
-import android.os.Build;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
@@ -18,15 +13,12 @@ import android.support.design.widget.TextInputLayout;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 
 import thomson.laurel.beth.thymesaver.Models.Ingredient;
 import thomson.laurel.beth.thymesaver.Models.ModType;
@@ -59,18 +51,6 @@ public class AddShoppingListItemFragment extends BottomSheetDialogFragment {
         new KeyboardUtil(getActivity(), view);
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialog) {
-                BottomSheetDialog d = (BottomSheetDialog) dialog;
-                FrameLayout bottomSheet = (FrameLayout) d.findViewById(android.support.design.R.id.design_bottom_sheet);
-                BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
-                behavior.setPeekHeight(1250);
-                mNameET.requestFocus();
-            }
-        });
-
-
         mNameET = view.findViewById(R.id.ingredient_name);
         view.findViewById(R.id.ingredient_unit).setVisibility(View.GONE);
         mQuantityET = view.findViewById(R.id.ingredient_quantity);
@@ -78,6 +58,17 @@ public class AddShoppingListItemFragment extends BottomSheetDialogFragment {
         mQuantityLayout = view.findViewById(R.id.quantity_text_input_layout);
         mUnitLayout = view.findViewById(R.id.unit_text_input_layout);
         mDoneButton =  view.findViewById(R.id.add_recipe_ing_button);
+
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                BottomSheetDialog d = (BottomSheetDialog) dialog;
+                FrameLayout bottomSheet = (FrameLayout) d.findViewById(android.support.design.R.id.design_bottom_sheet);
+                BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
+                behavior.setPeekHeight(1300);
+                //mNameET.requestFocus();
+            }
+        });
 
         mQuantityET.setText("1");
         mQuantityET.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -161,11 +152,6 @@ public class AddShoppingListItemFragment extends BottomSheetDialogFragment {
                     ModType.CHANGE,
                     quantity);
         }
-    }
-
-    public void hideKeyboard(){
-        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getDialog().getWindow().getCurrentFocus().getWindowToken(), 0);
     }
 }
 
