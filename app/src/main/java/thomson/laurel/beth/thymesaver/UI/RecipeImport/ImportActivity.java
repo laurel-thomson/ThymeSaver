@@ -1,13 +1,17 @@
 package thomson.laurel.beth.thymesaver.UI.RecipeImport;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -45,6 +49,7 @@ public class ImportActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mProgress.setVisibility(View.VISIBLE);
+                hideKeyboard();
                 new ImportClient().importRecipe(mURLEditText.getText().toString(), new ValueCallback<Recipe>() {
                     @Override
                     public void onSuccess(Recipe recipe) {
@@ -68,7 +73,23 @@ public class ImportActivity extends AppCompatActivity {
     }
 
     private void onImportFail(String error) {
+        // Get a handler that can be used to post to the main thread
+        Handler mainHandler = new Handler(this.getMainLooper());
 
+        Runnable myRunnable = new Runnable() {
+            @Override
+            public void run() {
+                mProgress.setVisibility(View.GONE);
+                Snackbar snackbar = Snackbar.make(findViewById(R.id.url_edittext), "Failed to import recipe", Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+        };
+        mainHandler.post(myRunnable);
+    }
+
+    private void hideKeyboard(){
+        InputMethodManager imm = (InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getWindow().getCurrentFocus().getWindowToken(), 0);
     }
 
     private void setUpActionBar() {

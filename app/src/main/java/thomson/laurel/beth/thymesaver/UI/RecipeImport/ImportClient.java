@@ -32,6 +32,9 @@ public class ImportClient {
             } catch (IOException e) {
                 e.printStackTrace();
                 mRecipeCallback.onError(e.toString());
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+                mRecipeCallback.onError(e.toString());
             }
             return doc;
         }
