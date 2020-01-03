@@ -1,13 +1,9 @@
 package thomson.laurel.beth.thymesaver.Database.Firebase;
 
 import android.graphics.Bitmap;
-import android.net.Uri;
-import android.renderscript.Sampler;
-import android.support.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+import androidx.annotation.NonNull;
+
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;

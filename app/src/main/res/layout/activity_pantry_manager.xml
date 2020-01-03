@@ -19,12 +19,12 @@
         android:indeterminateOnly="true"
         style="?android:attr/progressBarStyleHorizontal"/>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/manage_pantry_rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         style="@style/FABStyle"
         android:id="@+id/pantry_manager_add_button"
         android:layout_gravity="end|bottom"

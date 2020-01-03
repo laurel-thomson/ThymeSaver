@@ -1,8 +1,8 @@
 package thomson.laurel.beth.thymesaver.ViewModels;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import thomson.laurel.beth.thymesaver.Database.IPantryRepository;
 import thomson.laurel.beth.thymesaver.Database.IShoppingRepository;

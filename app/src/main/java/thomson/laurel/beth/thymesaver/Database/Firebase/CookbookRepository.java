@@ -1,10 +1,10 @@
 package thomson.laurel.beth.thymesaver.Database.Firebase;
 
-import android.arch.core.util.Function;
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.Transformations;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.arch.core.util.Function;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Transformations;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import thomson.laurel.beth.thymesaver.Database.Firebase.LiveData.ListLiveData;
 import thomson.laurel.beth.thymesaver.Database.Firebase.LiveData.SubRecipeListLiveData;

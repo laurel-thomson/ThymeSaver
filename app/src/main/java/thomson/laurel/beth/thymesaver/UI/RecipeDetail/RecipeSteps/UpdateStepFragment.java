@@ -3,7 +3,7 @@ package thomson.laurel.beth.thymesaver.UI.RecipeDetail.RecipeSteps;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.support.design.widget.BottomSheetDialogFragment;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;

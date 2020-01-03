@@ -1,6 +1,6 @@
 package thomson.laurel.beth.thymesaver.Database;
 
-import android.arch.lifecycle.LiveData;
+import androidx.lifecycle.LiveData;
 
 import thomson.laurel.beth.thymesaver.Models.MealPlan;
 import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
