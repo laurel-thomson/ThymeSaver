@@ -67,7 +67,12 @@ public class PantryListAdapter extends RecyclerView.Adapter<PantryListAdapter.My
         Pantry pantry = mPantryList.get(position);
         vh.mName.setText(pantry.getName());
         if (pantry.isMyPantry()) {
-            vh.mManageButton.setText("FOLLOWERS");
+            if (pantry.getFollowers().size() > 0) {
+                vh.mManageButton.setText("FOLLOWERS");
+            }
+            else {
+                vh.mManageButton.setVisibility(View.GONE);
+            }
         }
         else {
             vh.mManageButton.setText("LEAVE");
