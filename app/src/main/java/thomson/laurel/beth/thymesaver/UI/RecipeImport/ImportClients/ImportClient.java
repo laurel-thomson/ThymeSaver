@@ -54,6 +54,8 @@ public class ImportClient {
     private RecipeWebsiteClient getWebsiteClient(String url) {
         if (url.contains("minimalistbaker")) {
             return new MinimalistBakerClient();
+        } else if (url.contains("ohsheglows")) {
+            return new OhSheGlowsClient();
         }
         else {
             return new RecipeWebsiteClient();
