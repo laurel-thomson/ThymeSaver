@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -66,8 +67,14 @@ public class RecipeDetailActivity extends AppCompatActivity{
             public void onSuccess(Recipe recipe) {
                 if (recipe.getImageURL() != null) {
                     setRecipeImage(recipe.getImageURL());
+
                 } else {
                     supportStartPostponedEnterTransition();
+                }
+
+                if (recipe.getSourceURL() != null) {
+                    TextView sourceUrl = findViewById(R.id.source_url);
+                    sourceUrl.setText(recipe.getSourceURL());
                 }
             }
 

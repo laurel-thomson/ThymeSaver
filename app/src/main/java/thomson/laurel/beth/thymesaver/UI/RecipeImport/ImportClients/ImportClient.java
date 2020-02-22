@@ -12,10 +12,15 @@ import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
 
 public class ImportClient {
     private ValueCallback<Recipe> mRecipeCallback;
+    private String mUrl;
 
     public void importRecipe(String url, ValueCallback<Recipe> recipeCallback) {
         mRecipeCallback = recipeCallback;
-        new getWebpageTask().execute(url);
+        mUrl = url;
+        if (!url.contains("http")) {
+            mUrl = "http://" + url;
+        }
+        new getWebpageTask().execute(mUrl);
     }
 
     private class getWebpageTask extends AsyncTask<String, Void, Document> {
@@ -43,7 +48,9 @@ public class ImportClient {
             }
             RecipeWebsiteClient client = getWebsiteClient(doc);
             try {
-                mRecipeCallback.onSuccess(client.importRecipe(doc));
+                Recipe recipe = client.importRecipe(doc);
+                recipe.setSourceURL(mUrl.split("http[s]?://")[1].split("/")[0]);
+                mRecipeCallback.onSuccess(recipe);
             } catch (Exception e) {
                 mRecipeCallback.onError(e.toString());
             }

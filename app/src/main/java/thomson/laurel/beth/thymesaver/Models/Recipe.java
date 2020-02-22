@@ -22,6 +22,8 @@ public class Recipe {
 
     private String imageURL;
 
+    private String sourceURL;
+
     public Recipe() {
         //required empty constructor for Firebase
     }
@@ -95,4 +97,13 @@ public class Recipe {
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
     }
+
+    public String getSourceURL() {
+        return sourceURL;
+    }
+
+    public void setSourceURL(String sourceURL) {
+        this.sourceURL = sourceURL;
+    }
+
 }

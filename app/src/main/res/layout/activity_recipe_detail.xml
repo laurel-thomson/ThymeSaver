@@ -26,8 +26,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="fitCenter"
+                    android:foreground="@drawable/gradient"
                     android:src="@mipmap/ic_launcher_foreground"
                     android:transitionName="recipe_image" />
+
+                <TextView
+                    android:id="@+id/source_url"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="9dp"
+                    android:textColor="@color/colorTextIcon"
+                    android:textStyle="bold"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginBottom="50dp"
+                    android:layout_gravity="bottom|start"/>
 
                 <ImageButton
                     android:id="@+id/camera_button"

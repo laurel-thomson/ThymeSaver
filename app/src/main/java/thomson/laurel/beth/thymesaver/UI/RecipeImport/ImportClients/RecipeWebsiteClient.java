@@ -12,7 +12,7 @@ import thomson.laurel.beth.thymesaver.Models.Step;
 
 public class RecipeWebsiteClient {
     public Recipe importRecipe(Document doc) {
-        String recipeName = doc.select("title").text().split("[.#$\\[\\]]")[0];
+        String recipeName = doc.select("title").text().split("[.#$\\\\/]")[0];
         Recipe recipe = new Recipe(recipeName, "Entree");
 
         Elements images = doc.select("[class*=content] [class*=recipe] img");
@@ -28,7 +28,7 @@ public class RecipeWebsiteClient {
         if (images.size() == 0) {
             images = doc.select("img");
         }
-        String imageURL = images.first().attr("src");
+        String imageURL = images.last().attr("src");
         recipe.setImageURL(imageURL);
         Elements recipeIngredients = doc.select("ul[class*='ingredient'] li");
         if (recipeIngredients.size() == 0) {
@@ -42,7 +42,7 @@ public class RecipeWebsiteClient {
             if (quantity == null) continue;
 
             String unit = getUnit(quantityString, ingText);
-            String name = getName(unit, ingText);
+            String name = cleanIngredientName(getName(unit, ingText));
             RecipeQuantity rq = new RecipeQuantity(unit, quantity);
             recipe.addOrUpdateIngredient(name, rq);
         }
@@ -111,6 +111,6 @@ public class RecipeWebsiteClient {
     }
 
     public String cleanIngredientName(String name) {
-        return name.split("/")[0];
+        return name.split("[.#$\\\\/]")[0];
     }
 }

@@ -10,7 +10,7 @@ import thomson.laurel.beth.thymesaver.Models.Step;
 
 public class WPRMRecipeClient extends RecipeWebsiteClient {
     public Recipe importRecipe(Document doc) {
-        String recipeName = doc.select(".wprm-recipe-name").text();
+        String recipeName = doc.select(".wprm-recipe-name").text().split("[.#$\\\\/]")[0];
         Recipe recipe = new Recipe(recipeName, "Entree");
 
         String imageURL = doc.select(".wprm-recipe-image img").last().attr("src");
