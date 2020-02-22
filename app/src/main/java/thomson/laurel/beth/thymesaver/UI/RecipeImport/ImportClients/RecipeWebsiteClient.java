@@ -29,7 +29,10 @@ public class RecipeWebsiteClient {
             images = doc.select("img");
         }
         String imageURL = images.last().attr("src");
-        recipe.setImageURL(imageURL);
+        if (imageURL != null && !imageURL.equals("")) {
+            recipe.setImageURL(imageURL);
+        }
+
         Elements recipeIngredients = doc.select("ul[class*='ingredient'] li");
         if (recipeIngredients.size() == 0) {
             recipeIngredients = doc.select("[class*=ingredient] li");
@@ -39,7 +42,6 @@ public class RecipeWebsiteClient {
 
             String quantityString = ingText.split(" ")[0];
             Double quantity = getQuantity(quantityString);
-            if (quantity == null) continue;
 
             String unit = getUnit(quantityString, ingText);
             String name = cleanIngredientName(getName(unit, ingText));
@@ -70,7 +72,15 @@ public class RecipeWebsiteClient {
     }
 
     private String getUnit(String quantity, String ingText) {
-        String ingTextRemoved = ingText.substring(quantity.length() + 1);
+        String ingTextRemoved;
+        if (ingText.equals(quantity)) {
+            return "";
+        }
+        else if (ingText.contains(quantity)) {
+            ingTextRemoved = ingText.substring(quantity.length() + 1);
+        } else {
+            ingTextRemoved = ingText;
+        }
         if (ingTextRemoved.indexOf(')') == -1) {
             if (ingTextRemoved.split(" ").length > 0) {
                 return ingTextRemoved.split(" ")[0];
@@ -106,7 +116,7 @@ public class RecipeWebsiteClient {
             return Math.floor(Double.parseDouble(splitString[0]) * 100)/100;
         }
         catch (NumberFormatException e) {
-            return null;
+            return 1.0;
         }
     }
 

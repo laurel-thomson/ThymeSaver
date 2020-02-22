@@ -14,13 +14,14 @@ public class WPRMRecipeClient extends RecipeWebsiteClient {
         Recipe recipe = new Recipe(recipeName, "Entree");
 
         String imageURL = doc.select(".wprm-recipe-image img").last().attr("src");
-        recipe.setImageURL(imageURL);
+        if (imageURL != null && !imageURL.equals("")) {
+            recipe.setImageURL(imageURL);
+        }
         Elements recipeIngredients = doc.select(".wprm-recipe-ingredient");
         for (Element ri : recipeIngredients) {
             String quantityString = ri.select(".wprm-recipe-ingredient-amount").text();
             if (quantityString.equals("")) continue;
             Double quantity = parseQuantity(quantityString);
-            if (quantity == null) continue;
             String unit = ri.select(".wprm-recipe-ingredient-unit").text();
             String ingredient = cleanIngredientName(ri.select(".wprm-recipe-ingredient-name").text());
             RecipeQuantity rq = new RecipeQuantity(unit, quantity);
