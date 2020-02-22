@@ -88,7 +88,7 @@ public class RecipeWebsiteClient {
     private String getName(String unit, String ingText) {
         String[] pieces = ingText.split(Pattern.quote(unit));
         if (pieces.length > 1) {
-            return pieces[1].split("/")[0];
+            return pieces[1].split("[.#$\\[\\]]")[0];
         }
         else {
             return "unknown";
