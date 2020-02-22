@@ -4,23 +4,17 @@ import android.os.AsyncTask;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.io.IOException;
 
 import thomson.laurel.beth.thymesaver.Models.Recipe;
-import thomson.laurel.beth.thymesaver.Models.RecipeQuantity;
-import thomson.laurel.beth.thymesaver.Models.Step;
 import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
 
 public class ImportClient {
     private ValueCallback<Recipe> mRecipeCallback;
-    private RecipeWebsiteClient mRecipeWebsiteClient;
 
     public void importRecipe(String url, ValueCallback<Recipe> recipeCallback) {
         mRecipeCallback = recipeCallback;
-        mRecipeWebsiteClient = getWebsiteClient(url);
         new getWebpageTask().execute(url);
     }
 
@@ -47,17 +41,20 @@ public class ImportClient {
                 mRecipeCallback.onError("Could not find recipe.");
                 return;
             }
-            mRecipeCallback.onSuccess(mRecipeWebsiteClient.importRecipe(doc));
+            RecipeWebsiteClient client = getWebsiteClient(doc);
+            try {
+                mRecipeCallback.onSuccess(client.importRecipe(doc));
+            } catch (Exception e) {
+                mRecipeCallback.onError(e.toString());
+            }
+
         }
     }
 
-    private RecipeWebsiteClient getWebsiteClient(String url) {
-        if (url.contains("minimalistbaker")) {
-            return new MinimalistBakerClient();
-        } else if (url.contains("ohsheglows")) {
-            return new OhSheGlowsClient();
-        }
-        else {
+    private RecipeWebsiteClient getWebsiteClient(Document doc) {
+        if (doc.select(".wprm-recipe-ingredient").size() > 0) {
+            return new WPRMRecipeClient();
+        } else {
             return new RecipeWebsiteClient();
         }
     }

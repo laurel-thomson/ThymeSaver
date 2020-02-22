@@ -8,12 +8,12 @@ import thomson.laurel.beth.thymesaver.Models.Recipe;
 import thomson.laurel.beth.thymesaver.Models.RecipeQuantity;
 import thomson.laurel.beth.thymesaver.Models.Step;
 
-public class MinimalistBakerClient extends RecipeWebsiteClient {
+public class WPRMRecipeClient extends RecipeWebsiteClient {
     public Recipe importRecipe(Document doc) {
         String recipeName = doc.select(".wprm-recipe-name").text();
         Recipe recipe = new Recipe(recipeName, "Entree");
 
-        String imageURL = doc.select(".wprm-recipe-image img").attr("src");
+        String imageURL = doc.select(".wprm-recipe-image img").last().attr("src");
         recipe.setImageURL(imageURL);
         Elements recipeIngredients = doc.select(".wprm-recipe-ingredient");
         for (Element ri : recipeIngredients) {
@@ -27,7 +27,7 @@ public class MinimalistBakerClient extends RecipeWebsiteClient {
             recipe.addOrUpdateIngredient(ingredient, rq);
         }
 
-        Elements instructions = doc.select("ol.wprm-recipe-instructions");
+        Elements instructions = doc.select(".wprm-recipe-instructions");
         for (Element instruction : instructions) {
             Elements steps = instruction.select(".wprm-recipe-instruction-text");
             for (Element step : steps) {
