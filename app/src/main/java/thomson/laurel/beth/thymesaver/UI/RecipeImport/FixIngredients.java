@@ -11,10 +11,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -87,6 +90,8 @@ public class FixIngredients extends AppCompatActivity {
             @Override
             public void onSuccess(List<Ingredient> ingredients) {
                 mAdapter.setIngredients(ingredients);
+                ProgressBar progress = findViewById(R.id.progress_bar);
+                progress.setVisibility(View.GONE);
             }
 
             @Override
@@ -115,6 +120,16 @@ public class FixIngredients extends AppCompatActivity {
         intent.putExtra(RecipeDetailActivity.CURRENT_RECIPE_NAME, mRecipe.getName());
         finish();
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return false;
     }
 
     class IngredientAddedCB implements Callback {
