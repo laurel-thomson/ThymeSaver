@@ -30,6 +30,7 @@ public class PantryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private List<Ingredient> mIngredients = new ArrayList<>();
     private List<Ingredient> mFilteredIngredients = mIngredients;
     private IngredientListener mListener;
+    private boolean mIsFiltered;
     private static final int INGREDIENT_TYPE = 1;
     private static final int HEADER_TYPE = 2;
 
@@ -40,7 +41,9 @@ public class PantryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         mListener = listener;
     }
 
+
     public void setIngredients(List<Ingredient> ingredients) {
+        if (mIsFiltered) { return; }
         //Sort the ingredients
         Object[] ingArray = ingredients.toArray();
         Arrays.sort(ingArray, (o1, o2) -> ((Ingredient) o1).getName().compareTo(((Ingredient) o2).getName()));
@@ -177,8 +180,10 @@ public class PantryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             protected FilterResults performFiltering(CharSequence charSequence) {
                 String charString = charSequence.toString();
                 if (charString.isEmpty()) {
+                    mIsFiltered = false;
                     mFilteredIngredients = mIngredients;
                 } else {
+                    mIsFiltered = true;
                     List<Ingredient> filteredList = new ArrayList<>();
                     for (Ingredient row : mIngredients) {
 
