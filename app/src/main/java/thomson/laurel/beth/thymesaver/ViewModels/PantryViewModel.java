@@ -9,6 +9,7 @@ import thomson.laurel.beth.thymesaver.Database.IShoppingRepository;
 import thomson.laurel.beth.thymesaver.Database.Firebase.PantryRepository;
 import thomson.laurel.beth.thymesaver.Database.Firebase.ShoppingRepository;
 import thomson.laurel.beth.thymesaver.Models.Ingredient;
+import thomson.laurel.beth.thymesaver.UI.Callbacks.Callback;
 import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
 
 import java.util.List;
@@ -27,8 +28,16 @@ public class PantryViewModel extends AndroidViewModel {
         return mPantryRepository.getAllIngredients();
     }
 
+    public void getAllIngredients(ValueCallback<List<Ingredient>> callback) {
+        mPantryRepository.getAllIngredients(callback);
+    }
+
     public void addIngredient(Ingredient i) {
         mPantryRepository.addIngredient(i);
+    }
+
+    public void addImportedIngredient(Ingredient i, Callback cb) {
+        mPantryRepository.addImportedIngredient(i, cb);
     }
 
     public void updateModToChange(String name) {

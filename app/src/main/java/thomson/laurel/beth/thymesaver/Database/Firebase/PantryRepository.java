@@ -11,7 +11,11 @@ import thomson.laurel.beth.thymesaver.Models.Ingredient;
 import thomson.laurel.beth.thymesaver.Models.ModType;
 import thomson.laurel.beth.thymesaver.Models.Recipe;
 import thomson.laurel.beth.thymesaver.Models.ShoppingListMod;
+import thomson.laurel.beth.thymesaver.UI.Callbacks.Callback;
 import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -55,6 +59,16 @@ public class PantryRepository implements IPantryRepository {
 
             }
         });
+    }
+
+    public void addImportedIngredient(Ingredient i, Callback cb) {
+        DatabaseReferences.getIngredientReference().child(i.getName()).setValue(i)
+            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    cb.onSuccess();
+                }
+            });
     }
 
     @Override
@@ -124,6 +138,28 @@ public class PantryRepository implements IPantryRepository {
                         callback.onError(databaseError.toString());
                     }
                 });
+    }
+
+    @Override
+    public void getAllIngredients(ValueCallback<List<Ingredient>> callback) {
+        DatabaseReferences.getIngredientReference().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                mIngredients.clear();
+
+                for(DataSnapshot snap : dataSnapshot.getChildren()){
+                    Ingredient i = snap.getValue(Ingredient.class);
+                    i.setName(snap.getKey());
+                    mIngredients.add(i);
+                }
+                callback.onSuccess(mIngredients);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                callback.onError(databaseError.toString());
+            }
+        });
     }
 
     @Override

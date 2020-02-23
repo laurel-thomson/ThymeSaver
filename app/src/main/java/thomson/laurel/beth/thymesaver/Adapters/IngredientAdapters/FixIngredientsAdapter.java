@@ -66,7 +66,7 @@ public class FixIngredientsAdapter extends RecyclerView.Adapter<FixIngredientsAd
     public HashMap<String, RecipeQuantity> getRecipeIngredients() {
         HashMap<String, RecipeQuantity> recipeIngredients = new HashMap<>();
         for (RecipeIngredient ri : mRecipeIngredients) {
-            recipeIngredients.put(ri.fixedName,
+            recipeIngredients.put(ri.fixedName.toLowerCase(),
                     new RecipeQuantity(ri.unit, ri.quantity));
         }
         return recipeIngredients;

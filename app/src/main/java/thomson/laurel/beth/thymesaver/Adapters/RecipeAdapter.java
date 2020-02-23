@@ -112,6 +112,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             holder.mNameTV.setText(recipe.getName());
             if (recipe.getImageURL() != null) {
                 Picasso.with(mContext).load(recipe.getImageURL()).fit().centerCrop().into(holder.mImageView);
+            } else {
+                holder.mImageView.setImageResource(R.mipmap.ic_launcher_foreground);
             }
         }
         else {

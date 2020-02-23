@@ -12,7 +12,7 @@ import thomson.laurel.beth.thymesaver.Models.Step;
 
 public class RecipeWebsiteClient {
     public Recipe importRecipe(Document doc) {
-        String recipeName = doc.select("title").text().split("[.#$\\\\/]")[0];
+        String recipeName = doc.select("title").text().split("[|\\-.#$\\\\/]")[0];
         Recipe recipe = new Recipe(recipeName, "Entree");
 
         Elements images = doc.select("[class*=content] [class*=recipe] img");

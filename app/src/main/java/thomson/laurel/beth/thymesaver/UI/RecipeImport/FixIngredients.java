@@ -17,12 +17,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import thomson.laurel.beth.thymesaver.Adapters.IngredientAdapters.FixIngredientsAdapter;
 import thomson.laurel.beth.thymesaver.Models.Ingredient;
 import thomson.laurel.beth.thymesaver.Models.Recipe;
 import thomson.laurel.beth.thymesaver.R;
 import thomson.laurel.beth.thymesaver.UI.Callbacks.Callback;
+import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
 import thomson.laurel.beth.thymesaver.UI.RecipeDetail.RecipeDetailActivity;
 import thomson.laurel.beth.thymesaver.ViewModels.CookBookViewModel;
 import thomson.laurel.beth.thymesaver.ViewModels.PantryViewModel;
@@ -80,17 +82,18 @@ public class FixIngredients extends AppCompatActivity {
     private void setAdapterData() {
         mRecipe = ImportedRecipe.getInstance().getRecipe();
         mAdapter.setRecipe(mRecipe);
-        LifecycleOwner owner = this;
 
-        mPantryViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
+        mPantryViewModel.getAllIngredients(new ValueCallback<List<Ingredient>>() {
             @Override
-            public void onChanged(@Nullable List<Ingredient> ingredients) {
+            public void onSuccess(List<Ingredient> ingredients) {
                 mAdapter.setIngredients(ingredients);
-                mPantryViewModel.getAllIngredients().removeObservers(owner);
+            }
+
+            @Override
+            public void onError(String error) {
             }
         });
     }
-
 
     private void setUpActionBar() {
         ActionBar actionBar = getSupportActionBar();
@@ -99,22 +102,11 @@ public class FixIngredients extends AppCompatActivity {
     }
 
     private void onDoneClicked() {
-        for (Ingredient ingredient : mAdapter.getFixedIngredients()) {
-            mPantryViewModel.addIngredient(ingredient);
+        List<Ingredient> fixedIngredients = mAdapter.getFixedIngredients();
+        IngredientAddedCB cb = new IngredientAddedCB(fixedIngredients.size());
+        for (Ingredient ingredient : fixedIngredients) {
+            mPantryViewModel.addImportedIngredient(ingredient, cb);
         }
-
-        mRecipe.setRecipeIngredients(mAdapter.getRecipeIngredients());
-        mCookBookViewModel.addRecipe(mRecipe, new Callback() {
-            @Override
-            public void onSuccess() {
-                launchRecipeDetailActivity();
-            }
-
-            @Override
-            public void onError(String err) {
-                //TODO: show error - unable to import recipe
-            }
-        });
     }
 
 
@@ -123,5 +115,42 @@ public class FixIngredients extends AppCompatActivity {
         intent.putExtra(RecipeDetailActivity.CURRENT_RECIPE_NAME, mRecipe.getName());
         finish();
         startActivity(intent);
+    }
+
+    class IngredientAddedCB implements Callback {
+        private int ingredientsAdded = 0;
+        private int totalIngredients;
+
+        IngredientAddedCB(int totalIngredients) {
+            this.totalIngredients = totalIngredients;
+        }
+
+        @Override
+        public void onSuccess() {
+            ingredientsAdded++;
+            if (ingredientsAdded == totalIngredients) {
+               addRecipe();
+            }
+        }
+
+        private void addRecipe() {
+            mRecipe.setRecipeIngredients(mAdapter.getRecipeIngredients());
+            mCookBookViewModel.addRecipe(mRecipe, new Callback() {
+                @Override
+                public void onSuccess() {
+                    launchRecipeDetailActivity();
+                }
+
+                @Override
+                public void onError(String err) {
+                    //TODO: show error - unable to import recipe
+                }
+            });
+        }
+
+        @Override
+        public void onError(String err) {
+
+        }
     }
 }
