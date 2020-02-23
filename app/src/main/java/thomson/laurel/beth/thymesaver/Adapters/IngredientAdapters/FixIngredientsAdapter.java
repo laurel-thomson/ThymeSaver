@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -171,6 +172,14 @@ public class FixIngredientsAdapter extends RecyclerView.Adapter<FixIngredientsAd
             }
         });
 
+        myViewHolder.mDeleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mRecipeIngredients.remove(myViewHolder.getAdapterPosition());
+                notifyDataSetChanged();
+            }
+        });
+
     }
 
     @Override
@@ -180,15 +189,16 @@ public class FixIngredientsAdapter extends RecyclerView.Adapter<FixIngredientsAd
         return mRecipeIngredients.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView mNameTV;
-        public EditText mQuantityET;
-        public EditText mUnitET;
-        public EditText mNameET;
-        public EditText mCategoryET;
-        public Switch mIsBulkSwitch;
+    class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView mNameTV;
+        EditText mQuantityET;
+        EditText mUnitET;
+        EditText mNameET;
+        EditText mCategoryET;
+        Switch mIsBulkSwitch;
+        ImageButton mDeleteButton;
 
-        public MyViewHolder(@NonNull View itemView) {
+        MyViewHolder(@NonNull View itemView) {
             super(itemView);
             mNameTV = itemView.findViewById(R.id.name_textview);
             mQuantityET = itemView.findViewById(R.id.quantity_edittext);
@@ -196,6 +206,7 @@ public class FixIngredientsAdapter extends RecyclerView.Adapter<FixIngredientsAd
             mNameET = itemView.findViewById(R.id.name_edittext);
             mCategoryET = itemView.findViewById(R.id.category_edittext);
             mIsBulkSwitch = itemView.findViewById(R.id.is_bulk_switch);
+            mDeleteButton = itemView.findViewById(R.id.delete_button);
         }
     }
 
@@ -211,7 +222,7 @@ public class FixIngredientsAdapter extends RecyclerView.Adapter<FixIngredientsAd
     private abstract class TextChangedListener<T> implements TextWatcher {
         private T target;
 
-        public TextChangedListener(T target) {
+        TextChangedListener(T target) {
             this.target = target;
         }
 
