@@ -5,6 +5,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.regex.Pattern;
+import java.net.URL;
 
 import thomson.laurel.beth.thymesaver.Models.Recipe;
 import thomson.laurel.beth.thymesaver.Models.RecipeQuantity;
@@ -15,23 +16,7 @@ public class RecipeWebsiteClient {
         String recipeName = doc.select("title").text().split("[|\\-.#$\\\\/]")[0];
         Recipe recipe = new Recipe(recipeName, "Entree");
 
-        Elements images = doc.select("[class*=content] [class*=recipe] img");
-        if (images.size() == 0) {
-            images = doc.select("[class*=content] img[class*=recipe], [class*=content] img[class*=image]");
-        }
-        if (images.size() == 0) {
-            images = doc.select("img[class*=recipe] img[class*=image]");
-        }
-        if (images.size() == 0) {
-            images = doc.select("[class*=content] img");
-        }
-        if (images.size() == 0) {
-            images = doc.select("img");
-        }
-        String imageURL = images.last().attr("src");
-        if (imageURL != null && !imageURL.equals("")) {
-            recipe.setImageURL(imageURL);
-        }
+        recipe.setImageURL(getImageUrl(doc));
 
         Elements recipeIngredients = doc.select("ul[class*='ingredient'] li");
         if (recipeIngredients.size() == 0) {
@@ -64,6 +49,39 @@ public class RecipeWebsiteClient {
             }
         }
         return recipe;
+    }
+
+    private String getImageUrl(Document doc) {
+        String[] cssSelectors = new String[] {
+                "[class*=content] [class*=recipe] img",
+                "[class*=content] img[class*=recipe], [class*=content] img[class*=image]",
+                "img[class*=recipe] img[class*=image]",
+                "[class*=content] img",
+                "img"
+        };
+        Elements images;
+        for (String selector : cssSelectors) {
+            images = doc.select(selector);
+            if (images.size() == 0) { continue; }
+            for (int i = images.size() - 1; i >= 0; i--) {
+                String imageUrl = images.get(i).attr("src");
+                if (isValidUrl(imageUrl)) {
+                    return imageUrl;
+                }
+            }
+        }
+        return null;
+    }
+
+    private boolean isValidUrl(String url)
+    {
+        try {
+            new URL(url).toURI();
+            return true;
+        }
+        catch (Exception e) {
+            return false;
+        }
     }
 
     private Double getQuantity(String quantityString) {
