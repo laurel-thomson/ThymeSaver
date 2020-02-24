@@ -186,6 +186,8 @@ public class RecipeDetailActivity extends AppCompatActivity{
                     }
                 });
             }
+        } else {
+            super.onActivityResult(requestCode, resultCode, intent);
         }
     }
 
