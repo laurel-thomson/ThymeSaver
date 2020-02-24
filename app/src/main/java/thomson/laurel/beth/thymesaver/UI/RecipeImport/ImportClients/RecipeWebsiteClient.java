@@ -53,19 +53,19 @@ public class RecipeWebsiteClient {
 
     private String getImageUrl(Document doc) {
         String[] cssSelectors = new String[] {
-                "[class*=content] [class*=recipe] img",
-                "[class*=content] img[class*=recipe], [class*=content] img[class*=image]",
-                "img[class*=recipe] img[class*=image]",
-                "[class*=content] img",
-                "img"
+                "[class*=content] [class*=recipe] img:not([class*=svg])",
+                "[class*=content] img[class*=recipe], [class*=content] img[class*=image]:not([class*=svg])",
+                "img[class*=recipe] img[class*=image]:not([class*=svg])",
+                "[class*=content] img:not([class*=svg])",
+                "img:not([class*=svg])"
         };
         Elements images;
         for (String selector : cssSelectors) {
             images = doc.select(selector);
             if (images.size() == 0) { continue; }
-            for (int i = images.size() - 1; i >= 0; i--) {
-                String imageUrl = images.get(i).attr("src");
-                if (isValidUrl(imageUrl)) {
+            for (Element image : images) {
+                String imageUrl = image.attr("src");
+                if (isValidUrl(imageUrl) && !imageUrl.matches("svg$")) {
                     return imageUrl;
                 }
             }
