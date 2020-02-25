@@ -17,6 +17,7 @@ import android.widget.TextView;
 import thomson.laurel.beth.thymesaver.Models.BulkIngredientState;
 import thomson.laurel.beth.thymesaver.Models.Ingredient;
 import thomson.laurel.beth.thymesaver.R;
+import thomson.laurel.beth.thymesaver.UI.Callbacks.Callback;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -264,7 +265,18 @@ public class PantryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             mDeleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mListener.onDeleteClicked(mFilteredIngredients.get(getAdapterPosition()));
+                    mListener.onDeleteClicked(mFilteredIngredients.get(getAdapterPosition()), new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            mFilteredIngredients.remove(getAdapterPosition());
+                            notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onError(String err) {
+
+                        }
+                    });
                 }
             });
 
@@ -276,6 +288,7 @@ public class PantryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
                     int newQuantity = BulkIngredientState.getNextStateAsInt(ingredient.getQuantity());
                     mListener.onIngredientQuantityChanged(ingredient, newQuantity);
+                    notifyDataSetChanged();
                 }
             });
         }
@@ -293,7 +306,7 @@ public class PantryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public interface IngredientListener {
         void onIngredientQuantityChanged(Ingredient ingredient, int quantity);
 
-        void onDeleteClicked(Ingredient ingredient);
+        void onDeleteClicked(Ingredient ingredient, Callback callback);
 
         void onIngredientClicked(Ingredient ingredient);
     }

@@ -26,6 +26,7 @@ import thomson.laurel.beth.thymesaver.Adapters.IngredientAdapters.PantryAdapter;
 import thomson.laurel.beth.thymesaver.Models.Ingredient;
 import thomson.laurel.beth.thymesaver.R;
 import thomson.laurel.beth.thymesaver.UI.AddIngredients.AddIngredientFragment;
+import thomson.laurel.beth.thymesaver.UI.Callbacks.Callback;
 import thomson.laurel.beth.thymesaver.ViewModels.PantryViewModel;
 
 import java.util.List;
@@ -90,7 +91,7 @@ public class PantryFragment extends AddButtonFragment implements PantryAdapter.I
     }
 
     @Override
-    public void onDeleteClicked(final Ingredient ingredient) {
+    public void onDeleteClicked(final Ingredient ingredient, Callback callback) {
         new AlertDialog.Builder(getActivity())
                 .setTitle("Delete " + ingredient.getName() + " ?")
                 .setMessage("Are you sure you want to delete this ingredient? This will remove" +
@@ -100,6 +101,7 @@ public class PantryFragment extends AddButtonFragment implements PantryAdapter.I
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mViewModel.deleteIngredient(ingredient);
+                        callback.onSuccess();
                     }
 
                 })
