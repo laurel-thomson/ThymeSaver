@@ -60,6 +60,7 @@
     <string name="search">Search</string>
     <string name="delete">DELETE</string>
     <string name="get_cooking">GET COOKING</string>
+    <string name="none_found">We couldn\'t find any ingredients :(</string>
 
     <string-array name="ingredient_categories">
         <item>Produce</item>

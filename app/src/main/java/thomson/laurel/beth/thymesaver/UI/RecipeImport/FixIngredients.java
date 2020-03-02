@@ -39,6 +39,8 @@ public class FixIngredients extends AppCompatActivity {
     private CookBookViewModel mCookBookViewModel;
     private Button mDoneButton;
     private Recipe mRecipe;
+    private ProgressBar mProgress;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,7 @@ public class FixIngredients extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fix_ingredients);
         setUpActionBar();
+        mProgress = findViewById(R.id.progress_bar);
 
         mPantryViewModel = ViewModelProviders.of(this).get(PantryViewModel.class);
         mCookBookViewModel = ViewModelProviders.of(this).get(CookBookViewModel.class);
@@ -53,8 +56,14 @@ public class FixIngredients extends AppCompatActivity {
         mAdapter = new FixIngredientsAdapter(this);
         mRecyclerView = findViewById(R.id.fix_ingredients_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecipe = ImportedRecipe.getInstance().getRecipe();
 
-        setAdapterData();
+        if (mRecipe.getRecipeIngredients().size() == 0) {
+            displayNoneFound();
+            mProgress.setVisibility(View.GONE);
+        } else {
+            setAdapterData();
+        }
 
         mRecyclerView.setAdapter(mAdapter);
 
@@ -67,6 +76,10 @@ public class FixIngredients extends AppCompatActivity {
         });
 
         closeSoftKeyboardOnFocusLost();
+    }
+
+    private void displayNoneFound() {
+        findViewById(R.id.none_found).setVisibility(View.VISIBLE);
     }
 
     private void closeSoftKeyboardOnFocusLost() {
@@ -83,15 +96,13 @@ public class FixIngredients extends AppCompatActivity {
     }
 
     private void setAdapterData() {
-        mRecipe = ImportedRecipe.getInstance().getRecipe();
         mAdapter.setRecipe(mRecipe);
 
         mPantryViewModel.getAllIngredients(new ValueCallback<List<Ingredient>>() {
             @Override
             public void onSuccess(List<Ingredient> ingredients) {
                 mAdapter.setIngredients(ingredients);
-                ProgressBar progress = findViewById(R.id.progress_bar);
-                progress.setVisibility(View.GONE);
+                mProgress.setVisibility(View.GONE);
             }
 
             @Override

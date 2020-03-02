@@ -19,6 +19,15 @@
         android:indeterminateOnly="true"
         style="?android:attr/progressBarStyleHorizontal"/>
 
+    <TextView
+        android:id="@+id/none_found"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/none_found"
+        android:visibility="invisible"
+        />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fix_ingredients_recycler_view"
         android:layout_width="match_parent"
