@@ -14,6 +14,7 @@ import thomson.laurel.beth.thymesaver.Models.Ingredient;
 import thomson.laurel.beth.thymesaver.Models.Recipe;
 import thomson.laurel.beth.thymesaver.Models.RecipeQuantity;
 import thomson.laurel.beth.thymesaver.Models.Step;
+import thomson.laurel.beth.thymesaver.UI.Callbacks.Callback;
 import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
 
 import java.util.HashMap;
@@ -56,9 +57,9 @@ public class RecipeDetailViewModel extends AndroidViewModel {
         mRepository.addOrUpdateRecipe(mCurrentRecipe);
     }
 
-    public void renameRecipe(String newName) {
+    public void renameRecipe(String newName, Callback callback) {
         mCurrentRecipeName = newName;
-        //mRepository.renameRecipe(mCurrentRecipe, newName);
+        mRepository.renameRecipe(mCurrentRecipe, newName, callback);
         mCurrentRecipe.setName(newName);
     }
 

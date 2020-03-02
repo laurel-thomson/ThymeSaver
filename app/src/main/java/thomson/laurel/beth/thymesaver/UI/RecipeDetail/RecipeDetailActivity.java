@@ -50,6 +50,7 @@ import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
 import thomson.laurel.beth.thymesaver.UI.RecipeDetail.RecipeIngredients.RecipeIngredientsFragment;
 import thomson.laurel.beth.thymesaver.UI.RecipeDetail.RecipeSteps.RecipeStepsFragment;
 import thomson.laurel.beth.thymesaver.UI.TopLevel.AddButtonFragment;
+import thomson.laurel.beth.thymesaver.UI.TopLevel.MainActivity;
 import thomson.laurel.beth.thymesaver.ViewModels.CookBookViewModel;
 import thomson.laurel.beth.thymesaver.ViewModels.RecipeDetailViewModel;
 
@@ -143,6 +144,13 @@ public class RecipeDetailActivity extends AppCompatActivity{
         });
 
         findViewById(R.id.camera_button).setOnClickListener(view -> dispatchTakePictureIntent());
+    }
+
+    private void restartActivity(String recipeName) {
+        Intent intent = new Intent(this, RecipeDetailActivity.class);
+        intent.putExtra(CURRENT_RECIPE_NAME, recipeName);
+        finish();
+        startActivity(intent);
     }
 
     private void setRecipeImage(String imageURL) {
@@ -261,7 +269,18 @@ public class RecipeDetailActivity extends AppCompatActivity{
                 promptForRecipeName(context, recipes, new ValueCallback<Recipe>() {
                     @Override
                     public void onSuccess(Recipe value) {
-                        mViewModel.renameRecipe(value.getName());
+                        mViewModel.renameRecipe(value.getName(), new thomson.laurel.beth.thymesaver.UI.Callbacks.Callback() {
+                                    @Override
+                                    public void onSuccess() {
+                                        restartActivity(value.getName());
+                                    }
+
+                                    @Override
+                                    public void onError(String err) {
+
+                                    }
+                                });
+
                     }
 
                     @Override

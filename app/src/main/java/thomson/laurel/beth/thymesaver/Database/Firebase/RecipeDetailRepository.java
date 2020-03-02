@@ -9,10 +9,15 @@ import thomson.laurel.beth.thymesaver.Database.Firebase.LiveData.RecipeIngredien
 import thomson.laurel.beth.thymesaver.Database.Firebase.LiveData.RecipeLiveData;
 import thomson.laurel.beth.thymesaver.Database.IRecipeDetailRepository;
 import thomson.laurel.beth.thymesaver.Models.Ingredient;
+import thomson.laurel.beth.thymesaver.Models.MealPlan;
 import thomson.laurel.beth.thymesaver.Models.Recipe;
 import thomson.laurel.beth.thymesaver.Models.RecipeQuantity;
 import thomson.laurel.beth.thymesaver.Models.Step;
+import thomson.laurel.beth.thymesaver.UI.Callbacks.Callback;
 import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -37,6 +42,37 @@ public class RecipeDetailRepository implements IRecipeDetailRepository {
     @Override
     public void addOrUpdateRecipe(Recipe r) {
         DatabaseReferences.getRecipeReference().child(r.getName()).setValue(r);
+    }
+
+    @Override
+    public void renameRecipe(Recipe r, String newName, Callback callback) {
+        updateMealPlans(r.getName(), newName);
+        DatabaseReferences.getRecipeReference().child(newName).setValue(r).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                callback.onSuccess();
+            }
+        });
+        DatabaseReferences.getRecipeReference().child(r.getName()).removeValue();
+    }
+
+    private void updateMealPlans(String oldName, String newName) {
+        DatabaseReferences.getMealPlanReference().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                    MealPlan mp = snap.getValue(MealPlan.class);
+                    if (mp.getRecipeName().equals(oldName)) {
+                        DatabaseReferences.getMealPlanReference().child(snap.getKey()).child("recipeName").setValue(newName);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override

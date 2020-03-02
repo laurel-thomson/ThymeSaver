@@ -52,6 +52,7 @@ public class RecipeIngredientsLiveData extends LiveData<DataSnapshot> {
     public static HashMap<Ingredient, RecipeQuantity> getRecipeIngredients(DataSnapshot dataSnapshot, String recipeName) {
         DataSnapshot snap = dataSnapshot.child("recipes").child(recipeName);
         Recipe recipe = snap.getValue(Recipe.class);
+        if (recipe == null) return null;
         recipe.setName(snap.getKey());
 
         HashMap<Ingredient, RecipeQuantity> recipeIngredients = new HashMap<>();
