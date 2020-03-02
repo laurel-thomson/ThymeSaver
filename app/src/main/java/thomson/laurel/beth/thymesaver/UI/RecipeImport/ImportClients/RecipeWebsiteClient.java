@@ -13,7 +13,7 @@ import thomson.laurel.beth.thymesaver.Models.Step;
 
 public class RecipeWebsiteClient {
     public Recipe importRecipe(Document doc) {
-        String recipeName = doc.select("title").text().split("[|\\-.#$\\\\/]")[0];
+        String recipeName = doc.select("title").text().split("[^a-z A-Z0-9]")[0];
         Recipe recipe = new Recipe(recipeName, "Entree");
 
         recipe.setImageURL(getImageUrl(doc));
@@ -116,7 +116,7 @@ public class RecipeWebsiteClient {
     private String getName(String unit, String ingText) {
         String[] pieces = ingText.split(Pattern.quote(unit));
         if (pieces.length > 1) {
-            return pieces[1].split("[.#$\\[\\]]")[0];
+            return pieces[1].split("[^a-z A-Z0-9]")[0];
         }
         else {
             return "unknown";
@@ -139,6 +139,6 @@ public class RecipeWebsiteClient {
     }
 
     public String cleanIngredientName(String name) {
-        return name.split("[.#$\\\\/]")[0];
+        return name.split("[^a-z A-Z0-9]")[0];
     }
 }
