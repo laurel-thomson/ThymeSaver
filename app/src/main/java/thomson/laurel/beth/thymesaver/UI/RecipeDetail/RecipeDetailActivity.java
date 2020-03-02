@@ -1,5 +1,7 @@
 package thomson.laurel.beth.thymesaver.UI.RecipeDetail;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
@@ -18,16 +20,27 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import thomson.laurel.beth.thymesaver.Database.Firebase.StorageRepository;
 import thomson.laurel.beth.thymesaver.Database.IStorageRepository;
@@ -37,6 +50,7 @@ import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
 import thomson.laurel.beth.thymesaver.UI.RecipeDetail.RecipeIngredients.RecipeIngredientsFragment;
 import thomson.laurel.beth.thymesaver.UI.RecipeDetail.RecipeSteps.RecipeStepsFragment;
 import thomson.laurel.beth.thymesaver.UI.TopLevel.AddButtonFragment;
+import thomson.laurel.beth.thymesaver.ViewModels.CookBookViewModel;
 import thomson.laurel.beth.thymesaver.ViewModels.RecipeDetailViewModel;
 
 public class RecipeDetailActivity extends AppCompatActivity{
@@ -225,6 +239,9 @@ public class RecipeDetailActivity extends AppCompatActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_rename:
+                renameRecipe();
+                return true;
             case R.id.action_renew:
                 clearAllChecks();
                 return true;
@@ -235,8 +252,117 @@ public class RecipeDetailActivity extends AppCompatActivity{
         return false;
     }
 
+    private void renameRecipe() {
+        CookBookViewModel cookBookViewModel = ViewModelProviders.of(this).get(CookBookViewModel.class);
+        Context context = this;
+        cookBookViewModel.getAllRecipes(new ValueCallback<List<Recipe>>() {
+            @Override
+            public void onSuccess(List<Recipe> recipes) {
+                promptForRecipeName(context, recipes, new ValueCallback<Recipe>() {
+                    @Override
+                    public void onSuccess(Recipe value) {
+                        mViewModel.renameRecipe(value.getName());
+                    }
+
+                    @Override
+                    public void onError(String error) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
+
+    }
+
+    private boolean recipeNameExists(String recipeName, List<Recipe> recipes) {
+        for (Recipe r : recipes) {
+            if (r.getName().equals(recipeName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void promptForRecipeName(Context context, List<Recipe> recipes, ValueCallback<Recipe> callback) {
+        final View view = LayoutInflater.from(context).inflate(R.layout.recipe_name_dialog, null);
+        final EditText nameET = view.findViewById(R.id.recipe_name_edittext);
+        final AutoCompleteTextView categoryET = view.findViewById(R.id.recipe_category_edittext);
+        final TextInputLayout textInputLayout = view.findViewById(R.id.text_input_layout);
+
+        final AlertDialog dialog = new AlertDialog.Builder(context)
+                .setView(view)
+                .setTitle("Rename recipe")
+                .setPositiveButton("Rename", null)
+                .create();
+        dialog.show();
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Recipe recipe = new Recipe(nameET.getText().toString(), categoryET.getText().toString());
+                callback.onSuccess(recipe);
+                dialog.dismiss();
+            }
+        });
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+
+        nameET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String name = editable.toString();
+                if (name.equals("")) {
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                    return;
+                }
+                if (recipeNameExists(name, recipes)) {
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                    textInputLayout.setError("A recipe of that name already exists.");
+                    return;
+                }
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                textInputLayout.setError(null);
+            }
+        });
+
+        //set up category autocomplete textview
+        ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource(
+                view.getContext(),
+                R.array.recipe_categories,
+                android.R.layout.select_dialog_item);
+        categoryET.setAdapter(categoryAdapter);
+        categoryET.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                //Need to reset the array adapter because all elements will have
+                //been cleared out when the default category is set
+                ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource(
+                        view.getContext(),
+                        R.array.recipe_categories,
+                        android.R.layout.select_dialog_item);
+                categoryET.setAdapter(categoryAdapter);
+                categoryET.showDropDown();
+                return true;
+            }
+        });
+        categoryET.setText(context.getResources().getTextArray(R.array.recipe_categories)[0]);
+    }
+
     private void clearAllChecks() {
-        //todo : prompt user if sure
         mViewModel.clearAllChecks();
     }
 

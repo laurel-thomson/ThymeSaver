@@ -1,7 +1,11 @@
 package thomson.laurel.beth.thymesaver.ViewModels;
 
 import android.app.Application;
+import android.content.Context;
+
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 
 import thomson.laurel.beth.thymesaver.Database.IRecipeDetailRepository;
@@ -44,10 +48,6 @@ public class RecipeDetailViewModel extends AndroidViewModel {
         });
     }
 
-    public LiveData<Recipe> getLiveRecipe() {
-        return mRepository.getRecipe(mCurrentRecipeName);
-    }
-
     public Recipe getCurrentRecipe() {
         return mCurrentRecipe;
     }
@@ -56,8 +56,18 @@ public class RecipeDetailViewModel extends AndroidViewModel {
         mRepository.addOrUpdateRecipe(mCurrentRecipe);
     }
 
+    public void renameRecipe(String newName) {
+        mCurrentRecipeName = newName;
+        //mRepository.renameRecipe(mCurrentRecipe, newName);
+        mCurrentRecipe.setName(newName);
+    }
+
     public LiveData<HashMap<Ingredient, RecipeQuantity>> getRecipeIngredients() {
         return mRepository.getRecipeIngredients(mCurrentRecipeName);
+    }
+
+    public LiveData<Recipe> getLiveRecipe() {
+        return mRepository.getRecipe(mCurrentRecipeName);
     }
 
     public void addUpdateRecipeIngredient(String recipeName, String ingredientName, RecipeQuantity quantity) {
