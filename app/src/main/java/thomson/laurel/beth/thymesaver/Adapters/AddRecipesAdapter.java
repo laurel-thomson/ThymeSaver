@@ -10,7 +10,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import thomson.laurel.beth.thymesaver.Models.Recipe;
 import thomson.laurel.beth.thymesaver.R;
@@ -26,8 +29,8 @@ public class AddRecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private List<Recipe> mPlannedRecipes = new ArrayList<>();
     private final LayoutInflater mInflater;
     private Context mContext;
-    private static final int RECIPE_TYPE = 1;
-    private static final int HEADER_TYPE = 2;
+    public static final int RECIPE_TYPE = 1;
+    public static final int HEADER_TYPE = 2;
 
     public AddRecipesAdapter(Context context) {
         mContext = context;
@@ -101,7 +104,7 @@ public class AddRecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         switch (viewType) {
             case RECIPE_TYPE:
                 view = LayoutInflater.from(mContext)
-                        .inflate(R.layout.checklist_item, parent, false);
+                        .inflate(R.layout.mealplan_grid_item, parent, false);
                 return new RecipeViewHolder(view);
             default:
                 view = LayoutInflater.from(parent.getContext())
@@ -117,6 +120,9 @@ public class AddRecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             final RecipeViewHolder holder = (RecipeViewHolder) viewHolder;
             Recipe recipe = mTotalRecipes.get(position);
             holder.mNameTV.setText(recipe.getName());
+            if (recipe.getImageURL() != null) {
+                Picasso.with(mContext).load(recipe.getImageURL()).fit().centerCrop().into(holder.mImageView);
+            }
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -157,14 +163,13 @@ public class AddRecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     class RecipeViewHolder extends RecyclerView.ViewHolder {
         CheckBox mCheckBox;
         TextView mNameTV;
+        ImageView mImageView;
 
         public RecipeViewHolder(@NonNull View view) {
             super(view);
-            mCheckBox = view.findViewById(R.id.checklist_checkbox);
-            mNameTV = view.findViewById(R.id.checklist_textview);
-
-            Button deleteButton = view.findViewById(R.id.checklist_delete);
-            deleteButton.setVisibility(View.GONE);
+            mCheckBox = view.findViewById(R.id.mealplan_checkbox);
+            mNameTV = view.findViewById(R.id.mealplan_name);
+            mImageView = itemView.findViewById(R.id.mealplan_image);
 
             mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override

@@ -6,6 +6,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.MenuItem;
@@ -41,10 +43,21 @@ public class AddPlannedMealsActivity extends AppCompatActivity {
 
         mCookBookViewModel = ViewModelProviders.of(this).get(CookBookViewModel.class);
         RecyclerView rv = findViewById(R.id.recycler_view);
-        rv.setLayoutManager(new LinearLayoutManager(this));
-
-
         mAdapter = new AddRecipesAdapter(this);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                if (mAdapter.getItemViewType(position) == mAdapter.HEADER_TYPE) {
+                    return 2;
+                } else {
+                    return 1;
+                }
+            }
+        });
+        rv.setLayoutManager(layoutManager);
+
+
 
         mCookBookViewModel.getAllRecipes().observe(this, new Observer<List<Recipe>>() {
             @Override
