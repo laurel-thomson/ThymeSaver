@@ -46,6 +46,28 @@ public class AddRecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public void setTotalRecipes(List<Recipe> recipes) {
         mTotalRecipes = recipes;
+        //add in ingredients from subrecipes
+        HashMap<String, Recipe> recipeHashMap = new HashMap<>();
+        for (Recipe recipe : mTotalRecipes) {
+            recipeHashMap.put(recipe.getName(), recipe);
+        }
+        for (Recipe recipe : mTotalRecipes) {
+            if (recipe.getSubRecipes() != null && recipe.getSubRecipes().size() > 0) {
+                for (String subRecipeName : recipe.getSubRecipes()) {
+                    Recipe subRecipe = recipeHashMap.get(subRecipeName);
+                    for (String ing : subRecipe.getRecipeIngredients().keySet()) {
+                        RecipeQuantity rq = subRecipe.getRecipeIngredients().get(ing);
+                        if (recipe.getRecipeIngredients().containsKey(ing)) {
+                            Double oldQuantity = recipe.getRecipeIngredients().get(ing).getRecipeQuantity();
+                            Double newQuantity = rq.getRecipeQuantity();
+                            recipe.getRecipeIngredients().get(ing).setRecipeQuantity(oldQuantity + newQuantity);
+                        } else {
+                            recipe.getRecipeIngredients().put(ing, rq);
+                        }
+                    }
+                }
+            }
+        }
         if (mTotalIngredients != null) {
             sortRecipes();
         }
