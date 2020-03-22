@@ -16,15 +16,19 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import thomson.laurel.beth.thymesaver.Adapters.AddRecipesAdapter;
+import thomson.laurel.beth.thymesaver.Models.Ingredient;
 import thomson.laurel.beth.thymesaver.Models.Recipe;
 import thomson.laurel.beth.thymesaver.R;
+import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
 import thomson.laurel.beth.thymesaver.ViewModels.CookBookViewModel;
+import thomson.laurel.beth.thymesaver.ViewModels.PantryViewModel;
 
 import java.util.List;
 
 public class AddPlannedMealsActivity extends AppCompatActivity {
     private AddRecipesAdapter mAdapter;
     private CookBookViewModel mCookBookViewModel;
+    private PantryViewModel mPantryViewModel;
     private String mScheduledDay;
     public static String SCHEDULED_DAY = "Scheduled Day";
     private TextView mEmptyMessage;
@@ -42,6 +46,7 @@ public class AddPlannedMealsActivity extends AppCompatActivity {
         setUpActionBar();
 
         mCookBookViewModel = ViewModelProviders.of(this).get(CookBookViewModel.class);
+        mPantryViewModel = ViewModelProviders.of(this).get(PantryViewModel.class);
         RecyclerView rv = findViewById(R.id.recycler_view);
         mAdapter = new AddRecipesAdapter(this);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
@@ -57,8 +62,6 @@ public class AddPlannedMealsActivity extends AppCompatActivity {
         });
         rv.setLayoutManager(layoutManager);
 
-
-
         mCookBookViewModel.getAllRecipes().observe(this, new Observer<List<Recipe>>() {
             @Override
             public void onChanged(@Nullable List<Recipe> recipes) {
@@ -70,6 +73,18 @@ public class AddPlannedMealsActivity extends AppCompatActivity {
                 }
                 mAdapter.setTotalRecipes(recipes);
                 progressBar.setVisibility(View.GONE);
+            }
+        });
+
+        mPantryViewModel.getAllIngredients(new ValueCallback<List<Ingredient>>() {
+            @Override
+            public void onSuccess(List<Ingredient> ingredients) {
+                mAdapter.setTotalIngredients(ingredients);
+            }
+
+            @Override
+            public void onError(String error) {
+
             }
         });
 

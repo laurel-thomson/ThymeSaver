@@ -15,18 +15,22 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import thomson.laurel.beth.thymesaver.Models.Ingredient;
 import thomson.laurel.beth.thymesaver.Models.Recipe;
+import thomson.laurel.beth.thymesaver.Models.RecipeQuantity;
 import thomson.laurel.beth.thymesaver.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 
 public class AddRecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private List<Recipe> mTotalRecipes = new ArrayList<>();
     private List<Recipe> mPlannedRecipes = new ArrayList<>();
+    private List<Recipe> mTotalRecipes;
+    private List<String> mTotalIngredients;
     private final LayoutInflater mInflater;
     private Context mContext;
     public static final int RECIPE_TYPE = 1;
@@ -38,35 +42,59 @@ public class AddRecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public void setTotalRecipes(List<Recipe> recipes) {
-        //Sort the recipes
-        Object[] recipeArray = recipes.toArray();
+        mTotalRecipes = recipes;
+        if (mTotalIngredients != null) {
+            sortRecipes();
+        }
+    }
+
+    public void setTotalIngredients(List<Ingredient> ingredients) {
+        mTotalIngredients = new ArrayList<>();
+        for (Ingredient ing : ingredients) {
+            mTotalIngredients.add(ing.getName());
+        }
+        if (mTotalRecipes != null) {
+            sortRecipes();
+        }
+    }
+
+    private int getMissingIngredients(Recipe recipe) {
+        int missingCount = 0;
+        for (String ing : recipe.getRecipeIngredients().keySet()) {
+            if (!mTotalIngredients.contains(ing)) {
+                missingCount++;
+                if (missingCount == 3) {
+                    return missingCount;
+                }
+            }
+        }
+        return missingCount;
+    }
+
+    private void sortRecipes() {
+        //sort recipes alphabetically
+        Object[] recipeArray = mTotalRecipes.toArray();
         Arrays.sort(recipeArray, (o1, o2) -> ((Recipe) o1).getName().compareTo(((Recipe) o2).getName()));
         Collections.reverse(Arrays.asList(recipeArray));
-
         mTotalRecipes.clear();
 
         //generate category headers
-        CharSequence[] categories = mContext.getResources().getStringArray(R.array.recipe_categories);
-        Recipe[] headers = new Recipe[categories.length];
-        for (int i = 0; i < categories.length; i++) {
-            headers[i] = new Recipe("", categories[i].toString());
-        }
+        Recipe[] headers = new Recipe[] {
+                new Recipe("", "All ingredients in pantry"),
+                new Recipe("", "Missing 1 ingredient"),
+                new Recipe("", "Missing 2 ingredients"),
+                new Recipe("", "Missing 3+ ingredients"),
+        };
 
-        //add the headers in to the list
+        //add the headers into the list
         for (Recipe r : headers) {
             mTotalRecipes.add(r);
         }
 
-        //add all the ingredients in under their headers
+        //add the ingredients in under their headers
         for (Object object : recipeArray) {
             Recipe recipe = (Recipe) object;
-            int position = 0;
-            for (int i = 0; i < headers.length; i++) {
-                if (headers[i].getCategory().equals(recipe.getCategory())) {
-                    position = mTotalRecipes.indexOf(headers[i]);
-                    break;
-                }
-            }
+            int position = mTotalRecipes.indexOf(headers[getMissingIngredients(recipe)]);
             mTotalRecipes.add(position+1, recipe);
         }
 
