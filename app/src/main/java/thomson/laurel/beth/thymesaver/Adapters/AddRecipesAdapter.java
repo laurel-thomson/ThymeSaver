@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.jsoup.internal.StringUtil;
+
 import thomson.laurel.beth.thymesaver.Models.Ingredient;
 import thomson.laurel.beth.thymesaver.Models.Recipe;
 import thomson.laurel.beth.thymesaver.Models.RecipeQuantity;
@@ -30,7 +32,8 @@ import java.util.ListIterator;
 public class AddRecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<Recipe> mPlannedRecipes = new ArrayList<>();
     private List<Recipe> mTotalRecipes;
-    private List<String> mTotalIngredients;
+    private List<Ingredient> mTotalIngredients;
+    private HashMap<String, List<String>> mMissingIngredients = new HashMap<>();
     private final LayoutInflater mInflater;
     private Context mContext;
     public static final int RECIPE_TYPE = 1;
@@ -49,26 +52,30 @@ public class AddRecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public void setTotalIngredients(List<Ingredient> ingredients) {
-        mTotalIngredients = new ArrayList<>();
-        for (Ingredient ing : ingredients) {
-            mTotalIngredients.add(ing.getName());
-        }
+        mTotalIngredients = ingredients;
         if (mTotalRecipes != null) {
             sortRecipes();
         }
     }
 
     private int getMissingIngredients(Recipe recipe) {
-        int missingCount = 0;
-        for (String ing : recipe.getRecipeIngredients().keySet()) {
-            if (!mTotalIngredients.contains(ing)) {
-                missingCount++;
-                if (missingCount == 3) {
-                    return missingCount;
+        List<String> missingIngredients = new ArrayList<>();
+        for (String ingName : recipe.getRecipeIngredients().keySet()) {
+            for (Ingredient ing : mTotalIngredients) {
+                if (ing.getName().equals(ingName)) {
+                    if (ing.getQuantity() == 0) {
+                        missingIngredients.add(ing.getName());
+                        if (missingIngredients.size() == 3) {
+                            mMissingIngredients.put(recipe.getName(), missingIngredients);
+                            return missingIngredients.size();
+                        }
+                    }
+                    break;
                 }
             }
         }
-        return missingCount;
+        mMissingIngredients.put(recipe.getName(), missingIngredients);
+        return missingIngredients.size();
     }
 
     private void sortRecipes() {
@@ -151,6 +158,23 @@ public class AddRecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             if (recipe.getImageURL() != null) {
                 Picasso.with(mContext).load(recipe.getImageURL()).fit().centerCrop().into(holder.mImageView);
             }
+
+            List<String> missingIngs = mMissingIngredients.get(recipe.getName());
+            if (missingIngs.size() > 0) {
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < missingIngs.size(); i++) {
+                    sb.append(missingIngs.get(i));
+                    if (i == 2) {
+                        sb.append("...");
+                    }
+                    else if (i != missingIngs.size() - 1) {
+                        sb.append(",");
+                    }
+                    sb.append("\n");
+                }
+                holder.mMissingLabel.setVisibility(View.VISIBLE);
+                holder.mMissingTV.setText(sb.toString());
+            }
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -192,12 +216,16 @@ public class AddRecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         CheckBox mCheckBox;
         TextView mNameTV;
         ImageView mImageView;
+        TextView mMissingTV;
+        TextView mMissingLabel;
 
         public RecipeViewHolder(@NonNull View view) {
             super(view);
             mCheckBox = view.findViewById(R.id.mealplan_checkbox);
             mNameTV = view.findViewById(R.id.mealplan_name);
             mImageView = itemView.findViewById(R.id.mealplan_image);
+            mMissingTV = itemView.findViewById(R.id.missing_ings);
+            mMissingLabel = itemView.findViewById(R.id.missing_label);
 
             mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
