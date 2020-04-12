@@ -295,7 +295,6 @@ public class RecipeDetailActivity extends AppCompatActivity{
 
             }
         });
-
     }
 
     private boolean recipeNameExists(String recipeName, List<Recipe> recipes) {

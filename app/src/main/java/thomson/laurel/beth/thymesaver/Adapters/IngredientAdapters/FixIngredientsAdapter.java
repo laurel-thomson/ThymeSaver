@@ -120,7 +120,6 @@ public class FixIngredientsAdapter extends RecyclerView.Adapter<FixIngredientsAd
         myViewHolder.mUnitET.setText(recipeIngredient.unit);
         myViewHolder.mIsBulkSwitch.setChecked(recipeIngredient.isBulk);
         myViewHolder.mNameET.setText(recipeIngredient.fixedName);
-        myViewHolder.mCategoryET.setText(recipeIngredient.category);
 
         myViewHolder.mNameET.addTextChangedListener(new TextChangedListener<EditText>(myViewHolder.mNameET) {
             @Override
@@ -137,15 +136,6 @@ public class FixIngredientsAdapter extends RecyclerView.Adapter<FixIngredientsAd
                 String newUnit = myViewHolder.mUnitET.getText().toString();
                 RecipeIngredient ri = mRecipeIngredients.get(myViewHolder.getAdapterPosition());
                 ri.unit = newUnit;
-            }
-        });
-
-        myViewHolder.mCategoryET.addTextChangedListener(new TextChangedListener<EditText>(myViewHolder.mCategoryET) {
-            @Override
-            public void onTextChanged(EditText target, Editable s) {
-                String newCategory = myViewHolder.mCategoryET.getText().toString();
-                RecipeIngredient ri = mRecipeIngredients.get(myViewHolder.getAdapterPosition());
-                ri.category = newCategory;
             }
         });
 
@@ -194,7 +184,6 @@ public class FixIngredientsAdapter extends RecyclerView.Adapter<FixIngredientsAd
         EditText mQuantityET;
         EditText mUnitET;
         EditText mNameET;
-        EditText mCategoryET;
         Switch mIsBulkSwitch;
         ImageButton mDeleteButton;
 
@@ -204,7 +193,6 @@ public class FixIngredientsAdapter extends RecyclerView.Adapter<FixIngredientsAd
             mQuantityET = itemView.findViewById(R.id.quantity_edittext);
             mUnitET = itemView.findViewById(R.id.unit_edittext);
             mNameET = itemView.findViewById(R.id.name_edittext);
-            mCategoryET = itemView.findViewById(R.id.category_edittext);
             mIsBulkSwitch = itemView.findViewById(R.id.is_bulk_switch);
             mDeleteButton = itemView.findViewById(R.id.delete_button);
         }
