@@ -146,14 +146,6 @@ public class AddRecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return mPlannedRecipes;
     }
 
-    public String[] getRecipesArray() {
-        String[] arr = new String[mPlannedRecipes.size()];
-        for (int i = 0; i < mPlannedRecipes.size(); i++) {
-            arr[i] = mPlannedRecipes.get(i).getName();
-        }
-        return arr;
-    }
-
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

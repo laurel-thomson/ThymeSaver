@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.MenuItem;
@@ -16,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import thomson.laurel.beth.thymesaver.Adapters.AddRecipesAdapter;
+import thomson.laurel.beth.thymesaver.Adapters.AddSubRecipesAdapter;
 import thomson.laurel.beth.thymesaver.Models.Recipe;
 import thomson.laurel.beth.thymesaver.R;
 import thomson.laurel.beth.thymesaver.ViewModels.CookBookViewModel;
@@ -26,7 +28,7 @@ public class AddSubRecipesActivity extends AppCompatActivity {
     public static final String SUB_RECIPES = "Sub recipes";
     public static final String PARENT_RECIPE = "Parent recipe";
     private String mParentRecipeName;
-    private AddRecipesAdapter mAdapter;
+    private AddSubRecipesAdapter mAdapter;
     private CookBookViewModel mCookBookViewModel;
     private TextView mEmptyMessage;
 
@@ -42,9 +44,9 @@ public class AddSubRecipesActivity extends AppCompatActivity {
 
         mCookBookViewModel = ViewModelProviders.of(this).get(CookBookViewModel.class);
         RecyclerView rv = findViewById(R.id.recycler_view);
-        rv.setLayoutManager(new LinearLayoutManager(this));
+        rv.setLayoutManager(new GridLayoutManager(this, 2));
 
-        mAdapter = new AddRecipesAdapter(this);
+        mAdapter = new AddSubRecipesAdapter(this);
 
         mCookBookViewModel.getAvailableSubRecipes(mParentRecipeName).observe(this, new Observer<List<Recipe>>() {
             @Override
