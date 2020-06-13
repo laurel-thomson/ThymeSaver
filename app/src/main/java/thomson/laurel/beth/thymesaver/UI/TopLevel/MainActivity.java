@@ -1,11 +1,14 @@
 package thomson.laurel.beth.thymesaver.UI.TopLevel;
 
+import androidx.appcompat.view.menu.MenuView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -16,6 +19,8 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -91,17 +96,27 @@ public class MainActivity extends AppCompatActivity {
                             case R.id.action_cookbook:
                                 mViewPager.setCurrentItem(1);
                                 break;
-                            case R.id.action_pantry:
+                            case R.id.action_find:
                                 mViewPager.setCurrentItem(2);
                                 break;
-                            case R.id.action_shopping_list:
+                            case R.id.action_pantry:
                                 mViewPager.setCurrentItem(3);
+                                break;
+                            case R.id.action_shopping_list:
+                                mViewPager.setCurrentItem(4);
                                 break;
                         }
                         return true;
                     }
                 }
         );
+
+        BottomNavigationView view = findViewById(R.id.navigation);
+        BottomNavigationMenuView menuView = (BottomNavigationMenuView) view.getChildAt(0);
+        View iconView = menuView.getChildAt(2).findViewById(R.id.icon);;
+        iconView.setScaleY(1.5f);
+        iconView.setScaleX(1.5f);
+
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -234,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final int NUMBER_OF_TABS = 4;
+        private final int NUMBER_OF_TABS = 5;
         private Fragment[] mFragments = new Fragment[NUMBER_OF_TABS];
 
         public ViewPagerAdapter(FragmentManager manager) {
@@ -251,8 +266,10 @@ public class MainActivity extends AppCompatActivity {
                 case 1:
                     return new CookbookFragment();
                 case 2:
-                    return new PantryFragment();
+                    return new FindRecipesFragment();
                 case 3:
+                    return new PantryFragment();
+                case 4:
                     return new ShoppingListFragment();
                 default:
                     return null;

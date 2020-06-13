@@ -6,6 +6,9 @@
     <item android:id="@+id/action_cookbook"
         android:title="Cookbook"
         android:icon="@drawable/ic_notebook"/>
+    <item android:id="@+id/action_find"
+        android:title="Find Recipes"
+        android:icon="@drawable/ic_search"/>
     <item android:id="@+id/action_pantry"
         android:title="Pantry"
         android:icon="@drawable/ic_apple"/>
