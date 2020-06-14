@@ -1,4 +1,4 @@
-package thomson.laurel.beth.thymesaver.Adapters;
+package thomson.laurel.beth.thymesaver.Adapters.RecipeAdapters;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import thomson.laurel.beth.thymesaver.Adapters.DragHelper;
 import thomson.laurel.beth.thymesaver.Models.MealPlan;
 import thomson.laurel.beth.thymesaver.R;
 
@@ -238,7 +239,7 @@ public class MealPlannerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
-    class SectionHeaderViewHolder extends RecyclerView.ViewHolder {
+    public class SectionHeaderViewHolder extends RecyclerView.ViewHolder {
         TextView sectionTitle;
         Button addButton;
 

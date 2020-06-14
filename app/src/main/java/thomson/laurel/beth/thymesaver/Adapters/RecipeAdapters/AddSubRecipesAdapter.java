@@ -1,4 +1,4 @@
-package thomson.laurel.beth.thymesaver.Adapters;
+package thomson.laurel.beth.thymesaver.Adapters.RecipeAdapters;
 
 import android.content.Context;
 import androidx.annotation.NonNull;

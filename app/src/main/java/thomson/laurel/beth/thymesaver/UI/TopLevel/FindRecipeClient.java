@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +22,9 @@ public class FindRecipeClient {
     private String APP_IDD = "eda6b7ea";
     private String APP_KEY = "fcddac6702a40b12f38680b862148538";
 
-    public void getRecipes(String query) {
+    public void getRecipes(String query, ValueCallback<List<Recipe>> callback) {
         new GetRecipeTask().execute(query);
+        mRecipesCallback = callback;
     }
 
     private class GetRecipeTask extends AsyncTask<String, Void, JSONObject> {
@@ -45,14 +45,17 @@ public class FindRecipeClient {
                 readInput(stream);
             } catch (Exception e) {
                 e.printStackTrace();
+                mRecipesCallback.onError(e.getMessage());
             } finally {
-                urlConnection.disconnect();
+                if (urlConnection != null) {
+                    urlConnection.disconnect();
+                }
             }
             return null;
         }
     }
 
-    private List<Recipe> readInput(InputStream stream) {
+    private void readInput(InputStream stream) {
         List<Recipe> recipes = new ArrayList<>();
 
         JsonReader reader = new JsonReader(new InputStreamReader(stream));
@@ -103,8 +106,8 @@ public class FindRecipeClient {
             }
             reader.endObject();
         } catch (IOException e) {
-
+            mRecipesCallback.onError(e.getMessage());
         }
-        return recipes;
+        mRecipesCallback.onSuccess(recipes);
     }
 }

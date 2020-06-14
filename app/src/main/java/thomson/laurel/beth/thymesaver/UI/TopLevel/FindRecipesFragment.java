@@ -15,9 +15,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
-import thomson.laurel.beth.thymesaver.Adapters.RecipeAdapter;
+import java.util.List;
+
+import thomson.laurel.beth.thymesaver.Adapters.RecipeAdapters.RecipeAdapter;
 import thomson.laurel.beth.thymesaver.Models.Recipe;
 import thomson.laurel.beth.thymesaver.R;
+import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
 import thomson.laurel.beth.thymesaver.UI.RecipeDetail.RecipeDetailActivity;
 import thomson.laurel.beth.thymesaver.ViewModels.CookBookViewModel;
 
@@ -58,7 +61,17 @@ public class FindRecipesFragment extends AddButtonFragment implements RecipeAdap
     }
 
     private void onSearchClicked(String query) {
-        new FindRecipeClient().getRecipes(query);
+        new FindRecipeClient().getRecipes(query, new ValueCallback<List<Recipe>>() {
+            @Override
+            public void onSuccess(List<Recipe> value) {
+                mAdapter.setRecipes(value);
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
     }
 
     public void onRecipeSelected(Recipe recipe, View recipeImage) {

@@ -28,7 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import thomson.laurel.beth.thymesaver.Adapters.RecipeAdapter;
+import thomson.laurel.beth.thymesaver.Adapters.RecipeAdapters.RecipeAdapter;
 import thomson.laurel.beth.thymesaver.Models.Recipe;
 import thomson.laurel.beth.thymesaver.R;
 import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;

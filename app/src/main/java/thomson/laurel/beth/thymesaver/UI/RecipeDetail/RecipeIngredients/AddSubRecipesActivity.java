@@ -9,15 +9,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import thomson.laurel.beth.thymesaver.Adapters.AddRecipesAdapter;
-import thomson.laurel.beth.thymesaver.Adapters.AddSubRecipesAdapter;
+import thomson.laurel.beth.thymesaver.Adapters.RecipeAdapters.AddSubRecipesAdapter;
 import thomson.laurel.beth.thymesaver.Models.Recipe;
 import thomson.laurel.beth.thymesaver.R;
 import thomson.laurel.beth.thymesaver.ViewModels.CookBookViewModel;

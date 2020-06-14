@@ -5,6 +5,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.ItemTouchHelper;
 
+import thomson.laurel.beth.thymesaver.Adapters.RecipeAdapters.MealPlannerAdapter;
+
 /**
  * Code adapted from : https://github.com/sjthn/RecyclerViewDemo/tree/advanced-usecases
  */

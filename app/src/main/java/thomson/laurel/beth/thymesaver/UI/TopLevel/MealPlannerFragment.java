@@ -18,7 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import thomson.laurel.beth.thymesaver.Adapters.DragHelper;
-import thomson.laurel.beth.thymesaver.Adapters.MealPlannerAdapter;
+import thomson.laurel.beth.thymesaver.Adapters.RecipeAdapters.MealPlannerAdapter;
 import thomson.laurel.beth.thymesaver.Models.MealPlan;
 import thomson.laurel.beth.thymesaver.R;
 import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
