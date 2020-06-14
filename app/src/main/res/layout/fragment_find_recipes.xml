@@ -34,7 +34,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/url_edittext"
+            android:id="@+id/query_edittext"
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:hint="@string/search_for_recipes"

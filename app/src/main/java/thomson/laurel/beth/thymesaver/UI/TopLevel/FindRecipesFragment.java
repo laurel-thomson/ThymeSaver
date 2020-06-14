@@ -1,56 +1,33 @@
 package thomson.laurel.beth.thymesaver.UI.TopLevel;
 
-import android.annotation.SuppressLint;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.textfield.TextInputLayout;
 import androidx.core.app.ActivityOptionsCompat;
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import thomson.laurel.beth.thymesaver.Adapters.RecipeAdapter;
 import thomson.laurel.beth.thymesaver.Models.Recipe;
 import thomson.laurel.beth.thymesaver.R;
-import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
 import thomson.laurel.beth.thymesaver.UI.RecipeDetail.RecipeDetailActivity;
-import thomson.laurel.beth.thymesaver.UI.RecipeImport.ImportActivity;
 import thomson.laurel.beth.thymesaver.ViewModels.CookBookViewModel;
-
-import java.util.List;
 
 public class FindRecipesFragment extends AddButtonFragment implements RecipeAdapter.RecipeListener {
     private CookBookViewModel mViewModel;
     private RecipeAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
-    private TextView mEmptyMessage;
-    private FloatingActionButton mImportRecipeFAB;
-    private FloatingActionButton mCreateRecipeFAB;
-    private FloatingActionButton mMenuFAB;
-    private LinearLayout mFABLayout1;
-    private LinearLayout mFABLayout2;
-    private boolean isFABOpen;
-
+    private Button mSearchButton;
+    private EditText mQueryEditText;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState){
@@ -61,11 +38,27 @@ public class FindRecipesFragment extends AddButtonFragment implements RecipeAdap
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mProgressBar = view.findViewById(R.id.recycler_view_progress);
+        mSearchButton = view.findViewById(R.id.search_button);
+        mQueryEditText = view.findViewById(R.id.query_edittext);
         mRecyclerView = view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mViewModel = ViewModelProviders.of(this).get(CookBookViewModel.class);
         mAdapter = new RecipeAdapter(getContext(), this);
         mRecyclerView.setAdapter(mAdapter);
+
+        mSearchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String query = mQueryEditText.getText().toString();
+                if (!query.equals("")) {
+                    onSearchClicked(query);
+                }
+            }
+        });
+    }
+
+    private void onSearchClicked(String query) {
+        new FindRecipeClient().getRecipes(query);
     }
 
     public void onRecipeSelected(Recipe recipe, View recipeImage) {
