@@ -6,7 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityOptionsCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +18,6 @@ import android.widget.ProgressBar;
 import java.util.List;
 
 import thomson.laurel.beth.thymesaver.Adapters.RecipeAdapters.FindRecipesAdapter;
-import thomson.laurel.beth.thymesaver.Adapters.RecipeAdapters.RecipeAdapter;
 import thomson.laurel.beth.thymesaver.Models.Recipe;
 import thomson.laurel.beth.thymesaver.R;
 import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
@@ -45,7 +44,7 @@ public class FindRecipesFragment extends AddButtonFragment {
         mSearchButton = view.findViewById(R.id.search_button);
         mQueryEditText = view.findViewById(R.id.query_edittext);
         mRecyclerView = view.findViewById(R.id.recycler_view);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         mViewModel = ViewModelProviders.of(this).get(CookBookViewModel.class);
         mAdapter = new FindRecipesAdapter(getContext());
         mRecyclerView.setAdapter(mAdapter);

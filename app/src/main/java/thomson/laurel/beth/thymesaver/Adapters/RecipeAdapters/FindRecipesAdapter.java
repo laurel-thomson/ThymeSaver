@@ -35,7 +35,7 @@ public class FindRecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.recipe_list_item, parent, false);
+        View view = mInflater.inflate(R.layout.recipe_grid_item, parent, false);
         return new RecipeViewHolder(view);
     }
 
