@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 
 import java.util.List;
 
+import thomson.laurel.beth.thymesaver.Adapters.RecipeAdapters.FindRecipesAdapter;
 import thomson.laurel.beth.thymesaver.Adapters.RecipeAdapters.RecipeAdapter;
 import thomson.laurel.beth.thymesaver.Models.Recipe;
 import thomson.laurel.beth.thymesaver.R;
@@ -24,9 +25,9 @@ import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
 import thomson.laurel.beth.thymesaver.UI.RecipeDetail.RecipeDetailActivity;
 import thomson.laurel.beth.thymesaver.ViewModels.CookBookViewModel;
 
-public class FindRecipesFragment extends AddButtonFragment implements RecipeAdapter.RecipeListener {
+public class FindRecipesFragment extends AddButtonFragment {
     private CookBookViewModel mViewModel;
-    private RecipeAdapter mAdapter;
+    private FindRecipesAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
     private Button mSearchButton;
@@ -46,7 +47,7 @@ public class FindRecipesFragment extends AddButtonFragment implements RecipeAdap
         mRecyclerView = view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mViewModel = ViewModelProviders.of(this).get(CookBookViewModel.class);
-        mAdapter = new RecipeAdapter(getContext(), this);
+        mAdapter = new FindRecipesAdapter(getContext());
         mRecyclerView.setAdapter(mAdapter);
 
         mSearchButton.setOnClickListener(new View.OnClickListener() {
@@ -83,11 +84,6 @@ public class FindRecipesFragment extends AddButtonFragment implements RecipeAdap
         ActivityOptionsCompat options = ActivityOptionsCompat.
                 makeSceneTransitionAnimation(getActivity(), (View)recipeImage, "recipe_image");
         startActivity(intent, options.toBundle());
-    }
-
-    @Override
-    public void onDeleteClicked(Recipe recipe) {
-
     }
 
     @Override
