@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
                 switch (state) {
                     case ViewPager.SCROLL_STATE_IDLE:
                         //the Meal Planner tab doesn't have a FAB
-                        if (mViewPager.getCurrentItem() != 0) {
+                        if (fragmentHasFAB(mViewPager.getCurrentItem())) {
                             mFAB.show();
                         }
                         break;
@@ -173,6 +173,11 @@ public class MainActivity extends AppCompatActivity {
         if (!isUserAnonymous()) {
             listenForPantryRequests();
         }
+    }
+
+    private boolean fragmentHasFAB(int fragmentIndex) {
+        /* The Meal Planner fragment and Find Recipes fragment don't have a FAB */
+        return fragmentIndex != 0 && fragmentIndex != 2;
     }
 
     private boolean isUserAnonymous() {

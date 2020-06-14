@@ -10,7 +10,7 @@
     <ImageView
         android:id="@+id/recipe_image"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="150dp"
         android:scaleType="fitCenter"
         android:src="@mipmap/ic_launcher_foreground"
         app:layout_constraintTop_toTopOf="parent" />
