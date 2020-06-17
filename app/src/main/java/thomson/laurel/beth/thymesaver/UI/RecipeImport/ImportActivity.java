@@ -24,8 +24,6 @@ import thomson.laurel.beth.thymesaver.ViewModels.PantryViewModel;
 
 public class ImportActivity extends AppCompatActivity {
     private ActionBar mActionBar;
-    private CookBookViewModel mCookBookViewModel;
-    private PantryViewModel mPantryViewModel;
     private Button mSearchButton;
     private EditText mURLEditText;
     private ProgressBar mProgress;
@@ -38,8 +36,7 @@ public class ImportActivity extends AppCompatActivity {
         setUpActionBar();
 
         mProgress = findViewById(R.id.import_progress);
-        mCookBookViewModel = ViewModelProviders.of(this).get(CookBookViewModel.class);
-        mPantryViewModel = ViewModelProviders.of(this).get(PantryViewModel.class);
+
         mURLEditText= findViewById(R.id.url_edittext);
         mSearchButton = findViewById(R.id.search_button);
         mSearchButton.setOnClickListener(new View.OnClickListener() {
