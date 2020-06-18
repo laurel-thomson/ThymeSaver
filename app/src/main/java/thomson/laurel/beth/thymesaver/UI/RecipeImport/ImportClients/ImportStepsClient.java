@@ -21,8 +21,8 @@ public class ImportStepsClient {
     private ValueCallback<List<Step>> mStepsCallback;
     private String mUrl;
 
-    public void importRecipe(String url, ValueCallback<List<Step>> stepsCallback) {
-        mStepsCallback = mStepsCallback;
+    public void importSteps(String url, ValueCallback<List<Step>> stepsCallback) {
+        mStepsCallback = stepsCallback;
         mUrl = url;
         if (!url.contains("http")) {
             mUrl = "http://" + url;

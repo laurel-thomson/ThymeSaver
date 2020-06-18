@@ -6,14 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.squareup.picasso.Picasso;
-
 import java.util.List;
-
 import thomson.laurel.beth.thymesaver.Models.Recipe;
 import thomson.laurel.beth.thymesaver.R;
 
@@ -21,10 +17,12 @@ public class FindRecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private Context mContext;
     private LayoutInflater mInflater;
     private List<Recipe> mRecipes;
+    private FindRecipesListener mListener;
 
-    public FindRecipesAdapter(Context context) {
+    public FindRecipesAdapter(Context context, FindRecipesListener listener) {
         mContext = context;
         mInflater = LayoutInflater.from(context);
+        mListener = listener;
     }
 
     public void setRecipes(List<Recipe> recipes) {
@@ -49,6 +47,8 @@ public class FindRecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         } else {
             viewHolder.mImageView.setImageResource(R.mipmap.ic_launcher_foreground);
         }
+
+        viewHolder.itemView.setOnClickListener(view -> mListener.onFavoriteClicked(recipe));
     }
 
     @Override
@@ -66,6 +66,12 @@ public class FindRecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             mNameTV = itemView.findViewById(R.id.recipe_name);
             mImageView = itemView.findViewById(R.id.recipe_image);
         }
+    }
+
+    public interface FindRecipesListener {
+        void onFavoriteClicked(Recipe recipe);
+
+        void onUnfavoriteClicked(Recipe recipe);
     }
 
 }

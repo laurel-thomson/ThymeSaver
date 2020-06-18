@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,11 +23,15 @@ import java.util.List;
 
 import thomson.laurel.beth.thymesaver.Adapters.RecipeAdapters.FindRecipesAdapter;
 import thomson.laurel.beth.thymesaver.Models.Recipe;
+import thomson.laurel.beth.thymesaver.Models.Step;
 import thomson.laurel.beth.thymesaver.R;
 import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
+import thomson.laurel.beth.thymesaver.UI.RecipeImport.FixIngredients;
+import thomson.laurel.beth.thymesaver.UI.RecipeImport.ImportClients.ImportStepsClient;
+import thomson.laurel.beth.thymesaver.UI.RecipeImport.ImportedRecipe;
 import thomson.laurel.beth.thymesaver.ViewModels.CookBookViewModel;
 
-public class FindRecipesFragment extends Fragment {
+public class FindRecipesFragment extends Fragment implements FindRecipesAdapter.FindRecipesListener {
     private CookBookViewModel mViewModel;
     private FindRecipesAdapter mAdapter;
     private RecyclerView mRecyclerView;
@@ -50,7 +55,7 @@ public class FindRecipesFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         mViewModel = ViewModelProviders.of(this).get(CookBookViewModel.class);
-        mAdapter = new FindRecipesAdapter(getContext());
+        mAdapter = new FindRecipesAdapter(getContext(), this);
         mRecyclerView.setAdapter(mAdapter);
 
         mSearchButton.setOnClickListener(new View.OnClickListener() {
@@ -103,5 +108,29 @@ public class FindRecipesFragment extends Fragment {
     private void hideKeyboard(){
         InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getActivity().getWindow().getCurrentFocus().getWindowToken(), 0);
+    }
+
+    @Override
+    public void onFavoriteClicked(Recipe recipe) {
+        mProgressBar.setVisibility(View.VISIBLE);
+        new ImportStepsClient().importSteps(recipe.getSourceURL(), new ValueCallback<List<Step>>() {
+            @Override
+            public void onSuccess(List<Step> steps) {
+                recipe.setSteps(steps);
+                ImportedRecipe.getInstance().setRecipe(recipe);
+                Intent intent = new Intent(getContext(), FixIngredients.class);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
+    }
+
+    @Override
+    public void onUnfavoriteClicked(Recipe recipe) {
+
     }
 }
