@@ -14,8 +14,6 @@ import java.util.List;
 import thomson.laurel.beth.thymesaver.Models.Step;
 import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
 
-//TODO: the FindRecipesFragment needs to listen for when a recipe is clicked, use this import steps client to get the steps,
-//and launch the FixIngredients activity
 
 public class ImportStepsClient {
     private ValueCallback<List<Step>> mStepsCallback;

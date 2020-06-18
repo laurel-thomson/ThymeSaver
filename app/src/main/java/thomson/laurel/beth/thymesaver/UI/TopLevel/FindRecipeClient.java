@@ -12,10 +12,14 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import thomson.laurel.beth.thymesaver.Models.Ingredient;
 import thomson.laurel.beth.thymesaver.Models.Recipe;
+import thomson.laurel.beth.thymesaver.Models.RecipeQuantity;
 import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
+import thomson.laurel.beth.thymesaver.UI.RecipeImport.ImportClients.RecipeWebsiteClient;
 
 public class FindRecipeClient {
     private ValueCallback<List<Recipe>> mRecipesCallback;
@@ -55,6 +59,21 @@ public class FindRecipeClient {
         }
     }
 
+    private HashMap<String, RecipeQuantity> getRecipeIngredients(List<String> strings) {
+        HashMap<String, RecipeQuantity> recipeIngredients = new HashMap<>();
+        RecipeWebsiteClient recipeWebsiteClient = new RecipeWebsiteClient();
+        for (String string : strings) {
+            String quantityString = string.split(" ")[0];
+            Double quantity = recipeWebsiteClient.getQuantity(quantityString);
+
+            String unit = recipeWebsiteClient.getUnit(quantityString, string);
+            String name = recipeWebsiteClient.cleanIngredientName(recipeWebsiteClient.getName(unit, string));
+            RecipeQuantity rq = new RecipeQuantity(unit, quantity);
+            recipeIngredients.put(name, rq);
+        }
+        return recipeIngredients;
+    }
+
     private void readInput(InputStream stream) {
         List<Recipe> recipes = new ArrayList<>();
 
@@ -62,6 +81,7 @@ public class FindRecipeClient {
         String recipeName = "";
         String imageUrl = "";
         String sourceUrl = "";
+        HashMap<String, RecipeQuantity> recipeIngredients = null;
 
         try {
             reader.beginObject();
@@ -83,6 +103,14 @@ public class FindRecipeClient {
                                         imageUrl = reader.nextString();
                                     } else if (name.equals("url")) {
                                         sourceUrl = reader.nextString();
+                                    } else if (name.equals("ingredientLines")) {
+                                        reader.beginArray();
+                                        List<String> ings = new ArrayList<>();
+                                        while (reader.hasNext()) {
+                                            ings.add(reader.nextString());
+                                        }
+                                        recipeIngredients = getRecipeIngredients(ings);
+                                        reader.endArray();
                                     } else {
                                         reader.skipValue();
                                     }
@@ -91,6 +119,7 @@ public class FindRecipeClient {
                                 recipe.setName(recipeName);
                                 recipe.setImageURL(imageUrl);
                                 recipe.setSourceURL(sourceUrl);
+                                recipe.setRecipeIngredients(recipeIngredients);
                                 recipes.add(recipe);
                                 reader.endObject();
                             } else {

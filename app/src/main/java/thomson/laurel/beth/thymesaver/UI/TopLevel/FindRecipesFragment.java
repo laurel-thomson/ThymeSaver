@@ -120,11 +120,12 @@ public class FindRecipesFragment extends Fragment implements FindRecipesAdapter.
                 ImportedRecipe.getInstance().setRecipe(recipe);
                 Intent intent = new Intent(getContext(), FixIngredients.class);
                 startActivity(intent);
+                mProgressBar.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void onError(String error) {
-
+                mProgressBar.setVisibility(View.INVISIBLE);
             }
         });
     }

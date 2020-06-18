@@ -84,12 +84,12 @@ public class RecipeWebsiteClient {
         }
     }
 
-    private Double getQuantity(String quantityString) {
+    public Double getQuantity(String quantityString) {
         if (quantityString.equals("")) return null;
         return parseQuantity(quantityString);
     }
 
-    private String getUnit(String quantity, String ingText) {
+    public String getUnit(String quantity, String ingText) {
         String ingTextRemoved;
         if (ingText.equals(quantity)) {
             return "";
@@ -113,7 +113,7 @@ public class RecipeWebsiteClient {
         }
     }
 
-    private String getName(String unit, String ingText) {
+    public String getName(String unit, String ingText) {
         String[] pieces = ingText.split(Pattern.quote(unit));
         if (pieces.length > 1) {
             return pieces[1].split("[^a-z A-Z0-9]")[0];
