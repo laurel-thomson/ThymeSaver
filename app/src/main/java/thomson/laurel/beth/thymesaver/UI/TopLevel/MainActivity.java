@@ -139,9 +139,12 @@ public class MainActivity extends AppCompatActivity {
                         mActionBar.setTitle(R.string.cookbook);
                         break;
                     case 2:
-                        mActionBar.setTitle(R.string.pantry);
+                        mActionBar.setTitle(R.string.find_recipes);
                         break;
                     case 3:
+                        mActionBar.setTitle(R.string.pantry);
+                        break;
+                    case 4:
                         mActionBar.setTitle(R.string.shopping_list);
                         break;
                 }
