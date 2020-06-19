@@ -1,6 +1,7 @@
 package thomson.laurel.beth.thymesaver.UI.TopLevel;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Context;
@@ -57,6 +58,13 @@ public class FindRecipesFragment extends Fragment implements FindRecipesAdapter.
         mViewModel = ViewModelProviders.of(this).get(CookBookViewModel.class);
         mAdapter = new FindRecipesAdapter(getContext(), this);
         mRecyclerView.setAdapter(mAdapter);
+
+        mViewModel.getAllRecipes().observe(this, new Observer<List<Recipe>>() {
+            @Override
+            public void onChanged(List<Recipe> recipes) {
+                mAdapter.setCookbook(recipes);
+            }
+        });
 
         mSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
