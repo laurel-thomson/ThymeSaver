@@ -1,10 +1,13 @@
 package thomson.laurel.beth.thymesaver.UI.TopLevel;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -27,6 +30,7 @@ import thomson.laurel.beth.thymesaver.Models.Recipe;
 import thomson.laurel.beth.thymesaver.Models.Step;
 import thomson.laurel.beth.thymesaver.R;
 import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
+import thomson.laurel.beth.thymesaver.UI.RecipeDetail.RecipeDetailActivity;
 import thomson.laurel.beth.thymesaver.UI.RecipeImport.FixIngredients;
 import thomson.laurel.beth.thymesaver.UI.RecipeImport.ImportClients.ImportStepsClient;
 import thomson.laurel.beth.thymesaver.UI.RecipeImport.ImportedRecipe;
@@ -139,7 +143,32 @@ public class FindRecipesFragment extends Fragment implements FindRecipesAdapter.
     }
 
     @Override
-    public void onUnfavoriteClicked(Recipe recipe) {
+    public void launchRecipeClicked(Recipe recipe, View recipeImage) {
+        mProgressBar.setVisibility(View.VISIBLE);
+        Intent intent = new Intent(getActivity(), RecipeDetailActivity.class);
+        intent.putExtra(
+                RecipeDetailActivity.CURRENT_RECIPE_NAME,
+                recipe.getName());
+        ActivityOptionsCompat options = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(getActivity(), (View)recipeImage, "recipe_image");
+        startActivity(intent, options.toBundle());
+        mProgressBar.setVisibility(View.GONE);
+    }
 
+    @Override
+    public void onUnfavoriteClicked(Recipe recipe) {
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Remove " + recipe.getName() + " ?")
+                .setMessage("Are you sure you want to remove this recipe from the cookbook? This cannot be undone.")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mViewModel.deleteRecipe(recipe);
+                    }
+
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 }

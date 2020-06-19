@@ -95,8 +95,22 @@ public class FindRecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             viewHolder.mFavoriteIcon.setImageResource(R.drawable.ic_favorite_border);
         }
 
-        viewHolder.itemView.setOnClickListener(view -> mListener.onFavoriteClicked(recipe));
+        viewHolder.itemView.setOnClickListener(view -> {
+            if (isFavorite) {
+                mListener.launchRecipeClicked(recipe, viewHolder.mImageView);
+            } else {
+                mListener.onFavoriteClicked(recipe);
+            }
+        });
+
+        if (isFavorite) {
+            viewHolder.mFavoriteIcon.setOnClickListener(view -> {
+                mListener.onUnfavoriteClicked(recipe);
+            });
+        }
     }
+
+
 
     @Override
     public int getItemCount() {
@@ -119,6 +133,8 @@ public class FindRecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public interface FindRecipesListener {
         void onFavoriteClicked(Recipe recipe);
+
+        void launchRecipeClicked(Recipe recipe, View recipeImage);
 
         void onUnfavoriteClicked(Recipe recipe);
     }
