@@ -21,12 +21,12 @@ import thomson.laurel.beth.thymesaver.Adapters.RecipeStepAdapter;
 import thomson.laurel.beth.thymesaver.Models.Recipe;
 import thomson.laurel.beth.thymesaver.Models.Step;
 import thomson.laurel.beth.thymesaver.R;
-import thomson.laurel.beth.thymesaver.UI.TopLevel.AddButtonFragment;
+import thomson.laurel.beth.thymesaver.UI.TopLevel.ThymesaverFragment;
 import thomson.laurel.beth.thymesaver.ViewModels.RecipeDetailViewModel;
 
 import java.util.List;
 
-public class RecipeStepsFragment extends AddButtonFragment
+public class RecipeStepsFragment extends ThymesaverFragment
         implements RecipeStepListener {
     private RecipeStepAdapter mAdapter;
     private RecyclerView mRecyclerView;
@@ -82,6 +82,11 @@ public class RecipeStepsFragment extends AddButtonFragment
         AddStepFragment fragment = new AddStepFragment();
         fragment.setListener(this);
         fragment.show(getActivity().getSupportFragmentManager(), "TAG");
+    }
+
+    @Override
+    public void onFragmentLeft() {
+
     }
 
     @Override

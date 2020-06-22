@@ -38,7 +38,7 @@ import thomson.laurel.beth.thymesaver.ViewModels.CookBookViewModel;
 
 import java.util.List;
 
-public class CookbookFragment extends AddButtonFragment
+public class CookbookFragment extends ThymesaverFragment
         implements RecipeAdapter.RecipeListener {
     private CookBookViewModel mViewModel;
     private RecipeAdapter mAdapter;
@@ -229,6 +229,10 @@ public class CookbookFragment extends AddButtonFragment
         }else {
             closeFABMenu();
         }
+    }
+
+    @Override
+    public void onFragmentLeft() {
     }
 
     private void createRecipe() {

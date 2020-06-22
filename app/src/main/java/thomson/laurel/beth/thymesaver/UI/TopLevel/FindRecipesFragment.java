@@ -36,7 +36,7 @@ import thomson.laurel.beth.thymesaver.UI.RecipeImport.ImportClients.ImportStepsC
 import thomson.laurel.beth.thymesaver.UI.RecipeImport.ImportedRecipe;
 import thomson.laurel.beth.thymesaver.ViewModels.CookBookViewModel;
 
-public class FindRecipesFragment extends Fragment implements FindRecipesAdapter.FindRecipesListener {
+public class FindRecipesFragment extends ThymesaverFragment implements FindRecipesAdapter.FindRecipesListener {
     private CookBookViewModel mViewModel;
     private FindRecipesAdapter mAdapter;
     private RecyclerView mRecyclerView;
@@ -170,5 +170,15 @@ public class FindRecipesFragment extends Fragment implements FindRecipesAdapter.
                 })
                 .setNegativeButton("No", null)
                 .show();
+    }
+
+    @Override
+    public void onFABClicked() {
+
+    }
+
+    @Override
+    public void onFragmentLeft() {
+
     }
 }

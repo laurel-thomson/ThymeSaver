@@ -37,7 +37,7 @@ import thomson.laurel.beth.thymesaver.R;
 import thomson.laurel.beth.thymesaver.UI.AddIngredients.AddIngredientFragment;
 import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
 import thomson.laurel.beth.thymesaver.UI.RecipeDetail.RecipeDetailActivity;
-import thomson.laurel.beth.thymesaver.UI.TopLevel.AddButtonFragment;
+import thomson.laurel.beth.thymesaver.UI.TopLevel.ThymesaverFragment;
 import thomson.laurel.beth.thymesaver.ViewModels.CookBookViewModel;
 import thomson.laurel.beth.thymesaver.ViewModels.RecipeDetailViewModel;
 
@@ -46,7 +46,7 @@ import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
-public class RecipeIngredientsFragment extends AddButtonFragment
+public class RecipeIngredientsFragment extends ThymesaverFragment
         implements AddRecipeIngredientListener{
 
     private static final int ADD_SUB_RECIPES_REQUEST = 1000;
@@ -164,6 +164,11 @@ public class RecipeIngredientsFragment extends AddButtonFragment
         }else {
             closeFABMenu();
         }
+    }
+
+    @Override
+    public void onFragmentLeft() {
+
     }
 
     private void addIngredient() {

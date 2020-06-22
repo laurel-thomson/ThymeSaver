@@ -1,7 +1,6 @@
 package thomson.laurel.beth.thymesaver.UI.RecipeDetail;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
@@ -49,8 +48,7 @@ import thomson.laurel.beth.thymesaver.R;
 import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
 import thomson.laurel.beth.thymesaver.UI.RecipeDetail.RecipeIngredients.RecipeIngredientsFragment;
 import thomson.laurel.beth.thymesaver.UI.RecipeDetail.RecipeSteps.RecipeStepsFragment;
-import thomson.laurel.beth.thymesaver.UI.TopLevel.AddButtonFragment;
-import thomson.laurel.beth.thymesaver.UI.TopLevel.MainActivity;
+import thomson.laurel.beth.thymesaver.UI.TopLevel.ThymesaverFragment;
 import thomson.laurel.beth.thymesaver.ViewModels.CookBookViewModel;
 import thomson.laurel.beth.thymesaver.ViewModels.RecipeDetailViewModel;
 
@@ -138,7 +136,7 @@ public class RecipeDetailActivity extends AppCompatActivity{
 
         mFAB = findViewById(R.id.recipe_detail_add_button);
         mFAB.setOnClickListener(view -> {
-            AddButtonFragment currentFragment = (AddButtonFragment) mAdapter.getItem(
+            ThymesaverFragment currentFragment = (ThymesaverFragment) mAdapter.getItem(
                     mViewPager.getCurrentItem());
             currentFragment.onFABClicked();
         });

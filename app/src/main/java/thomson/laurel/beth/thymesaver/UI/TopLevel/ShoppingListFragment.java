@@ -31,7 +31,7 @@ import thomson.laurel.beth.thymesaver.ViewModels.ShoppingViewModel;
 
 import java.util.HashMap;
 
-public class ShoppingListFragment extends AddButtonFragment
+public class ShoppingListFragment extends ThymesaverFragment
         implements ShoppingListAdapter.ShoppingListListener {
 
     private ShoppingViewModel mViewModel;
@@ -91,6 +91,11 @@ public class ShoppingListFragment extends AddButtonFragment
     public void onFABClicked() {
         AddShoppingListItemFragment fragment = new AddShoppingListItemFragment();
         fragment.show(getActivity().getSupportFragmentManager(), "TAG");
+    }
+
+    @Override
+    public void onFragmentLeft() {
+
     }
 
     @Override

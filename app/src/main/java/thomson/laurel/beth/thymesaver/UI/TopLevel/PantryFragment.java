@@ -31,7 +31,7 @@ import thomson.laurel.beth.thymesaver.ViewModels.PantryViewModel;
 
 import java.util.List;
 
-public class PantryFragment extends AddButtonFragment implements PantryAdapter.IngredientListener {
+public class PantryFragment extends ThymesaverFragment implements PantryAdapter.IngredientListener {
     private PantryViewModel mViewModel;
     private PantryAdapter mAdapter;
     private RecyclerView mRecyclerView;
@@ -156,5 +156,10 @@ public class PantryFragment extends AddButtonFragment implements PantryAdapter.I
     public void onFABClicked() {
         AddIngredientFragment fragment = new AddIngredientFragment();
         fragment.show(getActivity().getSupportFragmentManager(), "TAG");
+    }
+
+    @Override
+    public void onFragmentLeft() {
+        mAdapter.clearFilter();
     }
 }

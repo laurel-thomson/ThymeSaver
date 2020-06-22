@@ -92,6 +92,12 @@ public class PantryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         notifyDataSetChanged();
     }
 
+    public void clearFilter() {
+        mFilteredIngredients = mIngredients;
+        mIsFiltered = false;
+        notifyDataSetChanged();
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;

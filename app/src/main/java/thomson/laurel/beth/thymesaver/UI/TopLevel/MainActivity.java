@@ -1,6 +1,5 @@
 package thomson.laurel.beth.thymesaver.UI.TopLevel;
 
-import androidx.appcompat.view.menu.MenuView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -20,7 +19,6 @@ import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -44,9 +42,10 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private MenuItem mPreviousMenuItem;
+    private int mPreviousMenuPosition = 0;
     private BottomNavigationView mNavigationView;
     private ViewPager mViewPager;
-    private ViewPagerAdapter mAdapter;
+    private ViewPagerAdapter mViewPagerAdapter;
     private FloatingActionButton mFAB;
     private ActionBar mActionBar;
     private PantryManagerViewModel mViewModel;
@@ -76,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         mFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AddButtonFragment currentFragment = (AddButtonFragment) mAdapter.getItem(
+                ThymesaverFragment currentFragment = (ThymesaverFragment) mViewPagerAdapter.getItem(
                         mViewPager.getCurrentItem());
                 currentFragment.onFABClicked();
             }
@@ -84,12 +83,12 @@ public class MainActivity extends AppCompatActivity {
 
         mNavigationView = findViewById(R.id.navigation);
         mViewPager = findViewById(R.id.main_viewpager);
+
         mNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                        switch(menuItem.getItemId())
-                        {
+                        switch (menuItem.getItemId()) {
                             case R.id.action_meal_planner:
                                 mViewPager.setCurrentItem(0);
                                 break;
@@ -113,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView view = findViewById(R.id.navigation);
         BottomNavigationMenuView menuView = (BottomNavigationMenuView) view.getChildAt(0);
-        View iconView = menuView.getChildAt(2).findViewById(R.id.icon);;
+        View iconView = menuView.getChildAt(2).findViewById(R.id.icon);
         iconView.setScaleY(1.5f);
         iconView.setScaleX(1.5f);
 
@@ -126,10 +125,12 @@ public class MainActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 if (mPreviousMenuItem != null) {
                     mPreviousMenuItem.setChecked(false);
+                    ((ThymesaverFragment) mViewPagerAdapter.getItem(mPreviousMenuPosition)).onFragmentLeft();
                 } else {
                     mNavigationView.getMenu().getItem(0).setChecked(false);
                 }
                 mNavigationView.getMenu().getItem(position).setChecked(true);
+                mPreviousMenuPosition = position;
                 mPreviousMenuItem = mNavigationView.getMenu().getItem(position);
                 switch (position) {
                     case 0:
@@ -166,9 +167,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        mAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        mViewPager.setAdapter(mAdapter);
+        mViewPager.setAdapter(mViewPagerAdapter);
 
         //The activity starts on the Meal Planner tab, which doesn't have a FAB
         mFAB.hide();
