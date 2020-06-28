@@ -1,6 +1,8 @@
 package thomson.laurel.beth.thymesaver.UI.TopLevel;
 
 import android.annotation.SuppressLint;
+
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -9,6 +11,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import androidx.core.app.ActivityOptionsCompat;
@@ -16,15 +20,19 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
+import android.text.Spanned;
 import android.text.TextWatcher;
+import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -134,7 +142,7 @@ public class CookbookFragment extends ThymesaverFragment
     private void promptForRecipeName(Context context, CookBookViewModel viewModel, ValueCallback<Recipe> callback) {
         final View view = LayoutInflater.from(context).inflate(R.layout.recipe_name_dialog, null);
         final EditText nameET = view.findViewById(R.id.recipe_name_edittext);
-        final AutoCompleteTextView categoryET = view.findViewById(R.id.recipe_category_edittext);
+        final MultiAutoCompleteTextView categoryET = view.findViewById(R.id.recipe_category_edittext);
         final TextInputLayout textInputLayout = view.findViewById(R.id.text_input_layout);
 
         final AlertDialog dialog = new AlertDialog.Builder(context)
@@ -189,21 +197,26 @@ public class CookbookFragment extends ThymesaverFragment
                 R.array.recipe_categories,
                 android.R.layout.select_dialog_item);
         categoryET.setAdapter(categoryAdapter);
-        categoryET.setOnTouchListener(new View.OnTouchListener() {
+        categoryET.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+        categoryET.setThreshold(1);
+        categoryET.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                //Need to reset the array adapter because all elements will have
-                //been cleared out when the default category is set
-                ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource(
-                        view.getContext(),
-                        R.array.recipe_categories,
-                        android.R.layout.select_dialog_item);
-                categoryET.setAdapter(categoryAdapter);
-                categoryET.showDropDown();
-                return true;
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String categoryName = ((CharSequence) adapterView.getItemAtPosition(i)).toString();
+                createCategoryChip(categoryName, categoryET);
             }
         });
-        categoryET.setText(context.getResources().getTextArray(R.array.recipe_categories)[0]);
+    }
+
+    private void createCategoryChip(String categoryName, MultiAutoCompleteTextView editText) {
+        ChipDrawable chip = ChipDrawable.createFromResource(getContext(), R.xml.standalone_chip);
+        ImageSpan span = new ImageSpan(chip);
+        int cursorPosition = editText.getSelectionStart();
+        int spanLength = categoryName.length() + 2;
+        Editable text = editText.getText();
+        chip.setText(categoryName);
+        chip.setBounds(0, 0, chip.getIntrinsicWidth(), chip.getIntrinsicHeight());
+        text.setSpan(span, cursorPosition - spanLength, cursorPosition, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
     }
 
     @SuppressLint("ClickableViewAccessibility")
