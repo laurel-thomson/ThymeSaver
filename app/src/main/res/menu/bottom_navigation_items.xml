@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/action_meal_planner"
-        android:title="Meal Planner"
+        android:title="Planner"
         android:icon="@drawable/ic_calendar"/>
     <item android:id="@+id/action_cookbook"
         android:title="Cookbook"
         android:icon="@drawable/ic_notebook"/>
     <item android:id="@+id/action_find"
-        android:title="Find Recipes"
+        android:title="Search"
         android:icon="@drawable/ic_search"/>
     <item android:id="@+id/action_pantry"
         android:title="Pantry"
