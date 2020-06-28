@@ -28,8 +28,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private final LayoutInflater mInflater;
     private RecipeListener mListener;
     private Context mContext;
-    private static final int RECIPE_TYPE = 1;
-    private static final int HEADER_TYPE = 2;
 
     public RecipeAdapter(
             Context context,
@@ -42,84 +40,25 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view;
-        switch (viewType) {
-            case RECIPE_TYPE:
-                view = LayoutInflater.from(mContext)
-                        .inflate(R.layout.recipe_list_item, parent, false);
-                return new RecipeViewHolder(view);
-            default:
-                view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.section_header, parent, false);
-                return new SectionHeaderViewHolder(view);
-        }
+        View view = LayoutInflater.from(mContext)
+                .inflate(R.layout.recipe_list_item, parent, false);
+        return new RecipeViewHolder(view);
     }
 
     public void setRecipes(List<Recipe> recipes) {
-        //Sort the recipes
-        Object[] recipeArray = recipes.toArray();
-        Arrays.sort(recipeArray, (o1, o2) -> ((Recipe) o1).getName().compareTo(((Recipe) o2).getName()));
-        Collections.reverse(Arrays.asList(recipeArray));
-
-        mRecipes.clear();
-
-        //generate category headers
-        CharSequence[] categories = mContext.getResources().getStringArray(R.array.recipe_categories);
-        Recipe[] headers = new Recipe[categories.length];
-        for (int i = 0; i < categories.length; i++) {
-            headers[i] = new Recipe("", categories[i].toString());
-        }
-
-        //add the headers in to the list
-        for (Recipe r : headers) {
-            mRecipes.add(r);
-        }
-
-        //add all the ingredients in under their headers
-        for (Object object : recipeArray) {
-            Recipe recipe = (Recipe) object;
-            int position = 0;
-            for (int i = 0; i < headers.length; i++) {
-                if (headers[i].getCategory().equals(recipe.getCategory())) {
-                    position = mRecipes.indexOf(headers[i]);
-                    break;
-                }
-            }
-            mRecipes.add(position+1, recipe);
-        }
-
-        //remove any headers that don't have ingredients under them
-        ListIterator<Recipe> iterator = mRecipes.listIterator();
-        while (iterator.hasNext()) {
-            Recipe recipe = iterator.next();
-            if (getItemViewType(recipe) == HEADER_TYPE) {
-                int nextIndex = iterator.nextIndex();
-                if (nextIndex >= mRecipes.size() || getItemViewType(nextIndex) == HEADER_TYPE) {
-                    iterator.remove();
-                }
-            }
-        }
-
+        mRecipes = recipes;
         notifyDataSetChanged();
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
-        int itemViewType = getItemViewType(position);
-        if (itemViewType == RECIPE_TYPE) {
-            RecipeViewHolder holder = (RecipeViewHolder) viewHolder;
-            Recipe recipe = mRecipes.get(position);
-            holder.mNameTV.setText(recipe.getName());
-            if (recipe.getImageURL() != null) {
-                Picasso.with(mContext).load(recipe.getImageURL()).fit().centerCrop().into(holder.mImageView);
-            } else {
-                holder.mImageView.setImageResource(R.mipmap.ic_launcher_foreground);
-            }
-        }
-        else {
-            SectionHeaderViewHolder headerViewHolder = (SectionHeaderViewHolder) viewHolder;
-            final String category = mRecipes.get(position).getCategory();
-            headerViewHolder.sectionTitle.setText(category);
+        RecipeViewHolder holder = (RecipeViewHolder) viewHolder;
+        Recipe recipe = mRecipes.get(position);
+        holder.mNameTV.setText(recipe.getName());
+        if (recipe.getImageURL() != null) {
+            Picasso.with(mContext).load(recipe.getImageURL()).fit().centerCrop().into(holder.mImageView);
+        } else {
+            holder.mImageView.setImageResource(R.mipmap.ic_launcher_foreground);
         }
     }
 
@@ -127,23 +66,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public int getItemCount() {
         if (mRecipes == null) return 0;
         return mRecipes.size();
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        if (TextUtils.isEmpty(mRecipes.get(position).getName())) {
-            return HEADER_TYPE;
-        } else {
-            return RECIPE_TYPE;
-        }
-    }
-
-    public int getItemViewType(Recipe recipe) {
-        if (TextUtils.isEmpty(recipe.getName())) {
-            return HEADER_TYPE;
-        } else {
-            return RECIPE_TYPE;
-        }
     }
 
     public class RecipeViewHolder extends RecyclerView.ViewHolder {
@@ -179,15 +101,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     return false;
                 }
             });
-        }
-    }
-
-    class SectionHeaderViewHolder extends RecyclerView.ViewHolder {
-        TextView sectionTitle;
-
-        SectionHeaderViewHolder(View itemView) {
-            super(itemView);
-            sectionTitle = itemView.findViewById(R.id.header_text);
         }
     }
 

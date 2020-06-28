@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import thomson.laurel.beth.thymesaver.Models.Ingredient;
 import thomson.laurel.beth.thymesaver.Models.Recipe;
 import thomson.laurel.beth.thymesaver.Models.RecipeQuantity;
 import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;

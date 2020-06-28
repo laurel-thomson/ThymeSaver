@@ -319,8 +319,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             case R.id.sign_out:
-                signOut();
-                return true;
             case R.id.sign_in:
                 signOut();
                 return true;

@@ -16,7 +16,7 @@ public class Recipe {
 
     private List<Step> steps = new ArrayList<>();
 
-    private String category;
+    private List<String> categories = new ArrayList<>();
 
     private boolean isSubRecipe;
 
@@ -24,13 +24,14 @@ public class Recipe {
 
     private String sourceURL;
 
+    private String missingPantryIngredients;
+
     public Recipe() {
         //required empty constructor for Firebase
     }
 
-    public Recipe(String name, String category) {
+    public Recipe(String name) {
         this.name = name;
-        this.category = category;
     }
 
     @Exclude
@@ -66,12 +67,18 @@ public class Recipe {
         steps.add(step);
     }
 
-    public String getCategory() {
-        return category;
+    public List<String> getCategories() {
+        return categories;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void addCategory(String category) {
+        if (!this.categories.contains(category)) {
+            this.categories.add(category);
+        }
+    }
+
+    public void removeCategory(String category) {
+        this.categories.remove(category);
     }
 
     public boolean isSubRecipe() {
@@ -104,6 +111,15 @@ public class Recipe {
 
     public void setSourceURL(String sourceURL) {
         this.sourceURL = sourceURL;
+    }
+
+    @Exclude
+    public String getMissingPantryIngredients() {
+        return this.missingPantryIngredients;
+    }
+
+    public void setMissingPantryIngredients(String missingText) {
+        this.missingPantryIngredients = missingText;
     }
 
 }

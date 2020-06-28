@@ -14,7 +14,7 @@ import thomson.laurel.beth.thymesaver.Models.Step;
 public class RecipeWebsiteClient {
     public Recipe importRecipe(Document doc) {
         String recipeName = doc.select("title").text().split("[^a-z A-Z0-9]")[0];
-        Recipe recipe = new Recipe(recipeName, "Entree");
+        Recipe recipe = new Recipe(recipeName);
 
         recipe.setImageURL(getImageUrl(doc));
 

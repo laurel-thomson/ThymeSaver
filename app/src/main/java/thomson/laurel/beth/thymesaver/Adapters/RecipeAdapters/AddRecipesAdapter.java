@@ -39,6 +39,13 @@ public class AddRecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public static final int RECIPE_TYPE = 1;
     public static final int HEADER_TYPE = 2;
 
+    public static final String[] mMissingOptions = {
+            "All ingredients in pantry",
+            "Missing 1 ingredient",
+            "Missing 2 ingredients",
+            "Missing 3 ingredients"
+    };
+
     public AddRecipesAdapter(Context context) {
         mContext = context;
         mInflater = LayoutInflater.from(context);
@@ -107,13 +114,12 @@ public class AddRecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         Collections.reverse(Arrays.asList(recipeArray));
         mTotalRecipes.clear();
 
-        //generate category headers
-        Recipe[] headers = new Recipe[] {
-                new Recipe("", "All ingredients in pantry"),
-                new Recipe("", "Missing 1 ingredient"),
-                new Recipe("", "Missing 2 ingredients"),
-                new Recipe("", "Missing 3+ ingredients"),
-        };
+        Recipe[] headers = new Recipe[mMissingOptions.length];
+        for (int i = 0; i < headers.length; i++) {
+            Recipe recipe = new Recipe("");
+            recipe.setMissingPantryIngredients(mMissingOptions[i]);
+            headers[i] = recipe;
+        }
 
         //add the headers into the list
         for (Recipe r : headers) {
@@ -198,8 +204,8 @@ public class AddRecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
         else {
             SectionHeaderViewHolder headerViewHolder = (SectionHeaderViewHolder) viewHolder;
-            final String category = mTotalRecipes.get(position).getCategory();
-            headerViewHolder.sectionTitle.setText(category);
+            final String missingCategory = mTotalRecipes.get(position).getMissingPantryIngredients();
+            headerViewHolder.sectionTitle.setText(missingCategory);
         }
     }
 
