@@ -10,11 +10,18 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.MultiAutoCompleteTextView;
 
+import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipDrawable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import thomson.laurel.beth.thymesaver.R;
 
 public class CategoryEditText extends androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView {
+    private List<ChipDrawable> mChips = new ArrayList<>();
+    private int mLastChipPosition = -1;
+
     public CategoryEditText(Context context) {
         super(context);
     }
@@ -52,7 +59,22 @@ public class CategoryEditText extends androidx.appcompat.widget.AppCompatMultiAu
         int spanLength = categoryName.length() + 2;
         Editable text = this.getText();
         chip.setText(categoryName);
-        chip.setBounds(0, 0, chip.getIntrinsicWidth(), chip.getIntrinsicHeight());
+        chip.setBounds(10, 0, chip.getIntrinsicWidth() + 10, chip.getIntrinsicHeight());
         text.setSpan(span, cursorPosition - spanLength, cursorPosition, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        mChips.add(chip);
+        mLastChipPosition += spanLength;
+    }
+
+    @Override
+    protected void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
+        super.onTextChanged(text, start, lengthBefore, lengthAfter);
+
+        if (mChips != null && mLastChipPosition != -1 && start == mLastChipPosition) {
+            int startPos = getText().length() - mChips.get(mChips.size() - 1).getText().length() - 1;
+            getText().delete(startPos, getText().length());
+            mChips.remove(mChips.size() - 1);
+            mLastChipPosition = startPos - 1;
+        }
+
     }
 }
