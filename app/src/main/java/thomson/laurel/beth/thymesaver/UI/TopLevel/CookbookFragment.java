@@ -40,6 +40,7 @@ import thomson.laurel.beth.thymesaver.Adapters.RecipeAdapters.RecipeAdapter;
 import thomson.laurel.beth.thymesaver.Models.Recipe;
 import thomson.laurel.beth.thymesaver.R;
 import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
+import thomson.laurel.beth.thymesaver.UI.CategoryEditText;
 import thomson.laurel.beth.thymesaver.UI.RecipeDetail.RecipeDetailActivity;
 import thomson.laurel.beth.thymesaver.UI.RecipeImport.ImportActivity;
 import thomson.laurel.beth.thymesaver.ViewModels.CookBookViewModel;
@@ -142,7 +143,7 @@ public class CookbookFragment extends ThymesaverFragment
     private void promptForRecipeName(Context context, CookBookViewModel viewModel, ValueCallback<Recipe> callback) {
         final View view = LayoutInflater.from(context).inflate(R.layout.recipe_name_dialog, null);
         final EditText nameET = view.findViewById(R.id.recipe_name_edittext);
-        final MultiAutoCompleteTextView categoryET = view.findViewById(R.id.recipe_category_edittext);
+        final CategoryEditText categoryET = view.findViewById(R.id.recipe_category_edittext);
         final TextInputLayout textInputLayout = view.findViewById(R.id.text_input_layout);
 
         final AlertDialog dialog = new AlertDialog.Builder(context)
@@ -196,16 +197,7 @@ public class CookbookFragment extends ThymesaverFragment
                 view.getContext(),
                 R.array.recipe_categories,
                 android.R.layout.select_dialog_item);
-        categoryET.setAdapter(categoryAdapter);
-        categoryET.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
-        categoryET.setThreshold(1);
-        categoryET.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String categoryName = ((CharSequence) adapterView.getItemAtPosition(i)).toString();
-                createCategoryChip(categoryName, categoryET);
-            }
-        });
+        categoryET.setCustomAdapter(categoryAdapter);
     }
 
     private void createCategoryChip(String categoryName, MultiAutoCompleteTextView editText) {
