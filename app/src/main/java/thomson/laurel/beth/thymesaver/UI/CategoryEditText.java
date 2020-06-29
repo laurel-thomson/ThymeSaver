@@ -5,6 +5,7 @@ import android.text.Editable;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -75,6 +76,15 @@ public class CategoryEditText extends androidx.appcompat.widget.AppCompatMultiAu
             mChips.remove(mChips.size() - 1);
             mLastChipPosition = startPos - 1;
         }
+    }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_ENTER) {
+            getText().append(", ");
+            String newChip = this.getText().toString().substring(mLastChipPosition + 1, this.getText().length() - 2);
+            createCategoryChip(newChip);
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
