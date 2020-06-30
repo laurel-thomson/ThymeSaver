@@ -21,7 +21,7 @@ import thomson.laurel.beth.thymesaver.R;
 
 public class CategoryEditText extends androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView {
     private List<ChipDrawable> mChips = new ArrayList<>();
-    private int mLastChipPosition = -1;
+    private List<Integer> mChipPositions = new ArrayList<>();
 
     public CategoryEditText(Context context) {
         super(context);
@@ -63,18 +63,51 @@ public class CategoryEditText extends androidx.appcompat.widget.AppCompatMultiAu
         chip.setBounds(10, 0, chip.getIntrinsicWidth() + 10, chip.getIntrinsicHeight());
         text.setSpan(span, cursorPosition - spanLength, cursorPosition, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         mChips.add(chip);
-        mLastChipPosition += spanLength;
+        int chipPosition = lastChipPosition() + spanLength;
+        mChipPositions.add(chipPosition);
+    }
+
+    private int lastChipPosition() {
+        if (mChipPositions.size() == 0) {
+            return -1;
+        }
+        return mChipPositions.get(mChipPositions.size() - 1);
     }
 
     @Override
     protected void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
         super.onTextChanged(text, start, lengthBefore, lengthAfter);
 
-        if (mChips != null && mLastChipPosition != -1 && start == mLastChipPosition) {
-            int startPos = getText().length() - mChips.get(mChips.size() - 1).getText().length() - 1;
-            getText().delete(startPos, getText().length());
-            mChips.remove(mChips.size() - 1);
-            mLastChipPosition = startPos - 1;
+        int chipToRemove = -1;
+
+        if (mChipPositions == null) { return; }
+
+        for (int i = 0; i < mChipPositions.size(); i++) {
+            int chipPosition = mChipPositions.get(i);
+            if (start == chipPosition) {
+                ChipDrawable chip = mChips.get(i);
+                int startPos = start - chip.getText().length() - 1;
+                getText().delete(startPos, startPos + chip.getText().length() + 1);
+                chipToRemove = i;
+                break;
+            }
+        }
+
+        if (chipToRemove != -1 && chipToRemove < mChipPositions.size()) {
+            mChips.remove(chipToRemove);
+            mChipPositions.remove(chipToRemove);
+
+            //need to update all the chip positions for the chips after the removed chip
+            for (int i = chipToRemove; i < mChipPositions.size(); i++) {
+                ChipDrawable chip = mChips.get(i);
+                int newPosition;
+                if (i == 0) {
+                    newPosition = chip.getText().length() + 1;
+                } else {
+                    newPosition = mChipPositions.get(i-1) + chip.getText().length() + 1;
+                }
+                mChipPositions.set(i, newPosition);
+            }
         }
     }
 
@@ -82,7 +115,7 @@ public class CategoryEditText extends androidx.appcompat.widget.AppCompatMultiAu
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_ENTER) {
             getText().append(", ");
-            String newChip = this.getText().toString().substring(mLastChipPosition + 1, this.getText().length() - 2);
+            String newChip = this.getText().toString().substring(lastChipPosition() + 1, this.getText().length() - 2);
             createCategoryChip(newChip);
         }
         return super.onKeyDown(keyCode, event);
