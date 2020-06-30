@@ -10,7 +10,7 @@
     <string name="done">DONE</string>
     <string name="is_bulk_ingredient">Is bulk ingredient?</string>
     <string name="ingredient_name">INGREDIENT NAME</string>
-    <string name="category">CATEGORY</string>
+    <string name="category">CATEGORIES</string>
     <string name="quantity">QUANTITY</string>
     <string name="unit">UNIT</string>
     <string name="step">STEP</string>

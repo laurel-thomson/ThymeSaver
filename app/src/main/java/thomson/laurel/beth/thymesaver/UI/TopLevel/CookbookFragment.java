@@ -157,7 +157,10 @@ public class CookbookFragment extends ThymesaverFragment
             @Override
             public void onClick(View view) {
                 Recipe recipe = new Recipe(nameET.getText().toString());
-                recipe.addCategory(categoryET.getText().toString());
+                List<String> categories = categoryET.getCategories();
+                for (String category : categories) {
+                    recipe.addCategory(category);
+                }
                 callback.onSuccess(recipe);
                 dialog.dismiss();
             }
@@ -198,17 +201,6 @@ public class CookbookFragment extends ThymesaverFragment
                 R.array.recipe_categories,
                 android.R.layout.select_dialog_item);
         categoryET.setCustomAdapter(categoryAdapter);
-    }
-
-    private void createCategoryChip(String categoryName, MultiAutoCompleteTextView editText) {
-        ChipDrawable chip = ChipDrawable.createFromResource(getContext(), R.xml.standalone_chip);
-        ImageSpan span = new ImageSpan(chip);
-        int cursorPosition = editText.getSelectionStart();
-        int spanLength = categoryName.length() + 2;
-        Editable text = editText.getText();
-        chip.setText(categoryName);
-        chip.setBounds(0, 0, chip.getIntrinsicWidth(), chip.getIntrinsicHeight());
-        text.setSpan(span, cursorPosition - spanLength, cursorPosition, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
     }
 
     @SuppressLint("ClickableViewAccessibility")

@@ -53,6 +53,14 @@ public class CategoryEditText extends androidx.appcompat.widget.AppCompatMultiAu
         });
     }
 
+    public List<String> getCategories() {
+        List<String> categories = new ArrayList<>();
+        for (ChipDrawable chip : mChips) {
+            categories.add(chip.getText().toString());
+        }
+        return categories;
+    }
+
     private void createCategoryChip(String categoryName) {
         ChipDrawable chip = ChipDrawable.createFromResource(getContext(), R.xml.standalone_chip);
         ImageSpan span = new ImageSpan(chip);
