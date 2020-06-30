@@ -22,6 +22,7 @@ import thomson.laurel.beth.thymesaver.R;
 public class CategoryEditText extends androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView {
     private List<ChipDrawable> mChips = new ArrayList<>();
     private List<Integer> mChipPositions = new ArrayList<>();
+    private ArrayAdapter<CharSequence> mAdaper;
 
     public CategoryEditText(Context context) {
         super(context);
@@ -41,6 +42,7 @@ public class CategoryEditText extends androidx.appcompat.widget.AppCompatMultiAu
     }
 
     public void setCustomAdapter(ArrayAdapter<CharSequence> categoryAdapter) {
+        mAdaper = categoryAdapter;
         super.setAdapter(categoryAdapter);
         super.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
         super.setThreshold(1);
@@ -51,6 +53,14 @@ public class CategoryEditText extends androidx.appcompat.widget.AppCompatMultiAu
                 createCategoryChip(categoryName);
             }
         });
+    }
+
+    private void removeElementFromAdapter(CharSequence element) {
+        mAdaper.remove(element);
+    }
+
+    private void addElementToAdapter(CharSequence element) {
+        mAdaper.add(element);
     }
 
     public List<String> getCategories() {
@@ -73,6 +83,7 @@ public class CategoryEditText extends androidx.appcompat.widget.AppCompatMultiAu
         mChips.add(chip);
         int chipPosition = lastChipPosition() + spanLength;
         mChipPositions.add(chipPosition);
+        removeElementFromAdapter(chip.getText());
     }
 
     private int lastChipPosition() {
@@ -85,28 +96,31 @@ public class CategoryEditText extends androidx.appcompat.widget.AppCompatMultiAu
     @Override
     protected void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
         super.onTextChanged(text, start, lengthBefore, lengthAfter);
-
-        int chipToRemove = -1;
-
         if (mChipPositions == null) { return; }
 
+        removeChip(start);
+    }
+
+    private void removeChip(int start) {
+        int chipToRemovePosition = -1;
         for (int i = 0; i < mChipPositions.size(); i++) {
             int chipPosition = mChipPositions.get(i);
             if (start == chipPosition) {
                 ChipDrawable chip = mChips.get(i);
                 int startPos = start - chip.getText().length() - 1;
                 getText().delete(startPos, startPos + chip.getText().length() + 1);
-                chipToRemove = i;
+                chipToRemovePosition = i;
                 break;
             }
         }
 
-        if (chipToRemove != -1 && chipToRemove < mChipPositions.size()) {
-            mChips.remove(chipToRemove);
-            mChipPositions.remove(chipToRemove);
+        if (chipToRemovePosition != -1 && chipToRemovePosition < mChipPositions.size()) {
+            ChipDrawable removedChip = mChips.remove(chipToRemovePosition);
+            mChipPositions.remove(chipToRemovePosition);
+            addElementToAdapter(removedChip.getText());
 
             //need to update all the chip positions for the chips after the removed chip
-            for (int i = chipToRemove; i < mChipPositions.size(); i++) {
+            for (int i = chipToRemovePosition; i < mChipPositions.size(); i++) {
                 ChipDrawable chip = mChips.get(i);
                 int newPosition;
                 if (i == 0) {
@@ -122,10 +136,14 @@ public class CategoryEditText extends androidx.appcompat.widget.AppCompatMultiAu
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_ENTER) {
-            getText().append(", ");
-            String newChip = this.getText().toString().substring(lastChipPosition() + 1, this.getText().length() - 2);
-            createCategoryChip(newChip);
+            addCustomChip();
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private void addCustomChip() {
+        getText().append(", ");
+        String newChip = this.getText().toString().substring(lastChipPosition() + 1, this.getText().length() - 2);
+        createCategoryChip(newChip);
     }
 }
