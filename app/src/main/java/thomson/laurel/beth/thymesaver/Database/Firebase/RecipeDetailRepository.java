@@ -163,6 +163,13 @@ public class RecipeDetailRepository implements IRecipeDetailRepository {
     }
 
     @Override
+    public void updateCategories(String recipeName, List<String> categories) {
+        DatabaseReferences.getRecipeReference().child(recipeName).child("categories").setValue(categories);
+
+        //TODO: edit the list of all possible categories
+    }
+
+    @Override
     public LiveData<HashMap<Ingredient, RecipeQuantity>> getRecipeIngredients(String recipeName) {
         mRecipeName = recipeName;
         return Transformations.map(

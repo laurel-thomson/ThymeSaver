@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -222,7 +223,7 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecyclerView.
         TextView mUnitTV;
         LinearLayout mDecrementer;
         LinearLayout mIncrementer;
-        Button mDeleteButton;
+        ImageButton mDeleteButton;
 
         public IngredientViewHolder(@NonNull View view) {
             super(view);

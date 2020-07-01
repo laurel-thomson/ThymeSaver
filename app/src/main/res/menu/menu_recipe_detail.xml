@@ -3,13 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/action_rename"
-        android:title="Rename recipe"
+        android:id="@+id/action_edit"
+        android:title="@string/edit_recipe"
         android:orderInCategory="1"/>
 
     <item
         android:id="@+id/action_renew"
         android:orderInCategory="2"
-        android:title="Clear checkboxes" />
+        android:title="@string/clear_checkboxes" />
 
 </menu>

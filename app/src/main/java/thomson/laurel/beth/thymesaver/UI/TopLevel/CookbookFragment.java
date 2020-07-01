@@ -2,7 +2,6 @@ package thomson.laurel.beth.thymesaver.UI.TopLevel;
 
 import android.annotation.SuppressLint;
 
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -12,7 +11,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import androidx.core.app.ActivityOptionsCompat;
@@ -20,19 +18,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
-import android.text.Spanned;
 import android.text.TextWatcher;
-import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.MultiAutoCompleteTextView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -159,7 +151,7 @@ public class CookbookFragment extends ThymesaverFragment
                 Recipe recipe = new Recipe(nameET.getText().toString());
                 List<String> categories = categoryET.getCategories();
                 for (String category : categories) {
-                    recipe.addCategory(category);
+                    recipe.addCategoryIfNotExists(category);
                 }
                 callback.onSuccess(recipe);
                 dialog.dismiss();

@@ -216,7 +216,7 @@ public class RecipeIngredientsFragment extends ThymesaverFragment
             @Override
             public void onClick(View view) {
                 Recipe recipe = new Recipe(nameET.getText().toString());
-                recipe.addCategory(categoryET.getText().toString());
+                recipe.addCategoryIfNotExists(categoryET.getText().toString());
                 mProgressBar.setVisibility(View.GONE);
                 cookBookViewModel.addRecipe(recipe);
                 mViewModel.addSubRecipe(recipe.getName());

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -87,7 +88,7 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.My
 
         private TextView mTextView;
         private CheckBox mCheckBox;
-        private Button mDeleteButton;
+        private ImageButton mDeleteButton;
 
         MyViewHolder(@NonNull View itemView) {
             super(itemView);

@@ -6,7 +6,7 @@
     android:orientation="horizontal"
     android:background="@color/colorTextIcon"
     xmlns:android="http://schemas.android.com/apk/res/android">
-
+F
     <CheckBox
         android:id="@+id/checklist_checkbox"
         android:background="@color/colorTextIcon"
@@ -23,7 +23,7 @@
         android:layout_weight="0.8"
         android:layout_height="wrap_content" />
 
-    <Button
+    <ImageButton
         android:id="@+id/checklist_delete"
         android:layout_width="30dp"
         android:layout_height="30dp"

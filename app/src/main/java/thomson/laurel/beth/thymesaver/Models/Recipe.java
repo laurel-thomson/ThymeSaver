@@ -71,9 +71,15 @@ public class Recipe {
         return categories;
     }
 
-    public void addCategory(String category) {
+    public void addCategoryIfNotExists(String category) {
         if (!this.categories.contains(category)) {
             this.categories.add(category);
+        }
+    }
+
+    public void addCategoriesIfNotExist(List<String> categories) {
+        for (String category : categories) {
+            addCategoryIfNotExists(category);
         }
     }
 

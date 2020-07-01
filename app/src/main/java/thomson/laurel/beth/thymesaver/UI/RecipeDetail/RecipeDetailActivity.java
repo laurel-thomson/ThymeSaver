@@ -46,6 +46,7 @@ import thomson.laurel.beth.thymesaver.Database.IStorageRepository;
 import thomson.laurel.beth.thymesaver.Models.Recipe;
 import thomson.laurel.beth.thymesaver.R;
 import thomson.laurel.beth.thymesaver.UI.Callbacks.ValueCallback;
+import thomson.laurel.beth.thymesaver.UI.CategoryEditText;
 import thomson.laurel.beth.thymesaver.UI.RecipeDetail.RecipeIngredients.RecipeIngredientsFragment;
 import thomson.laurel.beth.thymesaver.UI.RecipeDetail.RecipeSteps.RecipeStepsFragment;
 import thomson.laurel.beth.thymesaver.UI.TopLevel.ThymesaverFragment;
@@ -245,8 +246,8 @@ public class RecipeDetailActivity extends AppCompatActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_rename:
-                renameRecipe();
+            case R.id.action_edit:
+                editRecipe();
                 return true;
             case R.id.action_renew:
                 clearAllChecks();
@@ -258,19 +259,20 @@ public class RecipeDetailActivity extends AppCompatActivity{
         return false;
     }
 
-    private void renameRecipe() {
+    private void editRecipe() {
         CookBookViewModel cookBookViewModel = ViewModelProviders.of(this).get(CookBookViewModel.class);
         Context context = this;
         cookBookViewModel.getAllRecipes(new ValueCallback<List<Recipe>>() {
             @Override
             public void onSuccess(List<Recipe> recipes) {
-                promptForRecipeName(context, recipes, new ValueCallback<Recipe>() {
+                promptForRecipeEdit(context, recipes, new ValueCallback<Recipe>() {
                     @Override
-                    public void onSuccess(Recipe value) {
-                        mViewModel.renameRecipe(value.getName(), new thomson.laurel.beth.thymesaver.UI.Callbacks.Callback() {
+                    public void onSuccess(Recipe recipe) {
+                        mViewModel.renameRecipe(recipe.getName(), new thomson.laurel.beth.thymesaver.UI.Callbacks.Callback() {
                                     @Override
                                     public void onSuccess() {
-                                        restartActivity(value.getName());
+                                        mViewModel.updateCategories(recipe.getName(), recipe.getCategories());
+                                        restartActivity(recipe.getName());
                                     }
 
                                     @Override
@@ -304,16 +306,16 @@ public class RecipeDetailActivity extends AppCompatActivity{
         return false;
     }
 
-    private void promptForRecipeName(Context context, List<Recipe> recipes, ValueCallback<Recipe> callback) {
+    private void promptForRecipeEdit(Context context, List<Recipe> recipes, ValueCallback<Recipe> callback) {
         final View view = LayoutInflater.from(context).inflate(R.layout.recipe_name_dialog, null);
         final EditText nameET = view.findViewById(R.id.recipe_name_edittext);
-        final AutoCompleteTextView categoryET = view.findViewById(R.id.recipe_category_edittext);
+        final CategoryEditText categoryET = view.findViewById(R.id.recipe_category_edittext);
         final TextInputLayout textInputLayout = view.findViewById(R.id.text_input_layout);
 
         final AlertDialog dialog = new AlertDialog.Builder(context)
                 .setView(view)
-                .setTitle("Rename recipe")
-                .setPositiveButton("Rename", null)
+                .setTitle("Edit recipe")
+                .setPositiveButton("Save", null)
                 .create();
         dialog.show();
 
@@ -321,6 +323,7 @@ public class RecipeDetailActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 Recipe recipe = new Recipe(nameET.getText().toString());
+                recipe.addCategoriesIfNotExist(categoryET.getCategories());
                 callback.onSuccess(recipe);
                 dialog.dismiss();
             }
@@ -360,22 +363,7 @@ public class RecipeDetailActivity extends AppCompatActivity{
                 view.getContext(),
                 R.array.recipe_categories,
                 android.R.layout.select_dialog_item);
-        categoryET.setAdapter(categoryAdapter);
-        categoryET.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                //Need to reset the array adapter because all elements will have
-                //been cleared out when the default category is set
-                ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource(
-                        view.getContext(),
-                        R.array.recipe_categories,
-                        android.R.layout.select_dialog_item);
-                categoryET.setAdapter(categoryAdapter);
-                categoryET.showDropDown();
-                return true;
-            }
-        });
-        categoryET.setText(context.getResources().getTextArray(R.array.recipe_categories)[0]);
+        categoryET.setCustomAdapter(categoryAdapter);
     }
 
     private void clearAllChecks() {
