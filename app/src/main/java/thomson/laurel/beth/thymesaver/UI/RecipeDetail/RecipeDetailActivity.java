@@ -299,7 +299,7 @@ public class RecipeDetailActivity extends AppCompatActivity{
 
     private boolean recipeNameExists(String recipeName, List<Recipe> recipes) {
         for (Recipe r : recipes) {
-            if (r.getName().equals(recipeName)) {
+            if (r.getName().equals(recipeName) && !r.getName().equals(mRecipeName)) {
                 return true;
             }
         }
@@ -311,6 +311,8 @@ public class RecipeDetailActivity extends AppCompatActivity{
         final EditText nameET = view.findViewById(R.id.recipe_name_edittext);
         final CategoryEditText categoryET = view.findViewById(R.id.recipe_category_edittext);
         final TextInputLayout textInputLayout = view.findViewById(R.id.text_input_layout);
+
+        nameET.setText(mRecipeName);
 
         final AlertDialog dialog = new AlertDialog.Builder(context)
                 .setView(view)
@@ -328,7 +330,6 @@ public class RecipeDetailActivity extends AppCompatActivity{
                 dialog.dismiss();
             }
         });
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
 
         nameET.addTextChangedListener(new TextWatcher() {
             @Override
@@ -364,6 +365,7 @@ public class RecipeDetailActivity extends AppCompatActivity{
                 R.array.recipe_categories,
                 android.R.layout.select_dialog_item);
         categoryET.setCustomAdapter(categoryAdapter);
+        categoryET.setChippedCategories(mViewModel.getCurrentRecipe().getCategories());
     }
 
     private void clearAllChecks() {

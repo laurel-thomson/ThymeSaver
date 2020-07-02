@@ -55,6 +55,13 @@ public class CategoryEditText extends androidx.appcompat.widget.AppCompatMultiAu
         });
     }
 
+    public void setChippedCategories(List<String> categories) {
+        for (String category : categories) {
+            this.getText().append(category).append(", ");
+            createCategoryChip(category);
+        }
+    }
+
     private void removeElementFromAdapter(CharSequence element) {
         mAdaper.remove(element);
     }
@@ -76,10 +83,9 @@ public class CategoryEditText extends androidx.appcompat.widget.AppCompatMultiAu
         ImageSpan span = new ImageSpan(chip);
         int cursorPosition = this.getSelectionStart();
         int spanLength = categoryName.length() + 2;
-        Editable text = this.getText();
         chip.setText(categoryName);
         chip.setBounds(10, 0, chip.getIntrinsicWidth() + 10, chip.getIntrinsicHeight());
-        text.setSpan(span, cursorPosition - spanLength, cursorPosition, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        this.getText().setSpan(span, cursorPosition - spanLength, cursorPosition, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         mChips.add(chip);
         int chipPosition = lastChipPosition() + spanLength;
         mChipPositions.add(chipPosition);
