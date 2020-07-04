@@ -276,6 +276,7 @@ public class RecipeDetailActivity extends AppCompatActivity{
 
     private void updateCategories(Recipe recipe) {
         mViewModel.updateCategories(recipe.getName(), recipe.getCategories());
+        restartActivity(recipe.getName());
     }
 
     private void editRecipe() {
