@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -156,7 +157,7 @@ public class ShoppingListAdapter extends  RecyclerView.Adapter<RecyclerView.View
         TextView mQuantityTV;
         LinearLayout mDecrementer;
         LinearLayout mIncrementer;
-        Button mDeleteButton;
+        ImageButton mDeleteButton;
 
         ShoppingListViewHolder(View view) {
             super(view);
