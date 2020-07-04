@@ -259,6 +259,25 @@ public class RecipeDetailActivity extends AppCompatActivity{
         return false;
     }
 
+    private void renameRecipe(Recipe recipe) {
+        mViewModel.renameRecipe(recipe.getName(), new thomson.laurel.beth.thymesaver.UI.Callbacks.Callback() {
+            @Override
+            public void onSuccess() {
+                updateCategories(recipe);
+                restartActivity(recipe.getName());
+            }
+
+            @Override
+            public void onError(String err) {
+
+            }
+        });
+    }
+
+    private void updateCategories(Recipe recipe) {
+        mViewModel.updateCategories(recipe.getName(), recipe.getCategories());
+    }
+
     private void editRecipe() {
         CookBookViewModel cookBookViewModel = ViewModelProviders.of(this).get(CookBookViewModel.class);
         Context context = this;
@@ -268,18 +287,11 @@ public class RecipeDetailActivity extends AppCompatActivity{
                 promptForRecipeEdit(context, recipes, new ValueCallback<Recipe>() {
                     @Override
                     public void onSuccess(Recipe recipe) {
-                        mViewModel.renameRecipe(recipe.getName(), new thomson.laurel.beth.thymesaver.UI.Callbacks.Callback() {
-                                    @Override
-                                    public void onSuccess() {
-                                        mViewModel.updateCategories(recipe.getName(), recipe.getCategories());
-                                        restartActivity(recipe.getName());
-                                    }
-
-                                    @Override
-                                    public void onError(String err) {
-
-                                    }
-                                });
+                        if (!recipe.getName().equals(mRecipeName)) {
+                            renameRecipe(recipe);
+                        } else {
+                            updateCategories(recipe);
+                        }
 
                     }
 
