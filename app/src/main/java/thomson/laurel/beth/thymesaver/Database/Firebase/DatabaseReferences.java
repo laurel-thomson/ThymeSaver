@@ -13,6 +13,7 @@ public class DatabaseReferences {
     private static DatabaseReference shoppingListModReference;
     private static DatabaseReference userReference;
     private static DatabaseReference pantriesReference;
+    private static DatabaseReference categoriesReference;
     private static String pantryId;
 
     public static void initializeDatabaseReferences(String preferredPantry) {
@@ -25,6 +26,7 @@ public class DatabaseReferences {
         ingredientReference = dataBase.getReference("pantries/" + DatabaseReferences.pantryId + "/ingredients");
         mealPlanReference = dataBase.getReference("pantries/" + DatabaseReferences.pantryId + "/mealplan");
         shoppingListModReference = dataBase.getReference("pantries/" + DatabaseReferences.pantryId + "/shoppinglistmods");
+        categoriesReference = dataBase.getReference("pantries/" + DatabaseReferences.pantryId + "/categories");
         pantriesReference = userReference.child("pantries");
     }
 
@@ -59,6 +61,8 @@ public class DatabaseReferences {
     public static DatabaseReference getStarterPantryReference() {
         return dataBase.getReference("starterPantry");
     }
+
+    public static DatabaseReference getCategoriesReference() { return categoriesReference; }
 
     public static String getPreferredPantry() {
         return pantryId;

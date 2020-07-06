@@ -22,6 +22,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -166,7 +167,30 @@ public class RecipeDetailRepository implements IRecipeDetailRepository {
     public void updateCategories(String recipeName, List<String> categories) {
         DatabaseReferences.getRecipeReference().child(recipeName).child("categories").setValue(categories);
 
-        //TODO: edit the list of all possible categories
+        DatabaseReferences.getCategoriesReference().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<String> totalCategories = new ArrayList<>();
+                for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                    totalCategories.add(snap.getValue().toString());
+                }
+                addRecipeCategoriesToTotal(totalCategories, categories);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void addRecipeCategoriesToTotal(List<String> totalCategories, List<String> categoriesToAdd) {
+        for (String recipe : categoriesToAdd) {
+            if (!totalCategories.contains(recipe)) {
+                totalCategories.add(recipe);
+            }
+        }
+        DatabaseReferences.getCategoriesReference().setValue(totalCategories);
     }
 
     @Override
