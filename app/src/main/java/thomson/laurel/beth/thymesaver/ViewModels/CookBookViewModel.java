@@ -78,4 +78,8 @@ public class CookBookViewModel extends AndroidViewModel {
         }
         return false;
     }
+
+    public void getAllRecipeCategories(ValueCallback<List<String>> callback) {
+        mRepository.getAllRecipeCategories(callback);
+    }
 }

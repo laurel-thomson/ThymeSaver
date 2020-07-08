@@ -25,11 +25,9 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -39,6 +37,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import thomson.laurel.beth.thymesaver.Database.Firebase.StorageRepository;
@@ -58,7 +57,8 @@ public class RecipeDetailActivity extends AppCompatActivity{
     public static String CURRENT_RECIPE_NAME = "Current Recipe Name";
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private ViewPager mViewPager;
-    private RecipeDetailViewModel mViewModel;
+    private RecipeDetailViewModel mRecipeDetailViewModel;
+    private CookBookViewModel mCookBookViewModel;
     private FloatingActionButton mFAB;
     private ViewPagerAdapter mAdapter;
     private IStorageRepository mStorageRepository;
@@ -73,10 +73,11 @@ public class RecipeDetailActivity extends AppCompatActivity{
         setContentView(R.layout.activity_recipe_detail);
 
         mStorageRepository = StorageRepository.getInstance();
-        mViewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
+        mRecipeDetailViewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
+        mCookBookViewModel = ViewModelProviders.of(this).get(CookBookViewModel.class);
         mRecipeName= getIntent().getStringExtra(CURRENT_RECIPE_NAME);
-        mViewModel.setCurrentRecipe(mRecipeName);
-        mViewModel.getCurrentRecipe(new ValueCallback<Recipe>() {
+        mRecipeDetailViewModel.setCurrentRecipe(mRecipeName);
+        mRecipeDetailViewModel.getCurrentRecipe(new ValueCallback<Recipe>() {
             @Override
             public void onSuccess(Recipe recipe) {
                 if (recipe.getImageURL() != null) {
@@ -195,9 +196,9 @@ public class RecipeDetailActivity extends AppCompatActivity{
                 mStorageRepository.uploadImage(photo, mRecipeName, new ValueCallback<String>() {
                     @Override
                     public void onSuccess(String downloadURL) {
-                        Recipe recipe = mViewModel.getCurrentRecipe();
+                        Recipe recipe = mRecipeDetailViewModel.getCurrentRecipe();
                         recipe.setImageURL(downloadURL);
-                        mViewModel.updateRecipe();
+                        mRecipeDetailViewModel.updateRecipe();
                         setRecipeImage(downloadURL);
                     }
 
@@ -260,7 +261,7 @@ public class RecipeDetailActivity extends AppCompatActivity{
     }
 
     private void renameRecipe(Recipe recipe) {
-        mViewModel.renameRecipe(recipe.getName(), new thomson.laurel.beth.thymesaver.UI.Callbacks.Callback() {
+        mRecipeDetailViewModel.renameRecipe(recipe.getName(), new thomson.laurel.beth.thymesaver.UI.Callbacks.Callback() {
             @Override
             public void onSuccess() {
                 updateCategories(recipe);
@@ -275,7 +276,7 @@ public class RecipeDetailActivity extends AppCompatActivity{
     }
 
     private void updateCategories(Recipe recipe) {
-        mViewModel.updateCategories(recipe.getName(), recipe.getCategories());
+        mRecipeDetailViewModel.updateCategories(recipe.getName(), recipe.getCategories());
         restartActivity(recipe.getName());
     }
 
@@ -372,17 +373,28 @@ public class RecipeDetailActivity extends AppCompatActivity{
             }
         });
 
-        //set up category autocomplete textview
-        ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource(
-                view.getContext(),
-                R.array.recipe_categories,
-                android.R.layout.select_dialog_item);
-        categoryET.setCustomAdapter(categoryAdapter);
-        categoryET.setChippedCategories(mViewModel.getCurrentRecipe().getCategories());
+        mCookBookViewModel.getAllRecipeCategories(new ValueCallback<List<String>>() {
+            @Override
+            public void onSuccess(List<String> categories) {
+                ArrayAdapter<CharSequence> categoryAdapter = new ArrayAdapter<CharSequence>(
+                        view.getContext(),
+                        android.R.layout.select_dialog_item,
+                        categories.toArray(new String[0])
+                );
+                categoryET.setCustomAdapter(categoryAdapter);
+                categoryET.setChippedCategories(mRecipeDetailViewModel.getCurrentRecipe().getCategories());
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
+
     }
 
     private void clearAllChecks() {
-        mViewModel.clearAllChecks();
+        mRecipeDetailViewModel.clearAllChecks();
     }
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {

@@ -92,6 +92,25 @@ public class CookbookRepository implements ICookbookRepository {
         }
     }
 
+    @Override
+    public void getAllRecipeCategories(ValueCallback<List<String>> callback) {
+        DatabaseReferences.getCategoriesReference().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<String> categories = new ArrayList<>();
+                for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                    categories.add(snap.getValue().toString());
+                }
+                callback.onSuccess(categories);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                callback.onError(databaseError.getMessage());
+            }
+        });
+    }
+
     private void deleteAssociatedMealPlans(String recipeName) {
         DatabaseReferences.getMealPlanReference().addListenerForSingleValueEvent(
                 new ValueEventListener() {
