@@ -275,8 +275,22 @@ public class RecipeDetailActivity extends AppCompatActivity{
         });
     }
 
+    private List<String> checkForRemovedCategories(Recipe recipe) {
+        Recipe oldRecipe = mRecipeDetailViewModel.getCurrentRecipe();
+        if (recipe.getCategories().size() < oldRecipe.getCategories().size()) {
+            List<String> removedCategories = new ArrayList<>();
+            for (String category : oldRecipe.getCategories()) {
+                if (!recipe.getCategories().contains(category)) {
+                    removedCategories.add(category);
+                }
+            }
+            return removedCategories;
+        }
+        return null;
+    }
+
     private void updateCategories(Recipe recipe) {
-        mRecipeDetailViewModel.updateCategories(recipe.getName(), recipe.getCategories());
+        mRecipeDetailViewModel.updateCategories(recipe.getName(), recipe.getCategories(), checkForRemovedCategories(recipe));
         restartActivity(recipe.getName());
     }
 

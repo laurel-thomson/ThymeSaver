@@ -164,8 +164,8 @@ public class RecipeDetailRepository implements IRecipeDetailRepository {
     }
 
     @Override
-    public void updateCategories(String recipeName, List<String> categories) {
-        DatabaseReferences.getRecipeReference().child(recipeName).child("categories").setValue(categories);
+    public void updateCategories(String recipeName, List<String> categoriesToAdd, List<String> categoriesToRemove) {
+        DatabaseReferences.getRecipeReference().child(recipeName).child("categories").setValue(categoriesToAdd);
 
         DatabaseReferences.getCategoriesReference().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -174,7 +174,7 @@ public class RecipeDetailRepository implements IRecipeDetailRepository {
                 for (DataSnapshot snap : dataSnapshot.getChildren()) {
                     totalCategories.add(snap.getValue().toString());
                 }
-                addRecipeCategoriesToTotal(totalCategories, categories);
+                updateCategories(totalCategories, categoriesToAdd, categoriesToRemove);
             }
 
             @Override
@@ -184,13 +184,73 @@ public class RecipeDetailRepository implements IRecipeDetailRepository {
         });
     }
 
-    private void addRecipeCategoriesToTotal(List<String> totalCategories, List<String> categoriesToAdd) {
+    private void updateCategories(List<String> totalCategories, List<String> categoriesToAdd, List<String> categoriesToRemove) {
+        if (categoriesToRemove == null) {
+            addCategoriesToTotal(totalCategories, categoriesToAdd);
+            return;
+        }
+
+        getCategoriesEligibleForDeletion(categoriesToRemove, new ValueCallback<List<String>>() {
+            @Override
+            public void onSuccess(List<String> categories) {
+                removeCategoriesFromTotal(totalCategories, categories);
+                addCategoriesToTotal(totalCategories, categoriesToAdd);
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
+    }
+
+    private void removeCategoriesFromTotal(List<String> totalCategories, List<String> categoriesToRemove) {
+        for (String category : categoriesToRemove) {
+            totalCategories.remove(category);
+        }
+    }
+
+    private void addCategoriesToTotal(List<String> totalCategories, List<String> categoriesToAdd) {
         for (String recipe : categoriesToAdd) {
             if (!totalCategories.contains(recipe)) {
                 totalCategories.add(recipe);
             }
         }
         DatabaseReferences.getCategoriesReference().setValue(totalCategories);
+    }
+
+    private boolean categoryIsEligibleForDeletion(String category, List<Recipe> recipes) {
+        for (Recipe recipe : recipes) {
+            if (recipe.getCategories().contains(category)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void getCategoriesEligibleForDeletion(List<String> categories, ValueCallback<List<String>> callback) {
+        DatabaseReferences.getRecipeReference().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<Recipe> recipes = new ArrayList<>();
+                for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                    Recipe recipe = snap.getValue(Recipe.class);
+                    recipes.add(recipe);
+                }
+                List<String> eligibleCategories = new ArrayList<>();
+                for (String category : categories) {
+                    if (categoryIsEligibleForDeletion(category, recipes)) {
+                        eligibleCategories.add(category);
+                    }
+                }
+                callback.onSuccess(eligibleCategories);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override

@@ -35,5 +35,5 @@ public interface IRecipeDetailRepository {
 
     void clearAllChecks(String recipeName);
 
-    void updateCategories(String recipeName, List<String> categories);
+    void updateCategories(String recipeName, List<String> categoriesToAdd, List<String> categoriesToRemove);
 }

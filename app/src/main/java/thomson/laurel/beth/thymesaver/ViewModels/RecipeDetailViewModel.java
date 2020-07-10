@@ -123,8 +123,8 @@ public class RecipeDetailViewModel extends AndroidViewModel {
         }
     }
 
-    public void updateCategories(String recipeName, List<String> categories) {
-        mRepository.updateCategories(recipeName, categories);
+    public void updateCategories(String recipeName, List<String> categoriesToAdd, List<String> categoriesToRemove) {
+        mRepository.updateCategories(recipeName, categoriesToAdd, categoriesToRemove);
     }
 
 }
