@@ -7,12 +7,15 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 
 import com.squareup.picasso.Picasso;
 
+import thomson.laurel.beth.thymesaver.Models.Ingredient;
 import thomson.laurel.beth.thymesaver.Models.Recipe;
 import thomson.laurel.beth.thymesaver.R;
 
@@ -22,12 +25,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 
-public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
     private static final String TAG = "RECIPE_ADAPTER";
     private List<Recipe> mRecipes = new ArrayList<>();
+    private List<Recipe> mFilteredRecipes = mRecipes;
     private final LayoutInflater mInflater;
     private RecipeListener mListener;
     private Context mContext;
+    private boolean mIsFiltered;
 
     public RecipeAdapter(
             Context context,
@@ -46,14 +51,16 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     public void setRecipes(List<Recipe> recipes) {
+        if (mIsFiltered) { return; }
         mRecipes = recipes;
+        mFilteredRecipes = mRecipes;
         notifyDataSetChanged();
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         RecipeViewHolder holder = (RecipeViewHolder) viewHolder;
-        Recipe recipe = mRecipes.get(position);
+        Recipe recipe = mFilteredRecipes.get(position);
         holder.mNameTV.setText(recipe.getName());
         if (recipe.getImageURL() != null) {
             Picasso.with(mContext).load(recipe.getImageURL()).fit().centerCrop().into(holder.mImageView);
@@ -65,7 +72,44 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public int getItemCount() {
         if (mRecipes == null) return 0;
-        return mRecipes.size();
+        return mFilteredRecipes.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    mIsFiltered = false;
+                    mFilteredRecipes = mRecipes;
+                } else {
+                    mIsFiltered = true;
+                    List<Recipe> filteredList = new ArrayList<>();
+                    for (Recipe row : mRecipes) {
+
+                        // name match condition. this might differ depending on your requirement
+                        // here we are looking for name or phone number match
+                        if (row.getName().toLowerCase().contains(charString.toLowerCase())) {
+                            filteredList.add(row);
+                        }
+                    }
+
+                    mFilteredRecipes = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = mFilteredRecipes;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                mFilteredRecipes = (ArrayList<Recipe>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public class RecipeViewHolder extends RecyclerView.ViewHolder {
@@ -84,14 +128,14 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 @Override
                 public void onClick(View view) {
                     View commonRecipeImage = itemView.findViewById(R.id.recipe_image);
-                    mListener.onRecipeSelected(mRecipes.get(getAdapterPosition()), commonRecipeImage);
+                    mListener.onRecipeSelected(mFilteredRecipes.get(getAdapterPosition()), commonRecipeImage);
                 }
             });
 
             mDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mListener.onDeleteClicked(mRecipes.get(getAdapterPosition()));
+                    mListener.onDeleteClicked(mFilteredRecipes.get(getAdapterPosition()));
                 }
             });
 
@@ -102,6 +146,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 }
             });
         }
+    }
+
+    public void clearFilter() {
+        mFilteredRecipes = mRecipes;
+        mIsFiltered = false;
+        notifyDataSetChanged();
     }
 
     public interface RecipeListener {

@@ -2,8 +2,11 @@ package thomson.laurel.beth.thymesaver.UI.TopLevel;
 
 import android.annotation.SuppressLint;
 
+import androidx.appcompat.widget.SearchView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,6 +23,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -55,7 +60,8 @@ public class CookbookFragment extends ThymesaverFragment
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState){
+    public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.recycler_view_layout, viewGroup, false);
     }
 
@@ -130,6 +136,37 @@ public class CookbookFragment extends ThymesaverFragment
                 })
                 .setNegativeButton("No", null)
                 .show();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        getActivity().getMenuInflater().inflate(R.menu.menu_cookbook, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search)
+                .getActionView();
+        searchView.setSearchableInfo(searchManager
+                .getSearchableInfo(getActivity().getComponentName()));
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+
+        // listening to search query text change
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // filter recycler view when query submitted
+                mAdapter.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                // filter recycler view when text is changed
+                mAdapter.getFilter().filter(query);
+                return false;
+            }
+        });
     }
 
     private void promptForRecipeName(Context context, CookBookViewModel viewModel, ValueCallback<Recipe> callback) {
@@ -223,6 +260,7 @@ public class CookbookFragment extends ThymesaverFragment
 
     @Override
     public void onFragmentLeft() {
+        mAdapter.clearFilter();
     }
 
     private void createRecipe() {
