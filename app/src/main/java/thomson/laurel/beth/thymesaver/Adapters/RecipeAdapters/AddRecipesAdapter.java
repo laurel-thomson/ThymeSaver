@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,9 +31,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 
-public class AddRecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class AddRecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
     private List<Recipe> mPlannedRecipes = new ArrayList<>();
     private List<Recipe> mTotalRecipes;
+    private List<Recipe> mFilteredRecipes;
     private List<Ingredient> mTotalIngredients;
     private HashMap<String, List<String>> mMissingIngredients = new HashMap<>();
     private final LayoutInflater mInflater;
@@ -75,6 +78,7 @@ public class AddRecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 }
             }
         }
+        mFilteredRecipes = mTotalRecipes;
         if (mTotalIngredients != null) {
             sortRecipes();
         }
@@ -173,11 +177,13 @@ public class AddRecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         int itemViewType = getItemViewType(position);
         if (itemViewType == RECIPE_TYPE) {
             final RecipeViewHolder holder = (RecipeViewHolder) viewHolder;
-            Recipe recipe = mTotalRecipes.get(position);
+            Recipe recipe = mFilteredRecipes.get(position);
             holder.mNameTV.setText(recipe.getName());
             if (recipe.getImageURL() != null) {
                 Picasso.with(mContext).load(recipe.getImageURL()).fit().centerCrop().into(holder.mImageView);
             }
+
+            holder.mCheckBox.setChecked(mPlannedRecipes.contains(recipe));
 
             List<String> missingIngs = mMissingIngredients.get(recipe.getName());
             if (missingIngs.size() > 0) {
@@ -201,17 +207,29 @@ public class AddRecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     holder.mCheckBox.setChecked(!holder.mCheckBox.isChecked());
                 }
             });
+            holder.mCheckBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    CheckBox checkbox = (CheckBox) view;
+                    if (checkbox.isChecked()) {
+                        mPlannedRecipes.add(recipe);
+                    }
+                    else {
+                        mPlannedRecipes.remove(recipe);
+                    }
+                }
+            });
         }
         else {
             SectionHeaderViewHolder headerViewHolder = (SectionHeaderViewHolder) viewHolder;
-            final String missingCategory = mTotalRecipes.get(position).getMissingPantryIngredients();
+            final String missingCategory = mFilteredRecipes.get(position).getMissingPantryIngredients();
             headerViewHolder.sectionTitle.setText(missingCategory);
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (TextUtils.isEmpty(mTotalRecipes.get(position).getName())) {
+        if (TextUtils.isEmpty(mFilteredRecipes.get(position).getName())) {
             return HEADER_TYPE;
         } else {
             return RECIPE_TYPE;
@@ -229,7 +247,42 @@ public class AddRecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public int getItemCount() {
         if (mTotalRecipes == null) return 0;
-        return mTotalRecipes.size();
+        return mFilteredRecipes.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    mFilteredRecipes = mTotalRecipes;
+                } else {
+                    List<Recipe> filteredList = new ArrayList<>();
+                    for (Recipe row : mTotalRecipes) {
+
+                        // name match condition. this might differ depending on your requirement
+                        // here we are looking for name or phone number match
+                        if (row.getName().toLowerCase().contains(charString.toLowerCase())) {
+                            filteredList.add(row);
+                        }
+                    }
+
+                    mFilteredRecipes = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = mFilteredRecipes;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                mFilteredRecipes = (ArrayList<Recipe>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     class RecipeViewHolder extends RecyclerView.ViewHolder {
@@ -246,19 +299,6 @@ public class AddRecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             mImageView = itemView.findViewById(R.id.mealplan_image);
             mMissingTV = itemView.findViewById(R.id.missing_ings);
             mMissingLabel = itemView.findViewById(R.id.missing_label);
-
-            mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    Recipe recipe = mTotalRecipes.get(getAdapterPosition());
-                    if (compoundButton.isChecked()) {
-                        mPlannedRecipes.add(recipe);
-                    }
-                    else {
-                        mPlannedRecipes.remove(recipe);
-                    }
-                }
-            });
         }
     }
 
